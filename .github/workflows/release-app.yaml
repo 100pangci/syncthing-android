@@ -45,32 +45,12 @@ jobs:
       buildType: "Release"
       checkoutRef: ${{ github.event.inputs.tag }}
 
-  build2:
-    name: Build 2
-    needs: prepare
-    uses: ./.github/workflows/common-build.yaml
-    with:
-      applicationId: "com.github.catfriend1.syncthingandroid"
-      buildType: "Release"
-      checkoutRef: ${{ github.event.inputs.tag }}
-      gradleOptions: "bundleRelease"
-
   sign1:
     name: Sign 1
     needs: [prepare, build1]
     uses: ./.github/workflows/common-sign.yaml
     with:
       applicationId: "com.github.catfriend1.syncthingfork"
-      buildType: "release"
-      environmentName: prod
-    secrets: inherit
-
-  sign2:
-    name: Sign 2
-    needs: [prepare, build2]
-    uses: ./.github/workflows/common-sign.yaml
-    with:
-      applicationId: "bundle-com.github.catfriend1.syncthingandroid"
       buildType: "release"
       environmentName: prod
     secrets: inherit
