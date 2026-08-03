@@ -612,7 +612,8 @@ public class RestApi {
      */
     public void shutdown() {
         hasShutdown = true;
-        executorService.shutdown();
+        executorService.shutdownNow();
+        Util.killProcess("find");
         new PostRequest(mContext, mUrl, PostRequest.URI_SYSTEM_SHUTDOWN, mApiKey,
                 null, null, null);
     }
@@ -1233,7 +1234,7 @@ public class RestApi {
         // Execute planned workloads.
         final Boolean finalPlanGetSyncConflictFiles = planGetSyncConflictFiles;
         final Boolean finalPlanOnFolderSyncCompleted = planOnFolderSyncCompleted;
-        if (executorService.isShutdown()) {
+        if (hasShutdown || executorService.isShutdown()) {
             // We are on the way to shutdown SynchtingNative.
             return;
         }
@@ -1243,6 +1244,10 @@ public class RestApi {
         }
 
         executorService.execute(() -> {
+            if (hasShutdown) {
+                return;
+            }
+
             if (finalPlanGetSyncConflictFiles) {
                 // Check for ".sync-conflict-YYYYMMDD-HHMMSS-DEVICEI*" files.
                 mLocalCompletion.setDiscoveredConflictFiles(

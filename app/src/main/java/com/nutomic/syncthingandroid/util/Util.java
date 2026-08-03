@@ -5,6 +5,7 @@ import android.app.UiModeManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -30,6 +31,8 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.net.ssl.TrustManager;
@@ -104,6 +107,62 @@ public class Util {
             Log.i(TAG, "Failed to remove test file");
         }
         return true;
+    }
+
+    /**
+     * Look for running processes and return an array
+     * containing the PIDs of found instances.
+     */
+    public static List<String> getProcessPIDs(final String processName) {
+        List<String> processPIDs = new ArrayList<String>();
+        String output = runShellCommandGetOutput("ps\n");
+        if (TextUtils.isEmpty(output)) {
+            Log.w(TAG, "getProcessPIDs: Failed to list processes. ps command returned empty.");
+            return processPIDs;
+        }
+
+        String lines[] = output.split("\n");
+        if (lines.length == 0) {
+            Log.w(TAG, "getProcessPIDs: Failed to list processes. ps command returned no rows.");
+            return processPIDs;
+        }
+
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            if (line.contains(processName)) {
+                String processPID = line.trim().split("\\s+")[1];
+                // Log.v(TAG, "getProcessPIDs: Found PID [" + processPID + "] for ["+ processName + "]");
+                processPIDs.add(processPID);
+            }
+        }
+        return processPIDs;
+    }
+
+    /**
+     * Look for running processes and end them gracefully.
+     */
+    public static void killProcess(final String processName) {
+        int exitCode;
+        List<String> processPIDs = getProcessPIDs(processName);
+        if (processPIDs.isEmpty()) {
+            Log.v(TAG, "killProcess: Found no running instances of [" + processName + "]");
+            return;
+        }
+        for (String processPID : processPIDs) {
+            exitCode = runShellCommand("kill -SIGINT " + processPID + "\n");
+            if (exitCode != 0) {
+                Log.w(TAG, "killProcess: Failed to send kill SIGINT to process [" + processPID +
+                        "] exit code " + Integer.toString(exitCode));
+            }
+        }
+
+        /**
+         * Wait for process to end.
+         */
+        while (!getProcessPIDs(processName).isEmpty()) {
+            SystemClock.sleep(50);
+        }
+        Log.d(TAG, "killProcess: No more instances of [" + processName + "] running");
     }
 
     /**

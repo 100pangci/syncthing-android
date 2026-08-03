@@ -10,7 +10,6 @@ import android.net.RouteInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
 import android.os.Build;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -31,10 +30,8 @@ import java.io.RandomAccessFile;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -256,67 +253,6 @@ public class SyncthingRunnable implements Runnable {
             LogV("Setting env var: [" + e2[0] + "]=[" + e2[1] + "]");
             environment.put(e2[0], e2[1]);
         }
-    }
-
-    /**
-     * Look for running libsyncthingnative.so processes and return an array
-     * containing the PIDs of found instances.
-     */
-    private List<String> getSyncthingPIDs(Boolean enableLog) {
-        List<String> syncthingPIDs = new ArrayList<String>();
-        String output = Util.runShellCommandGetOutput("ps\n");
-        if (TextUtils.isEmpty(output)) {
-            Log.w(TAG, "Failed to list SyncthingNative processes. ps command returned empty.");
-            return syncthingPIDs;
-        }
-
-        String lines[] = output.split("\n");
-        if (lines.length == 0) {
-            Log.w(TAG, "Failed to list SyncthingNative processes. ps command returned no rows.");
-            return syncthingPIDs;
-        }
-
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-            if (line.contains(Constants.FILENAME_SYNCTHING_BINARY)) {
-                String syncthingPID = line.trim().split("\\s+")[1];
-                if (enableLog) {
-                    Log.v(TAG, "getSyncthingPIDs: Found process PID [" + syncthingPID + "]");
-                }
-                syncthingPIDs.add(syncthingPID);
-            }
-        }
-        return syncthingPIDs;
-    }
-
-    /**
-     * Look for running libsyncthingnative.so processes and end them gracefully.
-     */
-    public void killSyncthing() {
-        int exitCode;
-        List<String> syncthingPIDs = getSyncthingPIDs(true);
-        if (syncthingPIDs.isEmpty()) {
-            LogV("killSyncthing: Found no running instances of " + Constants.FILENAME_SYNCTHING_BINARY);
-            return;
-        }
-        for (String syncthingPID : syncthingPIDs) {
-            exitCode = Util.runShellCommand("kill -SIGINT " + syncthingPID + "\n");
-            if (exitCode == 0) {
-                LogV("Sent kill SIGINT to process " + syncthingPID);
-            } else {
-                Log.w(TAG, "Failed to send kill SIGINT to process " + syncthingPID +
-                        " exit code " + Integer.toString(exitCode));
-            }
-        }
-
-        /**
-         * Wait for the syncthing instance to end.
-         */
-        LogV("Waiting for all syncthing instances to end ...");
-        while (!getSyncthingPIDs(false).isEmpty()) {
-            SystemClock.sleep(50);
-        }
-        Log.d(TAG, "killSyncthing: Complete.");
     }
 
     /**
