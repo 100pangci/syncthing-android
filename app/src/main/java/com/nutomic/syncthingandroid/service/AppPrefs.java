@@ -1,10 +1,10 @@
-
 package com.nutomic.syncthingandroid.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 /**
  * Provides preference getters and setters.
@@ -28,5 +28,10 @@ public class AppPrefs {
             return PREF_VERBOSE_LOG_DEFAULT;
         }
         return sharedPreferences.getBoolean(Constants.PREF_VERBOSE_LOG, PREF_VERBOSE_LOG_DEFAULT);
+    }
+
+    public static final boolean getStartServiceOnBoot(Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getBoolean(Constants.PREF_START_SERVICE_ON_BOOT, false);
     }
 }

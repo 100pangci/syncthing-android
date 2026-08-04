@@ -3,13 +3,11 @@ package com.nutomic.syncthingandroid.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
-import androidx.preference.PreferenceManager;
 import android.util.Log;
 
+import com.nutomic.syncthingandroid.service.AppPrefs;
 import com.nutomic.syncthingandroid.service.Constants;
-import com.nutomic.syncthingandroid.service.SyncthingRunnable;
 import com.nutomic.syncthingandroid.service.SyncthingService;
 
 import java.lang.SecurityException;
@@ -31,7 +29,7 @@ public class BootReceiver extends BroadcastReceiver {
         }
 
         // Check if we should (re)start now.
-        if (!getPrefStartServiceOnBoot(context)) {
+        if (!AppPrefs.getStartServiceOnBoot(context)) {
             return;
         }
 
@@ -51,10 +49,5 @@ public class BootReceiver extends BroadcastReceiver {
         else {
             context.startService(intent);
         }
-    }
-
-    private static boolean getPrefStartServiceOnBoot(Context context) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        return sp.getBoolean(Constants.PREF_START_SERVICE_ON_BOOT, false);
     }
 }
