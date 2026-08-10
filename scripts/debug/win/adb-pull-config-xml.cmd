@@ -13,6 +13,7 @@ SET DATA_ROOT=/data/data
 REM 
 :loopMe
 cls
+adb pull "/storage/emulated/0/backups/syncthing/config.zip" "%SCRIPT_PATH%config.zip"
 adb shell "su root cat %DATA_ROOT%/%PACKAGE_NAME%/files/config.xml" > "%SCRIPT_PATH%config.xml"
 call :psConvertFileFromCRLFtoLF "%SCRIPT_PATH%config.xml"
 IF EXIST "%SCRIPT_PATH%config.xml" TYPE "%SCRIPT_PATH%config.xml" | more
