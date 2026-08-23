@@ -17,6 +17,7 @@ import android.util.ArrayMap
 import android.util.Base64
 import android.util.Log
 import android.webkit.SslErrorHandler
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -69,6 +70,7 @@ class WebGuiActivity : SyncthingActivity(), SyncthingService.OnServiceStateChang
     private var webGuiLoadStarted = false
     private var serviceActive = false
     private var webGuiLoading by mutableStateOf(true)
+    private var webGuiLoadError by mutableStateOf<String?>(null)
 
     private val webViewClient = object : WebViewClient() {
         override fun onReceivedSslError(
@@ -89,6 +91,18 @@ class WebGuiActivity : SyncthingActivity(), SyncthingService.OnServiceStateChang
         @Deprecated("Deprecated in Java")
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean =
             shouldOpenOutsideWebView(url.toUri())
+
+        override fun onReceivedError(
+            view: WebView,
+            request: WebResourceRequest,
+            error: WebResourceError,
+        ) {
+            if (!request.isForMainFrame || !webGuiLoading) {
+                return
+            }
+            Log.w(TAG, "Web GUI load failed: ${error.errorCode} ${error.description}")
+            webGuiLoadError = "${error.description} (${error.errorCode})"
+        }
 
         override fun onPageFinished(view: WebView, url: String) {
             webGuiLoading = false
@@ -120,6 +134,7 @@ class WebGuiActivity : SyncthingActivity(), SyncthingService.OnServiceStateChang
             ApplicationTheme {
                 WebGuiScreen(
                     loading = webGuiLoading,
+                    error = webGuiLoadError,
                     onNavigateBack = { finish() },
                     webViewFactory = { context ->
                         createWebView(context).also {
@@ -156,13 +171,11 @@ class WebGuiActivity : SyncthingActivity(), SyncthingService.OnServiceStateChang
 
     override fun onPause() {
         webView?.onPause()
-        webView?.pauseTimers()
         super.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        webView?.resumeTimers()
         webView?.onResume()
     }
 

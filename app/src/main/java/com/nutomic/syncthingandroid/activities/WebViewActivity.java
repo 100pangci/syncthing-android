@@ -166,14 +166,12 @@ public class WebViewActivity extends SyncthingActivity {
     @Override
     public void onPause() {
         mWebView.onPause();
-        mWebView.pauseTimers();
         super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mWebView.resumeTimers();
         mWebView.onResume();
     }
 

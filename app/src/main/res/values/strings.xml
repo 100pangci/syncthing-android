@@ -427,6 +427,10 @@
     <!-- Text for WebGuiActivity loading view -->
     <string name="web_gui_loading">Waiting for GUI</string>
 
+    <!-- Shown in WebGuiActivity when the web gui could not be loaded. The technical cause is shown
+         below it and written to the log. -->
+    <string name="web_gui_load_failed">Couldn\'t load the Web GUI. Please capture a log and report this.</string>
+
     <!-- WebViewActivity -->
 
     <!-- Dialog title displayed when an invalid ssl certificate was found -->
