@@ -79,6 +79,15 @@ internal object FolderEditActions {
                 }
                 configRouter.addFolder(api, folder)
 
+                // Push ignore patterns entered during creation; the folder must
+                // exist in Syncthing first, so give the config POST a moment.
+                if (ignoreListText.isNotBlank()) {
+                    kotlinx.coroutines.delay(1000)
+                    configRouter.postFolderIgnoreList(
+                        api, folder, ignoreListText.split("\n").toTypedArray()
+                    )
+                }
+
                 // Start sync after adding a folder.
                 LocalBroadcastManager.getInstance(context.applicationContext).sendBroadcast(
                     Intent(com.nutomic.syncthingandroid.service.RunConditionMonitor.ACTION_SYNC_TRIGGER_FIRED)
