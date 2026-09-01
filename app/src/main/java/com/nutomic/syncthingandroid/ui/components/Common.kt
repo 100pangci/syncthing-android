@@ -67,6 +67,7 @@ fun ToggleRow(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     description: String? = null,
+    icon: ImageVector? = null,
     enabled: Boolean = true,
 ) {
     Row(
@@ -76,6 +77,14 @@ fun ToggleRow(
             .clickable(enabled = enabled) { onCheckedChange(!checked) }
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
+        if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = if (enabled) 1f else 0.38f)
+            )
+            Spacer(Modifier.width(16.dp))
+        }
         Column(Modifier.weight(1f)) {
             Text(
                 text = title,

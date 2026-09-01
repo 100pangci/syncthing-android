@@ -216,13 +216,6 @@
                 <action android:name="${applicationId}.action.STOP" />
             </intent-filter>
         </receiver>
-        <activity android:name=".activities.QRScannerActivity"
-            android:label="QR Code Scanner"
-            android:parentActivityName=".activities.DeviceActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nutomic.syncthingandroid.activities.DeviceActivity" />
-        </activity>
         <property
             android:name="android.content.MEDIA_CAPABILITIES"
             android:resource="@xml/media_capabilities" />

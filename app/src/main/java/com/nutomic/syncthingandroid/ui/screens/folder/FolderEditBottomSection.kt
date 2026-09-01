@@ -5,6 +5,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DeleteSweep
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Pause
+import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Shield
+import androidx.compose.material.icons.outlined.Smartphone
+import androidx.compose.material.icons.outlined.Sort
+import androidx.compose.material.icons.outlined.Terminal
+import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -63,6 +74,12 @@ internal fun FolderEditBottomSection(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
                     ) {
+                        androidx.compose.material3.Icon(
+                            androidx.compose.material.icons.Icons.Outlined.Smartphone,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        androidx.compose.foundation.layout.Spacer(Modifier.padding(start = 6.dp))
                         Text(
                             text = shareState.device.displayName,
                             style = MaterialTheme.typography.bodyLarge,
@@ -141,6 +158,7 @@ internal fun FolderEditBottomSection(
         ToggleRow(
             title = stringResource(R.string.folder_fileWatcher),
             description = stringResource(R.string.folder_fileWatcherDescription),
+            icon = Icons.Outlined.Visibility,
             checked = folder.fsWatcherEnabled,
             onCheckedChange = { checked ->
                 folder.fsWatcherEnabled = checked
@@ -149,6 +167,7 @@ internal fun FolderEditBottomSection(
         )
         ToggleRow(
             title = stringResource(R.string.folder_pause),
+            icon = Icons.Outlined.Pause,
             checked = folder.paused,
             onCheckedChange = { checked ->
                 folder.paused = checked
@@ -161,6 +180,7 @@ internal fun FolderEditBottomSection(
             ToggleRow(
                 title = stringResource(R.string.custom_sync_conditions_title),
                 description = stringResource(R.string.custom_sync_conditions_description),
+                icon = Icons.Outlined.Tune,
                 checked = holder.customSyncConditions,
                 onCheckedChange = { checked ->
                     holder.customSyncConditions = checked
@@ -170,6 +190,7 @@ internal fun FolderEditBottomSection(
             if (holder.customSyncConditions) {
                 ClickRow(
                     title = stringResource(R.string.custom_sync_conditions_dialog),
+                    icon = Icons.Outlined.Schedule,
                     onClick = onOpenSyncConditions
                 )
             }
@@ -183,6 +204,7 @@ internal fun FolderEditBottomSection(
                 title = stringResource(R.string.pull_order),
                 value = pullOrderLabel,
                 description = pullOrderDescription,
+                icon = Icons.Outlined.Sort,
                 onClick = onShowPullOrderDialog
             )
         }
@@ -191,12 +213,14 @@ internal fun FolderEditBottomSection(
             title = stringResource(R.string.file_versioning),
             value = versioningTypeLabel(folder),
             description = versioningDescription,
+            icon = Icons.Outlined.History,
             onClick = onShowVersioningDialog
         )
         if (prefExpertMode) {
             ToggleRow(
                 title = stringResource(R.string.folder_ignore_delete_caption),
                 description = stringResource(R.string.folder_ignore_delete_description),
+                icon = Icons.Outlined.DeleteSweep,
                 checked = folder.ignoreDelete,
                 onCheckedChange = { checked ->
                     folder.ignoreDelete = checked
@@ -206,6 +230,7 @@ internal fun FolderEditBottomSection(
             ToggleRow(
                 title = stringResource(R.string.folder_run_script_caption),
                 description = stringResource(R.string.folder_run_script_description),
+                icon = Icons.Outlined.Terminal,
                 checked = holder.runScript,
                 onCheckedChange = { checked ->
                     holder.runScript = checked

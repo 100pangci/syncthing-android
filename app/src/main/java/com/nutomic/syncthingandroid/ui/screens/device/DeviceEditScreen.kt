@@ -39,7 +39,6 @@ import com.nutomic.syncthingandroid.model.Folder
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.ui.LocalServiceState
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
-import com.nutomic.syncthingandroid.activities.QRScannerActivity
 import com.nutomic.syncthingandroid.ui.appPreferences
 import com.nutomic.syncthingandroid.ui.dialogs.CompressionDialog
 import com.nutomic.syncthingandroid.ui.dialogs.ConfirmDialog
@@ -129,7 +128,9 @@ fun DeviceEditScreen(
         )
     }
 
-    var discoveredDevices by rememberSaveable { mutableStateOf<Map<String, DiscoveredDevice>?>(null) }
+    // NOTE: intentionally not rememberSaveable - DiscoveredDevice is not
+    // Parcelable and would crash onSaveInstanceState.
+    var discoveredDevices by remember { mutableStateOf<Map<String, DiscoveredDevice>?>(null) }
     val folders = remember(apiConfigLoaded) { configRouter.getFolders(api) }
 
     // Refresh folder share states whenever folders list changes.
@@ -151,10 +152,10 @@ fun DeviceEditScreen(
     var discoveryRefresh by rememberSaveable { mutableStateOf(0) }
 
     val qrScanLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
+        com.journeyapps.barcodescanner.ScanContract()
     ) { result ->
-        val scanned = result.data?.getStringExtra(QRScannerActivity.QR_RESULT_ARG)
-        if (scanned != null) {
+        val scanned = result.contents
+        if (!scanned.isNullOrEmpty()) {
             val d = ui?.device ?: return@rememberLauncherForActivityResult
             d.deviceID = scanned
             ui = ui!!.copy(needsUpdate = true)
@@ -233,6 +234,8 @@ fun DeviceEditScreen(
         navigator.navigateBack()
     }
 
+    val scanPrompt = stringResource(R.string.scan_qr_code_description)
+
     Surface(color = MaterialTheme.colorScheme.surface) {
         Scaffold(
             topBar = {
@@ -297,7 +300,15 @@ fun DeviceEditScreen(
                             ui = current.copy(needsUpdate = true, customSyncConditions = checked)
                         },
                         onCompressionClick = { showCompressionDialog = true },
-                        onScanQr = { qrScanLauncher.launch(QRScannerActivity.intent(context)) },
+                        onScanQr = {
+                            qrScanLauncher.launch(
+                                com.journeyapps.barcodescanner.ScanOptions()
+                                    .setDesiredBarcodeFormats(com.journeyapps.barcodescanner.ScanOptions.QR_CODE)
+                                    .setPrompt(scanPrompt)
+                                    .setBeepEnabled(false)
+                                    .setOrientationLocked(true)
+                            )
+                        },
                         onShowQr = { showQrDialog = true },
                         onOpenSyncConditions = {
                             navigator.navigateTo(

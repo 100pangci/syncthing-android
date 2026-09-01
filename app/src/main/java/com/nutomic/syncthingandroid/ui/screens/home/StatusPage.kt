@@ -217,14 +217,18 @@ fun StatusPage(
                             )
                     },
                     shape = SegmentedButtonDefaults.itemShape(index = index, count = labels.size),
+                    // Custom icon slot: draw the check mark (with a small start
+                    // inset) only when this segment is selected; nothing otherwise.
                     icon = {
-                        Icon(
-                            Icons.Outlined.Check,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .padding(start = 6.dp)
-                                .size(16.dp)
-                        )
+                        if (forceStartStopState == index) {
+                            Icon(
+                                Icons.Outlined.Check,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(start = 6.dp)
+                                    .size(16.dp)
+                            )
+                        }
                     },
                     modifier = Modifier.weight(1f)
                 ) {

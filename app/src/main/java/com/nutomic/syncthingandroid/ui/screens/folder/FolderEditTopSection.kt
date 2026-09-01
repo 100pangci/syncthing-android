@@ -9,11 +9,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CreateNewFolder
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.FolderOpen
+import androidx.compose.material.icons.outlined.Label
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Tag
 import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -59,6 +64,7 @@ internal fun FolderEditTopSection(
                 onMarkDirty()
             },
             label = { Text(stringResource(R.string.folder_label)) },
+            leadingIcon = { Icon(Icons.Outlined.Label, contentDescription = null) },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,6 +78,7 @@ internal fun FolderEditTopSection(
                     onMarkDirty()
                 },
                 label = { Text(stringResource(R.string.folder_id)) },
+                leadingIcon = { Icon(Icons.Outlined.Tag, contentDescription = null) },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -80,7 +87,8 @@ internal fun FolderEditTopSection(
         } else {
             ClickRow(
                 title = stringResource(R.string.folder_id),
-                value = folder.id
+                value = folder.id,
+                icon = Icons.Outlined.Tag
             )
         }
 
@@ -89,16 +97,19 @@ internal fun FolderEditTopSection(
             ClickRow(
                 title = stringResource(R.string.directory),
                 value = folder.path,
+                icon = Icons.Outlined.FolderOpen,
                 onClick = onPickPath
             )
             ClickRow(
                 title = stringResource(R.string.advanced_directory_selection),
+                icon = Icons.Outlined.CreateNewFolder,
                 onClick = onPickAdvancedPath
             )
         } else {
             ClickRow(
                 title = stringResource(R.string.directory),
-                value = folder.path
+                value = folder.path,
+                icon = Icons.Outlined.FolderOpen
             )
         }
 

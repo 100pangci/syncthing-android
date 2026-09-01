@@ -13,8 +13,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Compress
+import androidx.compose.material.icons.outlined.Lan
+import androidx.compose.material.icons.outlined.MoveToInbox
+import androidx.compose.material.icons.outlined.Pause
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.QrCode2
+import androidx.compose.material.icons.outlined.RecordVoiceOver
+import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Shield
+import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -87,6 +96,7 @@ internal fun DeviceEditContent(
                     onDeviceMutate { it.deviceID = value }
                 },
                 label = { Text(stringResource(R.string.device_id)) },
+                leadingIcon = { Icon(Icons.Outlined.QrCode2, contentDescription = null) },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -106,6 +116,7 @@ internal fun DeviceEditContent(
             ClickRow(
                 title = stringResource(R.string.device_id),
                 value = device.deviceID,
+                icon = Icons.Outlined.QrCode2,
                 onClick = onShowQr
             )
             Row(
@@ -166,6 +177,7 @@ internal fun DeviceEditContent(
                 onDeviceMutate { it.name = value }
             },
             label = { Text(stringResource(R.string.device_name)) },
+            leadingIcon = { Icon(Icons.Outlined.Person, contentDescription = null) },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -180,6 +192,7 @@ internal fun DeviceEditContent(
                 onDeviceMutate { it.addresses = persistableAddresses(value) }
             },
             label = { Text(stringResource(R.string.addresses)) },
+            leadingIcon = { Icon(Icons.Outlined.Lan, contentDescription = null) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 4.dp)
@@ -190,6 +203,7 @@ internal fun DeviceEditContent(
             ClickRow(
                 title = stringResource(R.string.compression),
                 value = compressionTitle(state.compressionIndex),
+                icon = Icons.Outlined.Compress,
                 onClick = onCompressionClick
             )
         }
@@ -199,21 +213,25 @@ internal fun DeviceEditContent(
         // ---- Toggles ----
         ToggleRow(
             title = stringResource(R.string.introducer),
+            icon = Icons.Outlined.RecordVoiceOver,
             checked = device.introducer,
             onCheckedChange = { checked -> onDeviceMutate { it.introducer = checked } }
         )
         ToggleRow(
             title = stringResource(R.string.autoAcceptFolders),
+            icon = Icons.Outlined.MoveToInbox,
             checked = device.autoAcceptFolders,
             onCheckedChange = { checked -> onDeviceMutate { it.autoAcceptFolders = checked } }
         )
         ToggleRow(
             title = stringResource(R.string.pause_device),
+            icon = Icons.Outlined.Pause,
             checked = device.paused,
             onCheckedChange = { checked -> onDeviceMutate { it.paused = checked } }
         )
         ToggleRow(
             title = stringResource(R.string.untrusted_device),
+            icon = Icons.Outlined.Shield,
             checked = device.untrusted,
             onCheckedChange = { checked -> onDeviceMutate { it.untrusted = checked } }
         )
@@ -225,6 +243,7 @@ internal fun DeviceEditContent(
             ToggleRow(
                 title = stringResource(R.string.custom_sync_conditions_title),
                 description = stringResource(R.string.custom_sync_conditions_dialog),
+                icon = Icons.Outlined.Tune,
                 checked = state.customSyncConditions,
                 onCheckedChange = onCustomSyncConditionsChange
             )
@@ -232,6 +251,7 @@ internal fun DeviceEditContent(
                 ClickRow(
                     title = stringResource(R.string.custom_sync_conditions_dialog),
                     value = stringResource(R.string.custom_sync_conditions_description),
+                    icon = Icons.Outlined.Schedule,
                     onClick = onOpenSyncConditions
                 )
             }

@@ -86,24 +86,21 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = TAB_FOLDERS, pageCount = { 3 })
 
-    var folders by remember { mutableStateOf<List<Folder>?>(null) }
-    var devices by remember { mutableStateOf<List<Device>?>(null) }
-    // Signatures of the last polled lists; state is only updated (and rows recomposed)
-    // when something visible actually changed. This keeps the UI smooth while polling.
-    var foldersSig by remember { mutableStateOf("") }
-    var devicesSig by remember { mutableStateOf("") }
+    var folders by remember { mutableStateOf<List<FolderUiModel>?>(null) }
+    var devices by remember { mutableStateOf<List<DeviceUiModel>?>(null) }
+    var sharedFoldersByDevice by remember { mutableStateOf<Map<String, List<Folder>>>(emptyMap()) }
 
-    // Folders poll at the legacy GUI_UPDATE_INTERVAL cadence.
+    // Folders poll at the legacy GUI_UPDATE_INTERVAL cadence. The card data is
+    // precomputed on the polling dispatcher; data class equality ensures rows
+    // whose visible content did not change are skipped by composition.
     LaunchedEffect(serviceState, apiConfigLoaded) {
         while (isActive) {
             try {
-                val newFolders = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                    configRouter.getFolders(api)
+                val newModels = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    buildFolderUiModels(context, api, apiConfigLoaded, configRouter.getFolders(api))
                 }
-                val newFoldersSig = folderSignature(api, apiConfigLoaded, newFolders)
-                if (newFoldersSig != foldersSig) {
-                    foldersSig = newFoldersSig
-                    folders = newFolders
+                if (newModels != folders) {
+                    folders = newModels
                 }
             } catch (e: ConfigXml.OpenConfigException) {
                 folders = null
@@ -113,20 +110,35 @@ fun HomeScreen(
     }
 
     // Devices poll at the legacy REST_UPDATE_INTERVAL cadence (3s on O+),
-    // including the forced remote status refresh.
+    // including the forced remote status refresh. Shared folder lists are
+    // derived here in memory; the legacy ConfigRouter.getSharedFolders would
+    // re-parse config.xml per call.
     LaunchedEffect(serviceState, apiConfigLoaded) {
         while (isActive) {
             try {
-                val newDevices = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                val (rawDevices, newSharedFolders) = kotlinx.coroutines.withContext(
+                    kotlinx.coroutines.Dispatchers.IO
+                ) {
                     if (serviceState == SyncthingService.State.ACTIVE && api != null && apiConfigLoaded) {
                         api.getRemoteDeviceStatus("")
                     }
-                    configRouter.getDevices(api, false)
+                    val d = configRouter.getDevices(api, false)
+                    // Derive sharing in memory; the legacy ConfigRouter helper
+                    // re-parses config.xml on every call.
+                    val map = HashMap<String, MutableList<Folder>>()
+                    for (folder in configRouter.getFolders(api)) {
+                        for (shared in folder.getSharedWithDevices()) {
+                            map.getOrPut(shared.deviceID) { mutableListOf() }.add(folder)
+                        }
+                    }
+                    d to map
                 }
-                val newDevicesSig = deviceSignature(api, apiConfigLoaded, newDevices)
-                if (newDevicesSig != devicesSig) {
-                    devicesSig = newDevicesSig
-                    devices = newDevices
+                val newModels = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    buildDeviceUiModels(context, api, apiConfigLoaded, rawDevices, newSharedFolders)
+                }
+                if (newModels != devices) {
+                    devices = newModels
+                    sharedFoldersByDevice = newSharedFolders
                 }
             } catch (e: ConfigXml.OpenConfigException) {
                 devices = null
@@ -135,18 +147,7 @@ fun HomeScreen(
         }
     }
 
-    // Shared folder lists derived in memory from the polled folder list.
-    // (The legacy ConfigRouter.getSharedFolders re-parses config.xml on every
-    // call, which had become a per-recomposition hotspot.)
-    val sharedFoldersByDevice = remember(folders) {
-        val map = HashMap<String, MutableList<Folder>>()
-        folders.orEmpty().forEach { f ->
-            f.getSharedWithDevices().forEach { shared ->
-                map.getOrPut(shared.deviceID) { mutableListOf() }.add(f)
-            }
-        }
-        map
-    }
+
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -217,13 +218,9 @@ fun HomeScreen(
                     when (page) {
                         TAB_FOLDERS -> FolderListPage(
                             folders = folders,
-                            configLoaded = apiConfigLoaded,
                         )
                         TAB_DEVICES -> DeviceListPage(
                             devices = devices,
-                            sharedFoldersByDevice = sharedFoldersByDevice,
-                            api = api,
-                            configLoaded = apiConfigLoaded,
                         )
                         else -> StatusPage(serviceState = serviceState)
                     }
@@ -235,39 +232,46 @@ fun HomeScreen(
 
 @Composable
 private fun FolderListPage(
-    folders: List<Folder>?,
-    configLoaded: Boolean,
+    folders: List<FolderUiModel>?,
 ) {
-    val service = LocalSyncthingService.current
     val context = LocalContext.current
     val navigator = LocalAppNavigator.current
     if (folders.isNullOrEmpty()) {
         EmptyListHint(stringResource(R.string.folder_list_empty))
         return
     }
+    // Stable callbacks: combined with the FolderUiModel data class equality,
+    // rows whose content did not change are skipped while scrolling.
+    val onEdit: (FolderUiModel) -> Unit = remember(navigator) {
+        { model -> navigator.openFolderEdit(model.id, false) }
+    }
+    val onOverride: (FolderUiModel) -> Unit = remember(context) {
+        { model ->
+            context.startService(
+                android.content.Intent(context, SyncthingService::class.java).apply {
+                    putExtra(SyncthingService.EXTRA_FOLDER_ID, model.id)
+                    action = SyncthingService.ACTION_OVERRIDE_CHANGES
+                }
+            )
+        }
+    }
+    val onRevert: (FolderUiModel) -> Unit = remember(context) {
+        { model ->
+            context.startService(
+                android.content.Intent(context, SyncthingService::class.java).apply {
+                    putExtra(SyncthingService.EXTRA_FOLDER_ID, model.id)
+                    action = SyncthingService.ACTION_REVERT_LOCAL_CHANGES
+                }
+            )
+        }
+    }
     LazyColumn(Modifier.fillMaxSize()) {
-        items(folders, key = { it.id }, contentType = { "folder" }) { folder ->
+        items(folders, key = { it.id }, contentType = { "folder" }) { model ->
             FolderRow(
-                folder = folder,
-                restApi = service?.getApi(),
-                apiConfigLoaded = configLoaded,
-                onEdit = { navigator.openFolderEdit(folder.id, false) },
-                onOverride = { f ->
-                    context.startService(
-                        android.content.Intent(context, SyncthingService::class.java).apply {
-                            putExtra(SyncthingService.EXTRA_FOLDER_ID, f.id)
-                            action = SyncthingService.ACTION_OVERRIDE_CHANGES
-                        }
-                    )
-                },
-                onRevert = { f ->
-                    context.startService(
-                        android.content.Intent(context, SyncthingService::class.java).apply {
-                            putExtra(SyncthingService.EXTRA_FOLDER_ID, f.id)
-                            action = SyncthingService.ACTION_REVERT_LOCAL_CHANGES
-                        }
-                    )
-                },
+                model = model,
+                onEdit = onEdit,
+                onOverride = onOverride,
+                onRevert = onRevert,
             )
         }
     }
@@ -275,82 +279,22 @@ private fun FolderListPage(
 
 @Composable
 private fun DeviceListPage(
-    devices: List<Device>?,
-    sharedFoldersByDevice: Map<String, List<Folder>>,
-    api: RestApi?,
-    configLoaded: Boolean,
+    devices: List<DeviceUiModel>?,
 ) {
     val navigator = LocalAppNavigator.current
     if (devices.isNullOrEmpty()) {
         EmptyListHint(stringResource(R.string.no_devices_configured))
         return
     }
-    val sorted = remember(devices) {
-        devices.sortedWith(compareBy { if (it.name.isNullOrEmpty()) it.deviceID else it.name })
+    val onEdit: (DeviceUiModel) -> Unit = remember(navigator) {
+        { model -> navigator.openDeviceEdit(model.id, false) }
     }
     LazyColumn(Modifier.fillMaxSize()) {
-        items(sorted, key = { it.deviceID }, contentType = { "device" }) { device ->
+        items(devices, key = { it.id }, contentType = { "device" }) { model ->
             DeviceRow(
-                device = device,
-                sharedFolders = sharedFoldersByDevice[device.deviceID] ?: emptyList(),
-                restApi = api,
-                apiConfigLoaded = configLoaded,
-                onEdit = { navigator.openDeviceEdit(device.deviceID, false) },
+                model = model,
+                onEdit = onEdit,
             )
         }
-    }
-}
-
-/**
- * Cheap signature of the folder list; only changes that are visible on the
- * cards (label, path, type, pause, sharing, status) bump the signature.
- */
-private fun folderSignature(
-    api: RestApi?,
-    configLoaded: Boolean,
-    folders: List<Folder>,
-): String = buildString {
-    for (f in folders) {
-        append(f.id).append('|')
-            .append(f.label).append('|')
-            .append(f.path).append('|')
-            .append(f.type).append('|')
-            .append(f.paused).append('|')
-            .append(f.getDeviceCount()).append('|')
-        if (api != null && configLoaded) {
-            val entry = api.getFolderStatus(f.id)
-            append(entry.key.state).append('|')
-                .append(entry.key.errors).append('|')
-                // Quantize completion to 5% steps so an actively syncing folder
-                // only bumps the signature (and recomposes) occasionally.
-                .append(entry.value.completion.toInt() / 5).append('|')
-                .append(entry.value.discoveredConflictFiles.size).append('|')
-        }
-        append(';')
-    }
-}
-
-/**
- * Cheap signature of the device list for change detection (see folderSignature).
- */
-private fun deviceSignature(
-    api: RestApi?,
-    configLoaded: Boolean,
-    devices: List<Device>,
-): String = buildString {
-    for (d in devices) {
-        append(d.deviceID).append('|')
-            .append(d.name).append('|')
-            .append(d.paused).append('|')
-        if (api != null && configLoaded) {
-            val conn = api.getRemoteDeviceStatus(d.deviceID)
-            append(conn.connected).append('|')
-                .append(api.getRemoteDeviceCompletion(d.deviceID)).append('|')
-                // Quantize transfer rates to KiB/s steps to avoid needless
-                // recompositions from tiny per-second fluctuations.
-                .append(conn.inBits / 1024).append('|')
-                .append(conn.outBits / 1024).append('|')
-        }
-        append(';')
     }
 }
