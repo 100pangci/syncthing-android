@@ -74,12 +74,6 @@ internal fun FolderEditBottomSection(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        androidx.compose.material3.Icon(
-                            androidx.compose.material.icons.Icons.Outlined.Smartphone,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        androidx.compose.foundation.layout.Spacer(Modifier.padding(start = 6.dp))
                         Text(
                             text = shareState.device.displayName,
                             style = MaterialTheme.typography.bodyLarge,

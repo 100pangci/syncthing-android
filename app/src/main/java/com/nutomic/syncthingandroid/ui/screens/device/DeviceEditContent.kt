@@ -119,19 +119,6 @@ internal fun DeviceEditContent(
                 icon = Icons.Outlined.QrCode2,
                 onClick = onShowQr
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(start = 16.dp)
-            ) {
-                IconButton(onClick = onShowQr) {
-                    Icon(Icons.Outlined.QrCode2, contentDescription = stringResource(R.string.show_device_id))
-                }
-                Text(
-                    text = stringResource(R.string.show_device_id),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
         }
 
         // ---- Discovered devices (create mode only) ----
