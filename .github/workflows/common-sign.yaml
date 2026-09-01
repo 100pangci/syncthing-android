@@ -15,8 +15,9 @@ on:
         required: true
         type: string
       environmentName:
-        description: 'Environment name'
-        required: true
+        description: 'Environment name (optional)'
+        required: false
+        default: ''
         type: string
 
 jobs:
@@ -61,11 +62,37 @@ jobs:
 
       - name: Sign multiple release APK
         if: ${{ inputs.buildType == 'release' }}
+        env:
+          SIGNING_KEYSTORE_JKS_BASE64: ${{ secrets.SIGNING_KEYSTORE_JKS_BASE64 }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
         run: |
           set -eu
           shopt -s nullglob
           mkdir -p "${{ runner.temp }}/.android"
-          echo "${{ secrets.SIGNING_KEYSTORE_JKS_BASE64 }}" | base64 -d > "${{ runner.temp }}/.android/signing-keystore.jks"
+          #
+          # Signing is always configured:
+          # a) If the SIGNING_KEYSTORE_JKS_BASE64 and SIGNING_PASSWORD secrets are set,
+          #    they are used to sign the release APKs.
+          # b) Otherwise, an ephemeral self-signed release keystore is generated on the
+          #    runner so that the pipeline always yields signed, installable APKs.
+          #    Replace this by configuring the two secrets above for production signing.
+          #
+          if [ -n "${SIGNING_KEYSTORE_JKS_BASE64}" ]; then
+            echo "${SIGNING_KEYSTORE_JKS_BASE64}" | base64 -d > "${{ runner.temp }}/.android/signing-keystore.jks"
+            KS_PASSWORD="${SIGNING_PASSWORD}"
+            echo "Using keystore from SIGNING_KEYSTORE_JKS_BASE64 secret"
+          else
+            KS_PASSWORD="$(head -c 32 /dev/urandom | base64 | tr -d '\n/+=' | cut -c1-24)"
+            keytool -genkeypair -v \
+              -keystore "${{ runner.temp }}/.android/signing-keystore.jks" \
+              -storetype JKS \
+              -storepass "${KS_PASSWORD}" \
+              -keypass "${KS_PASSWORD}" \
+              -alias Syncthing-Fork \
+              -keyalg RSA -keysize 2048 -validity 10950 \
+              -dname "CN=Syncthing-Fork, OU=Syncthing-Fork, O=Syncthing-Fork, L=Internet, ST=Internet, C=US"
+            echo "Generated ephemeral self-signed release keystore (set SIGNING_KEYSTORE_JKS_BASE64 + SIGNING_PASSWORD secrets for a stable signature)"
+          fi
           #
           for UNSIGNED_APK in unsigned/*/*.apk; do
             SIGNED_APK="$(basename -- "${UNSIGNED_APK}")"
@@ -73,8 +100,8 @@ jobs:
             # --alignment-preserved
             apksigner sign \
               --ks "${{ runner.temp }}/.android/signing-keystore.jks" \
-              --ks-pass pass:'${{ secrets.SIGNING_PASSWORD }}' \
-              --key-pass pass:'${{ secrets.SIGNING_PASSWORD }}' \
+              --ks-pass pass:"${KS_PASSWORD}" \
+              --key-pass pass:"${KS_PASSWORD}" \
               --ks-key-alias Syncthing-Fork \
               --out "${SIGNED_APK}" "${UNSIGNED_APK}"
           done

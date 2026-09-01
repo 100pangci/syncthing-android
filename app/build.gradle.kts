@@ -72,14 +72,33 @@ android {
             if (localFile.exists()) {
                 localFile.inputStream().use { localProps.load(it) }
             }
-            
+
             fun propOrEnv(key: String): String? =
                 localProps.getProperty(key) ?: System.getenv(key)
-            
+
             storeFile = propOrEnv("SYNCTHING_RELEASE_STORE_FILE")?.let(::file)
             storePassword = propOrEnv("SIGNING_PASSWORD")
             keyAlias = propOrEnv("SYNCTHING_RELEASE_KEY_ALIAS")
             keyPassword = storePassword
+        }
+        // Optional local signing for debug builds so the APK can be installed directly.
+        // Configure in local.properties (gitignored) or via environment variables; when unset,
+        // debug APKs stay unsigned and CI signs them with the shared debug keystore.
+        create("localDebug") {
+            val localProps = Properties()
+            val localFile = rootProject.file("local.properties")
+            if (localFile.exists()) {
+                localFile.inputStream().use { localProps.load(it) }
+            }
+
+            fun propOrEnv(key: String): String? =
+                localProps.getProperty(key) ?: System.getenv(key)
+
+            storeFile = propOrEnv("SYNCTHING_DEBUG_STORE_FILE")?.let(::file)
+            storePassword = propOrEnv("SYNCTHING_DEBUG_STORE_PASSWORD")
+            keyAlias = propOrEnv("SYNCTHING_DEBUG_KEY_ALIAS")
+            keyPassword = propOrEnv("SYNCTHING_DEBUG_KEY_PASSWORD")
+                ?: propOrEnv("SYNCTHING_DEBUG_STORE_PASSWORD")
         }
     }
 
@@ -89,7 +108,7 @@ android {
             isDebuggable = true
             isJniDebuggable = true
             isMinifyEnabled = false
-            signingConfig = null
+            signingConfig = signingConfigs.getByName("localDebug").takeIf { it.storeFile != null }
         }
         getByName("release") {
             isMinifyEnabled = false

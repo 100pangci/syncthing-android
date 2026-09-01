@@ -7,8 +7,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.nutomic.syncthingandroid.R;
@@ -24,35 +22,6 @@ public abstract class SyncthingActivity extends ThemedAppCompatActivity implemen
     private static final String TAG = "SyncthingActivity";
 
     private SyncthingService mSyncthingService;
-
-    /**
-     * Look for a Toolbar in the layout and bind it as the activity's actionbar with reasonable
-     * defaults.
-     *
-     * The Toolbar must exist in the content view and have an id of R.id.toolbar. Trying to call
-     * getSupportActionBar before this Activity's onPostCreate will cause a crash.
-     */
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        onPostCreateSetToolbar();
-    }
-
-    private void onPostCreateSetToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        if (toolbar == null) {
-            return;
-        }
-        toolbar.setNavigationContentDescription(R.string.main_menu);
-        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
-        toolbar.setTouchscreenBlocksFocus(false);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24);
-        }
-    }
 
     @Override
     protected void onPause() {

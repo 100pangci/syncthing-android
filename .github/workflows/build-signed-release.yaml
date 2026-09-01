@@ -1,0 +1,26 @@
+name: Build Signed Release
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build Release
+    uses: ./.github/workflows/common-build.yaml
+    with:
+      buildType: "Release"
+
+  sign:
+    name: Sign Release
+    needs: build
+    uses: ./.github/workflows/common-sign.yaml
+    with:
+      applicationId: "com.github.catfriend1.syncthingfork"
+      buildType: "release"
+    secrets: inherit
