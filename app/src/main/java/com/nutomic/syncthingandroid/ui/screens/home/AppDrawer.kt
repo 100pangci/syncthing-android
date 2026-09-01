@@ -69,12 +69,10 @@ fun AppDrawer(
     val context = LocalContext.current
     val config = LocalConfiguration.current
 
-    ModalDrawerSheet(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    ModalDrawerSheet {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(12.dp)
         ) {
             DrawerHeader()

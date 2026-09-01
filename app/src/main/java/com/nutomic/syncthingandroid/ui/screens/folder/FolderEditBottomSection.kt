@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.ui.components.ClickRow
+import com.nutomic.syncthingandroid.ui.components.FormCard
 import com.nutomic.syncthingandroid.ui.components.ToggleRow
 
 /**
@@ -39,16 +40,12 @@ internal fun FolderEditBottomSection(
     onOpenSyncConditions: () -> Unit,
     onOpenDeviceEdit: () -> Unit,
 ) {
-    Column {
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
+    Column(
+        modifier = Modifier.padding(vertical = 6.dp),
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+    ) {
         // ---- Devices sharing this folder ----
-        Text(
-            text = stringResource(R.string.devices),
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
+        FormCard(title = stringResource(R.string.devices)) {
         if (holder.deviceStates.isEmpty()) {
             Text(
                 text = stringResource(R.string.devices_list_empty),
@@ -138,8 +135,8 @@ internal fun FolderEditBottomSection(
             }
         }
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
+        }
+        FormCard {
         // ---- Toggles ----
         ToggleRow(
             title = stringResource(R.string.folder_fileWatcher),
@@ -217,15 +214,9 @@ internal fun FolderEditBottomSection(
             )
         }
 
-        // ---- Ignore patterns (edit mode only) ----
+        }
+        FormCard(title = stringResource(R.string.ignore_patterns)) {
         if (!isCreate) {
-            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-            Text(
-                text = stringResource(R.string.ignore_patterns),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            )
             OutlinedTextField(
                 value = holder.ignoreListText,
                 onValueChange = onIgnoreListChanged,
@@ -235,6 +226,7 @@ internal fun FolderEditBottomSection(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
+        }
         }
     }
 }

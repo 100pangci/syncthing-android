@@ -1,6 +1,7 @@
 package com.nutomic.syncthingandroid.ui.screens.device
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +40,7 @@ import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.model.Device
 import com.nutomic.syncthingandroid.model.DiscoveredDevice
 import com.nutomic.syncthingandroid.ui.components.ClickRow
+import com.nutomic.syncthingandroid.ui.components.FormCard
 import com.nutomic.syncthingandroid.ui.components.ToggleRow
 
 /**
@@ -72,8 +74,11 @@ internal fun DeviceEditContent(
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
+            .padding(vertical = 6.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         // ---- Device identity ----
+        FormCard(title = stringResource(R.string.device_id)) {
         if (isCreate) {
             OutlinedTextField(
                 value = deviceIdText,
@@ -189,8 +194,8 @@ internal fun DeviceEditContent(
             )
         }
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
+        }
+        FormCard {
         // ---- Toggles ----
         ToggleRow(
             title = stringResource(R.string.introducer),
@@ -213,9 +218,10 @@ internal fun DeviceEditContent(
             onCheckedChange = { checked -> onDeviceMutate { it.untrusted = checked } }
         )
 
+        }
+        FormCard {
         // ---- Custom sync conditions (edit mode only) ----
         if (!isCreate) {
-            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
             ToggleRow(
                 title = stringResource(R.string.custom_sync_conditions_title),
                 description = stringResource(R.string.custom_sync_conditions_dialog),
@@ -231,15 +237,8 @@ internal fun DeviceEditContent(
             }
         }
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
-        // ---- Folders shared with this device ----
-        Text(
-            text = stringResource(R.string.folders),
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
+        }
+        FormCard(title = stringResource(R.string.folders)) {
         if (state.folderStates.isEmpty()) {
             Text(
                 text = stringResource(R.string.folders_list_empty),
@@ -294,7 +293,7 @@ internal fun DeviceEditContent(
             }
         }
 
-        Spacer(Modifier.height(24.dp))
+        }
     }
 }
 

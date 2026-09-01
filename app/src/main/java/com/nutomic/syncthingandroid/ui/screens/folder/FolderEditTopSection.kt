@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.ui.components.ClickRow
+import com.nutomic.syncthingandroid.ui.components.FormCard
 import com.nutomic.syncthingandroid.ui.components.ToggleRow
 
 /**
@@ -49,7 +50,7 @@ internal fun FolderEditTopSection(
 ) {
     var label by remember(folder) { mutableStateOf(folder.label ?: "") }
 
-    Column {
+    FormCard {
         OutlinedTextField(
             value = label,
             onValueChange = { value ->

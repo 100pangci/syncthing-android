@@ -1,19 +1,21 @@
 package com.nutomic.syncthingandroid.ui.screens.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -66,11 +69,13 @@ fun StatusPage(
     var upload by remember { mutableStateOf("") }
     var announceServer by remember { mutableStateOf("") }
     var uptime by remember { mutableStateOf("") }
+    var totalSyncCompletion by remember { mutableStateOf(-1) }
 
     LaunchedEffect(serviceState) {
         while (isActive) {
             if (serviceState == SyncthingService.State.ACTIVE && api != null && api.isConfigLoaded()) {
                 api.getRemoteDeviceStatus("")
+                totalSyncCompletion = api.getTotalSyncCompletion()
                 api.getSystemStatus { systemStatus ->
                     val announceTotal = systemStatus.discoveryMethods
                     val announceConnected =
@@ -110,6 +115,33 @@ fun StatusPage(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        // Overall sync progress card (moved here from the legacy top bar strip).
+        if (serviceState == SyncthingService.State.ACTIVE && totalSyncCompletion != -1) {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(R.string.state_syncing, totalSyncCompletion),
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    LinearProgressIndicator(
+                        progress = { totalSyncCompletion / 100f },
+                        strokeCap = androidx.compose.ui.graphics.StrokeCap.Round,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+        }
+
         val statusItems = buildList {
             when (serviceState) {
                 SyncthingService.State.INIT, SyncthingService.State.STARTING ->
@@ -149,33 +181,51 @@ fun StatusPage(
             }
         }
 
-        // Force start/stop segmented button group (replaces the legacy SegmentedButton view).
-        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-            val labels = listOf(
-                stringResource(R.string.button_follow_run_conditions),
-                stringResource(R.string.button_force_start),
-                stringResource(R.string.button_force_stop)
-            )
-            labels.forEachIndexed { index, label ->
-                SegmentedButton(
-                    selected = forceStartStopState == index,
-                    onClick = {
-                        forceStartStopState = index
-                        preferences.edit()
-                            .putInt(Constants.PREF_BTNSTATE_FORCE_START_STOP, index)
-                            .apply()
-                        // Notify RunConditionMonitor that the decision changed.
-                        androidx.localbroadcastmanager.content.LocalBroadcastManager
-                            .getInstance(context)
-                            .sendBroadcast(
-                                android.content.Intent(
-                                    com.nutomic.syncthingandroid.service.RunConditionMonitor.ACTION_UPDATE_SHOULDRUN_DECISION
-                                )
-                            )
-                    },
-                    shape = SegmentedButtonDefaults.itemShape(index = index, count = labels.size)
-                ) {
-                    Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)
+        // Run decision picker: a single choice list inside a card, which keeps
+        // long localized labels readable on every screen width.
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(Modifier.padding(vertical = 4.dp)) {
+                val labels = listOf(
+                    stringResource(R.string.button_follow_run_conditions),
+                    stringResource(R.string.button_force_start),
+                    stringResource(R.string.button_force_stop)
+                )
+                labels.forEachIndexed { index, label ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                forceStartStopState = index
+                                preferences.edit()
+                                    .putInt(Constants.PREF_BTNSTATE_FORCE_START_STOP, index)
+                                    .apply()
+                                // Notify RunConditionMonitor that the decision changed.
+                                androidx.localbroadcastmanager.content.LocalBroadcastManager
+                                    .getInstance(context)
+                                    .sendBroadcast(
+                                        android.content.Intent(
+                                            com.nutomic.syncthingandroid.service.RunConditionMonitor.ACTION_UPDATE_SHOULDRUN_DECISION
+                                        )
+                                    )
+                            }
+                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                    ) {
+                        RadioButton(
+                            selected = forceStartStopState == index,
+                            onClick = null
+                        )
+                        Text(
+                            text = label,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
                 }
             }
         }

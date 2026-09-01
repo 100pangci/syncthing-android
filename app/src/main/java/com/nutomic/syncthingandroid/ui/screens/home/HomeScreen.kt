@@ -14,14 +14,11 @@ import androidx.compose.material.icons.Icons
 
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.PrimaryTabRow
@@ -33,16 +30,13 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.model.Device
@@ -54,7 +48,6 @@ import com.nutomic.syncthingandroid.ui.LocalServiceState
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.ui.appPreferences
 import com.nutomic.syncthingandroid.ui.components.EmptyListHint
-import com.nutomic.syncthingandroid.ui.nav.AppRoute
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
 import com.nutomic.syncthingandroid.util.ConfigRouter
 import com.nutomic.syncthingandroid.util.ConfigXml
@@ -95,10 +88,10 @@ fun HomeScreen(
 
     var folders by remember { mutableStateOf<List<Folder>?>(null) }
     var devices by remember { mutableStateOf<List<Device>?>(null) }
-    var totalSyncCompletion by remember { mutableIntStateOf(-1) }
-    var showExitFab by remember {
-        mutableStateOf(!context.appPreferences().getBoolean(Constants.PREF_START_SERVICE_ON_BOOT, false))
-    }
+    // Signatures of the last polled lists; state is only updated (and rows recomposed)
+    // when something visible actually changed. This keeps the UI smooth while polling.
+    var foldersSig by remember { mutableStateOf("") }
+    var devicesSig by remember { mutableStateOf("") }
 
     // Refresh the visible data once per GUI update interval, as the legacy screens did.
     LaunchedEffect(serviceState, apiConfigLoaded) {
@@ -107,17 +100,22 @@ fun HomeScreen(
                 api.getRemoteDeviceStatus("")
             }
             try {
-                folders = configRouter.getFolders(api)
-                devices = configRouter.getDevices(api, false)
+                val newFolders = configRouter.getFolders(api)
+                val newDevices = configRouter.getDevices(api, false)
+                val newFoldersSig = folderSignature(api, apiConfigLoaded, newFolders)
+                val newDevicesSig = deviceSignature(api, apiConfigLoaded, newDevices)
+                if (newFoldersSig != foldersSig) {
+                    foldersSig = newFoldersSig
+                    folders = newFolders
+                }
+                if (newDevicesSig != devicesSig) {
+                    devicesSig = newDevicesSig
+                    devices = newDevices
+                }
             } catch (e: ConfigXml.OpenConfigException) {
                 folders = null
                 devices = null
             }
-            totalSyncCompletion =
-                if (serviceState == SyncthingService.State.ACTIVE && apiConfigLoaded)
-                    api?.getTotalSyncCompletion() ?: -1
-                else
-                    -1
             delay(Constants.GUI_UPDATE_INTERVAL)
         }
     }
@@ -139,70 +137,43 @@ fun HomeScreen(
     ) {
         Scaffold(
             topBar = {
-                Column {
-                    TopAppBar(
-                        title = { Text(stringResource(R.string.app_name)) },
-                        navigationIcon = {
-                            IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                                Icon(Icons.Outlined.Menu, stringResource(R.string.main_menu))
-                            }
-                        },
-                        actions = {
-                            when (pagerState.currentPage) {
-                                TAB_FOLDERS -> {
-                                    IconButton(onClick = { navigator.openFolderEdit(null, true) }) {
-                                        Icon(Icons.Outlined.Add, stringResource(R.string.add_folder))
-                                    }
-                                    IconButton(onClick = {
-                                        if (api != null && apiConfigLoaded) {
-                                            api.rescanAll()
-                                        }
-                                    }) {
-                                        Icon(
-                                            Icons.Outlined.Refresh,
-                                            stringResource(R.string.activity_main_bottom_navigation_rescan_all)
-                                        )
-                                    }
-                                }
-                                TAB_DEVICES -> {
-                                    IconButton(onClick = { navigator.openDeviceEdit(null, true) }) {
-                                        Icon(Icons.Outlined.Add, stringResource(R.string.add_device))
-                                    }
-                                }
-                                else -> {}
-                            }
-                            IconButton(onClick = { navigator.openSettings() }) {
-                                Icon(Icons.Outlined.Settings, stringResource(R.string.settings_title))
-                            }
+                TopAppBar(
+                    title = { Text(stringResource(R.string.app_name)) },
+                    navigationIcon = {
+                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                            Icon(Icons.Outlined.Menu, stringResource(R.string.main_menu))
                         }
-                    )
-                    if (serviceState == SyncthingService.State.ACTIVE && totalSyncCompletion != -1) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            LinearProgressIndicator(
-                                progress = { totalSyncCompletion / 100f },
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                            Text(
-                                text = "$totalSyncCompletion%",
-                                style = MaterialTheme.typography.labelSmall,
-                                textAlign = TextAlign.Center
-                            )
+                    },
+                    actions = {
+                        when (pagerState.currentPage) {
+                            TAB_FOLDERS -> {
+                                IconButton(onClick = { navigator.openFolderEdit(null, true) }) {
+                                    Icon(Icons.Outlined.Add, stringResource(R.string.add_folder))
+                                }
+                                IconButton(onClick = {
+                                    if (api != null && apiConfigLoaded) {
+                                        api.rescanAll()
+                                    }
+                                }) {
+                                    Icon(
+                                        Icons.Outlined.Refresh,
+                                        stringResource(R.string.activity_main_bottom_navigation_rescan_all)
+                                    )
+                                }
+                            }
+                            TAB_DEVICES -> {
+                                IconButton(onClick = { navigator.openDeviceEdit(null, true) }) {
+                                    Icon(Icons.Outlined.Add, stringResource(R.string.add_device))
+                                }
+                            }
+                            else -> {}
+                        }
+                        IconButton(onClick = { navigator.openSettings() }) {
+                            Icon(Icons.Outlined.Settings, stringResource(R.string.settings_title))
                         }
                     }
-                }
+                )
             },
-            floatingActionButton = {
-                if (showExitFab) {
-                    ExtendedFloatingActionButton(
-                        text = { Text(stringResource(R.string.exit)) },
-                        icon = { Icon(Icons.Outlined.Close, contentDescription = null) },
-                        onClick = onExitApp,
-                    )
-                }
-            }
         ) { innerPadding ->
             Column(Modifier.padding(innerPadding)) {
                 PrimaryTabRow(selectedTabIndex = pagerState.currentPage) {
@@ -241,6 +212,7 @@ private fun FolderListPage(
 ) {
     val service = LocalSyncthingService.current
     val context = LocalContext.current
+    val navigator = LocalAppNavigator.current
     if (folders.isNullOrEmpty()) {
         EmptyListHint(stringResource(R.string.folder_list_empty))
         return
@@ -251,6 +223,7 @@ private fun FolderListPage(
                 folder = folder,
                 restApi = service?.getApi(),
                 apiConfigLoaded = configLoaded,
+                onEdit = { navigator.openFolderEdit(folder.id, false) },
                 onOverride = { f ->
                     context.startService(
                         android.content.Intent(context, SyncthingService::class.java).apply {
@@ -279,6 +252,7 @@ private fun DeviceListPage(
     api: RestApi?,
     configLoaded: Boolean,
 ) {
+    val navigator = LocalAppNavigator.current
     if (devices.isNullOrEmpty()) {
         EmptyListHint(stringResource(R.string.no_devices_configured))
         return
@@ -293,7 +267,60 @@ private fun DeviceListPage(
                 configRouter = configRouter,
                 restApi = api,
                 apiConfigLoaded = configLoaded,
+                onEdit = { navigator.openDeviceEdit(device.deviceID, false) },
             )
         }
+    }
+}
+
+/**
+ * Cheap signature of the folder list; only changes that are visible on the
+ * cards (label, path, type, pause, sharing, status) bump the signature.
+ */
+private fun folderSignature(
+    api: RestApi?,
+    configLoaded: Boolean,
+    folders: List<Folder>,
+): String = buildString {
+    for (f in folders) {
+        append(f.id).append('|')
+            .append(f.label).append('|')
+            .append(f.path).append('|')
+            .append(f.type).append('|')
+            .append(f.paused).append('|')
+            .append(f.getDeviceCount()).append('|')
+        if (api != null && configLoaded) {
+            val entry = api.getFolderStatus(f.id)
+            append(entry.key.state).append('|')
+                .append(entry.key.errors).append('|')
+                .append(entry.value.completion.toInt()).append('|')
+                .append(entry.value.discoveredConflictFiles.size).append('|')
+        }
+        append(';')
+    }
+}
+
+/**
+ * Cheap signature of the device list for change detection (see folderSignature).
+ */
+private fun deviceSignature(
+    api: RestApi?,
+    configLoaded: Boolean,
+    devices: List<Device>,
+): String = buildString {
+    for (d in devices) {
+        append(d.deviceID).append('|')
+            .append(d.name).append('|')
+            .append(d.paused).append('|')
+        if (api != null && configLoaded) {
+            val conn = api.getRemoteDeviceStatus(d.deviceID)
+            append(conn.connected).append('|')
+                .append(api.getRemoteDeviceCompletion(d.deviceID)).append('|')
+                // Quantize transfer rates to KiB/s steps to avoid needless
+                // recompositions from tiny per-second fluctuations.
+                .append(conn.inBits / 1024).append('|')
+                .append(conn.outBits / 1024).append('|')
+        }
+        append(';')
     }
 }
