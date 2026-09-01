@@ -117,6 +117,9 @@ fun FolderEditScreen(
         holder.runScript = preferences.getBoolean(
             Constants.DYN_PREF_OBJECT_FOLDER_RUN_SCRIPT(holder.folder!!.id), false
         )
+        // Evaluate the write access of the folder path so "folder type" and the
+        // ignore patterns are enabled for folders that are only being edited.
+        checkWriteAndUpdateUI(context, holder)
         // Automatically share with the given device (e.g. when accepting a folder share).
         deviceId?.let { devId ->
             holder.folder?.addDevice(com.nutomic.syncthingandroid.model.SharedWithDevice().apply {

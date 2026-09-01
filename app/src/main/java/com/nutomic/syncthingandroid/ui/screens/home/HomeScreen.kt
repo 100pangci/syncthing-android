@@ -93,34 +93,59 @@ fun HomeScreen(
     var foldersSig by remember { mutableStateOf("") }
     var devicesSig by remember { mutableStateOf("") }
 
-    // Refresh the visible data once per GUI update interval, as the legacy screens did.
+    // Folders poll at the legacy GUI_UPDATE_INTERVAL cadence.
     LaunchedEffect(serviceState, apiConfigLoaded) {
         while (isActive) {
             try {
-                val (newFolders, newDevices) = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                    if (serviceState == SyncthingService.State.ACTIVE && api != null && apiConfigLoaded) {
-                        api.getRemoteDeviceStatus("")
-                    }
-                    val f = configRouter.getFolders(api)
-                    val d = configRouter.getDevices(api, false)
-                    f to d
+                val newFolders = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    configRouter.getFolders(api)
                 }
                 val newFoldersSig = folderSignature(api, apiConfigLoaded, newFolders)
-                val newDevicesSig = deviceSignature(api, apiConfigLoaded, newDevices)
                 if (newFoldersSig != foldersSig) {
                     foldersSig = newFoldersSig
                     folders = newFolders
                 }
+            } catch (e: ConfigXml.OpenConfigException) {
+                folders = null
+            }
+            delay(Constants.GUI_UPDATE_INTERVAL)
+        }
+    }
+
+    // Devices poll at the legacy REST_UPDATE_INTERVAL cadence (3s on O+),
+    // including the forced remote status refresh.
+    LaunchedEffect(serviceState, apiConfigLoaded) {
+        while (isActive) {
+            try {
+                val newDevices = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    if (serviceState == SyncthingService.State.ACTIVE && api != null && apiConfigLoaded) {
+                        api.getRemoteDeviceStatus("")
+                    }
+                    configRouter.getDevices(api, false)
+                }
+                val newDevicesSig = deviceSignature(api, apiConfigLoaded, newDevices)
                 if (newDevicesSig != devicesSig) {
                     devicesSig = newDevicesSig
                     devices = newDevices
                 }
             } catch (e: ConfigXml.OpenConfigException) {
-                folders = null
                 devices = null
             }
-            delay(Constants.GUI_UPDATE_INTERVAL)
+            delay(Constants.REST_UPDATE_INTERVAL)
         }
+    }
+
+    // Shared folder lists derived in memory from the polled folder list.
+    // (The legacy ConfigRouter.getSharedFolders re-parses config.xml on every
+    // call, which had become a per-recomposition hotspot.)
+    val sharedFoldersByDevice = remember(folders) {
+        val map = HashMap<String, MutableList<Folder>>()
+        folders.orEmpty().forEach { f ->
+            f.getSharedWithDevices().forEach { shared ->
+                map.getOrPut(shared.deviceID) { mutableListOf() }.add(f)
+            }
+        }
+        map
     }
 
     ModalNavigationDrawer(
@@ -196,7 +221,7 @@ fun HomeScreen(
                         )
                         TAB_DEVICES -> DeviceListPage(
                             devices = devices,
-                            configRouter = configRouter,
+                            sharedFoldersByDevice = sharedFoldersByDevice,
                             api = api,
                             configLoaded = apiConfigLoaded,
                         )
@@ -251,7 +276,7 @@ private fun FolderListPage(
 @Composable
 private fun DeviceListPage(
     devices: List<Device>?,
-    configRouter: ConfigRouter,
+    sharedFoldersByDevice: Map<String, List<Folder>>,
     api: RestApi?,
     configLoaded: Boolean,
 ) {
@@ -262,11 +287,6 @@ private fun DeviceListPage(
     }
     val sorted = remember(devices) {
         devices.sortedWith(compareBy { if (it.name.isNullOrEmpty()) it.deviceID else it.name })
-    }
-    // Compute shared folder lists once per device list change; previously this
-    // ran a config.xml parse on every row recomposition while scrolling.
-    val sharedFoldersByDevice = remember(devices, configLoaded) {
-        devices.associate { it.deviceID to configRouter.getSharedFolders(it.deviceID) }
     }
     LazyColumn(Modifier.fillMaxSize()) {
         items(sorted, key = { it.deviceID }, contentType = { "device" }) { device ->
@@ -301,7 +321,9 @@ private fun folderSignature(
             val entry = api.getFolderStatus(f.id)
             append(entry.key.state).append('|')
                 .append(entry.key.errors).append('|')
-                .append(entry.value.completion.toInt()).append('|')
+                // Quantize completion to 5% steps so an actively syncing folder
+                // only bumps the signature (and recomposes) occasionally.
+                .append(entry.value.completion.toInt() / 5).append('|')
                 .append(entry.value.discoveredConflictFiles.size).append('|')
         }
         append(';')

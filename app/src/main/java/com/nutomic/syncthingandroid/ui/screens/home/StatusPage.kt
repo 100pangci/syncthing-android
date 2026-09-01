@@ -6,8 +6,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material3.Icon
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -183,8 +189,10 @@ fun StatusPage(
             }
         }
 
-        // Run decision picker: segmented buttons, equally weighted so the three
-        // segments stay aligned on every screen width and locale.
+        // Run decision picker: segmented buttons. All segments share a fixed
+        // two-line height so long labels cannot stretch individual segments
+        // out of alignment, and the check mark gets a small inset so it does
+        // not hug the leading edge.
         SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
             val labels = listOf(
                 stringResource(R.string.button_follow_run_conditions),
@@ -209,15 +217,30 @@ fun StatusPage(
                             )
                     },
                     shape = SegmentedButtonDefaults.itemShape(index = index, count = labels.size),
+                    icon = {
+                        Icon(
+                            Icons.Outlined.Check,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(start = 6.dp)
+                                .size(16.dp)
+                        )
+                    },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(
-                        text = label,
-                        style = MaterialTheme.typography.labelSmall,
-                        textAlign = TextAlign.Center,
-                        maxLines = 2,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 36.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = label,
+                            style = MaterialTheme.typography.labelSmall,
+                            textAlign = TextAlign.Center,
+                            maxLines = 2
+                        )
+                    }
                 }
             }
         }
