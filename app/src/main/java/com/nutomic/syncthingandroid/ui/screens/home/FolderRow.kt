@@ -43,8 +43,8 @@ import com.nutomic.syncthingandroid.model.Folder
 import com.nutomic.syncthingandroid.model.FolderStatus
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.RestApi
+import com.nutomic.syncthingandroid.ui.theme.StatusBadge
 import com.nutomic.syncthingandroid.ui.theme.StatusKind
-import com.nutomic.syncthingandroid.ui.theme.statusColor
 import com.nutomic.syncthingandroid.util.FileUtils
 import com.nutomic.syncthingandroid.util.Util
 
@@ -110,8 +110,11 @@ fun FolderRow(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+                    val shortPath = remember(folder.path) {
+                        getShortPathForUI(context, folder.path)
+                    }
                     Text(
-                        text = getShortPathForUI(context, folder.path),
+                        text = shortPath,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 2,
@@ -285,12 +288,7 @@ fun FolderRow(
 
             if (statusText.isNotEmpty()) {
                 Spacer(Modifier.height(4.dp))
-                Text(
-                    text = statusText,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                    color = statusColor(statusKind)
-                )
+                StatusBadge(text = statusText, kind = statusKind)
             }
             if (showProgressBar) {
                 Spacer(Modifier.height(6.dp))
@@ -405,8 +403,13 @@ private fun LastItemFinishedSection(cachedFolderStatus: CachedFolderStatus?) {
 }
 
 private fun getShortPathForUI(context: android.content.Context, path: String): String {
-    var shortenedPath = path.replaceFirst("/storage/emulated/0", "[int]")
-    shortenedPath = shortenedPath.replaceFirst("/storage/[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}".toRegex(), "[ext]")
-    shortenedPath = shortenedPath.replaceFirst("/" + context.packageName, "/[app]")
+    var shortenedPath = path
+        .replaceFirst("/storage/emulated/0", "[int]")
+        .replaceFirst("/storage/", "[ext]/")
+    shortenedPath = if (shortenedPath.startsWith("/" + context.packageName)) {
+        "/[app]" + shortenedPath.removePrefix("/" + context.packageName)
+    } else {
+        shortenedPath
+    }
     return "\u2756 " + Util.getPathEllipsis(shortenedPath)
 }

@@ -25,9 +25,8 @@ import com.nutomic.syncthingandroid.model.Connection
 import com.nutomic.syncthingandroid.model.Device
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.RestApi
+import com.nutomic.syncthingandroid.ui.theme.StatusBadge
 import com.nutomic.syncthingandroid.ui.theme.StatusKind
-import com.nutomic.syncthingandroid.ui.theme.statusColor
-import com.nutomic.syncthingandroid.util.ConfigRouter
 import com.nutomic.syncthingandroid.util.Util
 import com.nutomic.syncthingandroid.ui.appPreferences
 
@@ -41,7 +40,7 @@ private const val TIMESTAMP_NEVER_SEEN = "1970-01-01T00:00:00Z"
 @Composable
 fun DeviceRow(
     device: Device,
-    configRouter: ConfigRouter,
+    sharedFolders: List<com.nutomic.syncthingandroid.model.Folder>,
     restApi: RestApi?,
     apiConfigLoaded: Boolean,
     onEdit: () -> Unit,
@@ -87,7 +86,6 @@ fun DeviceRow(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            val sharedFolders = configRouter.getSharedFolders(device.deviceID)
             if (sharedFolders.isEmpty()) {
                 Text(
                     text = stringResource(R.string.device_state_unused),
@@ -178,13 +176,8 @@ fun DeviceRow(
                 )
             }
             if (statusText.isNotEmpty()) {
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    text = statusText,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                    color = statusColor(statusKind)
-                )
+                Spacer(Modifier.height(4.dp))
+                StatusBadge(text = statusText, kind = statusKind)
             }
             if (showProgressBar) {
                 Spacer(Modifier.height(6.dp))

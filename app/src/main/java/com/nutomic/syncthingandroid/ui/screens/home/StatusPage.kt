@@ -1,6 +1,5 @@
 package com.nutomic.syncthingandroid.ui.screens.home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +14,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.common.base.Optional
 import com.nutomic.syncthingandroid.R
@@ -181,51 +183,41 @@ fun StatusPage(
             }
         }
 
-        // Run decision picker: a single choice list inside a card, which keeps
-        // long localized labels readable on every screen width.
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-            ),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(Modifier.padding(vertical = 4.dp)) {
-                val labels = listOf(
-                    stringResource(R.string.button_follow_run_conditions),
-                    stringResource(R.string.button_force_start),
-                    stringResource(R.string.button_force_stop)
-                )
-                labels.forEachIndexed { index, label ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                forceStartStopState = index
-                                preferences.edit()
-                                    .putInt(Constants.PREF_BTNSTATE_FORCE_START_STOP, index)
-                                    .apply()
-                                // Notify RunConditionMonitor that the decision changed.
-                                androidx.localbroadcastmanager.content.LocalBroadcastManager
-                                    .getInstance(context)
-                                    .sendBroadcast(
-                                        android.content.Intent(
-                                            com.nutomic.syncthingandroid.service.RunConditionMonitor.ACTION_UPDATE_SHOULDRUN_DECISION
-                                        )
-                                    )
-                            }
-                            .padding(horizontal = 8.dp, vertical = 2.dp)
-                    ) {
-                        RadioButton(
-                            selected = forceStartStopState == index,
-                            onClick = null
-                        )
-                        Text(
-                            text = label,
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
-                    }
+        // Run decision picker: segmented buttons, equally weighted so the three
+        // segments stay aligned on every screen width and locale.
+        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+            val labels = listOf(
+                stringResource(R.string.button_follow_run_conditions),
+                stringResource(R.string.button_force_start),
+                stringResource(R.string.button_force_stop)
+            )
+            labels.forEachIndexed { index, label ->
+                SegmentedButton(
+                    selected = forceStartStopState == index,
+                    onClick = {
+                        forceStartStopState = index
+                        preferences.edit()
+                            .putInt(Constants.PREF_BTNSTATE_FORCE_START_STOP, index)
+                            .apply()
+                        // Notify RunConditionMonitor that the decision changed.
+                        androidx.localbroadcastmanager.content.LocalBroadcastManager
+                            .getInstance(context)
+                            .sendBroadcast(
+                                android.content.Intent(
+                                    com.nutomic.syncthingandroid.service.RunConditionMonitor.ACTION_UPDATE_SHOULDRUN_DECISION
+                                )
+                            )
+                    },
+                    shape = SegmentedButtonDefaults.itemShape(index = index, count = labels.size),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = label,
+                        style = MaterialTheme.typography.labelSmall,
+                        textAlign = TextAlign.Center,
+                        maxLines = 2,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }

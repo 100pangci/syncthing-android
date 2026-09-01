@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -83,25 +84,63 @@ fun QrScannerScreen(
                 .padding(innerPadding)
         ) {
             if (hasCameraPermission) {
+                // The view only gets created; camera start/stop is tied to the
+                // host lifecycle below. Starting the camera directly from the
+                // factory crashes when recomposition happens while the host is
+                // not yet resumed (e.g. right after the permission dialog).
                 AndroidView(
                     factory = { ctx ->
-                        DecoratedBarcodeView(ctx).apply {
-                            resume()
-                            decodeSingle(object : BarcodeCallback {
-                                override fun barcodeResult(result: BarcodeResult) {
-                                    pause()
-                                    onResult(result.text)
-                                }
-
-                                override fun possibleResultPoints(resultPoints: List<com.google.zxing.ResultPoint>) {
-                                    // Unused
-                                }
-                            })
-                        }
+                        DecoratedBarcodeView(ctx).also { barcodeView = it }
                     },
                     update = { barcodeView = it },
                     modifier = Modifier.fillMaxSize()
                 )
+            }
+        }
+    }
+
+    // Resume/pause the barcode scanner with the host lifecycle, mirroring the
+    // legacy activity's onResume/onStop handling. Wrapped in try/catch so a
+    // transient camera failure can never crash the app.
+    val lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current
+    DisposableEffect(hasCameraPermission, lifecycleOwner) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            val bv = barcodeView
+            when (event) {
+                androidx.lifecycle.Lifecycle.Event.ON_RESUME -> {
+                    try {
+                        bv?.resume()
+                        bv?.decodeSingle(object : BarcodeCallback {
+                            override fun barcodeResult(result: BarcodeResult) {
+                                bv.pause()
+                                onResult(result.text)
+                            }
+
+                            override fun possibleResultPoints(resultPoints: List<com.google.zxing.ResultPoint>) {
+                                // Unused
+                            }
+                        })
+                    } catch (e: Exception) {
+                        android.util.Log.w("QrScannerScreen", "Failed to start scanner", e)
+                    }
+                }
+                androidx.lifecycle.Lifecycle.Event.ON_PAUSE -> {
+                    try {
+                        bv?.pause()
+                    } catch (e: Exception) {
+                        android.util.Log.w("QrScannerScreen", "Failed to pause scanner", e)
+                    }
+                }
+                else -> {}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            try {
+                barcodeView?.pause()
+            } catch (e: Exception) {
+                // Ignore.
             }
         }
     }

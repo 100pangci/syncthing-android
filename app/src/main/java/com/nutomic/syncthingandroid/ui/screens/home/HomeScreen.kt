@@ -96,12 +96,15 @@ fun HomeScreen(
     // Refresh the visible data once per GUI update interval, as the legacy screens did.
     LaunchedEffect(serviceState, apiConfigLoaded) {
         while (isActive) {
-            if (serviceState == SyncthingService.State.ACTIVE && api != null && apiConfigLoaded) {
-                api.getRemoteDeviceStatus("")
-            }
             try {
-                val newFolders = configRouter.getFolders(api)
-                val newDevices = configRouter.getDevices(api, false)
+                val (newFolders, newDevices) = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    if (serviceState == SyncthingService.State.ACTIVE && api != null && apiConfigLoaded) {
+                        api.getRemoteDeviceStatus("")
+                    }
+                    val f = configRouter.getFolders(api)
+                    val d = configRouter.getDevices(api, false)
+                    f to d
+                }
                 val newFoldersSig = folderSignature(api, apiConfigLoaded, newFolders)
                 val newDevicesSig = deviceSignature(api, apiConfigLoaded, newDevices)
                 if (newFoldersSig != foldersSig) {
@@ -218,7 +221,7 @@ private fun FolderListPage(
         return
     }
     LazyColumn(Modifier.fillMaxSize()) {
-        items(folders, key = { it.id }) { folder ->
+        items(folders, key = { it.id }, contentType = { "folder" }) { folder ->
             FolderRow(
                 folder = folder,
                 restApi = service?.getApi(),
@@ -260,11 +263,16 @@ private fun DeviceListPage(
     val sorted = remember(devices) {
         devices.sortedWith(compareBy { if (it.name.isNullOrEmpty()) it.deviceID else it.name })
     }
+    // Compute shared folder lists once per device list change; previously this
+    // ran a config.xml parse on every row recomposition while scrolling.
+    val sharedFoldersByDevice = remember(devices, configLoaded) {
+        devices.associate { it.deviceID to configRouter.getSharedFolders(it.deviceID) }
+    }
     LazyColumn(Modifier.fillMaxSize()) {
-        items(sorted, key = { it.deviceID }) { device ->
+        items(sorted, key = { it.deviceID }, contentType = { "device" }) { device ->
             DeviceRow(
                 device = device,
-                configRouter = configRouter,
+                sharedFolders = sharedFoldersByDevice[device.deviceID] ?: emptyList(),
                 restApi = api,
                 apiConfigLoaded = configLoaded,
                 onEdit = { navigator.openDeviceEdit(device.deviceID, false) },
