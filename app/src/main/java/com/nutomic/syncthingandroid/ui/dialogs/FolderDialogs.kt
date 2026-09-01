@@ -1,5 +1,6 @@
 package com.nutomic.syncthingandroid.ui.dialogs
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,6 +54,7 @@ fun FolderTypeDialog(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .clickable { selected = type }
                             .padding(vertical = 2.dp)
                     ) {
                         RadioButton(
@@ -109,6 +111,7 @@ fun PullOrderDialog(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .clickable { selected = order }
                             .padding(vertical = 2.dp)
                     ) {
                         RadioButton(
@@ -191,6 +194,7 @@ fun VersioningDialog(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .clickable { selectedType = type }
                             .padding(vertical = 2.dp)
                     ) {
                         RadioButton(

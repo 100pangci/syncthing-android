@@ -54,17 +54,22 @@ internal data class FolderShareState(
     val password: String,
 )
 
-internal data class DeviceEditUiState(
-    val device: Device,
-    val needsUpdate: Boolean,
-    val folderStates: List<FolderShareState>,
-    val customSyncConditions: Boolean,
-    val compressionIndex: Int,
-)
+/**
+ * Per-field compose state for the device edit screen. Fields are kept
+ * individually (instead of one data class holding the mutable Java model) so
+ * that every change reliably triggers recomposition.
+ */
+internal class DeviceEditStateHolder {
+    var needsUpdate by mutableStateOf(false)
+    var folderStates by mutableStateOf<List<FolderShareState>>(emptyList())
+    var customSyncConditions by mutableStateOf(false)
+    var compressionIndex by mutableStateOf(Compression.METADATA.index)
+    var deviceIdText by mutableStateOf("")
+}
 
-private val UiStateSaver: Saver<DeviceEditUiState?, String> = Saver(
+private val DeviceSaver: Saver<Device?, String> = Saver(
     save = { Gson().toJson(it) },
-    restore = { Gson().fromJson(it, DeviceEditUiState::class.java) }
+    restore = { Gson().fromJson(it, Device::class.java) }
 )
 
 /**
@@ -88,11 +93,17 @@ fun DeviceEditScreen(
     val preferences = context.appPreferences()
     val prefExpertMode = preferences.getBoolean(Constants.PREF_EXPERT_MODE, false)
 
-    var ui by rememberSaveable(stateSaver = UiStateSaver) { mutableStateOf<DeviceEditUiState?>(null) }
+    val holder = remember { DeviceEditStateHolder() }
+    var device by rememberSaveable(stateSaver = DeviceSaver) { mutableStateOf<Device?>(null) }
 
-    // Init the model once.
+    // Init the model once; after process recreation, resync the holder from
+    // the restored model instead of creating a new one.
     LaunchedEffect(Unit) {
-        if (ui != null) return@LaunchedEffect
+        val restored = device
+        if (restored != null) {
+            syncHolderFromDevice(holder, restored, context, isCreate, preferences)
+            return@LaunchedEffect
+        }
         val d = if (isCreate) {
             Device().apply {
                 name = deviceName ?: ""
@@ -115,34 +126,21 @@ fun DeviceEditScreen(
             }
             found
         }
-        ui = DeviceEditUiState(
-            device = d,
-            needsUpdate = isCreate,
-            folderStates = emptyList(),
-            customSyncConditions = if (isCreate) false else preferences.getBoolean(
-                Constants.DYN_PREF_OBJECT_CUSTOM_SYNC_CONDITIONS(
-                    Constants.PREF_OBJECT_PREFIX_DEVICE + d.deviceID
-                ), false
-            ),
-            compressionIndex = Compression.fromValue(context, d.compression).getIndex(),
-        )
+        device = d
+        syncHolderFromDevice(holder, d, context, isCreate, preferences)
     }
 
-    // NOTE: intentionally not rememberSaveable - DiscoveredDevice is not
-    // Parcelable and would crash onSaveInstanceState.
     var discoveredDevices by remember { mutableStateOf<Map<String, DiscoveredDevice>?>(null) }
     val folders = remember(apiConfigLoaded) { configRouter.getFolders(api) }
 
-    // Refresh folder share states whenever folders list changes.
-    LaunchedEffect(folders, ui?.device?.deviceID) {
-        val d = ui?.device ?: return@LaunchedEffect
-        ui = ui?.copy(
-            folderStates = folders.map { folder ->
-                val shared = folder.getDevice(d.deviceID) != null
-                val password = folder.getDevice(d.deviceID)?.encryptionPassword ?: ""
-                FolderShareState(folder, shared, password)
-            }
-        )
+    // Refresh folder share states whenever the folders list or device id changes.
+    LaunchedEffect(folders, device?.deviceID) {
+        val d = device ?: return@LaunchedEffect
+        holder.folderStates = folders.map { folder ->
+            val shared = folder.getDevice(d.deviceID) != null
+            val password = folder.getDevice(d.deviceID)?.encryptionPassword ?: ""
+            FolderShareState(folder, shared, password)
+        }
     }
 
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
@@ -156,9 +154,9 @@ fun DeviceEditScreen(
     ) { result ->
         val scanned = result.contents
         if (!scanned.isNullOrEmpty()) {
-            val d = ui?.device ?: return@rememberLauncherForActivityResult
-            d.deviceID = scanned
-            ui = ui!!.copy(needsUpdate = true)
+            device?.let { it.deviceID = scanned }
+            holder.deviceIdText = scanned
+            holder.needsUpdate = true
         }
     }
 
@@ -166,9 +164,9 @@ fun DeviceEditScreen(
         service?.getNotificationHandler()?.cancelConsentNotification(notificationId)
     }
 
-    // Query discovered devices in create mode.
-    LaunchedEffect(isCreate, apiConfigLoaded, ui?.device?.deviceID?.isEmpty(), discoveryRefresh) {
-        if (isCreate && apiConfigLoaded && ui?.device?.deviceID?.isEmpty() == true) {
+    // Query discovered devices in create mode (when the id field is still empty).
+    LaunchedEffect(isCreate, apiConfigLoaded, holder.deviceIdText.isEmpty(), discoveryRefresh) {
+        if (isCreate && apiConfigLoaded && holder.deviceIdText.isEmpty()) {
             api?.getDiscoveredDevices { result ->
                 discoveredDevices = result
             }
@@ -176,22 +174,15 @@ fun DeviceEditScreen(
     }
 
     BackHandler(enabled = true) {
-        if (ui?.needsUpdate == true) {
+        if (holder.needsUpdate) {
             showDiscardDialog = true
         } else {
             navigator.navigateBack()
         }
     }
 
-    fun updateDevice(mutate: (Device) -> Unit) {
-        val current = ui ?: return
-        mutate(current.device)
-        ui = current.copy(needsUpdate = true)
-    }
-
     fun save() {
-        val current = ui ?: return
-        val d = current.device
+        val d = device ?: return
         if (d.deviceID.isNullOrEmpty()) {
             Toast.makeText(context, R.string.device_id_required, Toast.LENGTH_LONG).show()
             return
@@ -205,7 +196,7 @@ fun DeviceEditScreen(
             return
         }
         // Apply folder sharing + encryption passwords.
-        for (state in current.folderStates) {
+        for (state in holder.folderStates) {
             val folder = state.folder
             if (state.shared) {
                 folder.addDevice(d)
@@ -220,7 +211,7 @@ fun DeviceEditScreen(
             navigator.navigateBack()
             return
         }
-        if (!current.needsUpdate) {
+        if (!holder.needsUpdate) {
             navigator.navigateBack()
             return
         }
@@ -228,7 +219,7 @@ fun DeviceEditScreen(
             Constants.DYN_PREF_OBJECT_CUSTOM_SYNC_CONDITIONS(
                 Constants.PREF_OBJECT_PREFIX_DEVICE + d.deviceID
             ),
-            current.customSyncConditions
+            holder.customSyncConditions
         ).apply()
         configRouter.updateDevice(api, d)
         navigator.navigateBack()
@@ -245,7 +236,7 @@ fun DeviceEditScreen(
                     },
                     navigationIcon = {
                         IconButton(onClick = {
-                            if (ui?.needsUpdate == true) showDiscardDialog = true
+                            if (holder.needsUpdate) showDiscardDialog = true
                             else navigator.navigateBack()
                         }) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(android.R.string.cancel))
@@ -272,32 +263,17 @@ fun DeviceEditScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                val current = ui
-                if (current != null) {
+                val d = device
+                if (d != null) {
                     DeviceEditContent(
-                        state = current,
+                        device = d,
+                        holder = holder,
                         isCreate = isCreate,
                         prefExpertMode = prefExpertMode,
                         discoveredDevices = discoveredDevices,
-                        onDeviceMutate = ::updateDevice,
-                        onFolderShareChange = { folderId, shared ->
-                            ui = current.copy(
-                                needsUpdate = true,
-                                folderStates = current.folderStates.map {
-                                    if (it.folder.id == folderId) it.copy(shared = shared) else it
-                                }
-                            )
-                        },
-                        onFolderPasswordChange = { folderId, password ->
-                            ui = current.copy(
-                                needsUpdate = true,
-                                folderStates = current.folderStates.map {
-                                    if (it.folder.id == folderId) it.copy(password = password) else it
-                                }
-                            )
-                        },
-                        onCustomSyncConditionsChange = { checked ->
-                            ui = current.copy(needsUpdate = true, customSyncConditions = checked)
+                        onDeviceMutate = { mutate ->
+                            mutate(d)
+                            holder.needsUpdate = true
                         },
                         onCompressionClick = { showCompressionDialog = true },
                         onScanQr = {
@@ -313,16 +289,12 @@ fun DeviceEditScreen(
                         onOpenSyncConditions = {
                             navigator.navigateTo(
                                 AppRoute.SyncConditions(
-                                    objectPrefixAndId = Constants.PREF_OBJECT_PREFIX_DEVICE + current.device.deviceID,
-                                    objectReadableName = current.device.displayName
+                                    objectPrefixAndId = Constants.PREF_OBJECT_PREFIX_DEVICE + d.deviceID,
+                                    objectReadableName = d.displayName
                                 )
                             )
                         },
                         onOpenFolderEdit = { navigator.openFolderEdit(null, true) },
-                        onPickDiscoveredDevice = { pickedId ->
-                            current.device.deviceID = pickedId
-                            ui = current.copy(needsUpdate = true)
-                        },
                         onRefreshDiscovery = { discoveryRefresh++ },
                     )
                 } else {
@@ -336,11 +308,11 @@ fun DeviceEditScreen(
     }
 
     if (showQrDialog) {
-        val current = ui
-        if (current != null) {
+        val d = device
+        if (d != null) {
             DeviceIdQrDialog(
-                deviceName = current.device.displayName.trim(),
-                deviceId = current.device.deviceID,
+                deviceName = d.displayName.trim(),
+                deviceId = d.deviceID,
                 isCurrentDevice = false,
                 onDismiss = { showQrDialog = false }
             )
@@ -354,7 +326,7 @@ fun DeviceEditScreen(
             message = stringResource(R.string.remove_device_confirm),
             onConfirm = {
                 showDeleteDialog = false
-                configRouter.removeDevice(api, ui?.device?.deviceID)
+                configRouter.removeDevice(api, device?.deviceID)
                 navigator.navigateBack()
             },
             onDismiss = { showDeleteDialog = false }
@@ -373,22 +345,35 @@ fun DeviceEditScreen(
     }
 
     if (showCompressionDialog) {
-        val current = ui
-        if (current != null) {
-            CompressionDialog(
-                selectedIndex = current.compressionIndex,
-                onSelect = { index ->
-                    val compression = Compression.fromIndex(index)
-                    showCompressionDialog = false
-                    if (compression.getIndex() != current.compressionIndex) {
-                        updateDevice { it.compression = compression.getValue(context) }
-                        ui = ui?.copy(compressionIndex = index)
-                    }
-                },
-                onDismiss = { showCompressionDialog = false }
-            )
-        } else {
-            showCompressionDialog = false
-        }
+        CompressionDialog(
+            selectedIndex = holder.compressionIndex,
+            onSelect = { index ->
+                val compression = Compression.fromIndex(index)
+                showCompressionDialog = false
+                if (compression.index != holder.compressionIndex) {
+                    device?.let { it.compression = compression.getValue(context) }
+                    holder.compressionIndex = index
+                    holder.needsUpdate = true
+                }
+            },
+            onDismiss = { showCompressionDialog = false }
+        )
     }
+}
+
+private fun syncHolderFromDevice(
+    holder: DeviceEditStateHolder,
+    device: Device,
+    context: android.content.Context,
+    isCreate: Boolean,
+    preferences: android.content.SharedPreferences,
+) {
+    holder.deviceIdText = device.deviceID ?: ""
+    holder.compressionIndex = Compression.fromValue(context, device.compression).index
+    holder.needsUpdate = isCreate
+    holder.customSyncConditions = if (isCreate) false else preferences.getBoolean(
+        Constants.DYN_PREF_OBJECT_CUSTOM_SYNC_CONDITIONS(
+            Constants.PREF_OBJECT_PREFIX_DEVICE + device.deviceID
+        ), false
+    )
 }

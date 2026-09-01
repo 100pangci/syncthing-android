@@ -22,6 +22,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -50,7 +54,13 @@ internal fun FolderEditBottomSection(
     onShowVersioningDialog: () -> Unit,
     onOpenSyncConditions: () -> Unit,
     onOpenDeviceEdit: () -> Unit,
+    configVersion: Int = 0,
 ) {
+    // Mirror the Java model toggles so the UI updates immediately.
+    var fsWatcherEnabled by remember(folder) { mutableStateOf(folder.fsWatcherEnabled) }
+    var paused by remember(folder) { mutableStateOf(folder.paused) }
+    var ignoreDelete by remember(folder) { mutableStateOf(folder.ignoreDelete) }
+
     Column(
         modifier = Modifier.padding(vertical = 6.dp),
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
@@ -153,8 +163,9 @@ internal fun FolderEditBottomSection(
             title = stringResource(R.string.folder_fileWatcher),
             description = stringResource(R.string.folder_fileWatcherDescription),
             icon = Icons.Outlined.Visibility,
-            checked = folder.fsWatcherEnabled,
+            checked = fsWatcherEnabled,
             onCheckedChange = { checked ->
+                fsWatcherEnabled = checked
                 folder.fsWatcherEnabled = checked
                 onMarkDirty()
             }
@@ -162,8 +173,9 @@ internal fun FolderEditBottomSection(
         ToggleRow(
             title = stringResource(R.string.folder_pause),
             icon = Icons.Outlined.Pause,
-            checked = folder.paused,
+            checked = paused,
             onCheckedChange = { checked ->
+                paused = checked
                 folder.paused = checked
                 onMarkDirty()
             }
@@ -191,32 +203,35 @@ internal fun FolderEditBottomSection(
         }
 
         // ---- Expert options ----
-        if (prefExpertMode && folder.type != Constants.FOLDER_TYPE_SEND_ONLY) {
-            val pullOrderLabel = pullOrderLabel(folder.order)
-            val pullOrderDescription = pullOrderDescription(folder.order)
+        androidx.compose.runtime.key(configVersion) {
+            if (prefExpertMode && folder.type != Constants.FOLDER_TYPE_SEND_ONLY) {
+                val pullOrderLabel = pullOrderLabel(folder.order)
+                val pullOrderDescription = pullOrderDescription(folder.order)
+                ClickRow(
+                    title = stringResource(R.string.pull_order),
+                    value = pullOrderLabel,
+                    description = pullOrderDescription,
+                    icon = Icons.Outlined.Sort,
+                    onClick = onShowPullOrderDialog
+                )
+            }
+            val versioningDescription = versioningDescription(folder)
             ClickRow(
-                title = stringResource(R.string.pull_order),
-                value = pullOrderLabel,
-                description = pullOrderDescription,
-                icon = Icons.Outlined.Sort,
-                onClick = onShowPullOrderDialog
+                title = stringResource(R.string.file_versioning),
+                value = versioningTypeLabel(folder),
+                description = versioningDescription,
+                icon = Icons.Outlined.History,
+                onClick = onShowVersioningDialog
             )
         }
-        val versioningDescription = versioningDescription(folder)
-        ClickRow(
-            title = stringResource(R.string.file_versioning),
-            value = versioningTypeLabel(folder),
-            description = versioningDescription,
-            icon = Icons.Outlined.History,
-            onClick = onShowVersioningDialog
-        )
         if (prefExpertMode) {
             ToggleRow(
                 title = stringResource(R.string.folder_ignore_delete_caption),
                 description = stringResource(R.string.folder_ignore_delete_description),
                 icon = Icons.Outlined.DeleteSweep,
-                checked = folder.ignoreDelete,
+                checked = ignoreDelete,
                 onCheckedChange = { checked ->
+                    ignoreDelete = checked
                     folder.ignoreDelete = checked
                     onMarkDirty()
                 }

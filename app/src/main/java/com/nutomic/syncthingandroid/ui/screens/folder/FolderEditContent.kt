@@ -43,6 +43,7 @@ internal fun FolderEditContent(
                 onPickPath = onPickPath,
                 onPickAdvancedPath = onPickAdvancedPath,
                 onShowFolderTypeDialog = onShowFolderTypeDialog,
+                configVersion = holder.configVersion,
             )
             FolderEditBottomSection(
                 holder = holder,
@@ -55,6 +56,7 @@ internal fun FolderEditContent(
                 onShowVersioningDialog = onShowVersioningDialog,
                 onOpenSyncConditions = onOpenSyncConditions,
                 onOpenDeviceEdit = onOpenDeviceEdit,
+                configVersion = holder.configVersion,
             )
         }
     }

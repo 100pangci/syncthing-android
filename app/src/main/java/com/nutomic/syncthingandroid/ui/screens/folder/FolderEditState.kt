@@ -37,6 +37,13 @@ internal class FolderEditStateHolder {
     var deviceStates by mutableStateOf<List<DeviceShareState>>(emptyList())
     var customSyncConditions by mutableStateOf(false)
     var runScript by mutableStateOf(false)
+
+    /**
+     * Bumped whenever the folder model is changed from a dialog (type, pull
+     * order, versioning). Sections reading the Java model directly are keyed
+     * on this so they recompose reliably.
+     */
+    var configVersion by mutableStateOf(0)
 }
 
 @Composable

@@ -52,8 +52,10 @@ internal fun FolderEditTopSection(
     onPickPath: () -> Unit,
     onPickAdvancedPath: () -> Unit,
     onShowFolderTypeDialog: () -> Unit,
+    configVersion: Int = 0,
 ) {
     var label by remember(folder) { mutableStateOf(folder.label ?: "") }
+    var idText by remember(folder) { mutableStateOf(folder.id ?: "") }
 
     FormCard {
         OutlinedTextField(
@@ -72,8 +74,9 @@ internal fun FolderEditTopSection(
         )
         if (isCreate) {
             OutlinedTextField(
-                value = folder.id ?: "",
+                value = idText,
                 onValueChange = { value ->
+                    idText = value
                     folder.id = value
                     onMarkDirty()
                 },
@@ -134,11 +137,13 @@ internal fun FolderEditTopSection(
         val typeEnabled = holder.canWriteToPath &&
                 !folder.path.isNullOrEmpty() &&
                 folder.type != Constants.FOLDER_TYPE_RECEIVE_ENCRYPTED
-        FolderTypeRow(
-            folderType = folder.type,
-            enabled = typeEnabled,
-            onClick = onShowFolderTypeDialog
-        )
+        androidx.compose.runtime.key(configVersion) {
+            FolderTypeRow(
+                folderType = folder.type,
+                enabled = typeEnabled,
+                onClick = onShowFolderTypeDialog
+            )
+        }
     }
 }
 

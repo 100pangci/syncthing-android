@@ -302,6 +302,7 @@ fun FolderEditScreen(
                     return@FolderTypeDialog
                 }
                 f.type = newType
+                holder.configVersion++
                 holder.needsUpdate = true
             },
             onDismiss = { showFolderTypeDialog = false }
@@ -313,6 +314,7 @@ fun FolderEditScreen(
             onSelect = { order ->
                 showPullOrderDialog = false
                 f.order = order
+                holder.configVersion++
                 holder.needsUpdate = true
             },
             onDismiss = { showPullOrderDialog = false }
@@ -325,6 +327,7 @@ fun FolderEditScreen(
             onApply = { type, params ->
                 showVersioningDialog = false
                 applyVersioning(f, type, params)
+                holder.configVersion++
                 holder.needsUpdate = true
             },
             onDismiss = { showVersioningDialog = false }

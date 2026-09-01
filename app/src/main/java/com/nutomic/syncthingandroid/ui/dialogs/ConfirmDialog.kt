@@ -1,6 +1,8 @@
 package com.nutomic.syncthingandroid.ui.dialogs
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
@@ -60,7 +62,10 @@ fun CompressionDialog(
                 entries.forEachIndexed { index, entry ->
                     androidx.compose.foundation.layout.Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(vertical = 4.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onSelect(index) }
+                            .padding(vertical = 4.dp)
                     ) {
                         RadioButton(
                             selected = index == selectedIndex,
