@@ -1,10 +1,6 @@
 package com.nutomic.syncthingandroid.ui.screens.home
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,18 +8,23 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 
+import androidx.compose.material.icons.filled.DataUsage
+import androidx.compose.material.icons.filled.Devices
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.DataUsage
+import androidx.compose.material.icons.outlined.Devices
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
@@ -65,8 +66,17 @@ private val TAB_TITLES = intArrayOf(
     R.string.status_fragment_title
 )
 
+// MD3 bottom navigation: filled icon marks the selected destination, outlined
+// icon the unselected ones (see "icon" guidance in the M3 NavigationBar spec).
+private val TAB_ICONS = listOf(
+    Icons.Filled.Folder to Icons.Outlined.Folder,
+    Icons.Filled.Devices to Icons.Outlined.Devices,
+    Icons.Filled.DataUsage to Icons.Outlined.DataUsage,
+)
+
 /**
- * Home screen: folders / devices / status tabs inside a drawer scaffold.
+ * Home screen: folders / devices / status destinations on an MD3 bottom
+ * navigation bar inside a drawer scaffold.
  * Ported from the legacy MainActivity + FolderListFragment + DeviceListFragment + StatusFragment.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -167,7 +177,7 @@ fun HomeScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(stringResource(R.string.app_name)) },
+                    title = { Text(stringResource(TAB_TITLES[pagerState.currentPage])) },
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
                             Icon(Icons.Outlined.Menu, stringResource(R.string.main_menu))
@@ -203,27 +213,39 @@ fun HomeScreen(
                     }
                 )
             },
-        ) { innerPadding ->
-            Column(Modifier.padding(innerPadding)) {
-                PrimaryTabRow(selectedTabIndex = pagerState.currentPage) {
+            bottomBar = {
+                NavigationBar {
                     TAB_TITLES.forEachIndexed { index, titleRes ->
-                        Tab(
-                            selected = pagerState.currentPage == index,
+                        val selected = pagerState.currentPage == index
+                        NavigationBarItem(
+                            selected = selected,
                             onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
-                            text = { Text(stringResource(titleRes)) }
+                            icon = {
+                                Icon(
+                                    imageVector = if (selected) TAB_ICONS[index].first else TAB_ICONS[index].second,
+                                    contentDescription = null
+                                )
+                            },
+                            label = { Text(stringResource(titleRes)) }
                         )
                     }
                 }
-                HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-                    when (page) {
-                        TAB_FOLDERS -> FolderListPage(
-                            folders = folders,
-                        )
-                        TAB_DEVICES -> DeviceListPage(
-                            devices = devices,
-                        )
-                        else -> StatusPage(serviceState = serviceState)
-                    }
+            },
+        ) { innerPadding ->
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) { page ->
+                when (page) {
+                    TAB_FOLDERS -> FolderListPage(
+                        folders = folders,
+                    )
+                    TAB_DEVICES -> DeviceListPage(
+                        devices = devices,
+                    )
+                    else -> StatusPage(serviceState = serviceState)
                 }
             }
         }
