@@ -21,6 +21,6 @@ jobs:
     needs: build
     uses: ./.github/workflows/common-sign.yaml
     with:
-      applicationId: "com.github.catfriend1.syncthingfork"
+      applicationId: "com.github.ywpc05.syncthingfork"
       buildType: "release"
     secrets: inherit

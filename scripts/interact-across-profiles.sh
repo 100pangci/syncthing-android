@@ -43,5 +43,5 @@ if [[ "${#}" != 1 || ("${1}" != grant && "${1}" != revoke) ]]; then
     exit 1
 fi
 
-change_permission "${1}" com.github.catfriend1.syncthingfork.debug android.permission.INTERACT_ACROSS_USERS
-change_permission "${1}" com.github.catfriend1.syncthingfork android.permission.INTERACT_ACROSS_USERS
+change_permission "${1}" com.github.ywpc05.syncthingfork.debug android.permission.INTERACT_ACROSS_USERS
+change_permission "${1}" com.github.ywpc05.syncthingfork android.permission.INTERACT_ACROSS_USERS

@@ -1,2 +1,5 @@
 Features
 * enhancement(HomeScreen): move folders / devices / status tabs to an MD3 bottom navigation bar
+
+Other
+* change(applicationId): package renamed to com.github.ywpc05.syncthingfork so it can be installed alongside the original Syncthing-Fork
