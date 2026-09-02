@@ -1,6 +1,8 @@
 package com.nutomic.syncthingandroid.ui.screens.share
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -46,6 +48,7 @@ import com.nutomic.syncthingandroid.ui.appPreferences
 import com.nutomic.syncthingandroid.util.ConfigRouter
 import com.nutomic.syncthingandroid.util.ConfigXml
 import com.nutomic.syncthingandroid.util.Util
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,7 +68,6 @@ fun ShareScreen(
     val preferences = context.appPreferences()
     val configRouter = remember { ConfigRouter(context) }
     val scope = rememberCoroutineScope()
-
     var folders by remember { mutableStateOf<List<Folder>?>(null) }
     var selectedFolderIndex by remember { mutableStateOf(0) }
     var dropdownExpanded by remember { mutableStateOf(false) }
@@ -122,188 +124,179 @@ fun ShareScreen(
         }
     }
 
-    fun onShareClicked() {
-        val list = folders ?: return
-        if (selectedFolderIndex >= list.size) return
-        val folder = list[selectedFolderIndex]
-        if (folder.path == null) return
-        val effectiveFiles = if (files.size == 1) {
-            files.entries.associate { it.key to nameText }
-        } else {
-            files
-        }
-        val directory = File(folder.path, subDirectory)
-        val allowOverwrite = preferences.getBoolean(Constants.PREF_ALLOW_OVERWRITE_FILES, false)
-        isCopying = true
-        showProgress = true
-        scope.launch {
-            val result = withContext(Dispatchers.IO) {
-                ShareFilesHelper.copyFiles(context, effectiveFiles, directory, allowOverwrite)
-            }
-            isCopying = false
-            showProgress = false
-            if (result.isError) {
-                android.widget.Toast.makeText(
-                    context, R.string.copy_exception, android.widget.Toast.LENGTH_SHORT
-                ).show()
-            } else if (result.ignored > 0) {
-                android.widget.Toast.makeText(
-                    context,
-                    context.resources.getQuantityString(
-                        R.plurals.copy_success_partially,
-                        result.copied.coerceAtLeast(1),
-                        result.copied, folder.label, result.ignored
-                    ),
-                    android.widget.Toast.LENGTH_LONG
-                ).show()
-            } else {
-                android.widget.Toast.makeText(
-                    context,
-                    context.resources.getQuantityString(
-                        R.plurals.copy_success,
-                        result.copied.coerceAtLeast(1),
-                        result.copied, folder.label
-                    ),
-                    android.widget.Toast.LENGTH_LONG
-                ).show()
-            }
-            // Notify RunConditionMonitor when time schedule is enabled.
-            val prefRunOnTimeSchedule = preferences.getBoolean(Constants.PREF_RUN_ON_TIME_SCHEDULE, false)
-            if (prefRunOnTimeSchedule) {
-                androidx.localbroadcastmanager.content.LocalBroadcastManager
-                    .getInstance(context.applicationContext)
-                    .sendBroadcast(
-                        Intent(com.nutomic.syncthingandroid.service.RunConditionMonitor.ACTION_SYNC_TRIGGER_FIRED)
-                            .putExtra(
-                                com.nutomic.syncthingandroid.service.RunConditionMonitor.EXTRA_BEGIN_ACTIVE_TIME_WINDOW,
-                                true
-                            )
-                    )
-            }
-            onDone()
-        }
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        Text(
-            text = pluralStringResource(
-                R.plurals.file_name_title,
-                if (files.size > 1) 2 else 1
-            ),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
+        ShareFileNameSection(files.size, nameText, onNameTextChange = { nameText = it })
+        ShareFolderSection(
+            folders = folders, selectedFolderIndex = selectedFolderIndex,
+            subDirectory = subDirectory, dropdownExpanded = dropdownExpanded,
+            onDropdownExpandedChange = { dropdownExpanded = it },
+            onFolderSelected = { index, folder ->
+                selectedFolderIndex = index
+                preferences.edit().putString(
+                    PREF_PREVIOUSLY_SELECTED_SYNCTHING_FOLDER, folder.id
+                ).apply()
+                dropdownExpanded = false
+            },
+            onPickSubDirectory = { folderPickerLauncher.launch(it) },
         )
-        OutlinedTextField(
-            value = nameText,
-            onValueChange = { nameText = it },
-            enabled = files.size == 1,
-            readOnly = files.size > 1,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        val list = folders
-        Text(
-            text = stringResource(R.string.folders),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-        )
-        if (list != null && list.isNotEmpty() && selectedFolderIndex < list.size) {
-            ExposedDropdownMenuBox(
-                expanded = dropdownExpanded,
-                onExpandedChange = { dropdownExpanded = it }
-            ) {
-                OutlinedTextField(
-                    value = list[selectedFolderIndex].toString(),
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text(stringResource(R.string.folders)) },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropdownExpanded) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .menuAnchor()
+        ShareActionsRow(
+            folders = folders,
+            isCopying = isCopying,
+            onShare = {
+                shareSelectedFiles(
+                    context, scope, preferences, files, nameText, folders,
+                    selectedFolderIndex, subDirectory,
+                    { isCopying = it }, { showProgress = it }, onDone,
                 )
-                ExposedDropdownMenu(
-                    expanded = dropdownExpanded,
-                    onDismissRequest = { dropdownExpanded = false }
-                ) {
-                    list.forEachIndexed { index, folder ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    folder.toString(),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            },
-                            onClick = {
-                                selectedFolderIndex = index
-                                preferences.edit().putString(
-                                    PREF_PREVIOUSLY_SELECTED_SYNCTHING_FOLDER, folder.id
-                                ).apply()
-                                dropdownExpanded = false
-                            }
-                        )
-                    }
-                }
-            }
-            Text(
-                text = subDirectory,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
-            OutlinedButton(
-                onClick = {
-                    val folder = list[selectedFolderIndex]
-                    val initialDir = File(folder.path, subDirectory)
-                    folderPickerLauncher.launch(
-                        com.nutomic.syncthingandroid.activities.FolderPickerActivity.createIntent(
-                            context, initialDir.absolutePath, folder.path
-                        )
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(Icons.Outlined.FolderOpen, contentDescription = null)
-                Text(
-                    stringResource(R.string.advanced_directory_selection),
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
-        } else {
-            Text(
-                text = stringResource(R.string.folder_list_empty),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        Row(modifier = Modifier.padding(top = 16.dp)) {
-            Button(
-                onClick = { onShareClicked() },
-                enabled = !isCopying && list != null && list.isNotEmpty(),
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(stringResource(R.string.share_activity_title))
-            }
-            OutlinedButton(
-                onClick = { onDone() },
-                enabled = !isCopying,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp)
-            ) {
-                Text(stringResource(android.R.string.cancel))
-            }
-        }
+            },
+            onDone = onDone,
+        )
     }
 
-    if (showProgress) {
+    ShareProgressDialog(visible = showProgress)
+}
+
+@Composable
+private fun ShareFileNameSection(
+    fileCount: Int,
+    nameText: String,
+    onNameTextChange: (String) -> Unit,
+) {
+    Text(
+        text = pluralStringResource(
+            R.plurals.file_name_title,
+            if (fileCount > 1) 2 else 1
+        ),
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.padding(bottom = 8.dp)
+    )
+    OutlinedTextField(
+        value = nameText,
+        onValueChange = onNameTextChange,
+        enabled = fileCount == 1,
+        readOnly = fileCount > 1,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ShareFolderSection(
+    folders: List<Folder>?,
+    selectedFolderIndex: Int,
+    subDirectory: String,
+    dropdownExpanded: Boolean,
+    onDropdownExpandedChange: (Boolean) -> Unit,
+    onFolderSelected: (Int, Folder) -> Unit,
+    onPickSubDirectory: (Intent) -> Unit,
+) {
+    val context = LocalContext.current
+    Text(
+        text = stringResource(R.string.folders),
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+    )
+    if (folders != null && folders.isNotEmpty() && selectedFolderIndex < folders.size) {
+        ExposedDropdownMenuBox(
+            expanded = dropdownExpanded,
+            onExpandedChange = onDropdownExpandedChange
+        ) {
+            OutlinedTextField(
+                value = folders[selectedFolderIndex].toString(),
+                onValueChange = {},
+                readOnly = true,
+                label = { Text(stringResource(R.string.folders)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropdownExpanded) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
+            )
+            ExposedDropdownMenu(
+                expanded = dropdownExpanded,
+                onDismissRequest = { onDropdownExpandedChange(false) }
+            ) {
+                folders.forEachIndexed { index, folder ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                folder.toString(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
+                        onClick = { onFolderSelected(index, folder) }
+                    )
+                }
+            }
+        }
+        Text(
+            text = subDirectory,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+        OutlinedButton(
+            onClick = {
+                val folder = folders[selectedFolderIndex]
+                val initialDir = File(folder.path, subDirectory)
+                onPickSubDirectory(
+                    com.nutomic.syncthingandroid.activities.FolderPickerActivity.createIntent(
+                        context, initialDir.absolutePath, folder.path
+                    )
+                )
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(Icons.Outlined.FolderOpen, contentDescription = null)
+            Text(
+                stringResource(R.string.advanced_directory_selection),
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    } else {
+        Text(
+            text = stringResource(R.string.folder_list_empty),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun ShareActionsRow(
+    folders: List<Folder>?,
+    isCopying: Boolean,
+    onShare: () -> Unit,
+    onDone: () -> Unit,
+) {
+    Row(modifier = Modifier.padding(top = 16.dp)) {
+        Button(
+            onClick = onShare,
+            enabled = !isCopying && folders != null && folders.isNotEmpty(),
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(stringResource(R.string.share_activity_title))
+        }
+        OutlinedButton(
+            onClick = onDone,
+            enabled = !isCopying,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp)
+        ) {
+            Text(stringResource(android.R.string.cancel))
+        }
+    }
+}
+
+@Composable
+private fun ShareProgressDialog(visible: Boolean) {
+    if (visible) {
         AlertDialog(
             onDismissRequest = {},
             confirmButton = {},
@@ -314,6 +307,80 @@ fun ShareScreen(
                 }
             }
         )
+    }
+}
+
+private fun shareSelectedFiles(
+    context: Context,
+    scope: CoroutineScope,
+    preferences: SharedPreferences,
+    files: Map<Uri, String>,
+    nameText: String,
+    folders: List<Folder>?,
+    selectedFolderIndex: Int,
+    subDirectory: String,
+    onCopyingChanged: (Boolean) -> Unit,
+    onShowProgressChanged: (Boolean) -> Unit,
+    onDone: () -> Unit,
+) {
+    val list = folders ?: return
+    if (selectedFolderIndex >= list.size) return
+    val folder = list[selectedFolderIndex]
+    if (folder.path == null) return
+    val effectiveFiles = if (files.size == 1) {
+        files.entries.associate { it.key to nameText }
+    } else {
+        files
+    }
+    val directory = File(folder.path, subDirectory)
+    val allowOverwrite = preferences.getBoolean(Constants.PREF_ALLOW_OVERWRITE_FILES, false)
+    onCopyingChanged(true)
+    onShowProgressChanged(true)
+    scope.launch {
+        val result = withContext(Dispatchers.IO) {
+            ShareFilesHelper.copyFiles(context, effectiveFiles, directory, allowOverwrite)
+        }
+        onCopyingChanged(false)
+        onShowProgressChanged(false)
+        if (result.isError) {
+            android.widget.Toast.makeText(
+                context, R.string.copy_exception, android.widget.Toast.LENGTH_SHORT
+            ).show()
+        } else if (result.ignored > 0) {
+            android.widget.Toast.makeText(
+                context,
+                context.resources.getQuantityString(
+                    R.plurals.copy_success_partially,
+                    result.copied.coerceAtLeast(1),
+                    result.copied, folder.label, result.ignored
+                ),
+                android.widget.Toast.LENGTH_LONG
+            ).show()
+        } else {
+            android.widget.Toast.makeText(
+                context,
+                context.resources.getQuantityString(
+                    R.plurals.copy_success,
+                    result.copied.coerceAtLeast(1),
+                    result.copied, folder.label
+                ),
+                android.widget.Toast.LENGTH_LONG
+            ).show()
+        }
+        // Notify RunConditionMonitor when time schedule is enabled.
+        val prefRunOnTimeSchedule = preferences.getBoolean(Constants.PREF_RUN_ON_TIME_SCHEDULE, false)
+        if (prefRunOnTimeSchedule) {
+            androidx.localbroadcastmanager.content.LocalBroadcastManager
+                .getInstance(context.applicationContext)
+                .sendBroadcast(
+                    Intent(com.nutomic.syncthingandroid.service.RunConditionMonitor.ACTION_SYNC_TRIGGER_FIRED)
+                        .putExtra(
+                            com.nutomic.syncthingandroid.service.RunConditionMonitor.EXTRA_BEGIN_ACTIVE_TIME_WINDOW,
+                            true
+                        )
+                )
+        }
+        onDone()
     }
 }
 

@@ -56,17 +56,45 @@ internal fun FolderEditBottomSection(
     onOpenDeviceEdit: () -> Unit,
     configVersion: Int = 0,
 ) {
-    // Mirror the Java model toggles so the UI updates immediately.
-    var fsWatcherEnabled by remember(folder) { mutableStateOf(folder.fsWatcherEnabled) }
-    var paused by remember(folder) { mutableStateOf(folder.paused) }
-    var ignoreDelete by remember(folder) { mutableStateOf(folder.ignoreDelete) }
-
     Column(
         modifier = Modifier.padding(vertical = 6.dp),
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
     ) {
         // ---- Devices sharing this folder ----
-        FormCard(title = stringResource(R.string.devices)) {
+        FolderDevicesCard(
+            holder = holder,
+            folder = folder,
+            onMarkDirty = onMarkDirty,
+            onOpenDeviceEdit = onOpenDeviceEdit,
+        )
+        FolderTogglesCard(
+            holder = holder,
+            folder = folder,
+            isCreate = isCreate,
+            prefExpertMode = prefExpertMode,
+            configVersion = configVersion,
+            onMarkDirty = onMarkDirty,
+            onShowPullOrderDialog = onShowPullOrderDialog,
+            onShowVersioningDialog = onShowVersioningDialog,
+            onOpenSyncConditions = onOpenSyncConditions,
+        )
+        FolderIgnorePatternsCard(
+            holder = holder,
+            folder = folder,
+            isCreate = isCreate,
+            onIgnoreListChanged = onIgnoreListChanged,
+        )
+    }
+}
+
+@Composable
+private fun FolderDevicesCard(
+    holder: FolderEditStateHolder,
+    folder: com.nutomic.syncthingandroid.model.Folder,
+    onMarkDirty: () -> Unit,
+    onOpenDeviceEdit: () -> Unit,
+) {
+    FormCard(title = stringResource(R.string.devices)) {
         if (holder.deviceStates.isEmpty()) {
             Text(
                 text = stringResource(R.string.devices_list_empty),
@@ -155,9 +183,26 @@ internal fun FolderEditBottomSection(
                 }
             }
         }
+    }
+}
 
-        }
-        FormCard {
+@Composable
+private fun FolderTogglesCard(
+    holder: FolderEditStateHolder,
+    folder: com.nutomic.syncthingandroid.model.Folder,
+    isCreate: Boolean,
+    prefExpertMode: Boolean,
+    configVersion: Int,
+    onMarkDirty: () -> Unit,
+    onShowPullOrderDialog: () -> Unit,
+    onShowVersioningDialog: () -> Unit,
+    onOpenSyncConditions: () -> Unit,
+) {
+    // Mirror the Java model toggles so the UI updates immediately.
+    var fsWatcherEnabled by remember(folder) { mutableStateOf(folder.fsWatcherEnabled) }
+    var paused by remember(folder) { mutableStateOf(folder.paused) }
+    var ignoreDelete by remember(folder) { mutableStateOf(folder.ignoreDelete) }
+    FormCard {
         // ---- Toggles ----
         ToggleRow(
             title = stringResource(R.string.folder_fileWatcher),
@@ -247,9 +292,17 @@ internal fun FolderEditBottomSection(
                 }
             )
         }
+    }
+}
 
-        }
-        FormCard(title = stringResource(R.string.ignore_patterns)) {
+@Composable
+private fun FolderIgnorePatternsCard(
+    holder: FolderEditStateHolder,
+    folder: com.nutomic.syncthingandroid.model.Folder,
+    isCreate: Boolean,
+    onIgnoreListChanged: (String) -> Unit,
+) {
+    FormCard(title = stringResource(R.string.ignore_patterns)) {
         if (!isCreate) {
             OutlinedTextField(
                 value = holder.ignoreListText,
@@ -260,7 +313,6 @@ internal fun FolderEditBottomSection(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
-        }
         }
     }
 }

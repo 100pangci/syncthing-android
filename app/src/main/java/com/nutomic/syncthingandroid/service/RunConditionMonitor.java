@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.content.SyncStatusObserver;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -17,6 +19,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.telephony.TelephonyManager;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.os.SystemClock;
@@ -152,8 +155,12 @@ public class RunConditionMonitor {
         /**
          * Register broadcast receivers.
          */
-        // NetworkReceiver
-        ReceiverManager.registerReceiver(mContext, new NetworkReceiver(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        // NetworkReceiver (legacy API 23 fallback; API 24+ uses a default network callback instead).
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            ReceiverManager.registerReceiver(mContext, new NetworkReceiver(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        } else {
+            registerNetworkCallback();
+        }
 
         // BatteryReceiver
         IntentFilter filter = new IntentFilter();
@@ -231,6 +238,9 @@ public class RunConditionMonitor {
             mSyncStatusObserverHandle = null;
         }
 
+        // NetworkCallback (API 24+)
+        unregisterNetworkCallback();
+
         // SyncTriggerReceiver
         if (mSyncTriggerReceiver != null) {
             LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(mContext);
@@ -268,6 +278,77 @@ public class RunConditionMonitor {
                 updateShouldRunDecision();
             }
         }
+    }
+
+    /**
+     * API 24+: Replaces the deprecated CONNECTIVITY_ACTION broadcast.
+     * The callback only notifies about default network changes; the current
+     * network state is always read synchronously from ConnectivityManager
+     * when deciding if syncthing should run.
+     */
+    private @Nullable ConnectivityManager.NetworkCallback mNetworkCallback = null;
+    private final Handler mMainHandler = new Handler(Looper.getMainLooper());
+
+    private void registerNetworkCallback() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            // Should never happen; the caller only registers on API 24+.
+            return;
+        }
+        final ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) {
+            Log.e(TAG, "registerNetworkCallback: getSystemService(CONNECTIVITY_SERVICE) unexpectedly returned NULL.");
+            return;
+        }
+        mNetworkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(Network network) {
+                onDefaultNetworkMaybeChanged();
+            }
+
+            @Override
+            public void onLost(Network network) {
+                onDefaultNetworkMaybeChanged();
+            }
+
+            @Override
+            public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
+                onDefaultNetworkMaybeChanged();
+            }
+
+            @Override
+            public void onBlockedStatusChanged(Network network, boolean blocked) {
+                onDefaultNetworkMaybeChanged();
+            }
+        };
+        try {
+            cm.registerDefaultNetworkCallback(mNetworkCallback);
+        } catch (RuntimeException e) {
+            Log.e(TAG, "registerNetworkCallback: Failed to register network callback", e);
+            mNetworkCallback = null;
+        }
+    }
+
+    private void unregisterNetworkCallback() {
+        if (mNetworkCallback == null) {
+            return;
+        }
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            try {
+                cm.unregisterNetworkCallback(mNetworkCallback);
+            } catch (IllegalArgumentException e) {
+                Log.w(TAG, "unregisterNetworkCallback: Callback was not registered", e);
+            }
+        }
+        mNetworkCallback = null;
+    }
+
+    /**
+     * Called whenever the default network may have changed. Runs on the main
+     * thread to keep listener notifications consistent with the other receivers.
+     */
+    private void onDefaultNetworkMaybeChanged() {
+        mMainHandler.post(this::updateShouldRunDecision);
     }
 
     private class PowerSaveModeChangedReceiver extends BroadcastReceiver {
@@ -757,6 +838,31 @@ public class RunConditionMonitor {
     /**
      * Functions for run condition information retrieval.
      */
+
+    /**
+     * Returns the capabilities of the current default network, or null if the
+     * device is offline (e.g. flight mode). Never called on API 23.
+     */
+    private @Nullable NetworkCapabilities getActiveNetworkCapabilities() {
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) {
+            return null;
+        }
+        Network network = cm.getActiveNetwork();
+        return network == null ? null : cm.getNetworkCapabilities(network);
+    }
+
+    /**
+     * Returns true if the default network exists, is internet-capable and owns
+     * the given transport. Mirrors the legacy NetworkInfo.isConnected() checks.
+     */
+    private boolean hasActiveNetworkTransport(int transport) {
+        NetworkCapabilities nc = getActiveNetworkCapabilities();
+        return nc != null &&
+                nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                nc.hasTransport(transport);
+    }
+
     private boolean isCharging() {
         Intent intent = mContext.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         if (intent == null) {
@@ -786,12 +892,78 @@ public class RunConditionMonitor {
     }
 
     private boolean isFlightMode() {
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        return ni == null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return getActiveNetworkCapabilities() == null;
+        }
+        return isFlightModeLegacy();
     }
 
     private boolean isMeteredNetworkConnection() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            NetworkCapabilities nc = getActiveNetworkCapabilities();
+            if (nc == null) {
+                // In flight mode.
+                return false;
+            }
+            if (!nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                // No network connection.
+                return false;
+            }
+            if (nc.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                /**
+                 * We treat Wi-Fi and ETHERNET as "Wi-Fi" connection.
+                 * Assume ETHERNET connection is un-metered to allow syncing on
+                 * Android TV or VirtualBox ETHERNET connection.
+                 */
+                 return false;
+            }
+            ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            return cm != null && cm.isActiveNetworkMetered();
+        }
+        return isMeteredNetworkConnectionLegacy();
+    }
+
+    private boolean isMobileDataConnection() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return hasActiveNetworkTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                    hasActiveNetworkTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH);
+        }
+        return isMobileDataConnectionLegacy();
+    }
+
+    private boolean isRoamingNetworkConnection() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            NetworkCapabilities nc = getActiveNetworkCapabilities();
+            if (nc == null || !nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ||
+                    !nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                // Not on a (connected) mobile data network.
+                return false;
+            }
+            TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+            return tm != null && tm.isNetworkRoaming();
+        }
+        return isRoamingNetworkConnectionLegacy();
+    }
+
+    private boolean isWifiOrEthernetConnection() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return hasActiveNetworkTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    hasActiveNetworkTransport(NetworkCapabilities.TRANSPORT_ETHERNET);
+        }
+        return isWifiOrEthernetConnectionLegacy();
+    }
+
+    /**
+     * Legacy API 23 helpers, kept because {@link ConnectivityManager
+     * #registerDefaultNetworkCallback} requires API 24.
+     */
+    private boolean isFlightModeLegacy() {
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm == null ? null : cm.getActiveNetworkInfo();
+        return ni == null;
+    }
+
+    private boolean isMeteredNetworkConnectionLegacy() {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (ni == null) {
@@ -813,7 +985,7 @@ public class RunConditionMonitor {
         return cm.isActiveNetworkMetered();
     }
 
-    private boolean isMobileDataConnection() {
+    private boolean isMobileDataConnectionLegacy() {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (ni == null) {
@@ -835,7 +1007,7 @@ public class RunConditionMonitor {
         }
     }
 
-    private boolean isRoamingNetworkConnection() {
+    private boolean isRoamingNetworkConnectionLegacy() {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (ni == null) {
@@ -849,7 +1021,7 @@ public class RunConditionMonitor {
         return ni.isRoaming();
     }
 
-    private boolean isWifiOrEthernetConnection() {
+    private boolean isWifiOrEthernetConnectionLegacy() {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (ni == null) {

@@ -3,9 +3,7 @@ package com.nutomic.syncthingandroid.service;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -17,32 +15,15 @@ import com.nutomic.syncthingandroid.model.Device;
 import com.nutomic.syncthingandroid.model.Folder;
 import com.nutomic.syncthingandroid.util.ConfigRouter;
 import com.nutomic.syncthingandroid.util.ConfigXml;
-import com.nutomic.syncthingandroid.util.FileUtils;
 import com.nutomic.syncthingandroid.util.PermissionUtil;
 import com.nutomic.syncthingandroid.util.Util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 
-import net.lingala.zip4j.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.model.enums.CompressionLevel;
-import net.lingala.zip4j.model.enums.CompressionMethod;
-import net.lingala.zip4j.model.enums.EncryptionMethod;
-import net.lingala.zip4j.model.enums.AesKeyStrength;
 
 /**
  * Holds the native syncthing instance and provides an API to access it.
@@ -250,6 +231,19 @@ public class SyncthingService extends Service {
      */
     private boolean mStoragePermissionGranted = false;
 
+    private @Nullable
+    ConfigBackupManager mConfigBackupManager = null;
+
+    private @Nullable
+    HttpsCertManager mHttpsCertManager = null;
+
+    /**
+     * True if the last run condition decision told the service to (re)start the binary.
+     */
+    boolean shouldRunAfterRestart() {
+        return mLastDeterminedShouldRun;
+    }
+
     /**
      * Starts the native binary.
      */
@@ -261,6 +255,8 @@ public class SyncthingService extends Service {
         LogV("onCreate");
         mConfigRouter = new ConfigRouter(SyncthingService.this);
         mHandler = new Handler();
+        mConfigBackupManager = new ConfigBackupManager(this, mPreferences, ENABLE_VERBOSE_LOG);
+        mHttpsCertManager = new HttpsCertManager(this, mHandler);
 
         /**
          * If runtime permissions are revoked, android kills and restarts the service.
@@ -308,7 +304,7 @@ public class SyncthingService extends Service {
         }
 
         if (ACTION_RESTART.equals(intent.getAction()) && mCurrentState == State.ACTIVE) {
-            shutdown(State.INIT);
+            shutdownToState(State.INIT);
             launchStartupTask(SyncthingRunnable.Command.main);
         } else if (ACTION_STOP.equals(intent.getAction())) {
             if (intent.getBooleanExtra(EXTRA_STOP_AFTER_CRASHED_NATIVE, false)) {
@@ -319,12 +315,12 @@ public class SyncthingService extends Service {
                  * instance forcefully.
                  */
                 mCurrentState = State.ERROR;
-                shutdown(State.DISABLED);
+                shutdownToState(State.DISABLED);
             } else {
                 // Graceful shutdown.
                 if (mCurrentState == State.STARTING ||
                         mCurrentState == State.ACTIVE) {
-                    shutdown(State.DISABLED);
+                    shutdownToState(State.DISABLED);
                 }
             }
         } else if (ACTION_RESET_DATABASE.equals(intent.getAction())) {
@@ -336,7 +332,7 @@ public class SyncthingService extends Service {
             Log.i(TAG, "Invoking reset of database");
             if (mCurrentState != State.DISABLED) {
                 // Shutdown synchronously.
-                shutdown(State.DISABLED);
+                shutdownToState(State.DISABLED);
             }
             new SyncthingRunnable(this, SyncthingRunnable.Command.resetdatabase).run();
             if (mLastDeterminedShouldRun) {
@@ -355,12 +351,12 @@ public class SyncthingService extends Service {
             Log.i(TAG, "Invoking reset of delta indexes");
             if (mCurrentState != State.DISABLED) {
                 // Shutdown synchronously.
-                shutdown(State.DISABLED);
+                shutdownToState(State.DISABLED);
             }
             launchStartupTask(SyncthingRunnable.Command.resetdeltas);
             if (!mLastDeterminedShouldRun) {
                 // Shutdown if syncthing was not running before the UI action was raised.
-                shutdown(State.DISABLED);
+                shutdownToState(State.DISABLED);
             }
         } else if (ACTION_REFRESH_NETWORK_INFO.equals(intent.getAction())) {
             if (mRunConditionMonitor != null) {
@@ -445,7 +441,7 @@ public class SyncthingService extends Service {
                 if (mCurrentState == State.DISABLED) {
                     return;
                 }
-                shutdown(State.DISABLED);
+                shutdownToState(State.DISABLED);
             }
         }
     }
@@ -532,7 +528,7 @@ public class SyncthingService extends Service {
     /**
      * Prepares to launch the syncthing binary.
      */
-    private void launchStartupTask(SyncthingRunnable.Command srCommand) {
+    void launchStartupTask(SyncthingRunnable.Command srCommand) {
         synchronized (mStateLock) {
             if (mCurrentState != State.DISABLED && mCurrentState != State.INIT) {
                 Log.e(TAG, "launchStartupTask: Wrong state " + mCurrentState + " detected. Cancelling.");
@@ -665,7 +661,7 @@ public class SyncthingService extends Service {
             // are in State.INIT requiring an immediate shutdown of this service class.
             Log.i(TAG, "Shutting down syncthing binary due to missing storage permission.");
         }
-        shutdown(State.DISABLED);
+        shutdownToState(State.DISABLED);
         super.onDestroy();
     }
 
@@ -674,12 +670,10 @@ public class SyncthingService extends Service {
      * Sets {@link #mCurrentState} to newState.
      * Performs a synchronous shutdown of the native binary.
      */
-    private void shutdown(State newState) {
+    void shutdownToState(State newState) {
         if (mCurrentState == State.STARTING) {
             Log.w(TAG, "Deferring shutdown until State.STARTING was left");
-            mHandler.postDelayed(() -> {
-                shutdown(newState);
-            }, SHUTDOWN_RETRY_DELAY_MS);
+            mHandler.postDelayed(() -> shutdownToState(newState), SHUTDOWN_RETRY_DELAY_MS);
             return;
         }
 
@@ -808,21 +802,6 @@ public class SyncthingService extends Service {
     }
 
     /**
-     * Get backup zip file.
-     * Default: /storage/emulated0/backups/syncthing/config.zip
-     */
-    private final File getBackupZipFile() {
-        String defaultPath = "backups/syncthing/config.zip";
-        String relPathToZip = mPreferences.getString(Constants.PREF_BACKUP_REL_PATH_TO_ZIP, defaultPath);
-        // NOTE: somehow we get empty string from the prefs, which crashes the app, use default when that happens
-        // TODO: figure out where the empty string is coming from and fix that
-        if (relPathToZip.isEmpty()) {
-            relPathToZip = defaultPath;
-        }
-        return new File(Environment.getExternalStorageDirectory(), relPathToZip);
-    }
-
-    /**
      * Exports the local config and keys to {@link Constants#EXPORT_PATH}.
      *
      * Test with Android Virtual Device using emulator.
@@ -830,120 +809,7 @@ public class SyncthingService extends Service {
      *
      */
     public boolean exportConfig() {
-        boolean failSuccess = true;
-        Log.d(TAG, "exportConfig BEGIN");
-
-        if (mCurrentState != State.DISABLED) {
-            // Shutdown synchronously.
-            shutdown(State.DISABLED);
-        }
-
-        // Create export dir if non-existant.
-        File targetZip = getBackupZipFile();
-        targetZip.getParentFile().mkdirs();
-
-        // Export SharedPreferences.
-        File sharedPreferencesFile = null;
-        FileOutputStream fileOutputStream = null;
-        ObjectOutputStream objectOutputStream = null;
-        try {
-            sharedPreferencesFile = Constants.getSharedPrefsFile(this);
-            fileOutputStream = new FileOutputStream(sharedPreferencesFile);
-            if (!sharedPreferencesFile.exists()) {
-                sharedPreferencesFile.createNewFile();
-            }
-            objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(mPreferences.getAll());
-            objectOutputStream.flush();
-            fileOutputStream.flush();
-        } catch (IOException e) {
-            Log.e(TAG, "exportConfig: Failed to export SharedPreferences #1", e);
-            failSuccess = false;
-        } finally {
-            try {
-                if (objectOutputStream != null) {
-                    objectOutputStream.close();
-                }
-                if (fileOutputStream != null) {
-                    fileOutputStream.close();
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "exportConfig: Failed to export SharedPreferences #2", e);
-            }
-        }
-
-        // Make a list of files to backup.
-        List<File> includePaths = Arrays.asList(
-            Constants.getConfigFile(this),
-
-            Constants.getPrivateKeyFile(this),
-            Constants.getPublicKeyFile(this),
-
-            Constants.getHttpsCertFile(this),
-            Constants.getHttpsKeyFile(this),
-
-            Constants.getSharedPrefsFile(this),
-
-            Constants.getIndexDbFolder(this)
-        );
-
-        // If user set one, apply a password and encrypt the zip file.
-        String zipEncryptionPassword = mPreferences.getString(Constants.PREF_BACKUP_PASSWORD, "");
-
-        // Compress files to zip file.
-        try {
-            // Delete existing ZIP file to ensure we create a fresh archive instead of appending
-            if (targetZip.exists()) {
-                targetZip.delete();
-            }
-            
-            ZipParameters parameters = new ZipParameters();
-            parameters.setCompressionMethod(CompressionMethod.DEFLATE);
-            parameters.setCompressionLevel(CompressionLevel.NORMAL);
-
-            ZipFile zipFile;
-            if (zipEncryptionPassword.isEmpty()) {
-                zipFile = new ZipFile(targetZip);
-                parameters.setEncryptFiles(false);
-            } else {
-                zipFile = new ZipFile(targetZip, zipEncryptionPassword.toCharArray());
-                parameters.setEncryptFiles(true);
-                parameters.setEncryptionMethod(EncryptionMethod.AES);
-                parameters.setAesKeyStrength(AesKeyStrength.KEY_STRENGTH_256);
-            }
-
-            // Add files.
-            for (File includePath : includePaths) {
-                if (includePath.exists()) {
-                    if (includePath.isFile()) {
-                        zipFile.addFile(includePath, parameters);
-                    } else if (includePath.isDirectory()) {
-                        zipFile.addFolder(includePath, parameters);
-                    }
-                }
-            }
-
-            if (sharedPreferencesFile != null && sharedPreferencesFile.exists()) {
-                sharedPreferencesFile.delete();
-            }
-        } catch (Exception e) {
-            Log.w(TAG, "exportConfig: Failed to export config", e);
-            failSuccess = false;
-        }
-        Log.d(TAG, "exportConfig END");
-
-        // Start syncthing after export if run conditions apply.
-        if (mLastDeterminedShouldRun) {
-            Handler mainLooper = new Handler(Looper.getMainLooper());
-            Runnable launchStartupTaskRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    launchStartupTask(SyncthingRunnable.Command.main);
-                }
-            };
-            mainLooper.post(launchStartupTaskRunnable);
-        }
-        return failSuccess;
+        return mConfigBackupManager.exportConfig();
     }
 
     /**
@@ -955,505 +821,16 @@ public class SyncthingService extends Service {
      * @return True if the import was successful, false otherwise (eg if files aren't found).
      */
     public boolean importConfig() {
-        ZipFile zipFile = null;
-        Log.d(TAG, "importConfig PRECHECK");
-
-        // Check if ZIP exists.
-        File zipFilePath = getBackupZipFile();
-        if (!zipFilePath.exists()) {
-            Log.e(TAG, "importConfig: ZIP file is missing. Please check if it is present at '" + zipFilePath.getAbsolutePath() + "' as specified in the settings screen.");
-            return false;
-        }
-
-        // Open ZIP file.
-        try {
-            // If user set one, get password to decrypt the zip file.
-            String zipEncryptionPassword = mPreferences.getString(Constants.PREF_BACKUP_PASSWORD, "");
-            if (zipEncryptionPassword.isEmpty()) {
-                zipFile = new ZipFile(zipFilePath);
-            } else {
-                zipFile = new ZipFile(zipFilePath, zipEncryptionPassword.toCharArray());
-                if (!zipFile.isEncrypted()) {
-                    Log.e(TAG, "importConfig: ZIP file is not encrypted, but password was specified in settings screen. Try to specify an empty password temporarily.");
-                    return false;
-                }
-            }
-
-            // Check if ZIP archive contains required files.
-            List<String> checkFiles = Arrays.asList(
-                Constants.CONFIG_FILE,
-
-                Constants.PRIVATE_KEY_FILE,
-                Constants.PUBLIC_KEY_FILE
-            );
-            for (final String checkFile : checkFiles) {
-                if (zipFile.getFileHeader(checkFile) == null) {
-                    Log.e(TAG, "importConfig: Required file not found inside zip [" + checkFile + "]");
-                    return false;
-                }
-            }
-
-            // Test if supplied encryption password is correct.
-            String cacheDir = this.getCacheDir().getAbsolutePath();
-            zipFile.extractFile(Constants.PUBLIC_KEY_FILE, cacheDir);
-            new File(cacheDir, Constants.PUBLIC_KEY_FILE).delete();
-        } catch (ZipException e) {
-            Log.e(TAG, "importConfig: Failed to open zip, " + e.getMessage());
-            return false;
-        }
-
-        // Shutdown SyncthingNative.
-        boolean failSuccess = true;
-        Log.d(TAG, "importConfig BEGIN");
-        if (mCurrentState != State.DISABLED) {
-            // Shutdown synchronously.
-            shutdown(State.DISABLED);
-        }
-
-        // Remove database folder if it exists.
-        File databasePath = Constants.getIndexDbFolder(this);
-        if (databasePath.exists()) {
-            Log.d(TAG, "importConfig: Clearing index database");
-            try {
-                FileUtils.deleteDirectoryRecursively(databasePath);
-            } catch (IOException e) {
-                Log.e(TAG, "Failed to delete directory '" + databasePath.getAbsolutePath() + "'" + e);
-            }
-        }
-
-        // Decompress zip file.
-        try {
-            zipFile.extractAll(this.getFilesDir().getAbsolutePath());
-        } catch (ZipException e) {
-            Log.e(TAG, "importConfig: Failed to extract zip, " + e.getMessage());
-            failSuccess = false;
-        }
-
-        // Check if necessary files are present after extraction.
-        List<File> checkPaths = Arrays.asList(
-            Constants.getConfigFile(this),
-
-            Constants.getPrivateKeyFile(this),
-            Constants.getPublicKeyFile(this),
-
-            Constants.getHttpsCertFile(this),
-            Constants.getHttpsKeyFile(this),
-
-            Constants.getSharedPrefsFile(this)
-        );
-        for (final File checkPath : checkPaths) {
-            if (!checkPath.exists()) {
-                Log.e(TAG, "importConfig: Missing file after extraction [" + checkPath.getName() + "]");
-                failSuccess = false;
-            }
-        }
-        
-        // Import shared preferences.
-        File sharedPreferencesFile = Constants.getSharedPrefsFile(this);
-        if (sharedPreferencesFile.exists()) {
-            Log.d(TAG, "importConfig: Importing shared preferences");
-            failSuccess = failSuccess && importConfigSharedPrefs(sharedPreferencesFile);
-            sharedPreferencesFile.delete();
-        }
-
-        try {
-            cleanupImportedFolderDatabases();
-        } catch (Exception e) {
-            Log.e(TAG, "importConfig: Failed to cleanup invalid folder databases", e);
-        }
-
-        // Start syncthing after import if run conditions apply.
-        if (mLastDeterminedShouldRun) {
-            Handler mainLooper = new Handler(Looper.getMainLooper());
-            Runnable launchStartupTaskRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    launchStartupTask(SyncthingRunnable.Command.main);
-                }
-            };
-            mainLooper.post(launchStartupTaskRunnable);
-        }
-        return failSuccess;
+        return mConfigBackupManager.importConfig();
     }
 
-    /**
-     * Backstop timeout for {@link #verifyRestartAndRollback} in case the state machine never reaches
-     * a terminal state (e.g. the binary crashed via a path that doesn't transition to ERROR).
-     */
-    private static final long HTTPS_CERT_VERIFY_TIMEOUT_MS = 30000;
-
-    /**
-     * Replaces the Web GUI HTTPS certificate and key with the supplied PEM bytes, then restarts
-     * Syncthing so the new files take effect. If the restart fails to bring the Web GUI back online,
-     * the previous certificate and key are restored automatically.
-     *
-     * The bytes are expected to already be validated (see {@link com.nutomic.syncthingandroid.util.CertificateValidator}).
-     * The whole start/stop lifecycle is marshalled onto the main thread because the binary
-     * orchestration fields are only safe to touch there.
-     */
     public void replaceHttpsCertificate(byte[] certPem, byte[] keyPem,
                                         OnHttpsCertReplaceResultListener listener) {
-        mHandler.post(() -> doReplaceHttpsCertificate(certPem, keyPem, listener));
+        mHttpsCertManager.replaceHttpsCertificate(certPem, keyPem, listener);
     }
 
-    /**
-     * Deletes the user-supplied HTTPS certificate/key so Syncthing regenerates a fresh self-signed
-     * certificate at the next start, then restarts (with rollback on failure).
-     */
     public void resetHttpsCertificate(OnHttpsCertReplaceResultListener listener) {
-        mHandler.post(() -> doResetHttpsCertificate(listener));
-    }
-
-    private void doReplaceHttpsCertificate(byte[] certPem, byte[] keyPem,
-                                           OnHttpsCertReplaceResultListener listener) {
-        // shutdown() defers while STARTING; wait it out so our file writes don't race the binary.
-        if (mCurrentState == State.STARTING) {
-            mHandler.postDelayed(() -> doReplaceHttpsCertificate(certPem, keyPem, listener), SHUTDOWN_RETRY_DELAY_MS);
-            return;
-        }
-
-        final File certFile = Constants.getHttpsCertFile(this);
-        final File keyFile = Constants.getHttpsKeyFile(this);
-
-        // Stop the binary so it releases the cert/key before we overwrite them.
-        if (mCurrentState != State.DISABLED) {
-            shutdown(State.DISABLED);
-        }
-
-        final File certBak = backupFile(certFile);
-        final File keyBak = backupFile(keyFile);
-
-        try {
-            writeBytesAtomic(certFile, certPem);
-            writeBytesAtomic(keyFile, keyPem);
-            restrictToOwner(keyFile);
-        } catch (IOException e) {
-            Log.e(TAG, "doReplaceHttpsCertificate: Failed to write new cert/key", e);
-            restoreFile(certBak, certFile);
-            restoreFile(keyBak, keyFile);
-            if (mLastDeterminedShouldRun) {
-                launchStartupTask(SyncthingRunnable.Command.main);
-            }
-            listener.onResult(HttpsCertReplaceResult.FAILED, e.getMessage());
-            return;
-        }
-
-        applyCertChangeWithVerify(certFile, keyFile, certBak, keyBak, listener);
-    }
-
-    private void doResetHttpsCertificate(OnHttpsCertReplaceResultListener listener) {
-        if (mCurrentState == State.STARTING) {
-            mHandler.postDelayed(() -> doResetHttpsCertificate(listener), SHUTDOWN_RETRY_DELAY_MS);
-            return;
-        }
-
-        final File certFile = Constants.getHttpsCertFile(this);
-        final File keyFile = Constants.getHttpsKeyFile(this);
-
-        if (mCurrentState != State.DISABLED) {
-            shutdown(State.DISABLED);
-        }
-
-        final File certBak = backupFile(certFile);
-        final File keyBak = backupFile(keyFile);
-        // Removing the files makes syncthing generate a fresh self-signed certificate at startup.
-        deleteQuietly(certFile);
-        deleteQuietly(keyFile);
-
-        applyCertChangeWithVerify(certFile, keyFile, certBak, keyBak, listener);
-    }
-
-    private void applyCertChangeWithVerify(File certFile, File keyFile,
-                                           @Nullable File certBak, @Nullable File keyBak,
-                                           OnHttpsCertReplaceResultListener listener) {
-        if (mLastDeterminedShouldRun) {
-            verifyRestartAndRollback(certFile, keyFile, certBak, keyBak, listener);
-        } else {
-            // Not currently meant to run; the new files will take effect on next start.
-            deleteQuietly(certBak);
-            deleteQuietly(keyBak);
-            listener.onResult(HttpsCertReplaceResult.SUCCESS_PENDING_START, null);
-        }
-    }
-
-    /**
-     * Restarts the binary and watches the service state: success on reaching ACTIVE, failure on
-     * ERROR / an abnormal STARTING&rarr;DISABLED transition (crashed binary) / a watchdog timeout.
-     * On failure the backed-up cert/key are restored and a known-good instance is brought back up.
-     */
-    private void verifyRestartAndRollback(File certFile, File keyFile,
-                                          @Nullable File certBak, @Nullable File keyBak,
-                                          OnHttpsCertReplaceResultListener listener) {
-        final boolean[] resolved = {false};
-        final boolean[] sawStarting = {false};
-        final OnServiceStateChangeListener[] verifyListener = new OnServiceStateChangeListener[1];
-        final Runnable[] watchdog = new Runnable[1];
-
-        final Runnable finishSuccess = () -> {
-            deleteQuietly(certBak);
-            deleteQuietly(keyBak);
-            listener.onResult(HttpsCertReplaceResult.SUCCESS, null);
-        };
-        final Runnable finishFailure = () -> {
-            restoreFile(certBak, certFile);
-            restoreFile(keyBak, keyFile);
-            // Bring the previous, known-good certificate back online.
-            if (mCurrentState != State.DISABLED && mCurrentState != State.INIT) {
-                shutdown(State.INIT);
-            }
-            launchStartupTask(SyncthingRunnable.Command.main);
-            listener.onResult(HttpsCertReplaceResult.FAILED,
-                    "Syncthing did not come online with the new certificate.");
-        };
-
-        watchdog[0] = () -> {
-            if (resolved[0]) {
-                return;
-            }
-            resolved[0] = true;
-            unregisterOnServiceStateChangeListener(verifyListener[0]);
-            if (mCurrentState == State.ACTIVE) {
-                finishSuccess.run();
-            } else {
-                finishFailure.run();
-            }
-        };
-
-        verifyListener[0] = (state) -> {
-            if (resolved[0]) {
-                return;
-            }
-            if (state == State.STARTING) {
-                sawStarting[0] = true;
-                return;
-            }
-            final boolean success = (state == State.ACTIVE);
-            final boolean failure = (state == State.ERROR) || (sawStarting[0] && state == State.DISABLED);
-            if (!success && !failure) {
-                return;
-            }
-            resolved[0] = true;
-            mHandler.removeCallbacks(watchdog[0]);
-            // Defer unregister + lifecycle work out of onServiceStateChange's listener iteration.
-            mHandler.post(() -> {
-                unregisterOnServiceStateChangeListener(verifyListener[0]);
-                if (success) {
-                    finishSuccess.run();
-                } else {
-                    finishFailure.run();
-                }
-            });
-        };
-
-        // registerOnServiceStateChangeListener replays the current state (DISABLED) synchronously;
-        // that is ignored because sawStarting is still false.
-        registerOnServiceStateChangeListener(verifyListener[0]);
-        mHandler.postDelayed(watchdog[0], HTTPS_CERT_VERIFY_TIMEOUT_MS);
-        launchStartupTask(SyncthingRunnable.Command.main);
-    }
-
-    @Nullable
-    private File backupFile(File file) {
-        if (!file.exists()) {
-            return null;
-        }
-        File bak = new File(file.getParentFile(), file.getName() + ".bak");
-        deleteQuietly(bak);
-        if (file.renameTo(bak)) {
-            return bak;
-        }
-        Log.w(TAG, "backupFile: Failed to back up " + file.getName());
-        return null;
-    }
-
-    private void restoreFile(@Nullable File bak, File target) {
-        if (bak == null || !bak.exists()) {
-            return;
-        }
-        deleteQuietly(target);
-        if (!bak.renameTo(target)) {
-            Log.w(TAG, "restoreFile: Failed to restore " + target.getName());
-        }
-    }
-
-    private void deleteQuietly(@Nullable File file) {
-        if (file != null && file.exists() && !file.delete()) {
-            Log.w(TAG, "deleteQuietly: Failed to delete " + file.getName());
-        }
-    }
-
-    private void writeBytesAtomic(File target, byte[] data) throws IOException {
-        File tmp = new File(target.getParentFile(), target.getName() + ".tmp");
-        try (FileOutputStream fos = new FileOutputStream(tmp)) {
-            fos.write(data);
-            fos.flush();
-            fos.getFD().sync();
-        }
-        if (!tmp.renameTo(target)) {
-            deleteQuietly(tmp);
-            throw new IOException("Failed to rename " + tmp.getName() + " to " + target.getName());
-        }
-    }
-
-    private void restrictToOwner(File file) {
-        // Mirror syncthing core, which writes the HTTPS key with 0600 permissions.
-        file.setReadable(false, false);
-        file.setReadable(true, true);
-        file.setWritable(false, false);
-        file.setWritable(true, true);
-        file.setExecutable(false, false);
-    }
-
-    private void cleanupImportedFolderDatabases() {
-        ConfigXml configXml = new ConfigXml(this);
-        try {
-            configXml.loadConfig();
-        } catch (ConfigXml.OpenConfigException e) {
-            Log.w(TAG, "importConfig: Unable to parse imported config for DB cleanup");
-            return;
-        }
-
-        final List<Folder> folders = configXml.getFolders();
-        if (folders == null || folders.isEmpty()) {
-            return;
-        }
-
-        for (Folder folder : folders) {
-            if (folder == null || folder.id == null || folder.id.isEmpty()) {
-                continue;
-            }
-
-            final String folderPathValue = folder.path;
-            final File folderPath = (folderPathValue == null || folderPathValue.isEmpty())
-                    ? null
-                    : new File(folderPathValue);
-            final boolean folderPathMissing = folderPath == null || !folderPath.isDirectory();
-
-            String markerName = folder.markerName;
-            if (markerName == null || markerName.isEmpty()) {
-                markerName = Constants.FILENAME_STFOLDER;
-            }
-            final boolean markerMissing = folderPathMissing || !new File(folderPath, markerName).exists();
-
-            if (folderPathMissing || markerMissing) {
-                Log.i(TAG, "importConfig: Folder path or marker missing for folder id \"" + folder.id + "\". Resetting Syncthing database.");
-                new SyncthingRunnable(this, SyncthingRunnable.Command.resetdatabase).run();
-                break;
-            }
-        }
-    }
-
-    private boolean importConfigSharedPrefs(final File file) {
-        boolean failSuccess = true;
-        FileInputStream fileInputStream = null;
-        ObjectInputStream objectInputStream = null;
-        Map<?, ?> sharedPrefsMap = null;
-        try {
-            
-            // Read, deserialize shared preferences.
-            fileInputStream = new FileInputStream(file);
-            objectInputStream = new ObjectInputStream(fileInputStream);
-            Object objectFromInputStream = objectInputStream.readObject();
-            if (objectFromInputStream instanceof Map) {
-                sharedPrefsMap = (Map<?, ?>) objectFromInputStream;
-
-                // Store backup folder to restore it back later in the process.
-                String relPathToZip = mPreferences.getString(Constants.PREF_BACKUP_REL_PATH_TO_ZIP, "");
-                String backupPassword = mPreferences.getString(Constants.PREF_BACKUP_PASSWORD, "");
-
-                // Prepare a SharedPreferences commit.
-                SharedPreferences.Editor editor = mPreferences.edit();
-                editor.clear();
-                for (Map.Entry<?, ?> e : sharedPrefsMap.entrySet()) {
-                    String prefKey = (String) e.getKey();
-                    switch (prefKey) {
-                        // Preferences that are no longer used and left-overs from previous versions of the app.
-                        case "first_start":
-                        case "advanced_folder_picker":
-                        case "backup_folder_name":
-                        case "bind_network":
-                        case "log_to_file":
-                        case "notification_type":
-                        case "notify_crashes":
-                        case "suggest_new_folder_root":
-                        case "use_legacy_hashing":
-                        case "pref_current_language":
-                        case "restartOnWakeup":
-                        case "wakelock_while_binary_running":
-                        case "use_root":
-                        case "important_news_shown_version":
-                            LogV("importConfig: Ignoring deprecated pref \"" + prefKey + "\".");
-                            break;
-                        // Cached information which is not available on SettingsActivity.
-                        case Constants.PREF_APP_START_COUNTER:
-                        case Constants.PREF_BTNSTATE_FORCE_START_STOP:
-                        case Constants.PREF_DEBUG_FACILITIES_AVAILABLE:
-                        case Constants.PREF_EVENT_PROCESSOR_LAST_SYNC_ID:
-                        case Constants.PREF_LAST_BINARY_VERSION:
-                        case Constants.PREF_LOCAL_DEVICE_ID:
-                        case Constants.PREF_LAST_RUN_TIME:
-                            LogV("importConfig: Ignoring cache pref \"" + prefKey + "\".");
-                            break;
-                        default:
-                            Log.i(TAG, "importConfig: Adding pref \"" + prefKey + "\" to commit ...");
-
-                            // The editor only provides typed setters.
-                            if (e.getValue() instanceof Boolean) {
-                                editor.putBoolean(prefKey, (Boolean) e.getValue());
-                            } else if (e.getValue() instanceof String) {
-                                editor.putString(prefKey, (String) e.getValue());
-                            } else if (e.getValue() instanceof Integer) {
-                                editor.putInt(prefKey, (Integer) e.getValue());
-                            } else if (e.getValue() instanceof Float) {
-                                editor.putFloat(prefKey, (Float) e.getValue());
-                            } else if (e.getValue() instanceof Long) {
-                                editor.putLong(prefKey, (Long) e.getValue());
-                            } else if (e.getValue() instanceof Set) {
-                                editor.putStringSet(prefKey, asSet((Set<?>) e.getValue(), String.class));
-                            } else {
-                                Log.w(TAG, "importConfig: SharedPref type " + e.getValue().getClass().getName() + " is unknown");
-                            }
-                            break;
-                    }
-                }
-                editor.putString(Constants.PREF_BACKUP_REL_PATH_TO_ZIP, relPathToZip);
-                editor.putString(Constants.PREF_BACKUP_PASSWORD, backupPassword);
-
-                /**
-                 * If all shared preferences have been added to the commit successfully,
-                 * apply the commit.
-                 */
-                failSuccess = failSuccess && editor.commit();
-            } else {
-                Log.e(TAG, "importConfig: Invalid object stream");
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            Log.e(TAG, "importConfig: Failed to import SharedPreferences #1", e);
-            failSuccess = false;
-        } finally {
-            try {
-                if (objectInputStream != null) {
-                    objectInputStream.close();
-                }
-                if (fileInputStream != null) {
-                    fileInputStream.close();
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "importConfig: Failed to import SharedPreferences #2", e);
-            }
-        }
-        return failSuccess;
-    }
-
-    public static <T> Set<T> asSet(Set<?> c, Class<? extends T> type) {
-        if (c == null) {
-            return null;
-        }
-        Set<T> set = new HashSet<T>();
-        for (Object o : c) {
-            set.add(type.cast(o));
-        }
-        return set;
+        mHttpsCertManager.resetHttpsCertificate(listener);
     }
 
     private void LogV(String logMessage) {

@@ -69,14 +69,6 @@ internal fun DeviceEditContent(
     onOpenFolderEdit: () -> Unit,
     onRefreshDiscovery: () -> Unit,
 ) {
-    var nameText by remember(device) { mutableStateOf(device.name ?: "") }
-    var addressesText by remember(device) { mutableStateOf(displayableAddresses(device)) }
-    // Mirror the Java model toggles so the UI updates immediately.
-    var introducer by remember(device) { mutableStateOf(device.introducer) }
-    var autoAcceptFolders by remember(device) { mutableStateOf(device.autoAcceptFolders) }
-    var paused by remember(device) { mutableStateOf(device.paused) }
-    var untrusted by remember(device) { mutableStateOf(device.untrusted) }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,252 +77,316 @@ internal fun DeviceEditContent(
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
     ) {
         // ---- Device identity ----
-        FormCard(title = stringResource(R.string.device_id)) {
-            if (isCreate) {
-                OutlinedTextField(
-                    value = holder.deviceIdText,
-                    onValueChange = { value ->
-                        holder.deviceIdText = value
-                        onDeviceMutate { it.deviceID = value }
-                    },
-                    label = { Text(stringResource(R.string.device_id)) },
-                    leadingIcon = { Icon(Icons.Outlined.QrCode2, contentDescription = null) },
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp)
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                ) {
-                    TextButton(onClick = onScanQr) {
-                        Icon(Icons.Outlined.QrCode2, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.scan_qr_code_description))
-                    }
-                }
-            } else {
-                ClickRow(
-                    title = stringResource(R.string.device_id),
-                    value = device.deviceID,
-                    icon = Icons.Outlined.QrCode2,
-                    onClick = onShowQr
-                )
-            }
+        DeviceIdentityCard(
+            device = device,
+            holder = holder,
+            isCreate = isCreate,
+            prefExpertMode = prefExpertMode,
+            discoveredDevices = discoveredDevices,
+            onDeviceMutate = onDeviceMutate,
+            onScanQr = onScanQr,
+            onShowQr = onShowQr,
+            onCompressionClick = onCompressionClick,
+            onRefreshDiscovery = onRefreshDiscovery,
+        )
+        // ---- Toggles ----
+        DeviceTogglesCard(
+            device = device,
+            onDeviceMutate = onDeviceMutate,
+        )
+        // ---- Custom sync conditions (edit mode only) ----
+        if (!isCreate) {
+            DeviceSyncConditionsCard(
+                holder = holder,
+                onOpenSyncConditions = onOpenSyncConditions,
+            )
+        }
+        // ---- Folders shared with this device ----
+        DeviceFoldersCard(
+            holder = holder,
+            onOpenFolderEdit = onOpenFolderEdit,
+        )
+    }
+}
 
-            // ---- Discovered devices (create mode only) ----
-            if (isCreate && holder.deviceIdText.isEmpty() && discoveredDevices != null) {
-                if (discoveredDevices.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.local_discovery_disabled),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                    )
-                } else {
-                    Text(
-                        text = stringResource(R.string.discovered_devices_title),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                            .clickable { onRefreshDiscovery() }
-                    )
-                    discoveredDevices.forEach { (id, discoveredDevice) ->
-                        val readableAddresses = discoveredDevice.addresses?.joinToString(", ") ?: ""
-                        val caption = id + if (readableAddresses.isEmpty()) "" else " ($readableAddresses)"
-                        Text(
-                            text = caption,
-                            style = MaterialTheme.typography.bodyMedium,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    holder.deviceIdText = id
-                                    onDeviceMutate { it.deviceID = id }
-                                }
-                                .padding(horizontal = 16.dp, vertical = 10.dp)
-                        )
-                    }
-                }
-            }
-
-            // ---- Name ----
+@Composable
+private fun DeviceIdentityCard(
+    device: Device,
+    holder: DeviceEditStateHolder,
+    isCreate: Boolean,
+    prefExpertMode: Boolean,
+    discoveredDevices: Map<String, DiscoveredDevice>?,
+    onDeviceMutate: ((Device) -> Unit) -> Unit,
+    onScanQr: () -> Unit,
+    onShowQr: () -> Unit,
+    onCompressionClick: () -> Unit,
+    onRefreshDiscovery: () -> Unit,
+) {
+    var nameText by remember(device) { mutableStateOf(device.name ?: "") }
+    var addressesText by remember(device) { mutableStateOf(displayableAddresses(device)) }
+    FormCard(title = stringResource(R.string.device_id)) {
+        if (isCreate) {
             OutlinedTextField(
-                value = nameText,
+                value = holder.deviceIdText,
                 onValueChange = { value ->
-                    nameText = value
-                    onDeviceMutate { it.name = value }
+                    holder.deviceIdText = value
+                    onDeviceMutate { it.deviceID = value }
                 },
-                label = { Text(stringResource(R.string.device_name)) },
-                leadingIcon = { Icon(Icons.Outlined.Person, contentDescription = null) },
+                label = { Text(stringResource(R.string.device_id)) },
+                leadingIcon = { Icon(Icons.Outlined.QrCode2, contentDescription = null) },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 4.dp)
             )
-
-            // ---- Addresses ----
-            OutlinedTextField(
-                value = addressesText,
-                onValueChange = { value ->
-                    addressesText = value
-                    onDeviceMutate { it.addresses = persistableAddresses(value) }
-                },
-                label = { Text(stringResource(R.string.addresses)) },
-                leadingIcon = { Icon(Icons.Outlined.Lan, contentDescription = null) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
-            )
-
-            // ---- Compression (expert mode only) ----
-            if (prefExpertMode) {
-                ClickRow(
-                    title = stringResource(R.string.compression),
-                    value = compressionTitle(holder.compressionIndex),
-                    icon = Icons.Outlined.Compress,
-                    onClick = onCompressionClick
-                )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
+                TextButton(onClick = onScanQr) {
+                    Icon(Icons.Outlined.QrCode2, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.scan_qr_code_description))
+                }
             }
-        }
-
-        // ---- Toggles ----
-        FormCard {
-            ToggleRow(
-                title = stringResource(R.string.introducer),
-                icon = Icons.Outlined.RecordVoiceOver,
-                checked = introducer,
-                onCheckedChange = { checked ->
-                    introducer = checked
-                    onDeviceMutate { it.introducer = checked }
-                }
-            )
-            ToggleRow(
-                title = stringResource(R.string.autoAcceptFolders),
-                icon = Icons.Outlined.MoveToInbox,
-                checked = autoAcceptFolders,
-                onCheckedChange = { checked ->
-                    autoAcceptFolders = checked
-                    onDeviceMutate { it.autoAcceptFolders = checked }
-                }
-            )
-            ToggleRow(
-                title = stringResource(R.string.pause_device),
-                icon = Icons.Outlined.Pause,
-                checked = paused,
-                onCheckedChange = { checked ->
-                    paused = checked
-                    onDeviceMutate { it.paused = checked }
-                }
-            )
-            ToggleRow(
-                title = stringResource(R.string.untrusted_device),
-                icon = Icons.Outlined.Shield,
-                checked = untrusted,
-                onCheckedChange = { checked ->
-                    untrusted = checked
-                    onDeviceMutate { it.untrusted = checked }
-                }
+        } else {
+            ClickRow(
+                title = stringResource(R.string.device_id),
+                value = device.deviceID,
+                icon = Icons.Outlined.QrCode2,
+                onClick = onShowQr
             )
         }
 
-        // ---- Custom sync conditions (edit mode only) ----
-        if (!isCreate) {
-            FormCard {
-                ToggleRow(
-                    title = stringResource(R.string.custom_sync_conditions_title),
-                    description = stringResource(R.string.custom_sync_conditions_description),
-                    icon = Icons.Outlined.Tune,
-                    checked = holder.customSyncConditions,
-                    onCheckedChange = { checked ->
-                        holder.customSyncConditions = checked
-                        holder.needsUpdate = true
-                    }
+        // ---- Discovered devices (create mode only) ----
+        if (isCreate && holder.deviceIdText.isEmpty() && discoveredDevices != null) {
+            if (discoveredDevices.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.local_discovery_disabled),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
-                if (holder.customSyncConditions) {
-                    ClickRow(
-                        title = stringResource(R.string.custom_sync_conditions_dialog),
-                        value = stringResource(R.string.custom_sync_conditions_description),
-                        icon = Icons.Outlined.Schedule,
-                        onClick = onOpenSyncConditions
+            } else {
+                Text(
+                    text = stringResource(R.string.discovered_devices_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .clickable { onRefreshDiscovery() }
+                )
+                discoveredDevices.forEach { (id, discoveredDevice) ->
+                    val readableAddresses = discoveredDevice.addresses?.joinToString(", ") ?: ""
+                    val caption = id + if (readableAddresses.isEmpty()) "" else " ($readableAddresses)"
+                    Text(
+                        text = caption,
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                holder.deviceIdText = id
+                                onDeviceMutate { it.deviceID = id }
+                            }
+                            .padding(horizontal = 16.dp, vertical = 10.dp)
                     )
                 }
             }
         }
 
-        // ---- Folders shared with this device ----
-        FormCard(title = stringResource(R.string.folders)) {
-            if (holder.folderStates.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.folders_list_empty),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onOpenFolderEdit() }
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                )
-            } else {
-                holder.folderStates.forEach { shareState ->
-                    Column(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = shareState.folder.toString(),
-                                style = MaterialTheme.typography.bodyLarge,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clickable {
-                                        val newShared = !shareState.shared
-                                        holder.folderStates = holder.folderStates.map {
-                                            if (it.folder.id == shareState.folder.id)
-                                                it.copy(shared = newShared)
-                                            else it
-                                        }
-                                        holder.needsUpdate = true
-                                    }
-                        )
-                            Switch(
-                                checked = shareState.shared,
-                                onCheckedChange = { checked ->
+        // ---- Name ----
+        OutlinedTextField(
+            value = nameText,
+            onValueChange = { value ->
+                nameText = value
+                onDeviceMutate { it.name = value }
+            },
+            label = { Text(stringResource(R.string.device_name)) },
+            leadingIcon = { Icon(Icons.Outlined.Person, contentDescription = null) },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+        )
+
+        // ---- Addresses ----
+        OutlinedTextField(
+            value = addressesText,
+            onValueChange = { value ->
+                addressesText = value
+                onDeviceMutate { it.addresses = persistableAddresses(value) }
+            },
+            label = { Text(stringResource(R.string.addresses)) },
+            leadingIcon = { Icon(Icons.Outlined.Lan, contentDescription = null) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+        )
+
+        // ---- Compression (expert mode only) ----
+        if (prefExpertMode) {
+            ClickRow(
+                title = stringResource(R.string.compression),
+                value = compressionTitle(holder.compressionIndex),
+                icon = Icons.Outlined.Compress,
+                onClick = onCompressionClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun DeviceTogglesCard(
+    device: Device,
+    onDeviceMutate: ((Device) -> Unit) -> Unit,
+) {
+    // Mirror the Java model toggles so the UI updates immediately.
+    var introducer by remember(device) { mutableStateOf(device.introducer) }
+    var autoAcceptFolders by remember(device) { mutableStateOf(device.autoAcceptFolders) }
+    var paused by remember(device) { mutableStateOf(device.paused) }
+    var untrusted by remember(device) { mutableStateOf(device.untrusted) }
+    FormCard {
+        ToggleRow(
+            title = stringResource(R.string.introducer),
+            icon = Icons.Outlined.RecordVoiceOver,
+            checked = introducer,
+            onCheckedChange = { checked ->
+                introducer = checked
+                onDeviceMutate { it.introducer = checked }
+            }
+        )
+        ToggleRow(
+            title = stringResource(R.string.autoAcceptFolders),
+            icon = Icons.Outlined.MoveToInbox,
+            checked = autoAcceptFolders,
+            onCheckedChange = { checked ->
+                autoAcceptFolders = checked
+                onDeviceMutate { it.autoAcceptFolders = checked }
+            }
+        )
+        ToggleRow(
+            title = stringResource(R.string.pause_device),
+            icon = Icons.Outlined.Pause,
+            checked = paused,
+            onCheckedChange = { checked ->
+                paused = checked
+                onDeviceMutate { it.paused = checked }
+            }
+        )
+        ToggleRow(
+            title = stringResource(R.string.untrusted_device),
+            icon = Icons.Outlined.Shield,
+            checked = untrusted,
+            onCheckedChange = { checked ->
+                untrusted = checked
+                onDeviceMutate { it.untrusted = checked }
+            }
+        )
+    }
+}
+
+@Composable
+private fun DeviceSyncConditionsCard(
+    holder: DeviceEditStateHolder,
+    onOpenSyncConditions: () -> Unit,
+) {
+    FormCard {
+        ToggleRow(
+            title = stringResource(R.string.custom_sync_conditions_title),
+            description = stringResource(R.string.custom_sync_conditions_description),
+            icon = Icons.Outlined.Tune,
+            checked = holder.customSyncConditions,
+            onCheckedChange = { checked ->
+                holder.customSyncConditions = checked
+                holder.needsUpdate = true
+            }
+        )
+        if (holder.customSyncConditions) {
+            ClickRow(
+                title = stringResource(R.string.custom_sync_conditions_dialog),
+                value = stringResource(R.string.custom_sync_conditions_description),
+                icon = Icons.Outlined.Schedule,
+                onClick = onOpenSyncConditions
+            )
+        }
+    }
+}
+
+@Composable
+private fun DeviceFoldersCard(
+    holder: DeviceEditStateHolder,
+    onOpenFolderEdit: () -> Unit,
+) {
+    FormCard(title = stringResource(R.string.folders)) {
+        if (holder.folderStates.isEmpty()) {
+            Text(
+                text = stringResource(R.string.folders_list_empty),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onOpenFolderEdit() }
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            )
+        } else {
+            holder.folderStates.forEach { shareState ->
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = shareState.folder.toString(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable {
+                                    val newShared = !shareState.shared
                                     holder.folderStates = holder.folderStates.map {
                                         if (it.folder.id == shareState.folder.id)
-                                            it.copy(shared = checked)
+                                            it.copy(shared = newShared)
                                         else it
                                     }
                                     holder.needsUpdate = true
                                 }
-                            )
-                        }
-                        if (shareState.shared) {
-                            OutlinedTextField(
-                                value = shareState.password,
-                                onValueChange = { value ->
-                                    holder.folderStates = holder.folderStates.map {
-                                        if (it.folder.id == shareState.folder.id)
-                                            it.copy(password = value)
-                                        else it
-                                    }
-                                    holder.needsUpdate = true
-                                },
-                                label = { Text(stringResource(R.string.deviceEncryptionPasswordHint)) },
-                                singleLine = true,
-                                visualTransformation = PasswordVisualTransformation(),
-                                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
-                                    keyboardType = KeyboardType.Password
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp)
-                            )
-                        }
+                        )
+                        Switch(
+                            checked = shareState.shared,
+                            onCheckedChange = { checked ->
+                                holder.folderStates = holder.folderStates.map {
+                                    if (it.folder.id == shareState.folder.id)
+                                        it.copy(shared = checked)
+                                    else it
+                                }
+                                holder.needsUpdate = true
+                            }
+                        )
+                    }
+                    if (shareState.shared) {
+                        OutlinedTextField(
+                            value = shareState.password,
+                            onValueChange = { value ->
+                                holder.folderStates = holder.folderStates.map {
+                                    if (it.folder.id == shareState.folder.id)
+                                        it.copy(password = value)
+                                    else it
+                                }
+                                holder.needsUpdate = true
+                            },
+                            label = { Text(stringResource(R.string.deviceEncryptionPasswordHint)) },
+                            singleLine = true,
+                            visualTransformation = PasswordVisualTransformation(),
+                            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                                keyboardType = KeyboardType.Password
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        )
                     }
                 }
             }
