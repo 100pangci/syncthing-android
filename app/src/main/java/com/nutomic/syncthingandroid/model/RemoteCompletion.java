@@ -193,6 +193,10 @@ public class RemoteCompletion {
             }
             CompletionAccumulator accumulator = new CompletionAccumulator();
             for (Map.Entry<Connection, HashMap<String, RemoteCompletionInfo>> device : mDeviceFolderMap.values()) {
+                if (!device.getKey().connected) {
+                    continue;
+                }
+                connectedDeviceCount++;
                 accumulator.accumulate(device.getValue().values());
             }
             return accumulator.calculatePercentage();

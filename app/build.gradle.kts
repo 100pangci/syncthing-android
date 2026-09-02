@@ -40,12 +40,25 @@ dependencies {
     implementation(libs.zxing.android.embedded) { isTransitive = false }
     implementation(libs.zxing.core)
     ksp(libs.dagger.compiler)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.test.junit)
+    testImplementation("androidx.test:monitor:1.8.0")
 }
 
 android {
     compileSdk = libs.versions.compile.sdk.get().toInt()
     namespace = "com.nutomic.syncthingandroid"
     ndkVersion = libs.versions.ndk.version.get()
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 
     externalNativeBuild {
         ndkBuild {
