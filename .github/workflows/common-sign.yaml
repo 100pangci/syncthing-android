@@ -24,7 +24,6 @@ jobs:
   sign:
     name: Sign ${{ inputs.buildType }}
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environmentName }}
     steps:
       - name: Install apksigner
         run: |

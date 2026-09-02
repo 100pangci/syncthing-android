@@ -9,65 +9,49 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag to publish (e.g. v1.0.0.0 or v1.0.0.0-rc.1)'
-        required: true
+        description: 'Tag to publish (e.g. v2.1.4.0). Leave empty when triggered on a tag ref.'
+        required: false
+        default: ''
+  push:
+    tags:
+      - 'v*'
 
 concurrency:
   group: release-app
   cancel-in-progress: true
 
+env:
+  TAG_NAME: ${{ github.event.inputs.tag || github.ref_name }}
+
 jobs:
-  prepare:
-    name: Prepare
-    runs-on: ubuntu-latest
-    if: github.repository_owner == 'researchxxl'
-    steps:
-      - name: Code checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.inputs.tag }}
-
-      - name: Ensure release branch
-        run: |
-          git config --global --add safe.directory '*'
-          if ! git branch -a --contains $(git rev-parse HEAD) | grep release >/dev/null; then
-            echo "Tag is not part of release branch - aborting..."
-            exit 1
-          fi
-
-  build1:
-    name: Build 1
-    needs: prepare
+  build:
+    name: Build Release
     uses: ./.github/workflows/common-build.yaml
     with:
-      applicationId: "com.github.catfriend1.syncthingfork"
       buildType: "Release"
-      checkoutRef: ${{ github.event.inputs.tag }}
+      checkoutRef: ${{ github.event.inputs.tag || github.ref_name }}
 
-  sign1:
-    name: Sign 1
-    needs: [prepare, build1]
+  sign:
+    name: Sign Release
+    needs: build
     uses: ./.github/workflows/common-sign.yaml
     with:
       applicationId: "com.github.catfriend1.syncthingfork"
       buildType: "release"
-      environmentName: prod
     secrets: inherit
 
   release:
     name: Create release and attach artifacts
-    needs: [sign1]
-    if: ${{ github.event.inputs.tag != '' }}
+    needs: [sign]
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 0
-          ref: ${{ github.event.inputs.tag }}
+          ref: ${{ github.event.inputs.tag || github.ref_name }}
 
-      - name: "Download sign1"
+      - name: "Download signed artifacts"
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: signed-com.github.catfriend1.syncthingfork
@@ -75,17 +59,17 @@ jobs:
 
       - name: Create GitHub build provenance attestations
         uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
-        if: github.repository_owner == 'researchxxl'
         with:
           subject-path: ./artifacts/*
 
       - name: Create draft release
         uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # v1.21.0
         with:
-          tag: ${{ github.event.inputs.tag }}
+          tag: ${{ github.event.inputs.tag || github.ref_name }}
           artifacts: "./artifacts/*.apk"
           artifactErrorsFailBuild: true
-          name: Syncthing-Fork ${{ github.event.inputs.tag }}
+          name: Syncthing-Fork ${{ github.event.inputs.tag || github.ref_name }}
           bodyFile: "app/src/main/play/release-notes/en-US/default.txt"
-          prerelease: ${{ contains(github.event.inputs.tag, '-rc.') }}
+          prerelease: ${{ contains(github.event.inputs.tag || github.ref_name, '-rc.') }}
           draft: true
+          allowUpdates: true
