@@ -5,10 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.LocalActivity
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +20,7 @@ import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.activities.LogActivity
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.SyncthingService
+import com.nutomic.syncthingandroid.ui.dialogs.ConfirmDialog
 import me.zhanghai.compose.preference.MultiSelectListPreference
 import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.SwitchPreference
@@ -118,27 +117,16 @@ private fun VerboseLogPreference() {
         onValueChange = { showAlert = true }
     )
     if (showAlert) {
-        AlertDialog(
-            title = { Text(stringResource(R.string.dialog_settings_restart_app_title)) },
-            text = { Text(stringResource(R.string.dialog_settings_restart_app_question)) },
-            onDismissRequest = { showAlert = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        verboseLog.value = !verboseLog.value
-                        showAlert = false
-                        // restart whole app
-                        restartApp(activity)
-                    }
-                ) {
-                    Text(stringResource(android.R.string.ok))
-                }
+        ConfirmDialog(
+            message = stringResource(R.string.dialog_settings_restart_app_question),
+            onConfirm = {
+                verboseLog.value = !verboseLog.value
+                showAlert = false
+                // restart whole app
+                restartApp(activity)
             },
-            dismissButton = {
-                TextButton(onClick = { showAlert = false }) {
-                    Text(stringResource(android.R.string.cancel))
-                }
-            }
+            onDismiss = { showAlert = false },
+            title = stringResource(R.string.dialog_settings_restart_app_title),
         )
     }
 }
@@ -170,29 +158,18 @@ private fun ResetDatabasePreference() {
         onClick = { showAlert = true }
     )
     if (showAlert) {
-        AlertDialog(
-            title = { Text(stringResource(R.string.st_reset_database_title)) },
-            text = { Text(stringResource(R.string.st_reset_database_question)) },
-            onDismissRequest = { showAlert = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showAlert = false
-                        val intent = Intent(context, SyncthingService::class.java).apply {
-                            action = SyncthingService.ACTION_RESET_DATABASE
-                        }
-                        context.startService(intent)
-                        Toast.makeText(context, R.string.st_reset_database_done, Toast.LENGTH_LONG).show()
-                    }
-                ) {
-                    Text(stringResource(android.R.string.ok))
+        ConfirmDialog(
+            message = stringResource(R.string.st_reset_database_question),
+            onConfirm = {
+                showAlert = false
+                val intent = Intent(context, SyncthingService::class.java).apply {
+                    action = SyncthingService.ACTION_RESET_DATABASE
                 }
+                context.startService(intent)
+                Toast.makeText(context, R.string.st_reset_database_done, Toast.LENGTH_LONG).show()
             },
-            dismissButton = {
-                TextButton(onClick = { showAlert = false }) {
-                    Text(stringResource(android.R.string.cancel))
-                }
-            }
+            onDismiss = { showAlert = false },
+            title = stringResource(R.string.st_reset_database_title),
         )
     }
 }
@@ -208,29 +185,18 @@ private fun ResetDeltasPreference() {
         onClick = { showAlert = true }
     )
     if (showAlert) {
-        AlertDialog(
-            title = { Text(stringResource(R.string.st_reset_deltas_title)) },
-            text = { Text(stringResource(R.string.st_reset_deltas_question)) },
-            onDismissRequest = { showAlert = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showAlert = false
-                        val intent = Intent(context, SyncthingService::class.java).apply {
-                            action = SyncthingService.ACTION_RESET_DELTAS
-                        }
-                        context.startService(intent)
-                        Toast.makeText(context, R.string.st_reset_deltas_done, Toast.LENGTH_LONG).show()
-                    }
-                ) {
-                    Text(stringResource(android.R.string.ok))
+        ConfirmDialog(
+            message = stringResource(R.string.st_reset_deltas_question),
+            onConfirm = {
+                showAlert = false
+                val intent = Intent(context, SyncthingService::class.java).apply {
+                    action = SyncthingService.ACTION_RESET_DELTAS
                 }
+                context.startService(intent)
+                Toast.makeText(context, R.string.st_reset_deltas_done, Toast.LENGTH_LONG).show()
             },
-            dismissButton = {
-                TextButton(onClick = { showAlert = false }) {
-                    Text(stringResource(android.R.string.cancel))
-                }
-            }
+            onDismiss = { showAlert = false },
+            title = stringResource(R.string.st_reset_deltas_title),
         )
     }
 }

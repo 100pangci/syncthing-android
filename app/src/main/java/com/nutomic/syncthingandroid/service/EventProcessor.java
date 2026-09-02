@@ -17,7 +17,6 @@ import android.util.Log;
 import androidx.core.util.Consumer;
 
 import com.annimon.stream.Stream;
-// import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -46,7 +45,7 @@ public class EventProcessor implements  Runnable, RestApi.OnReceiveEventListener
 
     private static final String TAG = "EventProcessor";
 
-    private Boolean ENABLE_VERBOSE_LOG = false;
+    private boolean ENABLE_VERBOSE_LOG = false;
 
     /**
      * Minimum interval in seconds at which the events are polled from syncthing and processed.
@@ -221,14 +220,8 @@ public class EventProcessor implements  Runnable, RestApi.OnReceiveEventListener
             case "ListenAddressesChanged":
             case "LoginAttempt":
             case "RemoteDownloadProgress":
-                /*
-                onRemoteDownloadProgress(
-                        (String) event.data.get("device"),         // deviceId
-                        (String) event.data.get("folder"),         // folderId
-                        event.data.get("state") == null ? null : new Gson().toJsonTree(event.data.get("state")).getAsJsonObject() 
-                );
+                LogV("Ignored event " + event.type + ", data " + event.data);
                 break;
-                */
             case "RemoteIndexUpdated":
                 onRemoteIndexUpdated(
                         (String) event.data.get("device"),         // deviceId
@@ -306,14 +299,16 @@ public class EventProcessor implements  Runnable, RestApi.OnReceiveEventListener
     }
 
     private void onPendingFoldersChanged(Map<String, Object> added) {
-        String deviceId = added.get("deviceID").toString();
-        String folderId = added.get("folderID").toString();
-        String folderLabel = added.get("folderLabel").toString();
+        Object deviceIdObj = added.get("deviceID");
+        Object folderIdObj = added.get("folderID");
+        Object folderLabelObj = added.get("folderLabel");
         Boolean receiveEncrypted = (Boolean) added.get("receiveEncrypted");
-        Boolean remoteEncrypted = (Boolean) added.get("remoteEncrypted");
-        if (deviceId == null || folderId == null) {
+        if (deviceIdObj == null || folderIdObj == null) {
             return;
         }
+        String deviceId = deviceIdObj.toString();
+        String folderId = folderIdObj.toString();
+        String folderLabel = folderLabelObj == null ? "" : folderLabelObj.toString();
         Log.d(TAG, "Device '" + deviceId + "' wants to share folder '" +
             folderLabel + "' (" + folderId + ")");
         // Find the deviceName corresponding to the deviceId.
@@ -333,7 +328,6 @@ public class EventProcessor implements  Runnable, RestApi.OnReceiveEventListener
             folderId,
             folderLabel,
             receiveEncrypted,
-            remoteEncrypted,
             isNewFolder
         );
     }
@@ -366,12 +360,7 @@ public class EventProcessor implements  Runnable, RestApi.OnReceiveEventListener
                 if (!TextUtils.isEmpty(strError) &&
                     !TextUtils.isEmpty(strPath) &&
                             strError.contains("insufficient space in basic")) {
-                    String[] segments = strPath.split(File.separator);
-                    String shortenedFileAndFolder =
-                            segments.length < 2 ?
-                            strPath :
-                            segments[segments.length-2] + File.separator + segments[segments.length-1];
-                    mNotificationHandler.showCrashedNotification(R.string.notification_out_of_disk_space, shortenedFileAndFolder);
+                    mNotificationHandler.showCrashedNotification(R.string.notification_out_of_disk_space, shortenedFileAndFolder(strPath));
                 }
             }
         }
@@ -415,12 +404,7 @@ public class EventProcessor implements  Runnable, RestApi.OnReceiveEventListener
         if (!TextUtils.isEmpty(error)) {
             Log.e(TAG, "onItemFinished: Error \"" + error + "\" reported on file: " + fullFilePath);
             if (error.contains("no space left on device")) {
-                String[] segments = fullFilePath.split(File.separator);
-                String shortenedFileAndFolder =
-                        segments.length < 2 ?
-                        fullFilePath :
-                        segments[segments.length-2] + File.separator + segments[segments.length-1];
-                mNotificationHandler.showCrashedNotification(R.string.notification_out_of_disk_space, shortenedFileAndFolder);
+                mNotificationHandler.showCrashedNotification(R.string.notification_out_of_disk_space, shortenedFileAndFolder(fullFilePath));
             }
             return;
         }
@@ -492,19 +476,7 @@ public class EventProcessor implements  Runnable, RestApi.OnReceiveEventListener
         }
     }
 
-    /*
-    private void onRemoteDownloadProgress(final String deviceId, 
-                                                final String folderId,
-                                                final JsonObject state) {
-        if (state == null) {
-            LogV("onRemoteDownloadProgress: state == null");
-            return;
-        }                        
-        LogV("onRemoteDownloadProgress: state=[" + state + "]");
-    }
-    */
-
-    private void onRemoteIndexUpdated(final String deviceId, 
+    private void onRemoteIndexUpdated(final String deviceId,
                                             final String folderId, 
                                             final Double items) {
         if (deviceId == null || folderId == null || items == null) {
@@ -537,6 +509,13 @@ public class EventProcessor implements  Runnable, RestApi.OnReceiveEventListener
                 // Log.v(TAG, "onItemFinished: onDeleteComplete: [ok] file=" + cookie.toString() + ", token=" + Integer.toString(token));
             }
         }
+    }
+
+    private static String shortenedFileAndFolder(String path) {
+        String[] segments = path.split(File.separator);
+        return segments.length < 2 ?
+                path :
+                segments[segments.length - 2] + File.separator + segments[segments.length - 1];
     }
 
     private <T> void mapNullable(List<T> l, Consumer<T> c) {

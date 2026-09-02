@@ -1,6 +1,5 @@
 package com.nutomic.syncthingandroid.service;
 
-import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 import com.nutomic.syncthingandroid.R;
+import com.nutomic.syncthingandroid.util.Util;
 
 import static com.nutomic.syncthingandroid.service.RunConditionMonitor.ACTION_SYNC_TRIGGER_FIRED;
 import static com.nutomic.syncthingandroid.service.RunConditionMonitor.EXTRA_BEGIN_ACTIVE_TIME_WINDOW;
@@ -106,14 +106,7 @@ public class QuickSettingsTileSchedule extends TileService implements ServiceCon
         if (tile == null) return false;
 
         // look through running services to see whether the app is currently running
-        ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        boolean syncthingRunning = false;
-        for (ActivityManager.RunningServiceInfo service : am.getRunningServices(Integer.MAX_VALUE)) {
-            if (SyncthingService.class.getName().equals(service.service.getClassName())) {
-                syncthingRunning = true;
-                break;
-            }
-        }
+        boolean syncthingRunning = Util.isServiceRunning(mContext, SyncthingService.class);
 
         // disable tile if app is not running, schedule is off, or syncthing is force-started/stopped
         if (syncthingRunning && mPreferences.getBoolean(Constants.PREF_RUN_ON_TIME_SCHEDULE, false) && mPreferences.getInt(Constants.PREF_BTNSTATE_FORCE_START_STOP, Constants.BTNSTATE_NO_FORCE_START_STOP) == Constants.BTNSTATE_NO_FORCE_START_STOP) {

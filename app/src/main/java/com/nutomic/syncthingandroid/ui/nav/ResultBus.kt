@@ -16,23 +16,19 @@ class ResultBus {
     /** Absolute path picked by the folder picker, null when cancelled. */
     val folderPickerResult = MutableStateFlow<String?>(null)
 
-    /** Set to true when the custom sync conditions screen changed preferences. */
-    val syncConditionsChanged = MutableStateFlow(false)
-
     /** Non-null device id while the device id QR dialog should be shown. */
     val showDeviceIdDialog = MutableStateFlow<String?>(null)
 
     /** Non-null usage report text while the usage reporting dialog should be shown. */
     val usageReport = MutableStateFlow<String?>(null)
 
+    /** Set to true while the restart Syncthing confirmation dialog should be shown. */
+    val restartRequested = MutableStateFlow(false)
+
     fun reset() {
         folderPickerResult.value = null
-        syncConditionsChanged.value = false
         showDeviceIdDialog.value = null
         usageReport.value = null
-    }
-
-    companion object {
-        const val KEY_FOLDER_PICKER = "folderPicker"
+        restartRequested.value = false
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.nutomic.syncthingandroid.ui.theme.DISABLED_ALPHA
 
 /**
  * MD3 grouped form section: an elevated-tonal card with an optional heading,
@@ -81,7 +82,7 @@ fun ToggleRow(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary.copy(alpha = if (enabled) 1f else 0.38f)
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = if (enabled) 1f else DISABLED_ALPHA)
             )
             Spacer(Modifier.width(16.dp))
         }
@@ -91,14 +92,14 @@ fun ToggleRow(
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
                 color = if (enabled) MaterialTheme.colorScheme.onSurface
-                        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                        else MaterialTheme.colorScheme.onSurface.copy(alpha = DISABLED_ALPHA)
             )
             if (description != null) {
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
                     color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant
-                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                            else MaterialTheme.colorScheme.onSurface.copy(alpha = DISABLED_ALPHA)
                 )
             }
         }
@@ -120,7 +121,7 @@ fun ClickRow(
     enabled: Boolean = true,
     onClick: (() -> Unit)? = null,
 ) {
-    val alpha = if (enabled) 1f else 0.38f
+    val alpha = if (enabled) 1f else DISABLED_ALPHA
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier

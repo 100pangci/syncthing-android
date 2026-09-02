@@ -3,7 +3,6 @@ package com.nutomic.syncthingandroid.model;
 import android.util.Log;
 
 import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 import java.util.AbstractMap.SimpleEntry;
@@ -13,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.text.TextUtils;
+
+import com.nutomic.syncthingandroid.util.Util;
 
 /**
  * This class caches local folder synchronization
@@ -24,7 +25,7 @@ public class LocalCompletion {
 
     private static final String TAG = "LocalCompletion";
 
-    private Boolean ENABLE_VERBOSE_LOG = false;
+    private boolean ENABLE_VERBOSE_LOG = false;
 
     HashMap<String, Map.Entry<FolderStatus, CachedFolderStatus>> mFolderMap =
         new HashMap<String, Map.Entry<FolderStatus, CachedFolderStatus>>();
@@ -131,8 +132,8 @@ public class LocalCompletion {
             }
             Map.Entry<FolderStatus, CachedFolderStatus> folderEntry = mFolderMap.get(folderId);
             return new SimpleEntry(
-                    deepCopy(folderEntry.getKey(), new TypeToken<FolderStatus>(){}.getType()),
-                    deepCopy(folderEntry.getValue(), new TypeToken<CachedFolderStatus>(){}.getType())
+                    Util.deepCopy(folderEntry.getKey(), new TypeToken<FolderStatus>(){}.getType()),
+                    Util.deepCopy(folderEntry.getValue(), new TypeToken<CachedFolderStatus>(){}.getType())
             );
         }
     }
@@ -220,16 +221,6 @@ public class LocalCompletion {
             // Add folder or update existing folder entry.
             mFolderMap.put(folderId, new SimpleEntry(cacheEntry.getKey(), cachedFolderStatus));
         }
-    }
-
-    /**
-     * Returns a deep copy of object.
-     *
-     * This method uses Gson and only works with objects that can be converted with Gson.
-     */
-    private <T> T deepCopy(T object, Type type) {
-        Gson gson = new Gson();
-        return gson.fromJson(gson.toJson(object, type), type);
     }
 
     private void LogV(String logMessage) {

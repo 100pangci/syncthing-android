@@ -1,6 +1,5 @@
 package com.nutomic.syncthingandroid.service;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +14,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import com.nutomic.syncthingandroid.R;
+import com.nutomic.syncthingandroid.util.Util;
 
 import static com.nutomic.syncthingandroid.service.RunConditionMonitor.ACTION_UPDATE_SHOULDRUN_DECISION;
 
@@ -37,14 +37,7 @@ public class QuickSettingsTileForce extends TileService {
             mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
             // search through running services to see whether the app is currently running
-            ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-            boolean syncthingRunning = false;
-            for (ActivityManager.RunningServiceInfo service : am.getRunningServices(Integer.MAX_VALUE)) {
-                if (SyncthingService.class.getName().equals(service.service.getClassName())) {
-                    syncthingRunning = true;
-                    break;
-                }
-            }
+            boolean syncthingRunning = Util.isServiceRunning(mContext, SyncthingService.class);
             // disable tile if app is not running
             if (!syncthingRunning) {
                 tile.setState(Tile.STATE_UNAVAILABLE);

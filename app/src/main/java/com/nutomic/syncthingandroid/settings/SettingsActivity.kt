@@ -18,21 +18,20 @@ import com.nutomic.syncthingandroid.SyncthingApp
 import com.nutomic.syncthingandroid.activities.SyncthingActivity
 import com.nutomic.syncthingandroid.service.NotificationHandler
 import com.nutomic.syncthingandroid.service.SyncthingService
-import com.nutomic.syncthingandroid.theme.ApplicationTheme
+import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
+import com.nutomic.syncthingandroid.ui.LocalServiceTick
+import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.util.LocalActivityScope
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import me.zhanghai.compose.preference.Preferences
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
 
-val LocalSyncthingService = staticCompositionLocalOf<SyncthingService?> { null }
-val LocalServiceUpdateTick = staticCompositionLocalOf { 0 }
-
 class SettingsActivity : SyncthingActivity() {
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
-    lateinit var prefFlow: MutableStateFlow<Preferences>
+    private lateinit var prefFlow: MutableStateFlow<Preferences>
     @Inject
     lateinit var notificationHandler: NotificationHandler
 
@@ -80,7 +79,7 @@ class SettingsActivity : SyncthingActivity() {
                     LocalActivityScope provides activityScope,
                     LocalSettingsNavigator provides navigator,
                     LocalSyncthingService provides syncthingServiceState,
-                    LocalServiceUpdateTick provides serviceUpdateTick,
+                    LocalServiceTick provides serviceUpdateTick,
                 ) {
                     ProvidePreferenceLocals(flow = prefFlow) {
                         SettingsNavDisplay(

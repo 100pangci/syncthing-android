@@ -51,7 +51,12 @@ public class SyncthingService extends Service {
 
     private static final String TAG = "SyncthingService";
 
-    private Boolean ENABLE_VERBOSE_LOG = false;
+    /**
+     * Delay before retrying a deferred shutdown or re-applying certificate changes.
+     */
+    private static final long SHUTDOWN_RETRY_DELAY_MS = 1000;
+
+    private boolean ENABLE_VERBOSE_LOG = false;
 
     /**
      * Intent action to perform a Syncthing restart.
@@ -478,20 +483,16 @@ public class SyncthingService extends Service {
         List<Folder> folders = configXml.getFolders();
         if (folders != null) {
             for (Folder folder : folders) {
-                // LogV("applyCustomRunConditions: Processing config of folder(" + folder.label + ")");
-                Boolean folderCustomSyncConditionsEnabled = mPreferences.getBoolean(
-                    Constants.DYN_PREF_OBJECT_CUSTOM_SYNC_CONDITIONS(Constants.PREF_OBJECT_PREFIX_FOLDER + folder.id), false
-                );
-                if (folderCustomSyncConditionsEnabled) {
-                    Boolean syncConditionsMet = runConditionMonitor.checkObjectSyncConditions(
-                        Constants.PREF_OBJECT_PREFIX_FOLDER + folder.id
-                    );
-                    LogV("applyCustomRunConditions: f(" + folder.label + ")=" + (syncConditionsMet ? "1" : "0"));
-                    if (folder.paused != !syncConditionsMet) {
-                        configXml.setFolderPause(folder.id, !syncConditionsMet);
-                        Log.d(TAG, "applyCustomRunConditions: f(" + folder.label + ")=" + (syncConditionsMet ? ">1" : ">0"));
-                        configChanged = true;
-                    }
+                String folderPrefixAndId = Constants.PREF_OBJECT_PREFIX_FOLDER + folder.id;
+                Boolean shouldPause = runConditionMonitor.getCustomSyncConditionsPause(folderPrefixAndId);
+                if (shouldPause == null) {
+                    continue;
+                }
+                LogV("applyCustomRunConditions: f(" + folder.label + ")=" + (!shouldPause ? "1" : "0"));
+                if (folder.paused != shouldPause) {
+                    configXml.setFolderPause(folder.id, shouldPause);
+                    Log.d(TAG, "applyCustomRunConditions: f(" + folder.label + ")=" + (!shouldPause ? ">1" : ">0"));
+                    configChanged = true;
                 }
             }
         } else {
@@ -503,20 +504,16 @@ public class SyncthingService extends Service {
         List<Device> devices = configXml.getDevices(false);
         if (devices != null) {
             for (Device device : devices) {
-                // LogV("applyCustomRunConditions: Processing config of device(" + device.name + ")");
-                Boolean deviceCustomSyncConditionsEnabled = mPreferences.getBoolean(
-                    Constants.DYN_PREF_OBJECT_CUSTOM_SYNC_CONDITIONS(Constants.PREF_OBJECT_PREFIX_DEVICE + device.deviceID), false
-                );
-                if (deviceCustomSyncConditionsEnabled) {
-                    Boolean syncConditionsMet = runConditionMonitor.checkObjectSyncConditions(
-                        Constants.PREF_OBJECT_PREFIX_DEVICE + device.deviceID
-                    );
-                    LogV("applyCustomRunConditions: d(" + device.name + ")=" + (syncConditionsMet ? "1" : "0"));
-                    if (device.paused != !syncConditionsMet) {
-                        configXml.setDevicePause(device.deviceID, !syncConditionsMet);
-                        Log.d(TAG, "applyCustomRunConditions: d(" + device.name + ")=" + (syncConditionsMet ? ">1" : ">0"));
-                        configChanged = true;
-                    }
+                String devicePrefixAndId = Constants.PREF_OBJECT_PREFIX_DEVICE + device.deviceID;
+                Boolean shouldPause = runConditionMonitor.getCustomSyncConditionsPause(devicePrefixAndId);
+                if (shouldPause == null) {
+                    continue;
+                }
+                LogV("applyCustomRunConditions: d(" + device.name + ")=" + (!shouldPause ? "1" : "0"));
+                if (device.paused != shouldPause) {
+                    configXml.setDevicePause(device.deviceID, shouldPause);
+                    Log.d(TAG, "applyCustomRunConditions: d(" + device.name + ")=" + (!shouldPause ? ">1" : ">0"));
+                    configChanged = true;
                 }
             }
         } else {
@@ -682,7 +679,7 @@ public class SyncthingService extends Service {
             Log.w(TAG, "Deferring shutdown until State.STARTING was left");
             mHandler.postDelayed(() -> {
                 shutdown(newState);
-            }, 1000);
+            }, SHUTDOWN_RETRY_DELAY_MS);
             return;
         }
 
@@ -833,7 +830,7 @@ public class SyncthingService extends Service {
      *
      */
     public boolean exportConfig() {
-        Boolean failSuccess = true;
+        boolean failSuccess = true;
         Log.d(TAG, "exportConfig BEGIN");
 
         if (mCurrentState != State.DISABLED) {
@@ -930,7 +927,7 @@ public class SyncthingService extends Service {
                 sharedPreferencesFile.delete();
             }
         } catch (Exception e) {
-            Log.w(TAG, "exportConfig: Failed to export config, " + e.getMessage());
+            Log.w(TAG, "exportConfig: Failed to export config", e);
             failSuccess = false;
         }
         Log.d(TAG, "exportConfig END");
@@ -1006,7 +1003,7 @@ public class SyncthingService extends Service {
         }
 
         // Shutdown SyncthingNative.
-        Boolean failSuccess = true;
+        boolean failSuccess = true;
         Log.d(TAG, "importConfig BEGIN");
         if (mCurrentState != State.DISABLED) {
             // Shutdown synchronously.
@@ -1111,7 +1108,7 @@ public class SyncthingService extends Service {
                                            OnHttpsCertReplaceResultListener listener) {
         // shutdown() defers while STARTING; wait it out so our file writes don't race the binary.
         if (mCurrentState == State.STARTING) {
-            mHandler.postDelayed(() -> doReplaceHttpsCertificate(certPem, keyPem, listener), 1000);
+            mHandler.postDelayed(() -> doReplaceHttpsCertificate(certPem, keyPem, listener), SHUTDOWN_RETRY_DELAY_MS);
             return;
         }
 
@@ -1146,7 +1143,7 @@ public class SyncthingService extends Service {
 
     private void doResetHttpsCertificate(OnHttpsCertReplaceResultListener listener) {
         if (mCurrentState == State.STARTING) {
-            mHandler.postDelayed(() -> doResetHttpsCertificate(listener), 1000);
+            mHandler.postDelayed(() -> doResetHttpsCertificate(listener), SHUTDOWN_RETRY_DELAY_MS);
             return;
         }
 
@@ -1347,7 +1344,7 @@ public class SyncthingService extends Service {
     }
 
     private boolean importConfigSharedPrefs(final File file) {
-        Boolean failSuccess = true;
+        boolean failSuccess = true;
         FileInputStream fileInputStream = null;
         ObjectInputStream objectInputStream = null;
         Map<?, ?> sharedPrefsMap = null;

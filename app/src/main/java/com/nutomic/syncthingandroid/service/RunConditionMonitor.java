@@ -40,7 +40,19 @@ public class RunConditionMonitor {
 
     private static final String TAG = "RunConditionMonitor";
 
-    private Boolean ENABLE_VERBOSE_LOG = false;
+    private boolean ENABLE_VERBOSE_LOG = false;
+
+    /**
+     * Delay before re-evaluating run conditions after a power state change,
+     * so the OS has time to update the battery sticky broadcast.
+     */
+    private static final long BATTERY_UPDATE_DELAY_MS = 5000;
+
+    /**
+     * Default values of the "Run on a time schedule" user preferences, in minutes.
+     */
+    private static final String DEFAULT_SYNC_DURATION_MINUTES = "5";
+    private static final String DEFAULT_SLEEP_INTERVAL_MINUTES = "60";
 
     public static final String ACTION_SYNC_TRIGGER_FIRED =
         ".service.RunConditionMonitor.ACTION_SYNC_TRIGGER_FIRED";
@@ -170,7 +182,7 @@ public class RunConditionMonitor {
                 new IntentFilter(ACTION_UPDATE_SHOULDRUN_DECISION));
 
         if (!Constants.isRunningOnEmulator()) {
-            triggeredSyncSleepIntervalS = Integer.parseInt(mPreferences.getString(Constants.PREF_SLEEP_INTERVAL_MINUTES,"60")) * 60;
+            triggeredSyncSleepIntervalS = Integer.parseInt(mPreferences.getString(Constants.PREF_SLEEP_INTERVAL_MINUTES, DEFAULT_SLEEP_INTERVAL_MINUTES)) * 60;
         }
         long lastSyncTimeSinceBootMillisecs = mPreferences.getLong(Constants.PREF_LAST_RUN_TIME, 0);
         long elapsedRealtime = SystemClock.elapsedRealtime();
@@ -240,8 +252,11 @@ public class RunConditionMonitor {
         public void onReceive(Context context, Intent intent) {
             if (Intent.ACTION_POWER_CONNECTED.equals(intent.getAction())
                     || Intent.ACTION_POWER_DISCONNECTED.equals(intent.getAction())) {
-                SystemClock.sleep(5000);
-                updateShouldRunDecision();
+                // Wait for the battery state to settle before re-evaluating, without
+                // blocking the main thread.
+                new Handler(Looper.getMainLooper())
+                        .postDelayed(RunConditionMonitor.this::updateShouldRunDecision,
+                                BATTERY_UPDATE_DELAY_MS);
             }
         }
     }
@@ -367,7 +382,7 @@ public class RunConditionMonitor {
      */
     public void updateShouldRunDecision() {
         if (!Constants.isRunningOnEmulator()) {
-            triggeredSyncDurationS = Integer.parseInt(mPreferences.getString(Constants.PREF_SYNC_DURATION_MINUTES, "5")) * 60;
+            triggeredSyncDurationS = Integer.parseInt(mPreferences.getString(Constants.PREF_SYNC_DURATION_MINUTES, DEFAULT_SYNC_DURATION_MINUTES)) * 60;
             triggeredSyncSleepIntervalS = Integer.parseInt(mPreferences.getString(Constants.PREF_SLEEP_INTERVAL_MINUTES, "60")) * 60;
         }
 
@@ -573,7 +588,7 @@ public class RunConditionMonitor {
 
         // PREF_RUN_ON_TIME_SCHEDULE
         // set mTimeConditionMatch to true if the last run was more than triggeredSyncSleepIntervalS ago
-        if (SystemClock.elapsedRealtime() - mPreferences.getLong(Constants.PREF_LAST_RUN_TIME,0) > Integer.parseInt(mPreferences.getString(Constants.PREF_SLEEP_INTERVAL_MINUTES,"60")) * 60 * 1000)
+        if (SystemClock.elapsedRealtime() - mPreferences.getLong(Constants.PREF_LAST_RUN_TIME,0) > Integer.parseInt(mPreferences.getString(Constants.PREF_SLEEP_INTERVAL_MINUTES, DEFAULT_SLEEP_INTERVAL_MINUTES)) * 60 * 1000)
             mTimeConditionMatch = true;
         if (prefRunOnTimeSchedule && !mTimeConditionMatch) {
             // Currently, we aren't within a "SyncthingNative should run" time frame.
@@ -664,11 +679,25 @@ public class RunConditionMonitor {
     }
 
     /**
+     * Returns the desired paused state for the object with the given prefix and id
+     * according to its custom sync conditions,
+     * or null if custom sync conditions are disabled for it.
+     */
+    public Boolean getCustomSyncConditionsPause(String objectPrefixAndId) {
+        Boolean customSyncConditionsEnabled = mPreferences.getBoolean(
+                Constants.DYN_PREF_OBJECT_CUSTOM_SYNC_CONDITIONS(objectPrefixAndId), false
+        );
+        if (!customSyncConditionsEnabled) {
+            return null;
+        }
+        return !checkObjectSyncConditions(objectPrefixAndId);
+    }
+
+    /**
      * Check if an object's individual sync conditions are met.
      * Precondition: Object must own pref "...CustomSyncConditionsEnabled == true".
      */
-    public Boolean checkObjectSyncConditions(String objectPrefixAndId) {
-        // Sync on specific power source?
+    public Boolean checkObjectSyncConditions(String objectPrefixAndId) {        // Sync on specific power source?
         SyncConditionResult scr = checkConditionSyncOnPowerSource(Constants.DYN_PREF_OBJECT_SYNC_ON_POWER_SOURCE(objectPrefixAndId));
         if (!scr.conditionMet) {
             LogV("checkObjectSyncConditions(" + objectPrefixAndId + "): checkConditionSyncOnPowerSource");
@@ -855,7 +884,7 @@ public class RunConditionMonitor {
         if (wifiSsid == null || wifiSsid.equals("<unknown ssid>")) {
             throw new LocationUnavailableException("isWifiConnectionWhitelisted: Got null SSID. Try to enable android location service.");
         }
-        // DO NOT RELEASE WITH THIS LINE: Log.v(TAG, "isWifiConnectionWhitelisted: wifiSsid=[" + wifiSsid + "]");
+
         return whitelistedSsids.contains(wifiSsid);
     }
 

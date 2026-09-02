@@ -36,7 +36,6 @@ sealed interface AppRoute : NavKey {
     data class FolderPicker(
         val initialDirectory: String? = null,
         val rootDirectory: String? = null,
-        val requestKey: String = ResultBus.KEY_FOLDER_PICKER,
     ) : AppRoute
 
     @Serializable

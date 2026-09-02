@@ -4,13 +4,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.common.io.BaseEncoding;
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 
 import com.nutomic.syncthingandroid.util.Luhn;
 
-import java.lang.System;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -190,11 +186,24 @@ public class Device {
     }
 
     private Boolean checkDeviceAddressTcp(String address) {
+        return checkHostPort(address, false);
+    }
+
+    private Boolean checkDeviceAddressRelay(String address) {
+        return checkHostPort(address, true);
+    }
+
+    /**
+     * Validates "hostname:port" style address parts.
+     *
+     * Relay addresses may contain additional ":" inside their query string, so only the
+     * segment right after the host may be treated as the port there.
+     */
+    private Boolean checkHostPort(String address, boolean firstSegmentIsPort) {
         // Check if the address ends with ":" or "]:"
         if (address.endsWith(":") ||
                 address.endsWith("]:")) {
             // The address ends with ":". Will match "tcp://myserver:"
-            // Log.v(TAG, "address ends with \":\" or \"]:\". Will match \"tcp://myserver:\".");
             return false;
         }
 
@@ -204,83 +213,34 @@ public class Device {
             // Check if the hostname or IP address given before the port is empty.
             if (TextUtils.isEmpty(hostnamePortSplit[0])) {
                 // Empty hostname or IP address before the port. Will match "tcp://:4000"
-                // Log.v(TAG, "Empty hostname or IP address before the port.");
                 return false;
             }
 
             // Check if there's a port number given in the last part.
-            String potentialPort = hostnamePortSplit[hostnamePortSplit.length-1].split("/")[0];
+            String potentialPort = (firstSegmentIsPort
+                    ? hostnamePortSplit[1]
+                    : hostnamePortSplit[hostnamePortSplit.length - 1]).split("/")[0];
             if (!potentialPort.endsWith("]")) {
                 // It's not the end of an IPv6 address and likely a port number.
-                // Log.v(TAG, "... potentialPort=(" + potentialPort + ")");
-                Integer port = 0;
+                int port;
                 try {
                     port = Integer.parseInt(potentialPort);
-                } catch (Exception e) {
+                } catch (NumberFormatException e) {
+                    // Invalid port number.
+                    return false;
                 }
                 if (port < 1 || port > 65535) {
                     // Invalid port number.
-                    // Log.v(TAG, "Invalid port number.");
                     return false;
                 }
             }
         }
 
         return true;
-    }
-
-    private Boolean checkDeviceAddressRelay(String address) {
-        // Check if the address ends with ":" or "]:"
-        if (address.endsWith(":") ||
-                address.endsWith("]:")) {
-            // The address ends with ":". Will match "relay://myserver:"
-            // Log.v(TAG, "address ends with \":\" or \"]:\". Will match \"relay://myserver:\".");
-            return false;
-        }
-
-        // Check if there's a "hostname:port" number given in the part after "://".
-        String[] hostnamePortSplit = address.split(":");
-        if (hostnamePortSplit.length > 1) {
-            // Check if the hostname or IP address given before the port is empty.
-            if (TextUtils.isEmpty(hostnamePortSplit[0])) {
-                // Empty hostname or IP address before the port. Will match "relay://:4000"
-                // Log.v(TAG, "Empty hostname or IP address before the port.");
-                return false;
-            }
-
-            // Check if there's a port number given in the last part.
-            String potentialPort = hostnamePortSplit[1].split("/")[0];
-            if (!potentialPort.endsWith("]")) {
-                // It's not the end of an IPv6 address and likely a port number.
-                // Log.v(TAG, "... potentialPort=(" + potentialPort + ")");
-                Integer port = 0;
-                try {
-                    port = Integer.parseInt(potentialPort);
-                } catch (Exception e) {
-                }
-                if (port < 1 || port > 65535) {
-                    // Invalid port number.
-                    // Log.v(TAG, "Invalid port number.");
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Returns a deep copy of object.
-     *
-     * This method uses Gson and only works with objects that can be converted with Gson.
-     */
-    private <T> T deepCopy(T object, Type type) {
-        Gson gson = new Gson();
-        return gson.fromJson(gson.toJson(object, type), type);
     }
 
     private Boolean testCheckDeviceAddress() {
-        Boolean failSuccess = true;
+        boolean failSuccess = true;
 
         // Positive Syntax
         failSuccess = failSuccess && checkDeviceAddress("tcp://127.0.0.1:4000");

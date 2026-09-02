@@ -7,6 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.EntryProviderScope
+import com.nutomic.syncthingandroid.ui.LocalServiceTick
+import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.service.SyncthingService
 import me.zhanghai.compose.preference.Preference
@@ -21,7 +23,7 @@ fun EntryProviderScope<SettingsRoute>.settingsRootEntry() {
 fun SettingsRootScreen() {
     val navigator = LocalSettingsNavigator.current
     val stService = LocalSyncthingService.current
-    val stServiceTick = LocalServiceUpdateTick.current
+    val stServiceTick = LocalServiceTick.current
 
     val isSyncthingOptionsEnabled by remember(stService, stServiceTick) {
         derivedStateOf { stService != null && stService.currentState == SyncthingService.State.ACTIVE }

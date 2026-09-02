@@ -163,6 +163,18 @@ public class Constants {
      * Default listening ports.
      */
     public static final Integer DEFAULT_WEBGUI_TCP_PORT         = 8384;
+
+    /**
+     * Alternative Web GUI and data listen addresses used by debug builds, so
+     * debug and release can run in parallel for testing purposes.
+     */
+    public static final String DEBUG_WEBGUI_BIND_ADDRESS         = "127.0.0.1:8385";
+    public static final String DEBUG_DATA_LISTEN_ADDRESS         = "tcp://:22001";
+
+    /**
+     * Default address of the local Tor SOCKS proxy.
+     */
+    public static final String DEFAULT_TOR_SOCKS_PROXY_ADDRESS   = "socks5://localhost:9050";
     public static final Integer DEFAULT_DATA_TCP_PORT           = 22000;
 
 

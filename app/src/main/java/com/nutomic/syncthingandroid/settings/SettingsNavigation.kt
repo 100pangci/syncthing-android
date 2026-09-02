@@ -78,7 +78,7 @@ sealed interface SettingsRoute : NavKey {
 interface Navigator<T: NavKey> {
     fun navigateTo(route: T)
     fun navigateBack()
-    fun navigateUp() // added temporarily to finish settings activity and return
+    fun navigateUp()
 }
 
 val LocalSettingsNavigator = staticCompositionLocalOf<Navigator<SettingsRoute>> {
@@ -90,12 +90,12 @@ fun rememberSettingsNavBackStack(startDestination: SettingsRoute): NavBackStack<
     return rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
     ) {
-        val initialRouts = listOfNotNull(
+        val initialRoute = listOfNotNull(
             SettingsRoute.Root,
             SettingsRoute.About.takeIf { startDestination == SettingsRoute.Licenses },
             startDestination.takeIf { it != SettingsRoute.Root }
         ).toMutableStateList()
-        NavBackStack(initialRouts)
+        NavBackStack(initialRoute)
     }
 }
 

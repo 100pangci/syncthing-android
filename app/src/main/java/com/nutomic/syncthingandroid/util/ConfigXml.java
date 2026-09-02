@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ public class ConfigXml {
 
     private static final String TAG = "ConfigXml";
 
-    private Boolean ENABLE_VERBOSE_LOG = false;
+    private boolean ENABLE_VERBOSE_LOG = false;
 
     public class OpenConfigException extends RuntimeException {
     }
@@ -81,20 +80,9 @@ public class ConfigXml {
         return lhsName.compareTo(rhsName);
     };
 
-    /**
-     * Compares folders by labels, uses the folder ID as fallback if the label is empty
-     */
-    private final static Comparator<Folder> FOLDERS_COMPARATOR = (lhs, rhs) -> {
-        String lhsLabel = lhs.label != null && !lhs.label.isEmpty() ? lhs.label : lhs.id;
-        String rhsLabel = rhs.label != null && !rhs.label.isEmpty() ? rhs.label : rhs.id;
-        return lhsLabel.compareTo(rhsLabel);
-    };
-
     public interface OnResultListener1<T> {
         void onResult(T t);
     }
-
-    private static final int FOLDER_ID_APPENDIX_LENGTH = 4;
 
     private final Context mContext;
 
@@ -169,13 +157,13 @@ public class ConfigXml {
         //  Allow debug and release to run in parallel for testing purposes.
         if (Constants.isDebuggable(mContext)) {
             // Set alternative gui listen port.
-            changed = setConfigElement(gui, "address", "127.0.0.1:8385") || changed;
+            changed = setConfigElement(gui, "address", Constants.DEBUG_WEBGUI_BIND_ADDRESS) || changed;
 
             // Set alternative data listen port.
             Element elementOptions = (Element) mConfig.getDocumentElement().getElementsByTagName("options").item(0);
             if (elementOptions != null) {
                 changed = setConfigElement(elementOptions, "listenAddress", new String[]{
-                                "tcp://:22001",
+                                Constants.DEBUG_DATA_LISTEN_ADDRESS,
                                 "dynamic+https://relays.syncthing.net/endpoint"
                         }
                 ) || changed;
@@ -247,12 +235,7 @@ public class ConfigXml {
     }
 
     public URL getWebGuiUrl() {
-        String urlProtocol = Constants.osSupportsTLS12() ? "https" : "http";
-        try {
-            return new URL(urlProtocol + "://" + getGuiElement().getElementsByTagName("address").item(0).getTextContent());
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Failed to parse web interface URL", e);
-        }
+        return Util.buildWebGuiUrl(getGuiElement().getElementsByTagName("address").item(0).getTextContent());
     }
 
     public Integer getWebGuiBindPort() {
@@ -593,7 +576,7 @@ public class ConfigXml {
             // LogV("folder.label=" + folder.label + "/" +"folder.type=" + folder.type + "/" + "folder.paused=" + folder.paused);
             folders.add(folder);
         }
-        Collections.sort(folders, FOLDERS_COMPARATOR);
+        Collections.sort(folders, Folder.LABEL_COMPARATOR);
         return folders;
     }
 
@@ -1302,7 +1285,7 @@ public class ConfigXml {
         try {
             mConfigTempFile.renameTo(mConfigFile);
         } catch (Exception e) {
-            Log.w(TAG, "Failed to rename temporary config file to original file");
+            Log.w(TAG, "Failed to rename temporary config file to original file", e);
         }
     }
 

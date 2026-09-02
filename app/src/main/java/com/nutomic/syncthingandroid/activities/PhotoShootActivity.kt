@@ -18,7 +18,7 @@ import com.nutomic.syncthingandroid.R
 import android.os.Environment
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import com.nutomic.syncthingandroid.theme.ApplicationTheme
+import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.ui.screens.photoshoot.PhotoShootIntroScreen
 import com.nutomic.syncthingandroid.util.FileUtils
 import com.nutomic.syncthingandroid.util.FileUtils.ExternalStorageDirType

@@ -24,13 +24,11 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,12 +38,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.EntryProviderScope
+import com.nutomic.syncthingandroid.ui.LocalSyncthingService
+import com.nutomic.syncthingandroid.ui.dialogs.ConfirmDialog
+import com.nutomic.syncthingandroid.ui.theme.statusSuccess
+import com.nutomic.syncthingandroid.ui.theme.statusWarning
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.SyncthingService
@@ -210,37 +211,30 @@ fun SettingsCustomCertificateScreen() {
     }
 
     if (showResetDialog) {
-        AlertDialog(
-            onDismissRequest = { showResetDialog = false },
-            title = { Text(stringResource(R.string.custom_cert_reset_title)) },
-            text = { Text(stringResource(R.string.custom_cert_reset_question)) },
-            confirmButton = {
-                TextButton(onClick = {
-                    showResetDialog = false
-                    val service = stService
-                    if (service != null && !applying) {
-                        applying = true
-                        service.resetHttpsCertificate { outcome, detail ->
-                            applying = false
-                            if (outcome == SyncthingService.HttpsCertReplaceResult.FAILED) {
-                                handleOutcome(context, navigator, outcome, detail)
-                            } else {
-                                Toast.makeText(
-                                    context.applicationContext,
-                                    R.string.custom_cert_reset_done,
-                                    Toast.LENGTH_LONG,
-                                ).show()
-                                navigator.navigateUp()
-                            }
+        ConfirmDialog(
+            message = stringResource(R.string.custom_cert_reset_question),
+            onConfirm = {
+                showResetDialog = false
+                val service = stService
+                if (service != null && !applying) {
+                    applying = true
+                    service.resetHttpsCertificate { outcome, detail ->
+                        applying = false
+                        if (outcome == SyncthingService.HttpsCertReplaceResult.FAILED) {
+                            handleOutcome(context, navigator, outcome, detail)
+                        } else {
+                            Toast.makeText(
+                                context.applicationContext,
+                                R.string.custom_cert_reset_done,
+                                Toast.LENGTH_LONG,
+                            ).show()
+                            navigator.navigateUp()
                         }
                     }
-                }) { Text(stringResource(android.R.string.ok)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { showResetDialog = false }) {
-                    Text(stringResource(android.R.string.cancel))
                 }
             },
+            onDismiss = { showResetDialog = false },
+            title = stringResource(R.string.custom_cert_reset_title),
         )
     }
 }
@@ -267,8 +261,8 @@ private fun CurrentCertificateCard(info: CertificateValidator.CertInfo?) {
 @Composable
 private fun CheckRow(status: CertificateValidator.Status, title: String, detail: String?) {
     val (icon, tint) = when (status) {
-        CertificateValidator.Status.PASS -> Icons.Filled.CheckCircle to Color(0xFF2E7D32)
-        CertificateValidator.Status.WARN -> Icons.Filled.Warning to Color(0xFFF9A825)
+        CertificateValidator.Status.PASS -> Icons.Filled.CheckCircle to statusSuccess
+        CertificateValidator.Status.WARN -> Icons.Filled.Warning to statusWarning
         CertificateValidator.Status.FAIL -> Icons.Filled.Error to MaterialTheme.colorScheme.error
     }
     Row(

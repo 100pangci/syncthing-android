@@ -16,8 +16,8 @@ import com.nutomic.syncthingandroid.activities.SyncthingActivity
 import com.nutomic.syncthingandroid.activities.SyncConditionsActivity
 import com.nutomic.syncthingandroid.activities.WebViewActivity
 import com.nutomic.syncthingandroid.service.SyncthingService
-import com.nutomic.syncthingandroid.ui.nav.AppNavigator
 import com.nutomic.syncthingandroid.ui.nav.AppRoute
+import com.nutomic.syncthingandroid.ui.nav.IntentAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.LocalResultBus
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
@@ -47,7 +47,7 @@ fun CompositionLocalsHost(
     }
 
     val navigator = remember(activity) {
-        object : AppNavigator {
+        object : IntentAppNavigator(activity) {
             override fun navigateTo(route: AppRoute) {
                 when (route) {
                     is AppRoute.DeviceEdit -> activity.startActivity(
@@ -88,45 +88,9 @@ fun CompositionLocalsHost(
                 activity.finish()
             }
 
-            override fun openDeviceEdit(deviceId: String?, isCreate: Boolean) =
-                navigateTo(AppRoute.DeviceEdit(deviceId = deviceId, isCreate = isCreate))
-
-            override fun openFolderEdit(folderId: String?, isCreate: Boolean) =
-                navigateTo(AppRoute.FolderEdit(folderId = folderId, isCreate = isCreate))
-
-            override fun openSyncConditions(objectPrefixAndId: String, objectReadableName: String) =
-                navigateTo(AppRoute.SyncConditions(objectPrefixAndId, objectReadableName))
-
-            override fun openFolderPicker(initialDirectory: String?, rootDirectory: String?) =
-                navigateTo(AppRoute.FolderPicker(initialDirectory, rootDirectory))
-
-            override fun openLog() = navigateTo(AppRoute.Log)
-
-            override fun openWebView(url: String) = navigateTo(AppRoute.WebView(url))
-
-            override fun openSettings(startDestination: String?) {
-                val intent = Intent(activity, com.nutomic.syncthingandroid.settings.SettingsActivity::class.java)
-                startDestination?.let {
-                    intent.putExtra(com.nutomic.syncthingandroid.settings.SettingsActivity.EXTRA_START_DESTINATION, it)
-                }
-                activity.startActivity(intent)
-            }
-
-            override fun openRecentChanges() {
-                activity.startActivity(
-                    Intent(activity, com.nutomic.syncthingandroid.recentchanges.RecentChangesActivity::class.java)
-                )
-            }
-
-            override fun openWebGui() {
-                activity.startActivity(
-                    Intent(activity, com.nutomic.syncthingandroid.webgui.WebGuiActivity::class.java)
-                )
-            }
-
             override fun showDeviceIdDialog() {
-                resultBus.showDeviceIdDialog.value =
-                    activity.appPreferences().getString(com.nutomic.syncthingandroid.service.Constants.PREF_LOCAL_DEVICE_ID, "") ?: ""
+                // Not reachable in standalone activity hosts: only the home screen,
+                // which is hosted inside MainActivity, can trigger this.
             }
 
             override fun confirmRestart() {

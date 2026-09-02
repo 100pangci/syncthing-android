@@ -1,5 +1,6 @@
 package com.nutomic.syncthingandroid.util;
 
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.UiModeManager;
 import android.content.Context;
@@ -9,9 +10,11 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.common.base.Charsets;
+import com.google.gson.Gson;
 import com.nutomic.syncthingandroid.R;
 import com.nutomic.syncthingandroid.service.Constants;
 
@@ -23,6 +26,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.KeyStore;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +36,7 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -166,9 +172,47 @@ public class Util {
     }
 
     /**
+     * Builds the web GUI URL from the given gui address (e.g. "127.0.0.1:8384").
+     */
+    public static URL buildWebGuiUrl(String guiAddress) {
+        String urlProtocol = Constants.osSupportsTLS12() ? "https" : "http";
+        try {
+            return new URL(urlProtocol + "://" + guiAddress);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Failed to parse web interface URL", e);
+        }
+    }
+
+    /**
+     * Returns a deep copy of object.
+     *
+     * This method uses Gson and only works with objects that can be converted with Gson.
+     */
+    public static <T> T deepCopy(T object, Type type) {
+        Gson gson = new Gson();
+        return gson.fromJson(gson.toJson(object, type), type);
+    }
+
+    /**
      * Run command in a shell and return the exit code.
      */
     public static int runShellCommand(String cmd) {
+        return runShellCommandInternal("runShellCommand", cmd, null);
+    }
+
+    /**
+     * Run command in a shell and return the captured standard output.
+     */
+    public static String runShellCommandGetOutput(String cmd) {
+        StringBuilder capturedStdOut = new StringBuilder();
+        runShellCommandInternal("runShellCommandGetOutput", cmd, capturedStdOut);
+        return capturedStdOut.toString();
+    }
+
+    /**
+     * Run command in a shell, optionally capturing its standard output.
+     */
+    private static int runShellCommandInternal(String logTag, String cmd, @Nullable StringBuilder capturedStdOut) {
         // Assume "failure" exit code if an error is caught.
         // Note: redirectErrorStream(true); System.getProperty("line.separator");
         int exitCode = 255;
@@ -178,7 +222,7 @@ public class Util {
             shellProc = Runtime.getRuntime().exec("sh");
             shellOut = new DataOutputStream(shellProc.getOutputStream());
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(shellOut));
-            Log.d(TAG, "runShellCommand: " + cmd);
+            Log.d(TAG, logTag + ": " + cmd);
             bufferedWriter.write(cmd);
             bufferedWriter.flush();
             shellOut.close();
@@ -188,84 +232,38 @@ public class Util {
                 bufferedReader = new BufferedReader(new InputStreamReader(shellProc.getInputStream(), Charsets.UTF_8));
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
-                    Log.v(TAG, "runShellCommand: " + line);
+                    if (capturedStdOut == null) {
+                        Log.v(TAG, logTag + ": " + line);
+                    } else {
+                        capturedStdOut.append(line).append("\n");
+                    }
                 }
             } catch (IOException e) {
-                Log.w(TAG, "runShellCommand: Failed to read output", e);
+                Log.w(TAG, logTag + ": Failed to read output", e);
             } finally {
                 if (bufferedReader != null) {
                     bufferedReader.close();
                 }
             }
             exitCode = shellProc.waitFor();
+            if (capturedStdOut != null && exitCode != 0) {
+                Log.i(TAG, logTag + ": Exited with code " + exitCode);
+            }
         } catch (IOException | InterruptedException e) {
-            Log.w(TAG, "runShellCommand: Exception", e);
+            Log.w(TAG, logTag + ": Exception", e);
         } finally {
             try {
                 if (shellOut != null) {
                     shellOut.close();
                 }
             } catch (IOException e) {
-                Log.w(TAG, "runShellCommand: Failed to close stream", e);
+                Log.w(TAG, logTag + ": Failed to close stream", e);
             }
             if (shellProc != null) {
                 shellProc.destroy();
             }
         }
         return exitCode;
-    }
-
-    public static String runShellCommandGetOutput(String cmd) {
-        // Note: redirectErrorStream(true); System.getProperty("line.separator");
-        int exitCode = 255;
-        String capturedStdOut = "";
-        Process shellProc = null;
-        DataOutputStream shellOut = null;
-        try {
-            shellProc = Runtime.getRuntime().exec("sh");
-            shellOut = new DataOutputStream(shellProc.getOutputStream());
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(shellOut));
-            Log.d(TAG, "runShellCommandGetOutput: " + cmd);
-            bufferedWriter.write(cmd);
-            bufferedWriter.flush();
-            shellOut.close();
-            shellOut = null;
-            BufferedReader bufferedReader = null;
-            try {
-                bufferedReader = new BufferedReader(new InputStreamReader(shellProc.getInputStream(), Charsets.UTF_8));
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    // Log.i(TAG, "runShellCommandGetOutput: " + line);
-                    capturedStdOut = capturedStdOut + line + "\n";
-                }
-            } catch (IOException e) {
-                Log.w(TAG, "runShellCommandGetOutput: Failed to read output", e);
-            } finally {
-                if (bufferedReader != null) {
-                    bufferedReader.close();
-                }
-            }
-            exitCode = shellProc.waitFor();
-            if (exitCode != 0) {
-                Log.i(TAG, "runShellCommandGetOutput: Exited with code " + exitCode);
-            }
-        } catch (IOException | InterruptedException e) {
-            Log.w(TAG, "runShellCommandGetOutput: Exception", e);
-        } finally {
-            try {
-                if (shellOut != null) {
-                    shellOut.close();
-                }
-            } catch (IOException e) {
-                Log.w(TAG, "runShellCommandGetOutput: Failed to close shell stream", e);
-            }
-            if (shellProc != null) {
-                shellProc.destroy();
-            }
-        }
-
-        // Return captured command line output.
-        return capturedStdOut;
     }
 
     /**
@@ -298,23 +296,6 @@ public class Util {
             }
         }
         return false;
-    }
-
-    /**
-     * Make sure that dialog is showing and activity is valid before dismissing dialog, to prevent
-     * various crashes.
-     */
-    public static void dismissDialogSafe(Dialog dialog, AppCompatActivity activity) {
-        if (dialog == null || !dialog.isShowing())
-            return;
-
-        if (activity.isFinishing())
-            return;
-
-        if (activity.isDestroyed())
-            return;
-
-        dialog.dismiss();
     }
 
     /**
@@ -386,35 +367,6 @@ public class Util {
         return workOut;
     }
 
-    public static void testPathEllipsis() {
-        getPathEllipsis("");
-        getPathEllipsis("/");
-        getPathEllipsis("//");
-        getPathEllipsis("go2sync.dll");
-        getPathEllipsis("MY-LINK-/Cool 12345 Configuration Utility/sdk/bin/go2sync.dll");
-        getPathEllipsis("MY-LINK-Iam-bin-sum-another-and-make-long/Cool 12345 Configuration Utility/sdk/bin/go2sync.dll");
-        getPathEllipsis("MY-LINK-Iam-bin-sum-another-and-make-long-textfiles-are-cool.txt");
-        getPathEllipsis("MY-LINK-/Cool 12345 Configuration Utility/sdk/bin-Iam-bin-sum-another-and-make-long/go2sync-long-textfiles-are-cool.dll");
-        getPathEllipsis("MY-LINK-//Cool 12345 Configuration Utility/sdk/bin-Iam-bin-sum-another-and-make-long/go2sync-long-textfiles-are-cool.dll");
-        getPathEllipsis("MY-LINK-//Cool 12345 Configuration Utility/sdk/bin-Iam-bin-sum-another-and-make-long//go2sync-long-textfiles-are-cool.dll");
-        getPathEllipsis("MY-LINK-//Cool 12345 Configuration Utility/sdk/bin-Iam-bin-sum-another-and-make-long//go2sync-long-textfiles-are-cool");
-        getPathEllipsis("MY-LINK-//Cool 12345 Configuration Utility/sdk/bin-Iam-bin-sum-another-and-make-long//go2sync-long-textfiles-are-cool.correctlongeextensionswassolldas-denn-bitte");
-        getPathEllipsis("MY-LINK-Iam-bin-sum-another-and-make-long/Cool 12345 Configuration Utility/sdk/bin/go2sync.dllcorrectlongeextensionswassolldas-denn-bitte");
-    }
-
-    public static boolean containsIgnoreCase(String src, String what) {
-        final int length = what.length();
-        if (length == 0) {
-            return true;
-        }
-        for (int i = src.length() - length; i >= 0; i--) {
-            if (src.regionMatches(true, i, what, 0, length)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static Boolean isRunningOnTV(Context context) {
         UiModeManager uiModeManager = (UiModeManager) context.getSystemService(Context.UI_MODE_SERVICE);
         return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;
@@ -451,7 +403,8 @@ public class Util {
      * Converts local time to ZonedDateTime.
      */
     public static String getLocalZonedDateTime() {
-        // Example: "2021-02-11T22:11:29.356Z"
+        // Legacy devices below API 26 don't support java.time; return a fixed
+        // fallback timestamp as they cannot display the local time anyway.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return "2021-02-11T22:11:29.356Z";
         }
@@ -459,6 +412,28 @@ public class Util {
                 .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
     
+    /**
+     * Returns true if the given service class is currently running.
+     * Note: getRunningServices() is deprecated and only returns a cached
+     * snapshot on recent Android versions, which is fine for this check.
+     */
+    public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : am.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Quotes a string for safe use as a single shell argument.
+     */
+    public static String shellQuote(String s) {
+        return "'" + s.replace("'", "'\\''") + "'";
+    }
+
     /**
      * Called by RestApi/setRemoteCompletionInfo after folder completed.
      */
@@ -483,11 +458,11 @@ public class Util {
         for (File scriptFile : scriptFiles) {
             // Build arguments using shell escape.
             StringBuilder cmdBuilder = new StringBuilder();
-            cmdBuilder.append("cd \"").append(absPath).append("/..\";");
-            cmdBuilder.append("sh \"").append(scriptFile.getAbsolutePath()).append("\"");
+            cmdBuilder.append("cd ").append(shellQuote(absPath + "/..")).append(";");
+            cmdBuilder.append("sh ").append(shellQuote(scriptFile.getAbsolutePath()));
             if (scriptArgs != null) {
                 for (String arg : scriptArgs) {
-                    cmdBuilder.append(" \"").append(arg.replace("\"", "\\\"")).append("\"");
+                    cmdBuilder.append(" ").append(shellQuote(arg));
                 }
             }
 
@@ -503,7 +478,7 @@ public class Util {
      */
     public static String[] getSyncConflictFiles(final String absPath) {
         StringBuilder cmdBuilder = new StringBuilder();
-        cmdBuilder.append("cd \"").append(absPath).append("/\";");
+        cmdBuilder.append("cd ").append(shellQuote(absPath + "/")).append(";");
         // Unescaped:
         //  find -type f -name "*\.sync-conflict-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]-[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]*" -not -path "\.\/\.stversions\/*" -print | sed "s~\\.\/~~"
         cmdBuilder.append("find -type f -name \"*\\.sync-conflict-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]-[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]*\" -not -path \"\\.\\/\\" + Constants.FOLDER_NAME_STVERSIONS + "\\/*\" -print | sed \"s~\\\\.\\/~~\"");

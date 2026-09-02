@@ -24,7 +24,7 @@ import com.mikepenz.aboutlibraries.ui.compose.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 
 import com.nutomic.syncthingandroid.R
-import com.nutomic.syncthingandroid.theme.ApplicationTheme
+import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 
 fun EntryProviderScope<SettingsRoute>.licensesEntry() {
     entry<SettingsRoute.Licenses> {

@@ -6,6 +6,7 @@ import com.nutomic.syncthingandroid.service.Constants;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,15 @@ import java.util.Map;
  * - https://github.com/syncthing/syncthing/blob/master/lib/config/folderconfiguration.go
  */
 public class Folder {
+
+    /**
+     * Compares folders by labels, uses the folder ID as fallback if the label is empty.
+     */
+    public static final Comparator<Folder> LABEL_COMPARATOR = (lhs, rhs) -> {
+        String lhsLabel = lhs.label != null && !lhs.label.isEmpty() ? lhs.label : lhs.id;
+        String rhsLabel = rhs.label != null && !rhs.label.isEmpty() ? rhs.label : rhs.id;
+        return lhsLabel.compareTo(rhsLabel);
+    };
 
     // Folder Configuration
     public String group = "";

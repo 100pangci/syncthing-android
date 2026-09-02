@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.theme
+package com.nutomic.syncthingandroid.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

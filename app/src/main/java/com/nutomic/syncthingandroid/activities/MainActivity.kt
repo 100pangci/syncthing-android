@@ -14,13 +14,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.toMutableStateList
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import com.nutomic.syncthingandroid.R
@@ -29,13 +26,12 @@ import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.SyncthingService
 import com.nutomic.syncthingandroid.service.SyncthingService.OnServiceStateChangeListener
 import com.nutomic.syncthingandroid.service.SyncthingServiceBinder
-import com.nutomic.syncthingandroid.settings.SettingsActivity
-import com.nutomic.syncthingandroid.theme.ApplicationTheme
+import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.ui.LocalServiceState
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.ui.nav.AppNavDisplay
-import com.nutomic.syncthingandroid.ui.nav.AppNavigator
 import com.nutomic.syncthingandroid.ui.nav.AppRoute
+import com.nutomic.syncthingandroid.ui.nav.IntentAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.LocalResultBus
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
@@ -95,7 +91,7 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
                     NavBackStack(listOfNotNull<AppRoute>(AppRoute.Home).toMutableStateList())
                 }
                 val navigator = remember(backStack) {
-                    object : AppNavigator {
+                    object : IntentAppNavigator(this@MainActivity) {
                         override fun navigateTo(route: AppRoute) {
                             backStack.add(route)
                         }
@@ -109,49 +105,11 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
                             }
                         }
 
-                        override fun openDeviceEdit(deviceId: String?, isCreate: Boolean) {
-                            navigateTo(AppRoute.DeviceEdit(deviceId = deviceId, isCreate = isCreate))
-                        }
-
-                        override fun openFolderEdit(folderId: String?, isCreate: Boolean) {
-                            navigateTo(AppRoute.FolderEdit(folderId = folderId, isCreate = isCreate))
-                        }
-
-                        override fun openSyncConditions(objectPrefixAndId: String, objectReadableName: String) {
-                            navigateTo(AppRoute.SyncConditions(objectPrefixAndId, objectReadableName))
-                        }
-
-                        override fun openFolderPicker(initialDirectory: String?, rootDirectory: String?) {
-                            navigateTo(AppRoute.FolderPicker(initialDirectory, rootDirectory))
-                        }
-
-                        override fun openLog() = navigateTo(AppRoute.Log)
-
-                        override fun openWebView(url: String) = navigateTo(AppRoute.WebView(url))
-
-                        override fun openSettings(startDestination: String?) {
-                            val intent = Intent(this@MainActivity, SettingsActivity::class.java)
-                            startDestination?.let {
-                                intent.putExtra(SettingsActivity.EXTRA_START_DESTINATION, it)
-                            }
-                            startActivity(intent)
-                        }
-
-                        override fun openRecentChanges() {
-                            startActivity(
-                                Intent(this@MainActivity, com.nutomic.syncthingandroid.recentchanges.RecentChangesActivity::class.java)
-                            )
-                        }
-
-                        override fun openWebGui() {
-                            startActivity(
-                                Intent(this@MainActivity, com.nutomic.syncthingandroid.webgui.WebGuiActivity::class.java)
-                            )
-                        }
-
                         override fun showDeviceIdDialog() = showQrCodeDialog()
 
-                        override fun confirmRestart() = showRestartDialog()
+                        override fun confirmRestart() {
+                            resultBus.restartRequested.value = true
+                        }
                     }
                 }
 
@@ -266,19 +224,6 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
         Log.i(TAG, "Exiting app on user request")
         stopService(Intent(this, SyncthingService::class.java))
         finishAndRemoveTask()
-    }
-
-    private fun showRestartDialog() {
-        androidx.appcompat.app.AlertDialog.Builder(this)
-            .setMessage(R.string.dialog_confirm_restart)
-            .setPositiveButton(android.R.string.yes) { _, _ ->
-                startService(
-                    Intent(this, SyncthingService::class.java)
-                        .setAction(SyncthingService.ACTION_RESTART)
-                )
-            }
-            .setNegativeButton(android.R.string.no, null)
-            .show()
     }
 
     private fun showQrCodeDialog() {

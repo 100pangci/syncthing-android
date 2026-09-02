@@ -44,8 +44,8 @@ public class NotificationHandler {
     private final NotificationChannel mInfoChannel;
 
     private String mLastNotificationText = null;
-    private Boolean lastStartForegroundService = false;
-    private Boolean appShutdownInProgress = false;
+    private boolean lastStartForegroundService = false;
+    private boolean appShutdownInProgress = false;
 
     // Dagger2 constructor injection - receives SharedPreferences directly to avoid circular dependency
     public NotificationHandler(Context context, SharedPreferences preferences) {
@@ -71,7 +71,7 @@ public class NotificationHandler {
             mPersistentChannelWaiting.enableVibration(false);
             mPersistentChannelWaiting.setSound(null, null);
             mPersistentChannelWaiting.setShowBadge(false);
-            mPersistentChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_SECRET);
+            mPersistentChannelWaiting.setLockscreenVisibility(NotificationCompat.VISIBILITY_SECRET);
             mNotificationManager.createNotificationChannel(mPersistentChannelWaiting);
 
             mInfoChannel = new NotificationChannel(
@@ -138,11 +138,9 @@ public class NotificationHandler {
         }
 
         // Check if we have to stopForeground.
-        if (startForegroundService != lastStartForegroundService) {
-            if (!startForegroundService) {
-                Log.v(TAG, "Stopping foreground service");
-                service.stopForeground(false);
-            }
+        if (!startForegroundService && startForegroundService != lastStartForegroundService) {
+            Log.v(TAG, "Stopping foreground service");
+            service.stopForeground(false);
         }
 
         // Prepare notification builder.
@@ -258,13 +256,18 @@ public class NotificationHandler {
         mNotificationManager.notify(ID_CRASH, n);
     }
 
+    // Consent notification ids are deterministic within this range to avoid
+    // duplicates for different device, folder consent popups triggered by {@link EventProcessor}.
+    private static final int CONSENT_NOTIFICATION_ID_BASE = 1000;
+    private static final int CONSENT_NOTIFICATION_ID_RANGE = 1000;
+
     /**
      * Calculate a deterministic ID between 1000 and 2000 to avoid duplicate
      * notification ids for different device, folder consent popups triggered
      * by {@link EventProcessor}.
      */
     public int getNotificationIdFromText(String text) {
-        return 1000 + text.hashCode() % 1000;
+        return CONSENT_NOTIFICATION_ID_BASE + Math.floorMod(text.hashCode(), CONSENT_NOTIFICATION_ID_RANGE);
     }
 
     /**
@@ -361,7 +364,6 @@ public class NotificationHandler {
                                                 String folderId,
                                                 String folderLabel,
                                                 Boolean receiveEncrypted,
-                                                Boolean remoteEncrypted,
                                                 Boolean isNewFolder) {
         if (deviceId == null) {
             Log.e(TAG, "showFolderShareNotification: deviceId == null");
@@ -382,8 +384,7 @@ public class NotificationHandler {
                 .putExtra(FolderActivity.EXTRA_DEVICE_ID, deviceId)
                 .putExtra(FolderActivity.EXTRA_FOLDER_ID, folderId)
                 .putExtra(FolderActivity.EXTRA_FOLDER_LABEL, folderLabel)
-                .putExtra(FolderActivity.EXTRA_RECEIVE_ENCRYPTED, receiveEncrypted)
-                .putExtra(FolderActivity.EXTRA_REMOTE_ENCRYPTED, remoteEncrypted);
+                .putExtra(FolderActivity.EXTRA_RECEIVE_ENCRYPTED, receiveEncrypted);
         PendingIntent piAccept = PendingIntent.getActivity(mContext, notificationId,
             intentAccept, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 

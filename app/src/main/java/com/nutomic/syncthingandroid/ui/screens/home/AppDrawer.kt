@@ -50,6 +50,7 @@ import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.SyncthingService
 import com.nutomic.syncthingandroid.ui.appPreferences
+import com.nutomic.syncthingandroid.ui.theme.DISABLED_ALPHA
 import com.nutomic.syncthingandroid.util.isTelevision
 
 /**
@@ -194,7 +195,7 @@ private fun DrawerItem(
             modifier = modifier
         )
     } else {
-        val color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+        val color = MaterialTheme.colorScheme.onSurface.copy(alpha = DISABLED_ALPHA)
         Surface(
             color = Color.Transparent,
             modifier = modifier

@@ -3,7 +3,7 @@ package com.nutomic.syncthingandroid.activities
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.nutomic.syncthingandroid.theme.ApplicationTheme
+import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.ui.CompositionLocalsHost
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
 import com.nutomic.syncthingandroid.ui.screens.folder.FolderEditScreen
@@ -50,7 +50,5 @@ class FolderActivity : SyncthingActivity() {
         const val EXTRA_IS_CREATE = ".activities.FolderActivity.IS_CREATE"
         const val EXTRA_NOTIFICATION_ID = ".activities.FolderActivity.NOTIFICATION_ID"
         const val EXTRA_RECEIVE_ENCRYPTED = ".activities.FolderActivity.RECEIVE_ENCRYPTED"
-        const val EXTRA_REMOTE_ENCRYPTED = ".activities.FolderActivity.REMOTE_ENCRYPTED"
-        const val FOLDER_ADD_CODE = 402
     }
 }

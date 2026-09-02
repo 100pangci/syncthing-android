@@ -47,7 +47,7 @@ public abstract class ApiRequest {
 
     private static final String TAG = "ApiRequest";
 
-    private Boolean ENABLE_VERBOSE_LOG = false;
+    private boolean ENABLE_VERBOSE_LOG = false;
 
     /**
      * The name of the HTTP header used for the syncthing API key.
@@ -66,12 +66,23 @@ public abstract class ApiRequest {
         void onError(VolleyError error);
     }
 
-    private static RequestQueue sVolleyQueue;
+    /**
+     * Some requests seem to be slow or fail, make sure this doesn't break the app
+     * (eg if an event request fails, new event requests won't be triggered).
+     */
+    private static final int REQUEST_TIMEOUT_MS = 5000;
+    private static final int REQUEST_MAX_RETRIES = 5;
+
+    private static volatile RequestQueue sVolleyQueue;
 
     private RequestQueue getVolleyQueue() {
         if (sVolleyQueue == null) {
-            Context context = mContext.getApplicationContext();
-            sVolleyQueue = Volley.newRequestQueue(context, new NetworkStack());
+            synchronized (ApiRequest.class) {
+                if (sVolleyQueue == null) {
+                    Context context = mContext.getApplicationContext();
+                    sVolleyQueue = Volley.newRequestQueue(context, new NetworkStack());
+                }
+            }
         }
         return sVolleyQueue;
     }
@@ -192,9 +203,7 @@ public abstract class ApiRequest {
             }
         };
 
-        // Some requests seem to be slow or fail, make sure this doesn't break the app
-        // (eg if an event request fails, new event requests won't be triggered).
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, 5,
+        request.setRetryPolicy(new DefaultRetryPolicy(REQUEST_TIMEOUT_MS, REQUEST_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         getVolleyQueue().add(request);
     }

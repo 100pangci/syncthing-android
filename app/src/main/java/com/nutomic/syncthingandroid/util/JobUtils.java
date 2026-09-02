@@ -36,7 +36,7 @@ public class JobUtils {
         }
 
         // Schedule the start of "SyncTriggerJobService" in "X" seconds.
-        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(context.JOB_SCHEDULER_SERVICE);
+        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(builder.build());
         Log.i(TAG, "Scheduled SyncTriggerJobService to run in " +
                 Integer.toString(delayInSeconds) +
@@ -44,7 +44,7 @@ public class JobUtils {
     }
 
     public static void cancelAllScheduledJobs(Context context) {
-        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(context.JOB_SCHEDULER_SERVICE);
+        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         jobScheduler.cancelAll();
     }
 }

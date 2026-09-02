@@ -4,10 +4,8 @@ import android.content.ClipData
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -26,6 +24,9 @@ import androidx.compose.ui.semantics.password
 import androidx.compose.ui.semantics.semantics
 import androidx.navigation3.runtime.EntryProviderScope
 import com.google.common.base.Splitter
+import com.nutomic.syncthingandroid.ui.LocalServiceTick
+import com.nutomic.syncthingandroid.ui.LocalSyncthingService
+import com.nutomic.syncthingandroid.ui.dialogs.ConfirmDialog
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.model.Folder
 import com.nutomic.syncthingandroid.service.Constants
@@ -92,7 +93,7 @@ fun SettingsSyncthingOptionsScreen() {
     val context = LocalContext.current
     val clipboard = LocalClipboard.current
     val stService = LocalSyncthingService.current
-    val stServiceTick = LocalServiceUpdateTick.current
+    val stServiceTick = LocalServiceTick.current
     val scope = LocalActivityScope.current
     val navigator = LocalSettingsNavigator.current
 
@@ -392,40 +393,27 @@ private fun ClearStVersionPreference(
         enabled = enabled,
     )
     if (showAlert) {
-        AlertDialog(
-            onDismissRequest = { showAlert = false },
-            title = { Text(stringResource(R.string.clear_stversions_title)) },
-            text = { Text(stringResource(R.string.clear_stversions_question)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        stService?.api?.let { api ->
-                            scope.launch(Dispatchers.IO) {
-                                val folders = api.folders
-                                if (clearStVersions(folders)) {
-                                    withContext(Dispatchers.Main) {
-                                        Toast.makeText(
-                                            context,
-                                            R.string.clear_stversions_done,
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }
-                                }
-                                showAlert = false
+        ConfirmDialog(
+            message = stringResource(R.string.clear_stversions_question),
+            onConfirm = {
+                stService?.api?.let { api ->
+                    scope.launch(Dispatchers.IO) {
+                        val folders = api.folders
+                        if (clearStVersions(folders)) {
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(
+                                    context,
+                                    R.string.clear_stversions_done,
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
-                    },
-                ) {
-                    Text(stringResource(android.R.string.ok))
+                        showAlert = false
+                    }
                 }
             },
-            dismissButton = {
-                TextButton(
-                    onClick = { showAlert = false }
-                ) {
-                    Text(stringResource(android.R.string.cancel))
-                }
-            },
+            onDismiss = { showAlert = false },
+            title = stringResource(R.string.clear_stversions_title),
         )
     }
 }
@@ -446,39 +434,26 @@ private fun UndoIgnoredDevicesFoldersPreference(
         enabled = enabled,
     )
     if (showAlert) {
-        AlertDialog(
-            onDismissRequest = { showAlert = false },
-            title = { Text(stringResource(R.string.undo_ignored_devices_folders_title)) },
-            text = { Text(stringResource(R.string.undo_ignored_devices_folders_question)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        stService?.api?.let { api ->
-                            scope.launch(Dispatchers.IO) {
-                                api.undoIgnoredDevicesAndFolders()
-                                api.sendConfig()
-                                withContext(Dispatchers.Main) {
-                                    Toast.makeText(
-                                        context,
-                                        R.string.undo_ignored_devices_folders_done,
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                                showAlert = false
-                            }
+        ConfirmDialog(
+            message = stringResource(R.string.undo_ignored_devices_folders_question),
+            onConfirm = {
+                stService?.api?.let { api ->
+                    scope.launch(Dispatchers.IO) {
+                        api.undoIgnoredDevicesAndFolders()
+                        api.sendConfig()
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                context,
+                                R.string.undo_ignored_devices_folders_done,
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
-                    },
-                ) {
-                    Text(stringResource(android.R.string.ok))
+                        showAlert = false
+                    }
                 }
             },
-            dismissButton = {
-                TextButton(
-                    onClick = { showAlert = false }
-                ) {
-                    Text(stringResource(android.R.string.cancel))
-                }
-            },
+            onDismiss = { showAlert = false },
+            title = stringResource(R.string.undo_ignored_devices_folders_title),
         )
     }
 }
@@ -561,7 +536,6 @@ private var RestApi.preferences: Preferences
             values[Keys.WEB_GUI_REMOTE_ACCESS] = gui.bindAddress != BIND_LOCALHOST
             values[Keys.WEB_GUI_USERNAME] = gui.user
             // use password saved in shared preference only
-            // values[Keys.WEB_GUI_PASSWORD] = gui.password
         }
 
         return MapPreferences(values)

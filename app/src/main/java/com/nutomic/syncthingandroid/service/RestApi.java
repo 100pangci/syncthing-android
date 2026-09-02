@@ -49,7 +49,6 @@ import com.nutomic.syncthingandroid.model.RemoteCompletionInfo;
 import com.nutomic.syncthingandroid.model.RemoteIgnoredDevice;
 import com.nutomic.syncthingandroid.model.SharedWithDevice;
 import com.nutomic.syncthingandroid.model.SystemStatus;
-import com.nutomic.syncthingandroid.model.SystemVersion;
 import com.nutomic.syncthingandroid.service.Constants;
 import com.nutomic.syncthingandroid.util.FileUtils;
 import com.nutomic.syncthingandroid.util.Util;
@@ -58,12 +57,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -86,7 +83,20 @@ public class RestApi {
 
     private static final String TAG = "RestApi";
 
-    private Boolean ENABLE_VERBOSE_LOG = false;
+    /**
+     * The versioning cleanup workaround is triggered every Nth app start to save resources.
+     */
+    private static final int VERSIONING_CLEANUP_STARTUP_INTERVAL = 10;
+    private static final int VERSIONING_CLEANUP_INTERVAL_S_TEMPORARY = 2;
+    private static final int VERSIONING_CLEANUP_INTERVAL_S_DEFAULT = 3600;
+    private static final long VERSIONING_CLEANUP_RESET_DELAY_MS = 10000;
+    /**
+     * Process name of the "find" utility that Syncthing's versioning cleanup relies on.
+     * Leftover instances are killed before re-triggering the cleanup.
+     */
+    private static final String VERSIONING_CLEANUP_PROCESS_NAME = "find";
+
+    private boolean ENABLE_VERBOSE_LOG = false;
 
     /**
      * Intents we sent to to other apps that subscribed to us.
@@ -99,15 +109,6 @@ public class RestApi {
      */
      private static final String PERMISSION_RECEIVE_SYNC_STATUS =
             ".permission.RECEIVE_SYNC_STATUS";
-
-    /**
-     * Compares folders by labels, uses the folder ID as fallback if the label is empty
-     */
-    private final static Comparator<Folder> FOLDERS_COMPARATOR = (lhs, rhs) -> {
-        String lhsLabel = lhs.label != null && !lhs.label.isEmpty() ? lhs.label : lhs.id;
-        String rhsLabel = rhs.label != null && !rhs.label.isEmpty() ? rhs.label : rhs.id;
-        return lhsLabel.compareTo(rhsLabel);
-    };
 
     public interface OnConfigChangedListener {
         void onConfigChanged();
@@ -257,25 +258,25 @@ public class RestApi {
         sharedPreferences.edit()
             .putInt(Constants.PREF_APP_START_COUNTER, startupCounter)
             .apply();
-        boolean shouldRunWorkaround = (startupCounter % 10 == 0);
+        boolean shouldRunWorkaround = (startupCounter % VERSIONING_CLEANUP_STARTUP_INTERVAL == 0);
         if (!shouldRunWorkaround) {
-            LogV("Skipping versioning cleanup because it is only triggered every 10th startup to save resources.");
+            LogV("Skipping versioning cleanup because it is only triggered every " + VERSIONING_CLEANUP_STARTUP_INTERVAL + "th startup to save resources.");
             return;
         }
 
         // Temporarily lower cleanupIntervalS for every folder to force cleanup after startup.
-        setVersioningCleanupIntervalS(2);
+        setVersioningCleanupIntervalS(VERSIONING_CLEANUP_INTERVAL_S_TEMPORARY);
         final Handler resetCleanupIntervalHandler = new Handler(Looper.getMainLooper());
         resetCleanupIntervalHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (hasShutdown) {
-                    LogV("Skipping setVersioningCleanupIntervalS(3600) due to hasShutdown == true");
+                    LogV("Skipping resetting the versioning cleanup interval due to hasShutdown == true");
                     return;
                 }
-                setVersioningCleanupIntervalS(3600);
+                setVersioningCleanupIntervalS(VERSIONING_CLEANUP_INTERVAL_S_DEFAULT);
             }
-        }, 10000); 
+        }, VERSIONING_CLEANUP_RESET_DELAY_MS);
     }
 
     public void reloadConfig() {
@@ -372,7 +373,11 @@ public class RestApi {
                     Device matchingDevice = Stream.of(getDevices(false))
                             .filter(d -> d.deviceID.equals(offeredByDeviceId))
                             .findFirst()
-                            .get();
+                            .orElse(null);
+                    if (matchingDevice == null) {
+                        Log.w(TAG, "ORCC: No matching device for deviceId=[" + offeredByDeviceId + "]");
+                        continue;
+                    }
                     Boolean isNewFolder = Stream.of(getFolders())
                             .noneMatch(f -> f.id.equals(resultFolderId));
                     mNotificationHandler.showFolderShareNotification(
@@ -381,7 +386,6 @@ public class RestApi {
                         resultFolderId,
                         pendingFolder.label,
                         pendingFolder.receiveEncrypted,
-                        pendingFolder.remoteEncrypted,
                         isNewFolder
                     );
                 }
@@ -451,7 +455,7 @@ public class RestApi {
                         .putString(Constants.PREF_LAST_BINARY_VERSION, mVersion)
                         .apply();
                 } catch (Exception e) {
-                    Log.w(TAG, "updateDebugFacilitiesCache: Failed to get debug facilities. result=" + result);
+                    Log.w(TAG, "updateDebugFacilitiesCache: Failed to get debug facilities. result=" + result, e);
                 }
             }, error -> {});
         }
@@ -576,16 +580,11 @@ public class RestApi {
 
     public URL getWebGuiUrl() {
         synchronized (mConfigLock) {
-            String urlProtocol = Constants.osSupportsTLS12() ? "https" : "http";
-            try {
-                if (mConfig.gui.address == null) {
-                    Log.e(TAG, "getWebGuiUrl: mConfig.gui.address == null, returning 127.0.0.1:8384");
-                    return new URL(urlProtocol + "://127.0.0.1:8384");
-                }
-                return new URL(urlProtocol + "://" + mConfig.gui.address);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException("Failed to parse web interface URL", e);
+            if (mConfig.gui.address == null) {
+                Log.e(TAG, "getWebGuiUrl: mConfig.gui.address == null, returning 127.0.0.1:" + Constants.DEFAULT_WEBGUI_TCP_PORT);
+                return Util.buildWebGuiUrl("127.0.0.1:" + Constants.DEFAULT_WEBGUI_TCP_PORT);
             }
+            return Util.buildWebGuiUrl(mConfig.gui.address);
         }
     }
 
@@ -599,7 +598,6 @@ public class RestApi {
         synchronized (mConfigLock) {
             jsonConfig = mGson.toJson(mConfig);
         }
-        // LogVMultipleLines("sendConfig: config=" + jsonToPrettyFormat(jsonConfig));
         new PostRequest(mContext, mUrl, PostRequest.URI_SYSTEM_CONFIG, mApiKey,
             null, jsonConfig, null);
         mUrl = getWebGuiUrl();
@@ -613,7 +611,7 @@ public class RestApi {
     public void shutdown() {
         hasShutdown = true;
         executorService.shutdownNow();
-        Util.killProcess("find");
+        Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME);
         new PostRequest(mContext, mUrl, PostRequest.URI_SYSTEM_SHUTDOWN, mApiKey,
                 null, null, null);
     }
@@ -628,14 +626,14 @@ public class RestApi {
     public List<Folder> getFolders() {
         List<Folder> folders;
         synchronized (mConfigLock) {
-            folders = deepCopy(mConfig.folders, new TypeToken<List<Folder>>(){}.getType());
+            folders = Util.deepCopy(mConfig.folders, new TypeToken<List<Folder>>(){}.getType());
         }
         for (Folder folder : folders) {
             if (folder.path.startsWith("~/")) {
                 folder.path = folder.path.replaceFirst("^~", FileUtils.getSyncthingTildeAbsolutePath());
             }
         }
-        Collections.sort(folders, FOLDERS_COMPARATOR);
+        Collections.sort(folders, Folder.LABEL_COMPARATOR);
         return folders;
     }
 
@@ -712,7 +710,7 @@ public class RestApi {
     public List<Device> getDevices(Boolean includeLocal) {
         List<Device> devices;
         synchronized (mConfigLock) {
-            devices = deepCopy(mConfig.devices, new TypeToken<List<Device>>(){}.getType());
+            devices = Util.deepCopy(mConfig.devices, new TypeToken<List<Device>>(){}.getType());
         }
 
         Iterator<Device> it = devices.iterator();
@@ -735,7 +733,7 @@ public class RestApi {
         LogV("getLocalDevice: Looking for local device ID " + mLocalDeviceId);
         for (Device d : devices) {
             if (d.deviceID.equals(mLocalDeviceId)) {
-                return deepCopy(d, Device.class);
+                return Util.deepCopy(d, Device.class);
             }
         }
         throw new RuntimeException("RestApi.getLocalDevice: Failed to get the local device crucial to continuing execution.");
@@ -775,13 +773,13 @@ public class RestApi {
 
     public Options getOptions() {
         synchronized (mConfigLock) {
-            return deepCopy(mConfig.options, Options.class);
+            return Util.deepCopy(mConfig.options, Options.class);
         }
     }
 
     public Gui getGui() {
         synchronized (mConfigLock) {
-            return deepCopy(mConfig.gui, Gui.class);
+            return Util.deepCopy(mConfig.gui, Gui.class);
         }
     }
 
@@ -800,16 +798,6 @@ public class RestApi {
     }
 
     /**
-     * Returns a deep copy of object.
-     *
-     * This method uses Gson and only works with objects that can be converted with Gson.
-     */
-    private <T> T deepCopy(T object, Type type) {
-        Gson gson = new Gson();
-        return gson.fromJson(gson.toJson(object, type), type);
-    }
-
-    /**
      * Requests and parses information about current system status and resource usage.
      */
     public void getSystemStatus(OnResultListener1<SystemStatus> listener) {
@@ -819,7 +807,7 @@ public class RestApi {
                 systemStatus = mGson.fromJson(result, SystemStatus.class);
                 listener.onResult(systemStatus);
             } catch (Exception e) {
-                Log.e(TAG, "getSystemStatus: Parsing REST API result failed. result=" + result);
+                Log.e(TAG, "getSystemStatus: Parsing REST API result failed. result=" + result, e);
             }
         }, error -> {});
     }
@@ -866,16 +854,6 @@ public class RestApi {
         folderIgnoreList.ignore = ignore;
         new PostRequest(mContext, mUrl, PostRequest.URI_DB_IGNORES, mApiKey,
             ImmutableMap.of("folder", folderId), mGson.toJson(folderIgnoreList), null);
-    }
-
-    /**
-     * Requests and parses system version information.
-     */
-    public void getSystemVersion(OnResultListener1<SystemVersion> listener) {
-        new GetRequest(mContext, mUrl, GetRequest.URI_VERSION, mApiKey, null, result -> {
-            SystemVersion systemVersion = mGson.fromJson(result, SystemVersion.class);
-            listener.onResult(systemVersion);
-        }, error -> {});
     }
 
     /**
@@ -948,7 +926,7 @@ public class RestApi {
         if (!mPreviousConnections.isPresent()) {
             return new Connection();
         }
-        return deepCopy(mPreviousConnections.get().total, Connection.class);
+        return Util.deepCopy(mPreviousConnections.get().total, Connection.class);
     }
 
     /**
@@ -958,7 +936,7 @@ public class RestApi {
         Long now = System.currentTimeMillis();
         Long msElapsed = now - mPreviousConnectionTime;
         if (msElapsed < Constants.REST_UPDATE_INTERVAL) {
-            connections = deepCopy(mPreviousConnections.get(), Connections.class);
+            connections = Util.deepCopy(mPreviousConnections.get(), Connections.class);
             return;
         }
 
@@ -1042,7 +1020,7 @@ public class RestApi {
                         }
                         listener.onResult(diskEvents);
                     } catch (Exception e) {
-                        Log.e(TAG, "getDiskEvents: Parsing REST API result failed. result=" + result);
+                        Log.e(TAG, "getDiskEvents: Parsing REST API result failed. result=" + result, e);
                     }
                 }, error -> {}
         );
@@ -1382,7 +1360,7 @@ public class RestApi {
 
     public void downloadSupportBundle(File targetFile, final OnResultListener1<Boolean> listener) {
         new GetRequest(mContext, mUrl, GetRequest.URI_DEBUG_SUPPORT, mApiKey, null, result -> {
-            Boolean failSuccess = true;
+            boolean failSuccess = true;
             LogV("downloadSupportBundle: Writing '" + targetFile.getPath() + "' ...");
             FileOutputStream fileOutputStream = null;
             try {
@@ -1428,20 +1406,16 @@ public class RestApi {
             // Check if the folders are available from config.
             if (mConfig.folders != null) {
                 for (Folder folder : mConfig.folders) {
-                    // LogV("applyCustomRunConditions: Processing config of folder(" + folder.label + ")");
-                    Boolean folderCustomSyncConditionsEnabled = sharedPreferences.getBoolean(
-                        Constants.DYN_PREF_OBJECT_CUSTOM_SYNC_CONDITIONS(Constants.PREF_OBJECT_PREFIX_FOLDER + folder.id), false
-                    );
-                    if (folderCustomSyncConditionsEnabled) {
-                        Boolean syncConditionsMet = runConditionMonitor.checkObjectSyncConditions(
-                            Constants.PREF_OBJECT_PREFIX_FOLDER + folder.id
-                        );
-                        LogV("applyCustomRunConditions: f(" + folder.label + ")=" + (syncConditionsMet ? "1" : "0"));
-                        if (folder.paused != !syncConditionsMet) {
-                            folder.paused = !syncConditionsMet;
-                            Log.d(TAG, "applyCustomRunConditions: f(" + folder.label + ")=" + (syncConditionsMet ? ">1" : ">0"));
-                            configChanged = true;
-                        }
+                    String folderPrefixAndId = Constants.PREF_OBJECT_PREFIX_FOLDER + folder.id;
+                    Boolean shouldPause = runConditionMonitor.getCustomSyncConditionsPause(folderPrefixAndId);
+                    if (shouldPause == null) {
+                        continue;
+                    }
+                    LogV("applyCustomRunConditions: f(" + folder.label + ")=" + (!shouldPause ? "1" : "0"));
+                    if (folder.paused != shouldPause) {
+                        folder.paused = shouldPause;
+                        Log.d(TAG, "applyCustomRunConditions: f(" + folder.label + ")=" + (!shouldPause ? ">1" : ">0"));
+                        configChanged = true;
                     }
                 }
             } else {
@@ -1452,20 +1426,16 @@ public class RestApi {
             // Check if the devices are available from config.
             if (mConfig.devices != null) {
                 for (Device device : mConfig.devices) {
-                    // LogV("applyCustomRunConditions: Processing config of device(" + device.name + ")");
-                    Boolean deviceCustomSyncConditionsEnabled = sharedPreferences.getBoolean(
-                        Constants.DYN_PREF_OBJECT_CUSTOM_SYNC_CONDITIONS(Constants.PREF_OBJECT_PREFIX_DEVICE + device.deviceID), false
-                    );
-                    if (deviceCustomSyncConditionsEnabled) {
-                        Boolean syncConditionsMet = runConditionMonitor.checkObjectSyncConditions(
-                            Constants.PREF_OBJECT_PREFIX_DEVICE + device.deviceID
-                        );
-                        LogV("applyCustomRunConditions: d(" + device.name + ")=" + (syncConditionsMet ? "1" : "0"));
-                        if (device.paused != !syncConditionsMet) {
-                            device.paused = !syncConditionsMet;
-                            Log.d(TAG, "applyCustomRunConditions: d(" + device.name + ")=" + (syncConditionsMet ? ">1" : ">0"));
-                            configChanged = true;
-                        }
+                    String devicePrefixAndId = Constants.PREF_OBJECT_PREFIX_DEVICE + device.deviceID;
+                    Boolean shouldPause = runConditionMonitor.getCustomSyncConditionsPause(devicePrefixAndId);
+                    if (shouldPause == null) {
+                        continue;
+                    }
+                    LogV("applyCustomRunConditions: d(" + device.name + ")=" + (!shouldPause ? "1" : "0"));
+                    if (device.paused != shouldPause) {
+                        device.paused = shouldPause;
+                        Log.d(TAG, "applyCustomRunConditions: d(" + device.name + ")=" + (!shouldPause ? ">1" : ">0"));
+                        configChanged = true;
                     }
                 }
             } else {
@@ -1531,27 +1501,5 @@ public class RestApi {
         if (ENABLE_VERBOSE_LOG) {
             Log.v(TAG, logMessage);
         }
-    }
-
-    private void LogVMultipleLines(String logMessage) {
-        final int MAX_CHARS_PER_LOG_LINE = 4000;
-        if (!ENABLE_VERBOSE_LOG) {
-            return;
-        }
-        if (logMessage.length() <= MAX_CHARS_PER_LOG_LINE) {
-            LogV(logMessage);
-            return;
-        }
-        LogV("*** Multiple line log START ***");
-        int chunkCount = logMessage.length() / MAX_CHARS_PER_LOG_LINE;
-        for (int i = 0; i <= chunkCount; i++) {
-            int max = MAX_CHARS_PER_LOG_LINE * (i + 1);
-            if (max >= logMessage.length()) {
-                LogV(logMessage.substring(MAX_CHARS_PER_LOG_LINE * i));
-                continue;
-            }
-            LogV(logMessage.substring(MAX_CHARS_PER_LOG_LINE * i, max));
-        }
-        LogV("*** Multiple line log END ***");
     }
 }

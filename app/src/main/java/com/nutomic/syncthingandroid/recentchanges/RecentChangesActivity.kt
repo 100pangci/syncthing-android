@@ -26,7 +26,7 @@ import com.nutomic.syncthingandroid.service.Constants.PREF_SHOW_EXACT_TIMES
 import com.nutomic.syncthingandroid.service.RestApi
 import com.nutomic.syncthingandroid.service.SyncthingService
 import com.nutomic.syncthingandroid.service.SyncthingServiceBinder
-import com.nutomic.syncthingandroid.theme.ApplicationTheme
+import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.util.FileUtils
 import java.io.File
 import java.text.SimpleDateFormat

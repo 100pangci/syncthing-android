@@ -37,6 +37,8 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.EntryProviderScope
+import com.nutomic.syncthingandroid.ui.LocalSyncthingService
+import com.nutomic.syncthingandroid.ui.dialogs.ConfirmDialog
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.activities.LogActivity
 import com.nutomic.syncthingandroid.service.Constants
@@ -216,50 +218,37 @@ private fun ExportConfigPreference() {
         onClick = { showAlert = true }
     )
     if (showAlert) {
-        AlertDialog(
-            onDismissRequest = { showAlert = false },
-            title = { Text(stringResource(R.string.export_config)) },
-            text = { Text(stringResource(R.string.dialog_confirm_export)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        stService?.let { service ->
-                            scope.launch(Dispatchers.IO) {
-                                showAlert = false
-                                service.exportConfig().also { success ->
-                                    withContext(Dispatchers.Main) {
-                                        if (success) {
-                                            Toast.makeText(
-                                                context,
-                                                R.string.config_export_successful_no_path,
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                            navigator.navigateUp()
-                                        } else {
-                                            Toast.makeText(
-                                                context,
-                                                R.string.config_export_failed,
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                            val intent = Intent(context, LogActivity::class.java)
-                                            context.startActivity(intent)
-                                        }
-                                    }
+        ConfirmDialog(
+            message = stringResource(R.string.dialog_confirm_export),
+            title = stringResource(R.string.export_config),
+            onConfirm = {
+                stService?.let { service ->
+                    scope.launch(Dispatchers.IO) {
+                        showAlert = false
+                        service.exportConfig().also { success ->
+                            withContext(Dispatchers.Main) {
+                                if (success) {
+                                    Toast.makeText(
+                                        context,
+                                        R.string.config_export_successful_no_path,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    navigator.navigateUp()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        R.string.config_export_failed,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    val intent = Intent(context, LogActivity::class.java)
+                                    context.startActivity(intent)
                                 }
                             }
                         }
-                    },
-                ) {
-                    Text(stringResource(android.R.string.ok))
+                    }
                 }
             },
-            dismissButton = {
-                TextButton(
-                    onClick = { showAlert = false }
-                ) {
-                    Text(stringResource(android.R.string.cancel))
-                }
-            },
+            onDismiss = { showAlert = false }
         )
     }
 }
@@ -280,62 +269,49 @@ private fun ImportConfigPreference() {
         onClick = { showAlert = true }
     )
     if (showAlert) {
-        AlertDialog(
-            onDismissRequest = { showAlert = false },
-            title = { Text(stringResource(R.string.import_config)) },
-            text = { Text(stringResource(R.string.dialog_confirm_import)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        stService?.let { service ->
-                            scope.launch(Dispatchers.IO) {
-                                showAlert = false
-                                service.importConfig().also { success ->
-                                    withContext(Dispatchers.Main) {
-                                        if (success) {
-                                            Toast.makeText(
-                                                context,
-                                                R.string.config_imported_successful,
-                                                Toast.LENGTH_LONG
-                                            ).show()
+        ConfirmDialog(
+            message = stringResource(R.string.dialog_confirm_import),
+            title = stringResource(R.string.import_config),
+            onConfirm = {
+                stService?.let { service ->
+                    scope.launch(Dispatchers.IO) {
+                        showAlert = false
+                        service.importConfig().also { success ->
+                            withContext(Dispatchers.Main) {
+                                if (success) {
+                                    Toast.makeText(
+                                        context,
+                                        R.string.config_imported_successful,
+                                        Toast.LENGTH_LONG
+                                    ).show()
 
-                                            // apply theme from restored config
-                                            val raw: Any? = prefs.value[Constants.PREF_APP_THEME]
-                                            val theme = when (raw) {
-                                                is Int -> raw
-                                                is String -> raw.toIntOrNull()
-                                                else -> null
-                                            } ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                                            AppCompatDelegate.setDefaultNightMode(theme)
+                                    // apply theme from restored config
+                                    val raw: Any? = prefs.value[Constants.PREF_APP_THEME]
+                                    val theme = when (raw) {
+                                        is Int -> raw
+                                        is String -> raw.toIntOrNull()
+                                        else -> null
+                                    } ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                                    AppCompatDelegate.setDefaultNightMode(theme)
 
-                                            service.evaluateRunConditions()
+                                    service.evaluateRunConditions()
 
-                                            navigator.navigateUp()
-                                        } else {
-                                            Toast.makeText(
-                                                context,
-                                                R.string.config_import_failed_no_path,
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                            val intent = Intent(context, LogActivity::class.java)
-                                            context.startActivity(intent)
-                                        }
-                                    }
+                                    navigator.navigateUp()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        R.string.config_import_failed_no_path,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    val intent = Intent(context, LogActivity::class.java)
+                                    context.startActivity(intent)
                                 }
                             }
                         }
-                    },
-                ) {
-                    Text(stringResource(android.R.string.ok))
+                    }
                 }
             },
-            dismissButton = {
-                TextButton(
-                    onClick = { showAlert = false }
-                ) {
-                    Text(stringResource(android.R.string.cancel))
-                }
-            },
+            onDismiss = { showAlert = false }
         )
     }
 }

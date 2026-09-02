@@ -3,7 +3,7 @@ package com.nutomic.syncthingandroid.activities
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.nutomic.syncthingandroid.theme.ApplicationTheme
+import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.ui.CompositionLocalsHost
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
@@ -45,6 +45,5 @@ class DeviceActivity : SyncthingActivity() {
         const val EXTRA_DEVICE_ID = ".activities.DeviceActivity.DEVICE_ID"
         const val EXTRA_DEVICE_NAME = ".activities.DeviceActivity.DEVICE_NAME"
         const val EXTRA_IS_CREATE = ".activities.DeviceActivity.IS_CREATE"
-        const val DEVICE_ADD_CODE = 401
     }
 }

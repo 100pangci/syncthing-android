@@ -14,7 +14,7 @@ public class ReceiverManager {
 
     private static final String TAG = "ReceiverManager";
 
-    private static final Boolean ENABLE_VERBOSE_LOG = false;
+    private static final boolean ENABLE_VERBOSE_LOG = false;
 
     private static List<BroadcastReceiver> mReceivers = new ArrayList<BroadcastReceiver>();
 

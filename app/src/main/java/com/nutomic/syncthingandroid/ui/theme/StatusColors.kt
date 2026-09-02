@@ -17,6 +17,19 @@ import androidx.compose.ui.unit.dp
  */
 enum class StatusKind { ERROR, SYNCING, OK, WARNING, PAUSED }
 
+/**
+ * Fixed colors for check/validation results that have no MaterialTheme role
+ * equivalent (e.g. the custom certificate check rows).
+ */
+val statusSuccess = Color(0xFF2E7D32)
+val statusWarning = Color(0xFFF9A825)
+
+/** Alpha of disabled content (icons, labels) not covered by an MD3 role. */
+const val DISABLED_ALPHA = 0.38f
+
+/** Container alpha of the [StatusBadge] pill. */
+const val STATUS_BADGE_CONTAINER_ALPHA = 0.14f
+
 @Composable
 fun statusColor(kind: StatusKind): Color = when (kind) {
     StatusKind.ERROR -> MaterialTheme.colorScheme.error
@@ -39,7 +52,7 @@ fun StatusBadge(
     val color = statusColor(kind)
     Surface(
         shape = RoundedCornerShape(50),
-        color = color.copy(alpha = 0.14f),
+        color = color.copy(alpha = STATUS_BADGE_CONTAINER_ALPHA),
         contentColor = color,
         modifier = modifier
     ) {

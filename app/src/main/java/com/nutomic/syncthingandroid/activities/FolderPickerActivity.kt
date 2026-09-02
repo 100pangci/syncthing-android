@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.nutomic.syncthingandroid.theme.ApplicationTheme
+import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.ui.CompositionLocalsHost
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
 import com.nutomic.syncthingandroid.ui.screens.folderpicker.FolderPickerScreen
@@ -47,7 +47,6 @@ class FolderPickerActivity : SyncthingActivity() {
     }
 
     companion object {
-        const val DIRECTORY_REQUEST_CODE = 234
         const val EXTRA_RESULT_DIRECTORY = ".activities.FolderPickerActivity.RESULT_DIRECTORY"
         private const val EXTRA_INITIAL_DIRECTORY = ".activities.FolderPickerActivity.INITIAL_DIRECTORY"
         private const val EXTRA_ROOT_DIRECTORY = ".activities.FolderPickerActivity.ROOT_DIRECTORY"

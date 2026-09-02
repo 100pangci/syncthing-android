@@ -3,7 +3,6 @@ package com.nutomic.syncthingandroid.model;
 import android.util.Log;
 
 import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 import java.util.AbstractMap.SimpleEntry;
@@ -13,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.text.TextUtils;
+
+import com.nutomic.syncthingandroid.util.Util;
 
 /**
  * This class caches remote folder and device synchronization
@@ -25,7 +26,7 @@ public class RemoteCompletion {
     private static final String TAG = "RemoteCompletion";
 
     private Boolean ENABLE_DEBUG_LOG = false;
-    private Boolean ENABLE_VERBOSE_LOG = false;
+    private boolean ENABLE_VERBOSE_LOG = false;
 
     HashMap<String, Map.Entry<Connection, HashMap<String, RemoteCompletionInfo>>> mDeviceFolderMap =
         new HashMap<String, Map.Entry<Connection, HashMap<String, RemoteCompletionInfo>>>();
@@ -137,50 +138,64 @@ public class RemoteCompletion {
     }
 
     /**
+     * Accumulates per-folder completion values and calculates the average percentage
+     * clamped to 0-100. Takes into account that Syncthing's WebUI considers remote
+     * folders with 0% and 100% completion as up-to-date.
+     */
+    private static final class CompletionAccumulator {
+
+        private int folderCount = 0;
+        private double sumCompletion = 0;
+
+        void accumulate(Iterable<RemoteCompletionInfo> completionInfos) {
+            for (RemoteCompletionInfo completionInfo : completionInfos) {
+                double folderCompletion = completionInfo.completion;
+                if (folderCompletion < 0) {
+                    folderCompletion = 0;
+                } else if (folderCompletion > 100) {
+                    folderCompletion = 100;
+                }
+                if (folderCompletion != 0 && folderCompletion != 100) {
+                    sumCompletion += folderCompletion;
+                    folderCount++;
+                }
+            }
+        }
+
+        int calculatePercentage() {
+            if (folderCount == 0) {
+                return 100;
+            }
+            int completion = (int) Math.floor(sumCompletion / folderCount);
+            if (completion < 0) {
+                completion = 0;
+            } else if (completion > 100) {
+                completion = 100;
+            }
+            return completion;
+        }
+    }
+
+    /**
      * Calculates remote device sync completion percentage across all connected devices.
      * Returns "-1" if sync completion is not applicable.
      */
     public int getTotalDeviceCompletion() {
         synchronized(mDeviceFolderMapLock) {
             int connectedDeviceCount = 0;
-            int folderCount = 0;
-            double sumCompletion = 0;
             for (Map.Entry<Connection, HashMap<String, RemoteCompletionInfo>> device : mDeviceFolderMap.values()) {
-                if (!device.getKey().connected) {
-                    continue;
-                }
-                connectedDeviceCount++;
-
-                //                                                 HashMap   RemoteCompletionInfo
-                for (RemoteCompletionInfo completionInfo : device.getValue().values())
-                {
-                    double folderCompletion = completionInfo.completion;
-                    if (folderCompletion < 0) {
-                        folderCompletion = 0;
-                    } else if (folderCompletion > 100) {
-                        folderCompletion = 100;
-                    }
-
-                    // Syncthing's WebUI considers remote folders with 0% and 100% completion as up-to-date.
-                    if (folderCompletion != 0 && folderCompletion != 100) {
-                        sumCompletion += folderCompletion;
-                        folderCount++;
-                    }
+                if (device.getKey().connected) {
+                    connectedDeviceCount++;
                 }
             }
             if (connectedDeviceCount == 0) {
                 return -1;
             }
-            if (folderCount == 0) {
-                return 100;
+            CompletionAccumulator accumulator = new CompletionAccumulator();
+            for (Map.Entry<Connection, HashMap<String, RemoteCompletionInfo>> device : mDeviceFolderMap.values()) {
+                accumulator.accumulate(device.getValue().values());
             }
-            int totalDeviceCompletion = (int) Math.floor(sumCompletion / folderCount);
-            if (totalDeviceCompletion < 0) {
-                totalDeviceCompletion = 0;
-            } else if (totalDeviceCompletion > 100) {
-                totalDeviceCompletion = 100;
-            }
-            return totalDeviceCompletion;
+            return accumulator.calculatePercentage();
         }
     }
 
@@ -195,35 +210,13 @@ public class RemoteCompletion {
                 return 100;
             }
 
-            int folderCount = 0;
-            double sumCompletion = 0;
             HashMap<String, RemoteCompletionInfo> folderMap = mDeviceFolderMap.get(deviceId).getValue();
             if (folderMap != null) {
-                for (Map.Entry<String, RemoteCompletionInfo> folder : folderMap.entrySet()) {
-                    double folderCompletion = folder.getValue().completion;
-                    if (folderCompletion < 0) {
-                        folderCompletion = 0;
-                    } else if (folderCompletion > 100) {
-                        folderCompletion = 100;
-                    }
-
-                    // Syncthing's WebUI considers remote folders with 0% and 100% completion as up-to-date.
-                    if (folderCompletion != 0 && folderCompletion != 100) {
-                        sumCompletion += folderCompletion;
-                        folderCount++;
-                    }
-                }
+                CompletionAccumulator accumulator = new CompletionAccumulator();
+                accumulator.accumulate(folderMap.values());
+                return accumulator.calculatePercentage();
             }
-            if (folderCount == 0) {
-                return 100;
-            }
-            int deviceCompletion = (int) Math.floor(sumCompletion / folderCount);
-            if (deviceCompletion < 0) {
-                deviceCompletion = 0;
-            } else if (deviceCompletion > 100) {
-                deviceCompletion = 100;
-            }
-            return deviceCompletion;
+            return 100;
         }
     }
 
@@ -279,7 +272,7 @@ public class RemoteCompletion {
             }
             //                                      Map.Entry     Connection
             Connection connection = mDeviceFolderMap.get(deviceId).getKey();
-            return deepCopy(connection, new TypeToken<Connection>(){}.getType());
+            return Util.deepCopy(connection, new TypeToken<Connection>(){}.getType());
         }
     }
 
@@ -321,8 +314,8 @@ public class RemoteCompletion {
 
             // Update device status information.
             Map.Entry updatedEntry = new SimpleEntry(
-                    deepCopy(connection, new TypeToken<Connection>(){}.getType()),
-                    deepCopy(
+                    Util.deepCopy(connection, new TypeToken<Connection>(){}.getType()),
+                    Util.deepCopy(
                             mDeviceFolderMap.get(deviceId).getValue(),
                             new TypeToken<HashMap<String, RemoteCompletionInfo>>(){}.getType()
                     )
@@ -336,16 +329,6 @@ public class RemoteCompletion {
      */
     public String getShortenedDeviceId(String deviceId) {
         return (TextUtils.isEmpty(deviceId) ? "" : deviceId.substring(0, 7));
-    }
-
-    /**
-     * Returns a deep copy of object.
-     *
-     * This method uses Gson and only works with objects that can be converted with Gson.
-     */
-    private <T> T deepCopy(T object, Type type) {
-        Gson gson = new Gson();
-        return gson.fromJson(gson.toJson(object, type), type);
     }
 
     private void LogV(String logMessage) {

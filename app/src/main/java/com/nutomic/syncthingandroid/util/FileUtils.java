@@ -45,6 +45,10 @@ public class FileUtils {
 
     private static final String TAG = "FileUtils";
 
+    private static final String PROC_MOUNTS_PATH = "/proc/mounts";
+    private static final String INTERNAL_STORAGE_ROOT = "/storage/emulated/0";
+    private static final String RECOMMENDED_FILES_APP_PACKAGE = "me.zhanghai.android.files";
+
     private FileUtils() {
         // Private constructor to enforce Singleton pattern.
     }
@@ -119,7 +123,7 @@ public class FileUtils {
 
     private static List<String> getMountedStoragePaths() {
         List<String> mountPaths = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("/proc/mounts"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(PROC_MOUNTS_PATH))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.contains("/storage/") || line.contains("/mnt/media_rw/")) {
@@ -1149,7 +1153,7 @@ public class FileUtils {
                 .setTitle(R.string.suggest_file_manager_app_dialog_title)
                 .setMessage(R.string.suggest_file_manager_app_dialog_text)
                 .setPositiveButton(R.string.yes, (d, i) -> {
-                    final String appPackageName = "me.zhanghai.android.files";
+                    final String appPackageName = RECOMMENDED_FILES_APP_PACKAGE;
                     try {
                         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
                     } catch (android.content.ActivityNotFoundException anfe) {
@@ -1174,7 +1178,7 @@ public class FileUtils {
             fullPath = fullPath.substring(0, fullPath.length() - 1);
         }
 
-        final String INTERNAL_STORAGE_PATH = "/storage/emulated/0";
+        final String INTERNAL_STORAGE_PATH = INTERNAL_STORAGE_ROOT;
         @SuppressLint("SdCardPath")
         final String SDCARD_PATH = "/sdcard";
         final String STORAGE_PREFIX = "/storage/";

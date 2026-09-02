@@ -195,18 +195,7 @@ private fun PortraitDialogContent(
             Text(deviceId, modifier = Modifier.padding(16.dp))
         }
         Spacer(Modifier.height(16.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            FilledTonalButton(onCopy, Modifier.weight(1f)) {
-                Icon(imageVector = Icons.Outlined.ContentCopy, contentDescription = stringResource(R.string.copy))
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.copy))
-            }
-            FilledTonalButton(onShare, Modifier.weight(1f)) {
-                Icon(imageVector = Icons.Outlined.Share, contentDescription = stringResource(R.string.share_title))
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.share_title))
-            }
-        }
+        CopyShareButtons(onCopy, onShare)
     }
 }
 
@@ -238,18 +227,26 @@ private fun LandscapeDialogContent(
                 Text(deviceId, modifier = Modifier.padding(16.dp))
             }
             Spacer(Modifier.height(12.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                FilledTonalButton(onCopy, Modifier.weight(1f)) {
-                    Icon(imageVector = Icons.Outlined.ContentCopy, contentDescription = stringResource(R.string.copy))
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.copy))
-                }
-                FilledTonalButton(onShare, Modifier.weight(1f)) {
-                    Icon(imageVector = Icons.Outlined.Share, contentDescription = stringResource(R.string.share_title))
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.share_title))
-                }
-            }
+            CopyShareButtons(onCopy, onShare)
+        }
+    }
+}
+
+@Composable
+private fun CopyShareButtons(
+    onCopy: () -> Unit,
+    onShare: () -> Unit,
+) {
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        FilledTonalButton(onCopy, Modifier.weight(1f)) {
+            Icon(imageVector = Icons.Outlined.ContentCopy, contentDescription = stringResource(R.string.copy))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.copy))
+        }
+        FilledTonalButton(onShare, Modifier.weight(1f)) {
+            Icon(imageVector = Icons.Outlined.Share, contentDescription = stringResource(R.string.share_title))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.share_title))
         }
     }
 }

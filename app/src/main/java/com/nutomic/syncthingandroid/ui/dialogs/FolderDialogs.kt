@@ -42,43 +42,12 @@ fun FolderTypeDialog(
         Constants.FOLDER_TYPE_RECEIVE_ONLY to R.string.folder_type_receiveonly,
         Constants.FOLDER_TYPE_RECEIVE_ENCRYPTED to R.string.folder_type_receive_encrypted,
     )
-    var selected by remember { mutableStateOf(currentType) }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.folder_type)) },
-        text = {
-            Column {
-                types.forEach { (type, labelRes) ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { selected = type }
-                            .padding(vertical = 2.dp)
-                    ) {
-                        RadioButton(
-                            selected = selected == type,
-                            onClick = { selected = type }
-                        )
-                        Text(
-                            text = stringResource(labelRes),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = { onSelect(selected) }) {
-                Text(stringResource(android.R.string.ok))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(android.R.string.cancel))
-            }
-        }
+    SingleChoiceDialog(
+        title = stringResource(R.string.folder_type),
+        entries = types.map { stringResource(it.second) },
+        selectedIndex = types.indexOfFirst { it.first == currentType }.coerceAtLeast(0),
+        onSelect = { index -> onSelect(types[index].first) },
+        onDismiss = onDismiss,
     )
 }
 
@@ -99,43 +68,12 @@ fun PullOrderDialog(
         "oldestFirst" to R.string.pull_order_type_oldestFirst,
         "newestFirst" to R.string.pull_order_type_newestFirst,
     )
-    var selected by remember { mutableStateOf(currentOrder ?: "random") }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.pull_order)) },
-        text = {
-            Column {
-                orders.forEach { (order, labelRes) ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { selected = order }
-                            .padding(vertical = 2.dp)
-                    ) {
-                        RadioButton(
-                            selected = selected == order,
-                            onClick = { selected = order }
-                        )
-                        Text(
-                            text = stringResource(labelRes),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = { onSelect(selected) }) {
-                Text(stringResource(android.R.string.ok))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(android.R.string.cancel))
-            }
-        }
+    SingleChoiceDialog(
+        title = stringResource(R.string.pull_order),
+        entries = orders.map { stringResource(it.second) },
+        selectedIndex = orders.indexOfFirst { it.first == (currentOrder ?: "random") }.coerceAtLeast(0),
+        onSelect = { index -> onSelect(orders[index].first) },
+        onDismiss = onDismiss,
     )
 }
 

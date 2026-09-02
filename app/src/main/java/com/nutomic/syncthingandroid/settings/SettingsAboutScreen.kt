@@ -12,6 +12,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.EntryProviderScope
+import com.nutomic.syncthingandroid.ui.LocalServiceTick
+import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.util.Util
@@ -35,7 +37,7 @@ fun SettingsAboutScreen() {
     val navigator = LocalSettingsNavigator.current
     val uriHandler = LocalUriHandler.current
     val stService = LocalSyncthingService.current
-    val stServiceTick = LocalServiceUpdateTick.current
+    val stServiceTick = LocalServiceTick.current
 
     val loading = stringResource(R.string.state_loading)
     val unknown = stringResource(R.string.state_unknown)

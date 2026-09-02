@@ -1,6 +1,5 @@
 package com.nutomic.syncthingandroid.ui.screens.folder
 
-import android.net.Uri
 import com.nutomic.syncthingandroid.model.Device
 import com.nutomic.syncthingandroid.model.Folder
 import java.util.Random
@@ -9,17 +8,6 @@ internal data class DeviceShareState(
     val device: Device,
     val shared: Boolean,
     val password: String,
-)
-
-internal data class FolderEditUiState(
-    val folder: Folder,
-    val needsUpdate: Boolean = false,
-    val ignoreListNeedsUpdate: Boolean = false,
-    val deviceStates: List<DeviceShareState> = emptyList(),
-    val customSyncConditions: Boolean = false,
-    val runScript: Boolean = false,
-    val ignoreListText: String = "",
-    val canWriteToPath: Boolean = false,
 )
 
 internal fun generateRandomFolderId(): String {

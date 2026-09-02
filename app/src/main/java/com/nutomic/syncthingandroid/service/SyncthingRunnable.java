@@ -50,7 +50,7 @@ public class SyncthingRunnable implements Runnable {
     private static final String TAG_NATIVE = "SyncthingNativeCode";
     private static final String TAG_NICE = "SyncthingRunnableIoNice";
 
-    private Boolean ENABLE_VERBOSE_LOG = false;
+    private boolean ENABLE_VERBOSE_LOG = false;
     private static final int LOG_FILE_MAX_LINES = 200000;
     private static final int LOG_FILE_BUFFER_SIZE = 1024 * 1024;
 
@@ -215,6 +215,8 @@ public class SyncthingRunnable implements Runnable {
             }
         } catch (IOException | InterruptedException e) {
             Log.e(TAG, "Failed to execute syncthing binary or read output", e);
+            // The binary never ran, so the service must not stay in State.ACTIVE.
+            sendStopToService = true;
         } finally {
             if (multicastLock != null) {
                 multicastLock.release();
@@ -248,10 +250,14 @@ public class SyncthingRunnable implements Runnable {
         if (TextUtils.isEmpty(customEnvironment))
             return;
 
-        for (String e : customEnvironment.split(" ")) {
-            String[] e2 = e.split("=", 2);
-            LogV("Setting env var: [" + e2[0] + "]=[" + e2[1] + "]");
-            environment.put(e2[0], e2[1]);
+        for (String entry : customEnvironment.split(" ")) {
+            String[] keyAndValue = entry.split("=", 2);
+            if (keyAndValue.length != 2 || TextUtils.isEmpty(keyAndValue[0])) {
+                Log.w(TAG, "putCustomEnvironmentVariables: Ignoring malformed entry [" + entry + "]");
+                continue;
+            }
+            LogV("Setting env var: [" + keyAndValue[0] + "]=[" + keyAndValue[1] + "]");
+            environment.put(keyAndValue[0], keyAndValue[1]);
         }
     }
 
@@ -400,7 +406,7 @@ public class SyncthingRunnable implements Runnable {
         }
 
         if (mPreferences.getBoolean(Constants.PREF_USE_TOR, false)) {
-            targetEnv.put("all_proxy", "socks5://localhost:9050");
+            targetEnv.put("all_proxy", Constants.DEFAULT_TOR_SOCKS_PROXY_ADDRESS);
             targetEnv.put("ALL_PROXY_NO_FALLBACK", "1");
         } else {
             String socksProxyAddress = mPreferences.getString(Constants.PREF_SOCKS_PROXY_ADDRESS, "");

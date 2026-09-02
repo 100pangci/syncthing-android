@@ -60,6 +60,29 @@ fun MainActivityDialogsHost() {
         )
     }
 
+    // ---- Restart confirmation dialog ----
+    val restartRequested by resultBus.restartRequested.collectAsState()
+    if (restartRequested) {
+        AlertDialog(
+            onDismissRequest = { resultBus.restartRequested.value = false },
+            title = { Text(stringResource(R.string.dialog_confirm_restart)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    resultBus.restartRequested.value = false
+                    context.startService(
+                        Intent(context, SyncthingService::class.java)
+                            .setAction(SyncthingService.ACTION_RESTART)
+                    )
+                }) { Text(stringResource(android.R.string.yes)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { resultBus.restartRequested.value = false }) {
+                    Text(stringResource(android.R.string.no))
+                }
+            }
+        )
+    }
+
     // ---- Usage reporting dialog ----
     LaunchedEffect(serviceState, apiConfigLoaded) {
         if (serviceState != SyncthingService.State.ACTIVE || !apiConfigLoaded || api == null) {
