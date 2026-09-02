@@ -163,6 +163,7 @@ private fun DeviceIdentityCard(
             // Device ID row: monospace, grouped in chunks of 7 characters for
             // readability, with quick copy and QR actions in the same row.
             val context = LocalContext.current
+            val copiedToastText = stringResource(R.string.device_id_copied_to_clipboard)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -196,7 +197,7 @@ private fun DeviceIdentityCard(
                     )
                     Toast.makeText(
                         context,
-                        context.getString(R.string.device_id_copied_to_clipboard),
+                        copiedToastText,
                         Toast.LENGTH_SHORT
                     ).show()
                 }) {
