@@ -56,10 +56,15 @@ import java.util.concurrent.TimeUnit
 /**
  * Status tab: why syncthing is (not) running plus system statistics.
  * Ported from the legacy StatusFragment and SegmentedButton.
+ *
+ * [visible] gates the polling loop: since the pager keeps this page composed
+ * off-screen, polling here would otherwise recompose an invisible page every
+ * interval and steal main-thread time from the list tabs.
  */
 @Composable
 fun StatusPage(
     serviceState: SyncthingService.State,
+    visible: Boolean,
 ) {
     val context = LocalContext.current
     val service = LocalSyncthingService.current
@@ -79,7 +84,8 @@ fun StatusPage(
     var uptime by remember { mutableStateOf("") }
     var totalSyncCompletion by remember { mutableStateOf(-1) }
 
-    LaunchedEffect(serviceState) {
+    LaunchedEffect(serviceState, visible) {
+        if (!visible) return@LaunchedEffect
         while (isActive) {
             if (serviceState == SyncthingService.State.ACTIVE && api != null && api.isConfigLoaded()) {
                 api.getRemoteDeviceStatus("")
@@ -123,69 +129,106 @@ fun StatusPage(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Overall sync progress card (moved here from the legacy top bar strip).
-        if (serviceState == SyncthingService.State.ACTIVE && totalSyncCompletion != -1) {
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-                ),
-                modifier = Modifier.fillMaxWidth()
+        // ---- Run state card: sync progress + state + reasons ----
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Column(Modifier.padding(16.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = stringResource(R.string.state_syncing, totalSyncCompletion),
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                    Spacer(Modifier.height(8.dp))
+                val stateTitle = when (serviceState) {
+                    SyncthingService.State.INIT, SyncthingService.State.STARTING ->
+                        stringResource(R.string.syncthing_starting)
+                    SyncthingService.State.ACTIVE ->
+                        if (totalSyncCompletion != -1)
+                            stringResource(R.string.state_syncing, totalSyncCompletion)
+                        else
+                            stringResource(R.string.syncthing_running)
+                    SyncthingService.State.DISABLED ->
+                        stringResource(R.string.syncthing_not_running)
+                    SyncthingService.State.ERROR ->
+                        stringResource(R.string.syncthing_has_crashed)
+                }
+                Text(
+                    text = stateTitle,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold
+                )
+                if (serviceState == SyncthingService.State.ACTIVE && totalSyncCompletion != -1) {
                     LinearProgressIndicator(
                         progress = { totalSyncCompletion / 100f },
                         strokeCap = androidx.compose.ui.graphics.StrokeCap.Round,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
+                if (serviceState == SyncthingService.State.ACTIVE || serviceState == SyncthingService.State.DISABLED) {
+                    val explanation = service?.runDecisionExplanation?.trim()?.replace("\n", "\n- ") ?: ""
+                    Text(
+                        text = stringResource(R.string.reason),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "- " + explanation,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
 
-        val statusItems = buildList {
-            when (serviceState) {
-                SyncthingService.State.INIT, SyncthingService.State.STARTING ->
-                    add(stringResource(R.string.syncthing_starting))
-                SyncthingService.State.ACTIVE ->
-                    add(stringResource(R.string.syncthing_running))
-                SyncthingService.State.DISABLED ->
-                    add(stringResource(R.string.syncthing_not_running))
-                SyncthingService.State.ERROR ->
-                    add(stringResource(R.string.syncthing_has_crashed))
+        // ---- Transfer & resources card: two-column key/value grid ----
+        if (serviceState == SyncthingService.State.ACTIVE) {
+            val stats = buildList {
+                if (uptime.isNotEmpty()) add(stringResource(R.string.uptime) to uptime)
+                if (ramUsage.isNotEmpty()) add(stringResource(R.string.ram_usage) to ramUsage)
+                if (download.isNotEmpty()) add(stringResource(R.string.download_title) to download)
+                if (upload.isNotEmpty()) add(stringResource(R.string.upload_title) to upload)
+                if (announceServer.isNotEmpty()) add(stringResource(R.string.announce_server) to announceServer)
             }
-            if (serviceState == SyncthingService.State.ACTIVE || serviceState == SyncthingService.State.DISABLED) {
-                val explanation = service?.runDecisionExplanation?.trim()?.replace("\n", "\n- ") ?: ""
-                add(stringResource(R.string.reason) + "\n- " + explanation)
-            }
-            if (serviceState == SyncthingService.State.ACTIVE) {
-                if (uptime.isNotEmpty()) add(stringResource(R.string.uptime) + ": " + uptime)
-                if (ramUsage.isNotEmpty()) add(stringResource(R.string.ram_usage) + ": " + ramUsage)
-                if (download.isNotEmpty()) add(stringResource(R.string.download_title) + ": " + download)
-                if (upload.isNotEmpty()) add(stringResource(R.string.upload_title) + ": " + upload)
-                if (announceServer.isNotEmpty()) add(stringResource(R.string.announce_server) + ": " + announceServer)
-            }
-        }
-
-        statusItems.forEach { item ->
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-                ),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = item,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(12.dp)
-                )
+            if (stats.isNotEmpty()) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.status_transfer_resources),
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        stats.chunked(2).forEach { rowItems ->
+                            Row {
+                                StatCell(
+                                    label = rowItems[0].first,
+                                    value = rowItems[0].second,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                if (rowItems.size > 1) {
+                                    androidx.compose.material3.VerticalDivider(
+                                        modifier = Modifier.padding(horizontal = 12.dp)
+                                    )
+                                    StatCell(
+                                        label = rowItems[1].first,
+                                        value = rowItems[1].second,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                } else {
+                                    Spacer(Modifier.weight(1f))
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -199,7 +242,10 @@ fun StatusPage(
                 stringResource(R.string.button_force_start),
                 stringResource(R.string.button_force_stop)
             )
-            labels.forEachIndexed { index, label ->
+            labels.forEachIndexed { index, rawLabel ->
+                // Split "MAIN\nSUB" resources so every segment renders a
+                // uniform title + subtitle pair (or title only).
+                val labelLines = rawLabel.split("\n")
                 SegmentedButton(
                     selected = forceStartStopState == index,
                     onClick = {
@@ -217,36 +263,73 @@ fun StatusPage(
                             )
                     },
                     shape = SegmentedButtonDefaults.itemShape(index = index, count = labels.size),
-                    // Custom icon slot: draw the check mark (with a small start
-                    // inset) only when this segment is selected; nothing otherwise.
+                    // Custom icon slot: draw the check mark (with a small
+                    // inset so it clears the leading edge) only when this
+                    // segment is selected; nothing otherwise.
                     icon = {
                         if (forceStartStopState == index) {
                             Icon(
                                 Icons.Outlined.Check,
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .padding(start = 6.dp)
+                                    .padding(start = 12.dp)
                                     .size(16.dp)
                             )
                         }
                     },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Box(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(min = 36.dp),
-                        contentAlignment = Alignment.Center
+                            .heightIn(min = 40.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
                     ) {
                         Text(
-                            text = label,
-                            style = MaterialTheme.typography.labelSmall,
+                            text = labelLines[0],
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.SemiBold,
                             textAlign = TextAlign.Center,
-                            maxLines = 2
+                            maxLines = 1,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                         )
+                        if (labelLines.size > 1) {
+                            Text(
+                                text = labelLines[1],
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center,
+                                maxLines = 1,
+                                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                            )
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+/**
+ * One key/value cell of the transfer & resources grid.
+ */
+@Composable
+private fun StatCell(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Medium
+        )
     }
 }

@@ -213,6 +213,18 @@
     <!-- Title for the listing of shared folders with a colon and space appended -->
     <string name="shared_folders_title_colon">"Folders: "</string>
 
+    <!-- Expand the collapsed shared folders list on a device card; parameter is the hidden folder count -->
+    <string name="device_folders_show_more">+%1$d</string>
+
+    <!-- Collapse an expanded shared folders list on a device card -->
+    <string name="device_folders_show_less">Show less</string>
+
+    <!-- Title of the dialog listing the conflict files of a folder -->
+    <string name="conflict_files_title">Conflict files</string>
+
+    <!-- Header of the grouped status card showing transfer and resource stats -->
+    <string name="status_transfer_resources">Transfer &amp; resources</string>
+
     <!-- Title for current download rate -->
     <string name="download_title">Download</string>
 

@@ -368,4 +368,6 @@
     <string name="open_source_licenses_title">開放原始碼授權</string>
     <string name="open_source_licenses_summary">顯示被使用的開放原始碼授權</string>
     <string name="exception_known_bug_notice">遇到了尚未解決的已知錯誤。查看 %1$s/%2$s 以獲得更多資訊。請精準描述錯誤發生前的情況。</string>
+    <string name="conflict_files_title">衝突檔案</string>
+    <string name="status_transfer_resources">傳輸與資源</string>
 </resources>

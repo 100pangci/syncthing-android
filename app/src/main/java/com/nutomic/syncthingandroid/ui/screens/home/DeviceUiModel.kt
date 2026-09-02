@@ -14,12 +14,14 @@ private const val TIMESTAMP_NEVER_SEEN = "1970-01-01T00:00:00Z"
 
 /**
  * Immutable, precomputed view data for one device list card (see [FolderUiModel]).
+ * @Immutable makes row skipping work despite the List fields.
  */
+@androidx.compose.runtime.Immutable
 data class DeviceUiModel(
     val id: String,
     val displayName: String,
     val lastSeenText: String,
-    val sharedFoldersText: String?,
+    val sharedFolderNames: List<String>,
     val statusText: String,
     val statusKind: StatusKind,
     val isSyncing: Boolean,
@@ -59,11 +61,7 @@ fun buildDeviceUiModels(
             )
 
             val sharedFolders = sharedFoldersByDevice[device.deviceID] ?: emptyList()
-            val sharedFoldersText = if (sharedFolders.isEmpty()) {
-                null
-            } else {
-                "\u2022 " + sharedFolders.joinToString("\n\u2022 ") { it.toString() }
-            }
+            val sharedFolderNames = sharedFolders.map { it.toString() }.filter { it.isNotEmpty() }
 
             var statusText: String
             var statusKind: StatusKind
@@ -123,7 +121,7 @@ fun buildDeviceUiModels(
                 id = device.deviceID,
                 displayName = device.displayName,
                 lastSeenText = lastSeenText,
-                sharedFoldersText = sharedFoldersText,
+                sharedFolderNames = sharedFolderNames,
                 statusText = statusText,
                 statusKind = statusKind,
                 isSyncing = isSyncing,

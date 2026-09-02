@@ -1,5 +1,6 @@
 package com.nutomic.syncthingandroid.ui.screens.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,10 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -18,6 +23,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.ui.theme.StatusBadge
+
+/**
+ * Max folder names shown before the list collapses behind a "+N" expander.
+ */
+private const val FOLDER_LIST_COLLAPSE_THRESHOLD = 4
 
 /**
  * One device list card (pure renderer; all data is precomputed in
@@ -55,7 +65,7 @@ fun DeviceRow(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            if (model.sharedFoldersText == null) {
+            if (model.sharedFolderNames.isEmpty()) {
                 Text(
                     text = stringResource(R.string.device_state_unused),
                     style = MaterialTheme.typography.bodyMedium,
@@ -67,11 +77,34 @@ fun DeviceRow(
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium
                 )
-                Text(
-                    text = model.sharedFoldersText,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                val expanded = remember(model.id) { mutableStateOf(false) }
+                val hiddenCount = model.sharedFolderNames.size - FOLDER_LIST_COLLAPSE_THRESHOLD
+                val visibleNames =
+                    if (!expanded.value && hiddenCount > 0)
+                        model.sharedFolderNames.take(FOLDER_LIST_COLLAPSE_THRESHOLD)
+                    else
+                        model.sharedFolderNames
+                visibleNames.forEach { name ->
+                    Text(
+                        text = "\u2022 $name",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                if (hiddenCount > 0) {
+                    Text(
+                        text = if (expanded.value)
+                            stringResource(R.string.device_folders_show_less)
+                        else
+                            stringResource(R.string.device_folders_show_more, hiddenCount),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .padding(top = 2.dp)
+                            .clickable { expanded.value = !expanded.value }
+                    )
+                }
             }
 
             model.rateText?.let {

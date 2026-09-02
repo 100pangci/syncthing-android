@@ -15,14 +15,14 @@
     <string name="dialog_all_files_access_not_supported">您的设备不支持“所有文件访问权限”</string>
     <!-- Slide "Ignore battery optimizations" -->
     <string name="ignore_doze_permission_title">电池优化</string>
-    <string name="ignore_doze_permission_os_notice">众所周知，当应用程序在后台运行时，Android TV 偶尔会终止它。维基上的“%1$s/%2$s”提供了解决方案。</string>
+    <string name="ignore_doze_permission_os_notice">已知在 Android TV 上，后台应用偶尔会被系统终止。维基中的“%1$s/%2$s”提供了解决办法。</string>
     <string name="ignore_doze_permission_desc">Android 可能会在一段时间后停止同步。为防止这种情况，请关闭电池优化。一些设备预装了额外的任务终止应用。您也应该将 Syncthing 添加到他们的白名单中。</string>
-    <string name="toast_ignore_doze_permission_required">此应用只有被排除于“打盹”省电模式时才能可靠运行。</string>
+    <string name="toast_ignore_doze_permission_required">只有将本应用排除在“打盹”模式之外，它才能可靠运行。</string>
     <string name="dialog_disable_battery_optimizations_not_supported">您的设备不支持禁用电池优化</string>
     <!-- Slide "Location Permission" -->
     <string name="location_permission_title">位置权限</string>
     <string name="location_permission_desc">Syncthing 可以配置为在选定的 Wi-Fi 网络上工作。Android 要求应用具有获取位置权限才能读取活动的 Wi-Fi 网络名称。如果您想使用此功能，请按上面的按钮。您可以跳过此步骤。有关更多详细信息，请参阅我们的隐私政策。</string>
-    <string name="location_permission_desc_api_29">适用于 Android 10+ 提示：“始终允许”</string>
+    <string name="location_permission_desc_api_29">提示：Android 10+ 需选择“始终允许”</string>
     <!-- Slide "Key Generation" -->
     <string name="key_generation_title">密钥生成</string>
     <string name="key_generation_success">用于私密数据交换的安全密钥已成功生成。</string>
@@ -65,7 +65,7 @@
     <string name="exception_known_bug_notice">遇到了一个尚未解决的已知错误。有关详细信息，请参阅 %1$s/%2$s 。请准确描述故障发生前的情况。</string>
     <!-- Title of the exit app when running as a service confirmation dialog -->
     <string name="dialog_exit_while_running_as_service_title">确认退出应用</string>
-    <string name="dialog_exit_while_running_as_service_message">供您参考：您已将应用配置为在开机时自动启动。因此，它监控运行条件，并在条件匹配时随时在后台同步。只有在遇到严重问题时，才应该手动退出。否则，请在设置中禁用“开机时自动启动”。您想现在退出，直到设备重启吗？</string>
+    <string name="dialog_exit_while_running_as_service_message">供您参考：您已将应用配置为在开机时自动启动。因此，它监控运行条件，并在条件匹配时随时在后台同步。只有在遇到严重问题时，才应该手动退出。否则，请在设置中禁用“开机时自动启动”。是否要立即退出（直至设备重启）？</string>
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">添加文件夹</string>
     <!-- Title of the "share device id" menu action -->
@@ -98,7 +98,7 @@
     <string name="revert_local_changes">还原本地更改</string>
     <string name="delete_unexpected_items">删除意外项目</string>
     <!-- Revert Local Changes Confirmation Dialog -->
-    <string name="revert_local_changes_question">这将撤销在此设备的该文件夹内所做的所有更改。继续吗?</string>
+    <string name="revert_local_changes_question">这将撤销在此设备的该文件夹内所做的所有更改。继续吗？</string>
     <string name="open_file_manager">打开文件管理器</string>
     <string name="open_file_with">文件打开方式</string>
     <string name="open_file_no_compatible_app">没找到用于打开该文件的应用。</string>
@@ -111,8 +111,8 @@
     <!-- Shown if no devices are configured in add folder dialog -->
     <string name="devices_list_empty">未配置任何设备。点击以添加新设备。</string>
     <!-- Shown in ListView if no devices are configured -->
-    <string name="no_devices_configured">未配置任何设备。 \n现在开始添加设备。</string>
-    <string name="deviceEncryptionPasswordHint">如果不受信任，请输入加密密码</string>
+    <string name="no_devices_configured">未配置任何设备。\n立即添加设备。</string>
+    <string name="deviceEncryptionPasswordHint">若设备不受信任，请输入加密密码</string>
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">最新</string>
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
@@ -128,7 +128,7 @@
     <!-- Indicates that the device connection is unknown -->
     <string name="device_state_unknown">未知</string>
     <!-- Last seen title -->
-    <string name="device_last_seen">最后可见：%1$s</string>
+    <string name="device_last_seen">最后在线：%1$s</string>
     <string name="device_last_seen_never">从未</string>
     <!-- Title for the listing of shared folders with a colon and space appended -->
     <string name="shared_folders_title_colon">"文件夹： "</string>
@@ -139,8 +139,8 @@
     <!-- StatusFragment -->
     <string name="status_fragment_title">状态</string>
     <string name="button_follow_run_conditions">遵循运行条件</string>
-    <string name="button_force_start">强制启动 \n忽略运行条件</string>
-    <string name="button_force_stop">强制停止 \n忽略运行条件</string>
+    <string name="button_force_start">强制启动\n忽略运行条件</string>
+    <string name="button_force_stop">强制停止\n忽略运行条件</string>
     <string name="syncthing_starting">Syncthing 正在启动。</string>
     <string name="syncthing_running">Syncthing 正在运行。</string>
     <string name="syncthing_not_running">Syncthing 未运行。</string>
@@ -153,7 +153,7 @@
     <!-- Title for current RAM usage -->
     <string name="ram_usage">内存占用</string>
     <!-- Title for announce server status -->
-    <string name="announce_server">配置的宣布服务器</string>
+    <string name="announce_server">发现服务器</string>
     <!-- Title for uptime status -->
     <string name="uptime">运行时间</string>
     <string name="restart">重启</string>
@@ -211,7 +211,7 @@
     <!-- Status text -->
     <string name="discovered_device_list_empty">本地发现在本地网络上找不到任何设备。请在另一部手机上运行此应用。计算机的安装文件可在以下位置获得：%1$s</string>
     <!-- Status text -->
-    <string name="local_discovery_disabled">您已在“设置”&gt;“Syncthing 选项”&gt;“本地发现”中禁用了本地发现。启用选项以搜索本地网络上的设备。</string>
+    <string name="local_discovery_disabled">您已在“设置”&gt;“Syncthing 选项”&gt;“本地发现”中禁用了本地发现。请启用该选项以搜索本地网络中的设备。</string>
     <!-- Setting title -->
     <string name="name">名称</string>
     <!-- Setting title -->
@@ -232,7 +232,7 @@
     <string name="pause_device">暂停设备</string>
     <!-- Setting title -->
     <string name="untrusted_device">不受信任的设备</string>
-    <string name="untrusted_device_explanation">与此设备共享的所有文件夹都必须有密码保护，这样的话，如果没有给定的密码，所有发送的数据都不可读。</string>
+    <string name="untrusted_device_explanation">与此设备共享的所有文件夹都必须设置密码保护，这样在未提供密码时，发送的数据都无法被对方读取。</string>
     <!-- ActionBar item -->
     <string name="delete_device">删除设备</string>
     <string name="add_device">添加设备</string>
@@ -249,11 +249,11 @@
     <!-- Toast shown when trying to create a device with an empty name -->
     <string name="device_name_required">设备名称不能为空</string>
     <!-- Toast shown when trying to create a device with invalid addresses -->
-    <string name="device_addresses_invalid">设备地址格式不正确。请重试。查看Syncthing文档了解更多信息。</string>
+    <string name="device_addresses_invalid">设备地址格式不正确，请重试。详情请查阅 Syncthing 文档。</string>
     <!-- Content description for device ID qr code icon -->
     <string name="scan_qr_code_description">扫描二维码</string>
     <!-- Dialog message if no compatible barcode scanner app is installed -->
-    <string name="install_barcode_scanner_app_message">这需要条形码扫描应用。您想安装 F-Droid 的应用“Binary Eye”吗?</string>
+    <string name="install_barcode_scanner_app_message">这需要条形码扫描应用。要安装 F-Droid 上的“Binary Eye”吗？</string>
     <!-- Shown if no folders are configured -->
     <string name="folders_list_empty">未配置文件夹。点击以添加新文件夹。</string>
     <!-- RecentChangesActivity -->
@@ -304,7 +304,7 @@
     <string name="run_on_whitelisted_wifi_title">使用指定的 Wi-Fi 网络时运行</string>
     <string name="specify_wifi_ssid_whitelist">选择 Wi-Fi 网络</string>
     <string name="run_on_whitelisted_wifi_networks">已选择的 Wi-Fi 网络：%1$s</string>
-    <string name="wifi_ssid_whitelist_empty">未指定 Wi-Fi 网络。单击以指定网络。</string>
+    <string name="wifi_ssid_whitelist_empty">未指定 Wi-Fi 网络。点击以指定网络。</string>
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">请打开 Wi-Fi 以选择网络。</string>
     <string name="sync_only_wifi_ssids_wifi_turn_on_location">请打开位置以选择网络。</string>
     <string name="sync_only_wifi_ssids_need_to_grant_location_permission">您需要授予位置权限才能使用此功能。</string>
@@ -319,10 +319,10 @@
     <string name="respect_master_sync_title">遵循 Android 的“自动同步数据”设置</string>
     <string name="respect_master_sync_summary">当快捷设置图块中的“自动同步数据”关闭时，禁用 Syncthing。</string>
     <string name="run_in_flight_mode_title">无网络连接时运行</string>
-    <string name="run_in_flight_mode_summary">启用此选项后，即使离线时，Syncthing 仍会运行。如果您的设备在飞行模式下检测手动 Wi-Fi 连接时出现问题，请启用。</string>
+    <string name="run_in_flight_mode_summary">启用后，即使处于离线状态，Syncthing 仍会运行。如果您的设备在飞行模式下无法检测到手动连接的 Wi-Fi，请启用此选项。</string>
     <string name="run_on_time_schedule_title">按时间表运行</string>
-    <string name="run_on_time_schedule_summary">如果满足运行条件并且自上次同步以来一些指定的间隔期已过，那么启用此选项将尝试在配置的持续时间内进行同步。这可以节省很多电量，但需要同步伙伴在线。请注意：这可能会在下一次计划同步发生前留下不完整的临时文件。</string>
-    <string name="sync_duration_minutes_title">同步周期的持续时间</string>
+    <string name="run_on_time_schedule_summary">启用后，如果满足运行条件且距上次同步已超过设定的间隔，将在配置的时长内尝试同步。这可以节省大量电量，但需要同步伙伴在线。注意：在下次计划同步开始前，可能会留下不完整的临时文件。</string>
+    <string name="sync_duration_minutes_title">每次同步时长</string>
     <string name="sync_duration_minutes_summary">%1$s 分钟</string>
     <!-- Preferences - Behaviour -->
     <string name="behaviour_autostart_title">自动启动</string>
@@ -344,7 +344,7 @@
     <string name="versioning_type_none">无</string>
     <string name="versioning_type_trashcan">回收站</string>
     <string name="versioning_type_simple">简单</string>
-    <string name="versioning_type_staggered">阶段</string>
+    <string name="versioning_type_staggered">交错</string>
     <string name="versioning_type_external">外部</string>
     <string name="device_name">设备名称</string>
     <string name="listen_address">同步协议监听地址</string>
@@ -359,7 +359,7 @@
     <string name="crash_reporting">匿名崩溃报告</string>
     <string name="webui_tcp_port_title">Web UI TCP 端口</string>
     <string name="webui_remote_access_title">Web UI 远程访问</string>
-    <string name="webui_remote_access_summary">指定以允许从其他设备访问 Web UI。如果启用，您可以使用用户“syncthing”和 API 密钥作为密码登录。默认值：禁用（最安全）</string>
+    <string name="webui_remote_access_summary">允许从其他设备访问 Web UI。启用后，可使用用户名“syncthing”和 API 密钥（作为密码）登录。默认：禁用（最安全）</string>
     <string name="download_support_bundle_title">下载支持包</string>
     <!-- Summary shown when the user clicked the download support bundle button -->
     <string name="download_support_bundle_in_progress">正在准备支持包下载…</string>
@@ -369,7 +369,7 @@
     <string name="download_support_bundle_failed">下载支持包失败。请检查日志。</string>
     <!-- Titles for the preference to undo ignored devices and folders -->
     <string name="undo_ignored_devices_folders_title">撤销忽略的设备和文件夹</string>
-    <string name="undo_ignored_devices_folders_question">这将撤消以前忽略的设备和文件夹的决定。 是否继续？</string>
+    <string name="undo_ignored_devices_folders_question">这将撤销之前对设备和文件夹的忽略。是否继续？</string>
     <string name="undo_ignored_devices_folders_done">成功撤销了决定。</string>
     <string name="export_config">导出配置</string>
     <!-- Toast after entering an invalid tcp port -->
@@ -388,18 +388,18 @@
     <!-- Toast after entering invalid http proxy address -->
     <string name="toast_invalid_http_proxy_address">请按照“http://[IP/主机名]:[端口]”的格式输入代理地址</string>
     <string name="broadcast_service_control_title">通过广播控制服务</string>
-    <string name="broadcast_service_control_summary">默认值：禁用。启用此选项让 adb 或第三方应用，如自动化应用，吩咐 Syncthing 遵照运行条件、强制启动或强制停止。</string>
+    <string name="broadcast_service_control_summary">默认值：禁用。启用后，adb 或第三方应用（如自动化应用）可发送广播指令，让 Syncthing 遵循运行条件、强制启动或强制停止。</string>
     <!-- Dialog shown before config export -->
     <string name="dialog_confirm_export">是否确定要导出您的配置？现有存档将被覆盖。</string>
     <!-- Dialog shown before config import -->
     <string name="dialog_confirm_import">是否确定要导入该配置？现有设置，包括共享文件夹和设备列表将被替换。</string>
     <!-- Toast shown after config was exported -->
-    <string name="config_export_failed">配置导出失败了。请转到\"设置-故障排除-打开日志”查看详情。</string>
+    <string name="config_export_failed">配置导出失败。请前往“设置 → 故障排除 → 打开日志”查看详情。</string>
     <string name="import_config">导入配置</string>
     <!-- Toast shown after config was imported -->
     <string name="config_imported_successful">配置已导入</string>
     <string name="dialog_settings_restart_app_title">需要重启</string>
-    <string name="dialog_settings_restart_app_question">更改此选项需要立即重启本应用。将会丢弃所有其他更改。是否继续？</string>
+    <string name="dialog_settings_restart_app_question">更改此选项需要立即重启本应用，其他未应用的更改将被丢弃。是否继续？</string>
     <!-- Title for the preference to set STTRACE parameters -->
     <string name="sttrace_title">STTRACE 选项</string>
     <string name="environment_variables">环境变量</string>
@@ -408,13 +408,13 @@
     <!-- Title for the preference to reset Syncthing indexes -->
     <string name="st_reset_database_title">重置数据库</string>
     <!-- Syncthing was reset -->
-    <string name="st_reset_database_question">此操作只能根据我们的支持团队的建议执行。 \n是否确定要清除 Syncthing 的数据库？</string>
+    <string name="st_reset_database_question">请仅在支持团队的建议下执行此操作。\n确定要清除 Syncthing 的数据库吗？</string>
     <!-- Syncthing was reset -->
     <string name="st_reset_database_done">已成功重置 Syncthing 的数据库</string>
     <!-- Title for the preference to reset Syncthing indexes -->
     <string name="st_reset_deltas_title">重置增量索引</string>
     <!-- Syncthing was reset -->
-    <string name="st_reset_deltas_question">此操作只能根据我们的支持团队的建议执行。 \n是否确定要清除 Syncthing 的增量索引？</string>
+    <string name="st_reset_deltas_question">请仅在支持团队的建议下执行此操作。\n确定要清除 Syncthing 的增量索引吗？</string>
     <!-- Syncthing was reset -->
     <string name="st_reset_deltas_done">已成功重置 Syncthing 的增量索引</string>
     <string name="category_about">关于</string>
@@ -434,9 +434,9 @@
     <!-- Title of the preference showing upstream version name -->
     <string name="syncthing_version_title">Syncthing 版本</string>
     <!-- Title of the preference showing this app's version name -->
-    <string name="app_version_title">Syncthing-Fork 包装器版本</string>
+    <string name="app_version_title">Syncthing-Fork 版本</string>
     <!-- Title of the preference showing the REST API key -->
-    <string name="syncthing_api_key">Syncthing API 密钥（单击复制）</string>
+    <string name="syncthing_api_key">Syncthing API 密钥（点击复制）</string>
     <!-- Shown when the API key is copied to the clipboard -->
     <string name="api_key_copied_to_clipboard">Syncthing API 密钥已复制到剪贴板</string>
     <!-- Title of the preference showing database size -->
@@ -471,7 +471,7 @@
     <string name="share_title">分享</string>
     <!-- ShareActivity -->
     <!-- Toast if user didn't complete the welcome wizard yet -->
-    <string name="complete_welcome_wizard_first">首先，从应用抽屉启动应用，并在共享文件之前完成欢迎向导。</string>
+    <string name="complete_welcome_wizard_first">请先从启动器打开本应用并完成欢迎向导，然后再共享文件。</string>
     <!-- Title of the "share" activity -->
     <string name="share_activity_title">保存到 Syncthing</string>
     <!-- Title of the "save" button -->
@@ -483,10 +483,10 @@
     <!-- New file name template -->
     <string name="file_name_template">新文件 %1$s</string>
     <!-- Nothing to share toast -->
-    <string name="nothing_share">没什么可分享的</string>
+    <string name="nothing_share">没有可分享的内容</string>
     <!-- Copy success toast partially -->
     <plurals name="copy_success_partially">
-        <item quantity="other">%1$d 个文件已复制到文件夹“%2$s”，已存在 %3$d 个</item>
+        <item quantity="other">%1$d 个文件已复制到文件夹“%2$s”，其中 %3$d 个已存在</item>
     </plurals>
     <!-- Copy success toast -->
     <plurals name="copy_success">
@@ -505,14 +505,14 @@
     <string name="reason_force_start">Syncthing 正在运行，因为您强制启动它，而不管运行条件如何。</string>
     <string name="reason_force_stop">Syncthing 未运行，因为您强制停止它，而不管运行条件如何。</string>
     <!-- Explanations why syncthing is running or not running -->
-    <string name="reason_not_within_time_frame">您启用了“按照时间表运行”，最后同步不超过一小时前。</string>
-    <string name="reason_not_within_time_frame_2">您启用了“按照时间表运行”，最后同步是在 %s 前。</string>
+    <string name="reason_not_within_time_frame">您启用了“按时间表运行”，且距上次同步不到一小时。</string>
+    <string name="reason_not_within_time_frame_2">您启用了“按时间表运行”，上次同步是在 %s之前。</string>
     <string name="reason_not_within_time_frame_0_min">不到一分钟</string>
     <plurals name="reason_not_within_time_frame_minutes">
         <item quantity="other">%d 分钟</item>
     </plurals>
     <string name="reason_not_charging">手机没有充电。</string>
-    <string name="reason_not_on_battery_power">手机未使用电池供电。</string>
+    <string name="reason_not_on_battery_power">手机当前不是由电池供电。</string>
     <string name="reason_not_while_power_saving">Syncthing 未运行，因为手机当前处于省电模式。</string>
     <string name="reason_not_while_auto_sync_data_disabled">Syncthing 未运行，因为 Android 当前已禁用“自动同步数据”。</string>
     <!-- … Mobile data -->
@@ -523,19 +523,19 @@
     <string name="reason_on_roaming_nonroaming_mobile_data">Syncthing 允许在漫游和非漫游移动数据连接上运行。</string>
     <string name="reason_on_nonroaming_mobile_data">Syncthing 允许在非漫游移动数据连接上运行。活动连接处于非漫游状态。</string>
     <string name="reason_not_nonroaming_mobile_data">Syncthing 未运行，因为您不允许它在漫游移动数据连接上运行。</string>
-    <string name="reason_wifi_disallowed">Syncthing 不允许在 WiFi 或以太网上运行。</string>
-    <string name="reason_on_wifi">Syncthing 允许在 WiFi 上运行，WiFi 当前已连接。</string>
-    <string name="reason_not_on_wifi">Syncthing 允许在 WiFi 上运行，但 WiFi 未连接或手机处于飞行模式。</string>
+    <string name="reason_wifi_disallowed">Syncthing 不允许在 Wi-Fi 或以太网上运行。</string>
+    <string name="reason_on_wifi">Syncthing 允许在 Wi-Fi 上运行，Wi-Fi 当前已连接。</string>
+    <string name="reason_not_on_wifi">Syncthing 允许在 Wi-Fi 上运行，但 Wi-Fi 未连接或手机处于飞行模式。</string>
     <string name="reason_on_metered_nonmetered_wifi">Syncthing 允许在按流量计费和不按流量计费的 Wi-Fi 连接上运行。</string>
-    <string name="reason_on_whitelisted_wifi">Syncthing 允许在当前 WiFi 网络上运行。</string>
-    <string name="reason_not_on_whitelisted_wifi">Syncthing 未运行，因为当前 WiFi 网络的名称未列入白名单。</string>
-    <string name="reason_on_nonmetered_wifi">Syncthing 允许在非计量 WiFi 连接上运行。活动 WiFi 连接不按流量计费。</string>
-    <string name="reason_not_nonmetered_wifi">Syncthing 未运行，因为您不允许它在计量 WiFi 连接上运行。</string>
-    <string name="reason_location_unavailable">您在设置中启用了“在选定的 WiFi 网络上运行”。Android 定位服务目前已关闭。根据 Android 的限制，Syncthing 无法确定当前的 WiFi 网络名称以决定是否运行。解决方案：打开定位，授予定位权限并重新连接 WiFi。</string>
+    <string name="reason_on_whitelisted_wifi">Syncthing 允许在当前 Wi-Fi 网络上运行。</string>
+    <string name="reason_not_on_whitelisted_wifi">Syncthing 未运行，因为当前 Wi-Fi 网络的名称未列入白名单。</string>
+    <string name="reason_on_nonmetered_wifi">Syncthing 允许在不按流量计费的 Wi-Fi 连接上运行。当前 Wi-Fi 连接不按流量计费。</string>
+    <string name="reason_not_nonmetered_wifi">Syncthing 未运行，因为您不允许它在按流量计费的 Wi-Fi 连接上运行。</string>
+    <string name="reason_location_unavailable">您在设置中启用了“在选定的 Wi-Fi 网络上运行”。Android 定位服务目前已关闭。根据 Android 的限制，Syncthing 无法确定当前的 Wi-Fi 网络名称以决定是否运行。解决方案：打开定位，授予定位权限并重新连接 Wi-Fi。</string>
     <string name="reason_on_flight_mode">Syncthing 正在运行，因为您允许它在飞行模式处于活动状态时运行。</string>
     <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor 未实例化。如果重启后此错误没有消失，请重启应用并提交错误报告。</string>
     <!-- Sync Conditions Dialog -->
-    <string name="custom_wifi_ssid_whitelist_empty">没有 WiFi SSID 被列入白名单。请在设置中指定一些。</string>
+    <string name="custom_wifi_ssid_whitelist_empty">白名单中没有 Wi-Fi 网络，请在设置中添加。</string>
     <!-- SyncthingService -->
     <!-- Text for the exit button on the drawer -->
     <string name="exit">退出</string>
@@ -554,29 +554,29 @@
     <!-- Toast shown if syncthing failed to create or read the config -->
     <string name="executable_not_found">缺少核心可执行文件“%s”。请检查构建和日志输出。</string>
     <string name="config_create_failed">创建配置失败。请检查日志输出。</string>
-    <string name="config_read_failed">读取配置失败。考虑备份同步文件夹中的数据，然后从 Android 设置中清除此应用的数据并重启。</string>
+    <string name="config_read_failed">读取配置失败。请先备份同步文件夹中的数据，然后在系统设置中清除本应用的数据并重新打开。</string>
     <!-- Toast shown if a config file crucial to operation is missing -->
     <string name="config_file_missing">缺少对操作至关重要的配置文件</string>
     <!-- Toast shown if a listening tcp port is unavailable -->
-    <string name="webui_tcp_port_unavailable">WebUI TCP 端口 %s 繁忙。第二个实例？</string>
+    <string name="webui_tcp_port_unavailable">Web UI TCP 端口 %s 已被占用。是否已运行第二个实例？</string>
     <!-- Label of the default folder created of first start (camera folder). -->
     <string name="default_android_camera_folder_label">Android 相机</string>
     <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
     <string name="default_folder_id">%1$s-照片</string>
     <string name="notification_crash_title">已崩溃（退出代码 %1$s）</string>
-    <string name="notification_crash_text">单击查看日志（%1$s）</string>
+    <string name="notification_crash_text">点击查看日志（%1$s）</string>
     <string name="notifications_persistent_channel">Syncthing 处于活动状态</string>
     <string name="notification_persistent_waiting_channel">监控运行状况</string>
     <string name="notifications_other_channel">其他通知</string>
     <!-- EventProcessor -->
-    <string name="notification_out_of_disk_space">SD 卡已满。文件 %1$s</string>
+    <string name="notification_out_of_disk_space">存储空间已满，无法保存文件 %1$s</string>
     <!-- RestApi -->
     <!-- Title of the notification shown when a restart is needed -->
     <string name="restart_title">需要重启</string>
     <!-- Text for positive button in restart dialog -->
     <!-- Text for the dismiss button of the restart Activity -->
     <!-- Text of the notification shown when a restart is needed -->
-    <string name="restart_notification_text">单击此处立即重启 Syncthing</string>
+    <string name="restart_notification_text">点击此处立即重启 Syncthing</string>
     <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">设备 ID 已复制到剪贴板</string>
     <!-- Strings representing units for file sizes, from smallest to largest -->
@@ -595,7 +595,7 @@
     <string name="state_failed_items">失败的项目（%1$d）</string>
     <string name="state_up_to_date">最新</string>
     <string name="state_local_additions">本地添加</string>
-    <string name="state_cleaning">清理版本中</string>
+    <string name="state_cleaning">正在清理</string>
     <string name="state_clean_waiting">正在等待清理</string>
     <string name="state_scanning">正在扫描</string>
     <string name="state_scan_waiting">正在等待扫描</string>
@@ -608,7 +608,7 @@
     <string name="state_unknown">未知</string>
     <string name="state_paused">已暂停</string>
     <string name="status_outofsync">未同步</string>
-    <string name="state_unshared">非共享</string>
+    <string name="state_unshared">未共享</string>
     <!-- Format string for folder size, eg "500 MiB / 1 GiB" -->
     <string name="folder_size_format">%1$s / %2$s</string>
     <!-- Titles used in the folder type dialog and folder type button in the folder activity -->
@@ -643,7 +643,7 @@
     <string name="maximum_age">最长保留时间</string>
     <string name="clean_out_after">在该时间后清除</string>
     <string name="file_versioning">文件版本控制</string>
-    <string name="file_versioning_generic_description">Syncthing 支持在文件被删除或被集群中的新版本替换时对旧版本进行存档。单击查看可用的版本控制策略。文件版本控制是在每个设备的基础上按文件夹配置的。选定策略：</string>
+    <string name="file_versioning_generic_description">Syncthing 支持在文件被删除或被集群中的新版本替换时对旧版本进行存档。点击查看可用的版本控制策略。文件版本控制按文件夹、逐设备配置。当前策略：</string>
     <string name="none">无</string>
     <string name="versions_path">历史版本路径</string>
     <string name="command">命令</string>
@@ -660,7 +660,7 @@
     <!-- Displays the current file versioning type in the Folder activity -->
     <string name="type_simple">类型：简单</string>
     <string name="type_trashcan">类型：回收站</string>
-    <string name="type_staggered">类型：阶段</string>
+    <string name="type_staggered">类型：交错</string>
     <string name="type_external">类型：外部</string>
     <!-- Information displayed about the current file versioning configuration in the folder activity -->
     <string name="trashcan_versioning_info">在该时间后清除：%1$s</string>
@@ -672,33 +672,33 @@
     <string name="could_not_access_deviceid">无法访问设备 ID。</string>
     <string name="browse">浏览</string>
     <string name="no_sub_folder_is_selected">未选择子文件夹</string>
-    <string name="share_device_id_chooser">分享设备 ID 与</string>
-    <string name="run_on_whitelisted_wifi_summary">打开白名单以限制仅在指定的 WiFi 网络上进行同步。</string>
+    <string name="share_device_id_chooser">通过以下方式分享设备 ID</string>
+    <string name="run_on_whitelisted_wifi_summary">打开白名单以限制仅在指定的 Wi-Fi 网络上进行同步。</string>
     <string name="custom_sync_conditions_title">自定义同步条件</string>
     <string name="custom_sync_conditions_description">允许您指定全局运行条件的例外情况。</string>
     <string name="custom_sync_conditions_dialog">指定同步条件</string>
     <!-- Quick Setting icon names and labels -->
     <string name="qs_force_label">强制运行</string>
-    <string name="qs_forced_to_run">被强制运行</string>
-    <string name="qs_forced_to_stop">被强制停止</string>
+    <string name="qs_forced_to_run">已强制运行</string>
+    <string name="qs_forced_to_stop">已强制停止</string>
     <string name="qs_following_run_conditions">遵循运行条件</string>
     <string name="qs_schedule_label">运行 5 分钟</string>
     <string name="qs_schedule_disabled">时间表已禁用</string>
     <string name="webui_username_title">Web UI 用户名</string>
     <string name="autoAcceptFolders">自动接受</string>
     <string name="webui_password_title">Web UI 密码</string>
-    <string name="notification_permission_desc">需要显示有关新设备连接、文件夹共享请求的通知，并保持服务活动和连接。</string>
+    <string name="notification_permission_desc">需要通知权限来显示新设备连接、文件夹共享请求等通知，并保持服务持续运行。</string>
     <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">运行 %1$d 分钟</string>
     <string name="notification_permission_title">通知权限</string>
-    <string name="toast_notification_permission_required">Syncthing 需要通知权限保持其服务活动和连接。</string>
-    <string name="dialog_confirm_skip_ignore_doze_permission">小心：如果 SyncthingNative 被中断并做了一些奇怪的事情，都怪您。仅在您的设备不支持授予权限的情况下跳过。真的要跳过？</string>
-    <string name="sleep_interval_minutes_title">同步暂停间隔持续时间</string>
-    <string name="start_into_web_gui_title">启动直接进入 Web GUI</string>
-    <string name="start_into_web_gui_summary">启动应用时，打开 Web GUI 而不是打开主屏幕</string>
+    <string name="toast_notification_permission_required">Syncthing 需要通知权限才能保持服务持续运行。</string>
+    <string name="dialog_confirm_skip_ignore_doze_permission">注意：如果此后 SyncthingNative 被系统中断而出现异常，后果自负。仅当您的设备不支持授予该权限时才可跳过。确定要跳过吗？</string>
+    <string name="sleep_interval_minutes_title">暂停同步的时长</string>
+    <string name="start_into_web_gui_title">启动时直接进入 Web GUI</string>
+    <string name="start_into_web_gui_summary">打开应用时直接显示 Web GUI 而非主屏幕</string>
     <string name="open_source_licenses_summary">显示使用的开放源代码许可</string>
     <string name="open_source_licenses_title">开放源代码许可</string>
     <string name="privacy_title">隐私政策</string>
-    <string name="privacy_summary">打开 syncthing-android 的隐私政策，其中涵盖了个人数据的使用（如果有的话），例如位置。</string>
+    <string name="privacy_summary">打开 syncthing-android 的隐私政策，其中说明了个人数据（如位置信息）的使用方式。</string>
     <string name="syncthing_forum_title">Syncthing 论坛</string>
     <string name="syncthing_forum_summary">前往 Syncthing 论坛获取支持</string>
     <string name="clear_stversions_title">清空所有版本控制文件夹</string>
@@ -716,18 +716,18 @@
     <string name="share_log_file_missing">缺少要分享的日志文件。</string>
     <string name="preference_category_actions">操作</string>
     <string name="preference_category_prepare">准备</string>
-    <string name="config_import_failed_no_path">配置导入失败了。请转到\"设置-故障排除-打开日志”查看详情。</string>
+    <string name="config_import_failed_no_path">配置导入失败。请前往“设置 → 故障排除 → 打开日志”查看详情。</string>
     <string name="backup_rel_path_to_zip">配置存档的相对路径</string>
     <string name="backup_password_title">配置保护密码</string>
-    <string name="backup_password_set">✅ 设置了密码： %1$s</string>
+    <string name="backup_password_set">✅ 已设置密码： %1$s</string>
     <string name="backup_password_not_set">⚠ 未设置密码。</string>
     <string name="preference_category_explanation">说明</string>
     <string name="config_export_successful_no_path">导出了配置。请确保记得此密码用于之后的导入。</string>
-    <string name="backup_password_summary">ℹ️推荐：\n建议导入时输入用以在导出和解密期间加密配置的强密码。 将此密码存放在安全地方用于恢复过程。 你需要这个密码来使用导入功能。\n\n⚠️ 不推荐：\n不使用密码，,其他应用可能可以读取并篡改 Syncthing 配置。暴露配置可能有让坏蛋使用窃取的配置导出文件获得对文件未经授权的访问的风险。</string>
+    <string name="backup_password_summary">ℹ️ 推荐：\n建议设置一个强密码，导出时用于加密配置，导入时用于解密。请将密码保存在安全的地方，导入功能需要它。\n\n⚠️ 不推荐：\n不使用密码时，其他应用可能读取甚至篡改 Syncthing 配置。配置泄露可能让他人利用导出的配置文件未经授权访问您的文件。</string>
     <string name="toggle_password_visibility">切换密码可见性</string>
     <string name="backup_password_set_masked">✅ 密码已设置 – 点击更改</string>
     <string name="allow_overwrite_files_title">允许覆盖现有文件</string>
-    <string name="allow_overwrite_files_summary">当另一个应用分享文件到我们文件夹中的一个时。</string>
+    <string name="allow_overwrite_files_summary">当其他应用向本应用的文件夹分享文件时，允许覆盖同名文件。</string>
     <string name="device_id_qr_code">设备 ID 二维码</string>
     <string name="close_device_id">关闭设备 ID</string>
     <string name="copy">复制</string>
@@ -770,4 +770,11 @@
     <string name="cert_check_trust">受此设备信任</string>
     <string name="cert_check_validity">有效期</string>
     <string name="cert_check_key">私钥</string>
+    <string name="conflict_files_title">冲突文件</string>
+    <string name="status_transfer_resources">传输与资源</string>
+    <string name="device_folders_show_more">+%1$d</string>
+    <string name="device_folders_show_less">收起</string>
+    <string name="more_options">更多选项</string>
+    <string name="show_exact_times">显示精确时间</string>
+    <string name="web_gui_load_failed">无法加载 Web GUI。请抓取日志并报告此问题。</string>
 </resources>

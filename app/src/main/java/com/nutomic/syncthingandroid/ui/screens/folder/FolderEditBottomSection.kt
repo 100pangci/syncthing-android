@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Shield
@@ -17,6 +18,8 @@ import androidx.compose.material.icons.outlined.Terminal
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
@@ -94,6 +97,9 @@ private fun FolderDevicesCard(
     onMarkDirty: () -> Unit,
     onOpenDeviceEdit: () -> Unit,
 ) {
+    // Devices whose encryption password field is expanded. Collapsed by
+    // default so long device lists stay compact.
+    var expandedPasswordDevices by remember { mutableStateOf(setOf<String>()) }
     FormCard(title = stringResource(R.string.devices)) {
         if (holder.deviceStates.isEmpty()) {
             Text(
@@ -139,6 +145,27 @@ private fun FolderDevicesCard(
                                     onMarkDirty()
                                 }
                         )
+                        if (shareState.shared) {
+                            // Key icon toggles the encryption password field;
+                            // tinted primary when a password is configured.
+                            IconButton(onClick = {
+                                expandedPasswordDevices =
+                                    if (shareState.device.deviceID in expandedPasswordDevices)
+                                        expandedPasswordDevices - shareState.device.deviceID
+                                    else
+                                        expandedPasswordDevices + shareState.device.deviceID
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Key,
+                                    contentDescription =
+                                        stringResource(R.string.deviceEncryptionPasswordHint),
+                                    tint = if (shareState.password.isNotEmpty())
+                                        MaterialTheme.colorScheme.primary
+                                    else
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
                         Switch(
                             checked = shareState.shared,
                             onCheckedChange = { checked ->
@@ -161,7 +188,7 @@ private fun FolderDevicesCard(
                             }
                         )
                     }
-                    if (shareState.shared) {
+                    if (shareState.shared && shareState.device.deviceID in expandedPasswordDevices) {
                         OutlinedTextField(
                             value = shareState.password,
                             onValueChange = { value ->

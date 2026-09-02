@@ -1,9 +1,15 @@
 package com.nutomic.syncthingandroid.ui.screens.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListLayoutInfo
+import androidx.compose.foundation.lazy.LazyListPrefetchScope
+import androidx.compose.foundation.lazy.LazyListPrefetchStrategy
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.layout.NestedPrefetchScope
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -79,7 +85,7 @@ private val TAB_ICONS = listOf(
  * navigation bar inside a drawer scaffold.
  * Ported from the legacy MainActivity + FolderListFragment + DeviceListFragment + StatusFragment.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     onExitApp: () -> Unit,
@@ -236,7 +242,13 @@ fun HomeScreen(
                 state = pagerState,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
+                    .padding(innerPadding),
+                // Keep all three pages composed. Without this, every tab
+                // switch had to rebuild the target page's whole UI on the
+                // main thread mid-animation, which showed up as jank. Pages
+                // now persist (including their scroll positions) and tab
+                // switches only move the scroll offset.
+                beyondViewportPageCount = 2
             ) { page ->
                 when (page) {
                     TAB_FOLDERS -> FolderListPage(
@@ -245,13 +257,17 @@ fun HomeScreen(
                     TAB_DEVICES -> DeviceListPage(
                         devices = devices,
                     )
-                    else -> StatusPage(serviceState = serviceState)
+                    else -> StatusPage(
+                        serviceState = serviceState,
+                        visible = pagerState.currentPage == TAB_STATUS
+                    )
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FolderListPage(
     folders: List<FolderUiModel>?,
@@ -287,7 +303,10 @@ private fun FolderListPage(
             )
         }
     }
-    LazyColumn(Modifier.fillMaxSize()) {
+    LazyColumn(
+        state = rememberLazyListState(prefetchStrategy = NoLazyListPrefetch),
+        modifier = Modifier.fillMaxSize()
+    ) {
         items(folders, key = { it.id }, contentType = { "folder" }) { model ->
             FolderRow(
                 model = model,
@@ -299,6 +318,7 @@ private fun FolderListPage(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DeviceListPage(
     devices: List<DeviceUiModel>?,
@@ -311,7 +331,10 @@ private fun DeviceListPage(
     val onEdit: (DeviceUiModel) -> Unit = remember(navigator) {
         { model -> navigator.openDeviceEdit(model.id, false) }
     }
-    LazyColumn(Modifier.fillMaxSize()) {
+    LazyColumn(
+        state = rememberLazyListState(prefetchStrategy = NoLazyListPrefetch),
+        modifier = Modifier.fillMaxSize()
+    ) {
         items(devices, key = { it.id }, contentType = { "device" }) { model ->
             DeviceRow(
                 model = model,
@@ -319,4 +342,22 @@ private fun DeviceListPage(
             )
         }
     }
+}
+
+/**
+ * Prefetch strategy that never queues prefetch requests.
+ *
+ * Workaround for a Compose runtime 1.11 crash where resuming a prefetched
+ * (paused) item composition throws
+ * "IllegalArgumentException: Cannot disable reuse from root if it was caused
+ * by other groups". Prefetching is a pure performance hint, so skipping it
+ * only trades a small scroll-ahead cost for stability.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+internal object NoLazyListPrefetch : LazyListPrefetchStrategy {
+    override fun LazyListPrefetchScope.onScroll(delta: Float, layoutInfo: LazyListLayoutInfo) = Unit
+
+    override fun LazyListPrefetchScope.onVisibleItemsUpdated(layoutInfo: LazyListLayoutInfo) = Unit
+
+    override fun NestedPrefetchScope.onNestedPrefetch(firstVisibleItemIndex: Int) = Unit
 }

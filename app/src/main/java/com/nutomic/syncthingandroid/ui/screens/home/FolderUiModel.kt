@@ -12,8 +12,10 @@ import com.nutomic.syncthingandroid.util.Util
  * Immutable, precomputed view data for one folder list card. Building this on
  * the polling dispatcher keeps every string/format/regex operation out of the
  * UI thread, and data class equality lets Compose skip rows that did not
- * change at all.
+ * change at all. @Immutable is what makes that skipping actually work —
+ * without it the List fields would mark the class unstable.
  */
+@androidx.compose.runtime.Immutable
 data class FolderUiModel(
     val id: String,
     val title: String,
@@ -23,7 +25,8 @@ data class FolderUiModel(
     val overrideVisible: Boolean,
     val revertVisible: Boolean,
     val revertLabelRes: Int,
-    val conflictText: String?,
+    val conflictCount: Int,
+    val conflictFiles: List<String>,
     val lastItemText: String?,
     val lastItemTimeText: String?,
     val itemsAndSize: String?,
@@ -51,7 +54,8 @@ fun buildFolderUiModels(
 
         var statusText: String? = null
         var statusKind = StatusKind.PAUSED
-        var conflictText: String? = null
+        var conflictCount = 0
+        var conflictFiles: List<String> = emptyList()
         var lastItemText: String? = null
         var lastItemTimeText: String? = null
         var itemsAndSize: String? = null
@@ -158,21 +162,10 @@ fun buildFolderUiModels(
             }
 
             // Conflicts.
-            val conflictFiles = cached.discoveredConflictFiles ?: emptyArray()
-            if (conflictFiles.isNotEmpty()) {
-                conflictText = buildString {
-                    append("\u26a0 ")
-                    append(
-                        resources.getQuantityString(
-                            R.plurals.conflicts, conflictFiles.size, conflictFiles.size
-                        )
-                    )
-                    append("\n\u292e ")
-                    append(conflictFiles[0])
-                    if (conflictFiles.size > 1) {
-                        append("\n\u2026")
-                    }
-                }
+            val discoveredConflicts = cached.discoveredConflictFiles ?: emptyArray()
+            if (discoveredConflicts.isNotEmpty()) {
+                conflictCount = discoveredConflicts.size
+                conflictFiles = discoveredConflicts.toList()
             }
 
             // Last finished item.
@@ -180,18 +173,13 @@ fun buildFolderUiModels(
                 !cached.lastItemFinishedItem.isNullOrEmpty() &&
                 !cached.lastItemFinishedTime.isNullOrEmpty()
             ) {
-                val actionMark = when (cached.lastItemFinishedAction) {
-                    "delete" -> " \u2297"
-                    "update" -> " \u229b"
-                    else -> " \u2049"
-                }
-                lastItemText = "\u21cc" + actionMark + " " + Util.getPathEllipsis(cached.lastItemFinishedItem)
-                lastItemTimeText = "\u21cc\u231a" + Util.formatTime(cached.lastItemFinishedTime)
+                lastItemText = Util.getPathEllipsis(cached.lastItemFinishedItem)
+                lastItemTimeText = Util.formatTime(cached.lastItemFinishedTime)
             }
 
             // Items and size summary.
             if (!folder.paused) {
-                itemsAndSize = "\u2211 " +
+                itemsAndSize =
                         resources.getQuantityString(
                             R.plurals.files,
                             folderStatus.inSyncFiles.toInt(),
@@ -218,7 +206,8 @@ fun buildFolderUiModels(
             overrideVisible = overrideVisible,
             revertVisible = revertVisible,
             revertLabelRes = revertLabelRes,
-            conflictText = conflictText,
+            conflictCount = conflictCount,
+            conflictFiles = conflictFiles,
             lastItemText = lastItemText,
             lastItemTimeText = lastItemTimeText,
             itemsAndSize = itemsAndSize,
@@ -242,5 +231,5 @@ private fun getShortPathForUI(context: Context, path: String): String {
                 p
             }
         }
-    return "\u2756 " + Util.getPathEllipsis(shortenedPath)
+    return Util.getPathEllipsis(shortenedPath)
 }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.automirrored.outlined.ViewQuilt
@@ -56,6 +57,7 @@ import com.nutomic.syncthingandroid.util.isTelevision
 /**
  * Drawer content of the home screen, ported from the legacy DrawerFragment.
  */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun AppDrawer(
     stServiceRunning: Boolean,
@@ -81,6 +83,7 @@ fun AppDrawer(
             HorizontalDivider(Modifier.padding(horizontal = 16.dp))
 
             LazyColumn(
+                state = rememberLazyListState(prefetchStrategy = NoLazyListPrefetch),
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .weight(1f)

@@ -12,6 +12,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Compress
+import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.Fingerprint
+import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Lan
 import androidx.compose.material.icons.outlined.MoveToInbox
 import androidx.compose.material.icons.outlined.Pause
@@ -23,6 +26,7 @@ import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
@@ -35,13 +39,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.model.Device
 import com.nutomic.syncthingandroid.model.DiscoveredDevice
@@ -150,12 +160,58 @@ private fun DeviceIdentityCard(
                 }
             }
         } else {
-            ClickRow(
-                title = stringResource(R.string.device_id),
-                value = device.deviceID,
-                icon = Icons.Outlined.QrCode2,
-                onClick = onShowQr
-            )
+            // Device ID row: monospace, grouped in chunks of 7 characters for
+            // readability, with quick copy and QR actions in the same row.
+            val context = LocalContext.current
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Fingerprint,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.device_id),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Text(
+                        text = formatDeviceId(device.deviceID),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontFamily = FontFamily.Monospace,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                IconButton(onClick = {
+                    val clipboard =
+                        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    clipboard.setPrimaryClip(
+                        ClipData.newPlainText("deviceID", device.deviceID)
+                    )
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.device_id_copied_to_clipboard),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.ContentCopy,
+                        contentDescription = stringResource(R.string.copy)
+                    )
+                }
+                IconButton(onClick = onShowQr) {
+                    Icon(
+                        imageVector = Icons.Outlined.QrCode2,
+                        contentDescription = stringResource(R.string.device_id_qr_code)
+                    )
+                }
+            }
         }
 
         // ---- Discovered devices (create mode only) ----
@@ -319,6 +375,9 @@ private fun DeviceFoldersCard(
     holder: DeviceEditStateHolder,
     onOpenFolderEdit: () -> Unit,
 ) {
+    // Folders whose encryption password field is expanded. Collapsed by
+    // default so long folder lists stay compact.
+    var expandedPasswordFolders by remember { mutableStateOf(setOf<String>()) }
     FormCard(title = stringResource(R.string.folders)) {
         if (holder.folderStates.isEmpty()) {
             Text(
@@ -354,6 +413,27 @@ private fun DeviceFoldersCard(
                                     holder.needsUpdate = true
                                 }
                         )
+                        if (shareState.shared) {
+                            // Key icon toggles the encryption password field;
+                            // tinted primary when a password is configured.
+                            IconButton(onClick = {
+                                expandedPasswordFolders =
+                                    if (shareState.folder.id in expandedPasswordFolders)
+                                        expandedPasswordFolders - shareState.folder.id
+                                    else
+                                        expandedPasswordFolders + shareState.folder.id
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Key,
+                                    contentDescription =
+                                        stringResource(R.string.deviceEncryptionPasswordHint),
+                                    tint = if (shareState.password.isNotEmpty())
+                                        MaterialTheme.colorScheme.primary
+                                    else
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
                         Switch(
                             checked = shareState.shared,
                             onCheckedChange = { checked ->
@@ -366,7 +446,7 @@ private fun DeviceFoldersCard(
                             }
                         )
                     }
-                    if (shareState.shared) {
+                    if (shareState.shared && shareState.folder.id in expandedPasswordFolders) {
                         OutlinedTextField(
                             value = shareState.password,
                             onValueChange = { value ->
@@ -398,6 +478,17 @@ private fun displayableAddresses(device: Device): String {
     val addresses = device.addresses ?: return ""
     return addresses.joinToString(", ")
 }
+
+/**
+ * Formats the 52 character device ID the same way as the Syncthing web UI:
+ * groups of 7 characters joined by dashes, 3 groups per line, so the text
+ * never wraps mid-group even with large font scales.
+ */
+private fun formatDeviceId(deviceId: String): String =
+    deviceId.replace("-", "")
+        .chunked(7)
+        .chunked(3)
+        .joinToString("\n") { line -> line.joinToString("-") }
 
 /**
  * Fault tolerant address list parsing, ported from DeviceActivity.persistableAddresses.

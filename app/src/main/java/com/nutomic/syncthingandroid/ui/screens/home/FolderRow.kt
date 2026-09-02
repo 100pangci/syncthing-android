@@ -1,19 +1,25 @@
 package com.nutomic.syncthingandroid.ui.screens.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Upload
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -21,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -31,8 +38,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.nutomic.syncthingandroid.R
@@ -56,6 +65,7 @@ fun FolderRow(
     val context = LocalContext.current
     var showOverrideConfirm by remember { mutableStateOf(false) }
     var showRevertConfirm by remember { mutableStateOf(false) }
+    var showConflicts by remember { mutableStateOf(false) }
 
     Card(
         onClick = { onEdit(model) },
@@ -97,7 +107,7 @@ fun FolderRow(
                         text = model.pathShort,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2,
+                        maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -121,17 +131,43 @@ fun FolderRow(
                 }
             }
 
-            model.conflictText?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error
-                )
+            if (model.conflictCount > 0) {
+                // Single-line warning pill; the long file names only appear in
+                // the dialog so the card height stays uniform.
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.14f),
+                    contentColor = MaterialTheme.colorScheme.error,
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .clickable { showConflicts = true }
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Warning,
+                            contentDescription = null,
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        Text(
+                            text = pluralStringResource(
+                                R.plurals.conflicts, model.conflictCount, model.conflictCount
+                            ),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
             }
 
             if (model.lastItemText != null && model.lastItemTimeText != null) {
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp)
                 ) {
                     Text(
                         text = model.lastItemText,
@@ -150,12 +186,26 @@ fun FolderRow(
                 }
             }
 
-            model.itemsAndSize?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+            Spacer(Modifier.height(4.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (model.statusText != null) {
+                    StatusBadge(text = model.statusText, kind = model.statusKind)
+                    Spacer(Modifier.width(8.dp))
+                }
+                if (model.itemsAndSize != null) {
+                    Text(
+                        text = model.itemsAndSize,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = if (model.statusText != null) TextAlign.End else TextAlign.Start,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
 
             model.invalidText?.let {
@@ -168,10 +218,6 @@ fun FolderRow(
                 }
             }
 
-            model.statusText?.let {
-                Spacer(Modifier.height(4.dp))
-                StatusBadge(text = it, kind = model.statusKind)
-            }
             if (model.isSyncing) {
                 Spacer(Modifier.height(6.dp))
                 LinearProgressIndicator(
@@ -181,6 +227,35 @@ fun FolderRow(
                 )
             }
         }
+    }
+
+    if (showConflicts) {
+        AlertDialog(
+            onDismissRequest = { showConflicts = false },
+            title = { Text(stringResource(R.string.conflict_files_title)) },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .heightIn(max = 400.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    model.conflictFiles.forEach { file ->
+                        Text(
+                            text = file,
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showConflicts = false }) {
+                    Text(stringResource(android.R.string.ok))
+                }
+            }
+        )
     }
 
     if (showOverrideConfirm) {
