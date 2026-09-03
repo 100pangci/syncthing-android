@@ -21,6 +21,7 @@
 
 ### 新特性
 - **AMOLED 纯黑主题**：跟随系统 / 浅色 / 深色 / AMOLED 四档即时切换，同步内嵌 Web GUI 的 black 主题
+- **全量本地化补全**：38 种语言全部补齐至 100%（每种含 496 键 + 8 组复数，其中 az / be / ckb / gl 为从零新建），所有语言文件的键顺序与主模板 `values/strings.xml` 完全对齐，便于后续维护
 - 包名改为 `com.github.ywpc05.syncthingfork`，可与上游版本并存安装
 
 ### 稳定性与修复

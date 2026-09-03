@@ -1,3 +1,1061 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Syncthing-Fork</string>
+
+    <string name="app_description">پڕۆگرامێکی کراوە، متمانەپێکراو و لامەرکەزی بۆ هاوکاتکردنی پەڕگەکان.</string>
+
+    <!-- FirstStartActivity -->
+
+    <!-- Title for dialog displayed on first start -->
+    <string name="welcome_title">بەخێربێیت بۆ \nSyncthing بۆ Android</string>
+
+    <!-- Welcome wizard -->
+    <!-- Slide "Introduction" -->
+    <string name="welcome_text">Syncthing پڕۆگرامێکی سەرچاوەکراوەی هاوکاتکردنی پەڕگەیە. بۆ هاوبەشکردنی داتا لەگەڵ ئامێرەکانی تر، پێویستە ناسنامە (ID) تایبەتەکانی ئامێرەکان زیاد بکەیت بۆ لیستی ئامێرەکان. دواتر دەتوانیت هەڵبژێریت کە کام بۆکە لەگەڵ کام ئامێر هاوبەش بکرێت.
+\n
+\nتکایە هەر کێشەیەک کە ڕووبەڕووت بووەوە لە ڕێگەی GitHub ڕاپۆرت بکە.</string>
+
+    <!-- Slide "Storage Permission" -->
+    <string name="storage_permission_title">مۆڵەتی کۆگاکردن</string>
+    <string name="storage_permission_desc">Syncthing پێویستی بە دەستگەیشتن بە کۆگای ئامێرەکەت هەیە بۆ ئەوەی هاوکاتکردنی پەڕگەکان ئەنجام بدات.</string>
+    <string name="dialog_all_files_access_not_supported">ئامێرەکەت پشتیوانی دەستگەیشتن بە هەموو پەڕگەکان ناکات</string>
+
+    <!-- Slide "Ignore battery optimizations" -->
+    <string name="ignore_doze_permission_title">ئاساییکردنەوەی پاتری</string>
+    <string name="ignore_doze_permission_os_notice">Android TV بە شێوەیەکی ناسراو لەوانەیە کۆتایی بە پڕۆگرامەکە بهێنێت کاتێک لە پاشبنەمادا کاردەکات. چارەسەرێک لە ویکیدا بەردەستە لە \'%1$s/%2$s\'.</string>
+    <string name="ignore_doze_permission_desc">Android لەوانەیە دوای ماوەیەک هاوکاتکردن بوەستێنێت. بۆ ڕێگەگرتن لەمە، ئاساییکردنەوەی پاتری ناچالاک بکە. هەندێک ئامێر پڕۆگرامی کوشتنی ئەرک (task-killer)ی پێشوەخت دامەزراویان هەیە. دەبێت Syncthing بۆ لیستی ڕەسپێدراوەکانیان زیاد بکەیت.</string>
+    <string name="dialog_disable_battery_optimizations_not_supported">ئامێرەکەت پشتیوانی ناچالاککردنی ئاساییکردنەوەی پاتری ناکات</string>
+    <string name="dialog_confirm_skip_ignore_doze_permission">ئاگادار بە: ئەگەر SyncthingNative تێکبچێت و شتێکی نامۆ ئەنجام بدات، تۆ بەرپرسیاریت. تەنها لە حاڵەتێکدا دەستبەرداری ببە کە ئامێرەکەت پشتگیری بەخشینی مۆڵەتەکە نەکات. بەڕاستی دەستبەرداری ببیت\؟</string>
+
+    <!-- Slide "Location Permission" -->
+    <string name="location_permission_title">مۆڵەتی شوێن</string>
+    <string name="location_permission_desc">Syncthing دەتوانرێت ڕێکبخرێت بۆ ئەوەی لەسەر تۆڕی Wi-Fi هەڵبژێردراو کار بکات. Android داوا دەکات پڕۆگرامەکە مۆڵەتی شوێنی هەبێت بۆ خوێندنەوەی ناوی تۆڕی Wi-Fi چالاکەکە. ئەگەر دەتەوێت ئەم تایبەتمەندییە بەکاربهێنیت، پەنجە بە دوگمەکەی سەرەوە بدە. دەتوانیت ئەم هەنگاوە نەبەیت. بۆ وردەکاری زیاتر سەیری سیاسەتی تایبەتمەندی بکە.</string>
+    <string name="location_permission_desc_api_29">ڕێنمایی بۆ Android 10+: «ڕێگەدان هەموو کات»</string>
+
+    <!-- Slide "Notification Permission" -->
+    <string name="notification_permission_title">مۆڵەتی ئاگادارکردنەوە</string>
+    <string name="notification_permission_desc">پێویستە بۆ پیشاندانی ئاگادارکردنەوەکان سەبارەت بە پەیوەندییە نوێیەکانی ئامێرەکان و داواکارییەکانی هاوبەشکردنی بۆکەکان، هەروەها بۆ بەڕەوادا هێشتنەوەی ڕاژەکە و بەستنەوەکەی.</string>
+
+    <!-- Slide "Key Generation" -->
+    <string name="key_generation_title">دروستکردنی کلیل</string>
+    <string name="key_generation_success">کلیلە ئاسایشەکان بۆ ئاڵوگۆڕی داتای تایبەت بە سەرکەوتوویی دروستکران.</string>
+
+    <!-- Generic texts used everywhere -->
+    <string name="back">گەڕانەوە</string>
+    <string name="cont">بەردەوامبوون</string>
+    <string name="finish">تەواوکردن</string>
+    <string name="generic_example">نموونە</string>
+    <string name="grant_permission">ڕێگەپێدان بە مۆڵەت</string>
+    <string name="permission_granted">مۆڵەت درا</string>
+    <string name="reason">هۆکار:</string>
+    <string name="accept">قبووڵکردن</string>
+
+    <string name="ignore">پشتگوێخستن</string>
+
+
+    <string name="main_menu">مێنوی سەرەکی</string>
+
+    <string name="refresh">نوێکردنەوە</string>
+
+    <!-- PhotoShootActivity -->
+
+    <string name="photo_shoot_launcher_title">کامێرای هاوکاتکردن</string>
+    <string name="photo_shoot_activity_title">کامێرای Syncthing-Fork</string>
+    <string name="photo_shoot_intro_welcome_title">بەخێربێیت بۆ کامێرای Syncthing</string>
+    <string name="photo_shoot_intro_no_camera">ببورە، ئەم ئامێرە کامێرای نییە.</string>
+    <string name="photo_shoot_intro_missing_permissions">بۆ بەردەوامبوون مۆڵەتی کۆگاکردن و کامێرامان پێویستە.</string>
+    <string name="grant_storage_permission">ڕێگەپێدان بە مۆڵەتی کۆگاکردن</string>
+    <string name="grant_camera_permission">ڕێگەپێدان بە مۆڵەتی کامێرا</string>
+    <string name="photo_shoot_intro_permission_desc">کامێرای Syncthing ڕەزامەندی تۆ پێویستە بۆ گرتنی وێنە و هەڵگرتنیان لەسەر ئامێرەکەت. ئەم تایبەتمەندییە دڵخوازە. بۆ بەکارهێنانی، مۆڵەتەکان ڕێگەپێبدە و پەنجە بە «بەردەوامبوون» بدە. ئێمە بۆکەیەکی کامێرای Syncthing بۆت دادەنێین کە دواتر دەتوانیت لەگەڵ ئامێرەکانی تری Syncthing هاوبەشی بکەیت.</string>
+    <string name="photo_shoot_take_picture_success">وێنەکە بە سەرکەوتوویی لە بۆکەی کامێرای Syncthing هەڵگیرا.</string>
+    <string name="photo_shoot_take_picture_failure">گرتنی وێنە سەرکەوتوو نەبوو یان هەڵیوەشاندیتەوە.</string>
+
+    <!-- Label of the folder created by the Syncthing Camera feature. -->
+    <string name="default_syncthing_camera_folder_label">کامێرای Syncthing</string>
+
+    <!-- MainActivity -->
+
+    <!-- Main bottom navigation view -->
+    <string name="activity_main_bottom_navigation_rescan_all">پوختکردنەوەی هەموو</string>
+
+    <!-- Main menu button -->
+
+    <!-- Exception dialog message -->
+
+    <!-- Title of the exit app when running as a service confirmation dialog -->
+    <string name="dialog_exit_while_running_as_service_title">دڵنیابوون لە چوونەدەرەوە لە پڕۆگرام</string>
+    <string name="dialog_exit_while_running_as_service_message">بۆ بیرت لێدەکەمەوە: تۆ پڕۆگرامەکەت ڕێکخستووە کە لە سەرهەڵدانەوەی سیستەمەکە خۆکارانە دەستپێبکات. بۆیە مەرجەکانی کارکردن چاودێری دەکات و لە هەر کاتێکدا کە مەرجەکان هاتنە دی، لە پاشبنەمادا هاوکاتکردن دەکات. تەنها ئەگەر بە کێشەی جدی ڕووبەڕوو بوویتەوە دەبێت بە دەستی چوونەدەرەوە بکەیت. ئەگینە، «دەستپێکردنی خۆکار لە سەرهەڵدانەوە» لە ڕێکخستنەکاندا ناچالاک بکە. ئایا دەتەوێت ئێستا بچیتە دەرەوە تا دووبارە ئامێرەکە زیندوو بکرێتەوە\؟</string>
+
+    <!-- Title of the "add folder" menu action -->
+    <string name="add_folder">زیادکردنی بۆکە</string>
+
+    <!-- Title of the "share device id" menu action -->
+
+    <!-- Shown in the chooser dialog when sharing a Device ID -->
+
+    <string name="usage_reporting_dialog_title">ڕێگەپێدان بە ڕاپۆرتی بەکارهێنان بە نەناسراوی\؟</string>
+
+    <string name="yes">بەڵێ</string>
+
+    <string name="no">نەخێر</string>
+
+
+    <!-- URL to open when user chose to open website in usage reporting dialog -->
+
+    <string name="toast_write_storage_permission_required">مۆڵەتی نووسین لە کۆگا پێویستە بۆ ئەم پڕۆگرامە</string>
+
+    <string name="device_rejected">ئامێری «%1$s» دەیەوێت پەیوەندی بکات</string>
+
+    <string name="folder_rejected">ئامێری «%1$s» دەیەوێت بۆکەی «%2$s» هاوبەش بکات</string>
+    <!-- StateDialogActivity -->
+
+    <!-- Text for FoldersFragment and DevicesFragment loading view -->
+    <!-- Shown instead of web_gui_loading if the key does not exist and has to be created -->
+    <string name="web_gui_creating_key">کلیلە ئاسایشەکان دروست دەکرێن. ئەمە لەوانەیە چەند خولەکێک پێبچێت…</string>
+
+    <!-- FolderListFragment -->
+
+    <string name="folders_fragment_title">بۆکەکان</string>
+
+    <!-- Shown if no folders exist -->
+    <string name="folder_list_empty">هیچ بۆکەیەک نەدۆزرایەوە</string>
+
+    <!-- Format string for folder file count -->
+    <plurals name="files">
+        <item quantity="one">%1$d / %2$d پەڕگە</item>
+        <item quantity="other">%1$d / %2$d پەڕگە</item>
+    </plurals>
+
+    <!-- Format string for conflict file count -->
+    <plurals name="conflicts">
+        <item quantity="one">%1$d ناکۆکی</item>
+        <item quantity="other">%1$d ناکۆکی</item>
+    </plurals>
+
+    <string name="override_changes">تێپەڕاندنی گۆڕانکارییەکان</string>
+
+    <!-- Override Changes Confirmation Dialog -->
+    <string name="override_changes_question">ئەمە هەموو گۆڕانکارییەکان دەسڕێتەوە کە لەسەر ئامێرەکانی تر لەم بۆکەیەدا ئەنجام دراون. بەردەوام بیت\؟</string>
+
+    <string name="revert_local_changes">گەڕاندنەوەی گۆڕانکارییە ناوخۆییەکان</string>
+
+    <string name="delete_unexpected_items">سڕینەوەی ئەو شتانەی پێشبینی نەکراون</string>
+
+    <!-- Revert Local Changes Confirmation Dialog -->
+    <string name="revert_local_changes_question">ئەمە هەموو گۆڕانکارییەکانی ئەم ئامێرە دەسڕێتەوە لە ناو ئەو بۆکەیەدا. بەردەوام بیت\؟</string>
+
+    <string name="open_file_manager">کردنەوەی بەڕێوەبەری پەڕگە</string>
+    <string name="open_file_with">کردنەوەی پەڕگە بە</string>
+    <string name="open_file_no_compatible_app">هیچ پڕۆگرامێک نەدۆزرایەوە بۆ کردنەوەی پەڕگەکە.</string>
+
+    <!-- Suggest File Manager App Dialog -->
+    <string name="suggest_file_manager_app_dialog_title">هیچ پڕۆگرامێکی بەڕێوەبەری پەڕگەی گونجاو نەدۆزرایەوە</string>
+    <string name="suggest_file_manager_app_dialog_text">پێشنیار دەکەین پڕۆگرامە سەرچاوەکراوەکەی بەڕێوەبەری پەڕگە \'Material Files\' دامەزرێنیت. ئایا دەتەوێت پەڕەی دۆکانی لە ستۆردا بکرێتەوە\؟</string>
+
+    <!-- DeviceListFragment -->
+
+    <!-- Devices tab title -->
+    <string name="devices_fragment_title">ئامێرەکان</string>
+
+    <!-- Shown if no devices are configured in add folder dialog -->
+    <string name="devices_list_empty">هیچ ئامێرێک ڕێکنەخراوە. پەنجە بۆ زیادکردنی ئامێرێکی نوێ بدە.</string>
+
+    <!-- Shown in ListView if no devices are configured -->
+    <string name="no_devices_configured">هیچ ئامێرێک ڕێکنەخراوە.
+\nئێستا بە زیادکردنی ئامێرێک دەستپێبکە.</string>
+
+    <string name="deviceEncryptionPasswordHint">ئەگەر متمانەپێنەکراوە، وشەی نهێنی نهێنیکردن بنووسە</string>
+
+    <!-- Indicates that a folder is fully synced to the local device -->
+    <string name="device_up_to_date">نوێترینە</string>
+
+    <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
+    <string name="device_syncing_percent_bytes">هاوکاتکردن (%1$d%%, %2$s)</string>
+
+    <!-- Indicates that there is no connection to the device -->
+    <string name="device_disconnected">پەیوەندی نەماوە</string>
+    <string name="device_disconnected_not_synced">پەیوەندی نەماوە (%1$s چاوەڕوانە)</string>
+
+    <!-- Indicates that the device is paused and does not sync -->
+    <string name="device_paused">وەستێنراوە</string>
+
+    <!-- Indicates that devices does not share any folders -->
+    <string name="device_state_unused">بەکارنەهێنراو</string>
+
+    <!-- Indicates that the device connection is unknown -->
+
+    <!-- Last seen title -->
+    <string name="device_last_seen">دوایین بینین: %1$s</string>
+    <string name="device_last_seen_never">هەرگیز</string>
+
+    <!-- Title for the listing of shared folders with a colon and space appended -->
+    <string name="shared_folders_title_colon">"بۆکە هاوبەشکراوەکان: "</string>
+
+    <!-- Expand the collapsed shared folders list on a device card; parameter is the hidden folder count -->
+    <string name="device_folders_show_more">+%1$d</string>
+
+    <!-- Collapse an expanded shared folders list on a device card -->
+    <string name="device_folders_show_less">پیشاندانی کەمتر</string>
+
+    <!-- Title of the dialog listing the conflict files of a folder -->
+    <string name="conflict_files_title">پەڕگە ناکۆکەکان</string>
+
+    <!-- Header of the grouped status card showing transfer and resource stats -->
+    <string name="status_transfer_resources">گواستنەوە و سەرچاوەکان</string>
+
+    <!-- Title for current download rate -->
+    <string name="download_title">داگرتن</string>
+
+    <!-- Title for current upload rate -->
+    <string name="upload_title">بارکردن</string>
+    <!-- StatusFragment -->
+
+    <string name="status_fragment_title">دۆخ</string>
+
+    <string name="button_follow_run_conditions">شوێنکەوتنی مەرجەکانی کارکردن</string>
+    <string name="button_force_start">دەستپێکردنی بەزۆر
+\nپشتگوێخستنی مەرجەکانی کارکردن</string>
+    <string name="button_force_stop">وەستانەوەی بەزۆر
+\nپشتگوێخستنی مەرجەکانی کارکردن</string>
+
+    <string name="syncthing_starting">Syncthing لە دەستپێکردندایە.</string>
+    <string name="syncthing_running">Syncthing کاردەکات.</string>
+    <string name="syncthing_not_running">Syncthing کارناکات.</string>
+    <string name="syncthing_has_crashed">Syncthing داڕماوە.</string>
+
+    <!-- DrawerFragment -->
+
+    <!-- Same as download_title with a colon and space appended -->
+    <!-- Same as upload_title with a colon and space appended -->
+    <!-- Title for current RAM usage -->
+    <string name="ram_usage">بەکارهێنانی RAM</string>
+    <!-- Title for announce server status -->
+    <string name="announce_server">ڕاژەکەری ڕاگەیاندنی ڕێکخراو</string>
+    <!-- Title for uptime status -->
+    <string name="uptime">ماوەی کارکردن</string>
+    <string name="restart">دووبارە دەستپێکردنەوە</string>
+
+    <string name="dialog_confirm_restart">ئایا دەتەوێت Syncthing دووبارە دەستپێبکەیتەوە\؟</string>
+
+    <!-- FolderActivity -->
+
+    <!-- Setting title -->
+    <string name="folder_id">ناسنامەی بۆکە</string>
+
+    <!-- Setting title -->
+    <string name="folder_label">ناونیشانی بۆکە</string>
+
+    <!-- Setting title -->
+    <string name="directory">ڕێڕەو</string>
+    <string name="advanced_directory_selection">هەڵبژاردنی پێشکەوتووی ڕێڕەو</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_fileWatcher">چاودێریکردنی گۆڕانکارییەکان</string>
+    <string name="folder_fileWatcherDescription">لە سیستەمی کارپێکردنەکە دەپاڕێتەوە ئاگاداری بکاتەوە لە گۆڕانکارییەکانی پەڕگەکان. ئەگەر ناچالاک بکرێت، دەگەڕێتەوە بۆ پشکنینی خولەکی هەموو کاتژمێرێک.</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_ignore_delete_caption">پشتگوێخستنی سڕینەوە</string>
+    <string name="folder_ignore_delete_description">بژاردەیەکی شارەزایانە کە کاریگەری لەسەر مامەڵەکردن لەگەڵ نوێکارییەکانی هاتووی پێڕست هەیە. کاتێک چالاک بێت، نوێکارییە هاتووەکان کە ئاڵای سڕینەوەیان لەسەرە پشتگوێ دەخرێن. بڕوانە https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_run_script_caption">جێبەجێکردنی سکریپت</string>
+    <string name="folder_run_script_description">بژاردەی شارەزایانە بۆ جێبەجێکردنی سکریپت دوای ئەوەی بۆکەیەک دۆخی هاوکاتکردنی دەگۆڕێت. سکریپتەکانی ناو \'.stfolder/*.sh\' جێبەجێ دەکرێن، شوێنەکانی تر بەهۆی ڕەچاوکردنی ئاسایشەوە پشتگیری ناکرێن.\nنموونەی بانگکردنی سکریپت: \'.stfolder/rename-files.sh sync_complete\'</string>
+
+    <!-- Setting title -->
+    <string name="folder_pause">وەستاندنی بۆکە</string>
+
+    <!-- Setting title -->
+    <string name="devices">ئامێرەکان</string>
+
+    <!-- Setting title -->
+    <string name="keep_versions">هەڵگرتنی وەشانەکان</string>
+
+    <!-- Setting title -->
+    <string name="delete_folder">سڕینەوەی بۆکە</string>
+
+    <!-- Title for FolderSettingsFragment in create mode -->
+    <string name="create_folder">دروستکردنی بۆکە</string>
+
+    <!-- Title for FolderSettingsFragment in edit mode -->
+    <string name="edit_folder">دەستکاریکردنی بۆکە</string>
+
+    <!-- Menu item to confirm folder creation -->
+    <string name="create">دروستکردن</string>
+
+    <!-- Dialog shown when attempting to remove a folder -->
+    <string name="remove_folder_confirm">بەڕاستی دەتەوێت ئەم بۆکەیە لە Syncthing بسڕیتەوە\؟</string>
+
+    <!-- Toast shown when trying to create a folder with an empty ID -->
+    <string name="folder_id_required">ناسنامەی بۆکە نابێت بەتاڵ بێت</string>
+
+    <!-- Toast shown when trying to create a folder with an empty label -->
+    <string name="folder_label_required">ناونیشانی بۆکە نابێت بەتاڵ بێت</string>
+
+    <!-- Toast shown when trying to create a folder with an empty path -->
+    <string name="folder_path_required">ڕێڕەوی بۆکە نابێت بەتاڵ بێت</string>
+
+    <string name="dialog_discard_changes">گۆڕانکارییەکانت فڕبدەیت\؟</string>
+
+    <!-- Summary shown if we only have readonly access to the folder path -->
+    <string name="folder_path_readonly">وەشانی Android ی تۆ تەنها دەستگەیشتنی خوێندنەوەی بۆ Syncthing دەبەخشێت بەو ڕێڕەوەی هەڵبژێردراوە.</string>
+
+    <!-- Summary shown if we only have readwrite access to the folder path -->
+    <string name="folder_path_readwrite">وەشانی Android ی تۆ دەستگەیشتنی خوێندنەوە و نووسین دەبەخشێت بە Syncthing بۆ ئەو ڕێڕەوەی هەڵبژێردراوە.</string>
+
+    <!-- Toast shown if the user selected an invalid location for a new syncthing folder -->
+    <string name="toast_invalid_folder_selected">ببورە. ئەو بۆکەیەی هەڵبژێردراوە ناکرێت بەکاربهێنرێت. تکایە بۆکەیەک هەڵبژێرە لە کۆگای ناوەکی یان دەرەکی.</string>
+
+    <string name="folder_type_switch_to_receive_encrypted_not_allowed">گۆڕینی بۆکە هەرنەبێکان بۆ \'وەرگرتنی نهێنیکراو\' پشتگیری ناکرێت.</string>
+
+    <string name="ignore_patterns">شێوە پشتگوێخراوەکان</string>
+    <!-- DeviceActivity -->
+
+    <!-- Setting title -->
+    <string name="device_id">ناسنامەی ئامێر</string>
+
+    <!-- Status title -->
+    <string name="discovered_devices_title">ئامێرە دۆزراوەکان - پەنجە بدە بۆ هەڵبژاردن</string>
+
+    <!-- Status text -->
+
+    <!-- Status text -->
+    <string name="local_discovery_disabled">تۆ دۆزینەوەی ناوخۆیی لە «ڕێکخستنەکان» &gt; «بژاردەکانی Syncthing» &gt; «دۆزینەوەی ناوخۆیی» ناچالاک کردووە. چالاکی بکە بۆ گەڕان بەدوای ئامێرەکان لە تۆڕی ناوخۆیی.</string>
+
+    <!-- Setting title -->
+
+    <!-- Setting title -->
+    <string name="folders">بۆکەکان</string>
+
+    <!-- Setting title -->
+    <string name="addresses">ناونیشانەکان</string>
+
+    <!-- Setting title -->
+
+    <!-- Setting title -->
+    <string name="compression">پاڵپێوەستن</string>
+
+    <!-- Strings representing compression options -->
+    <string name="compress_never">هەرگیز</string>
+    <string name="compress_metadata">مێتاداتا</string>
+    <string name="compress_always">هەمیشە</string>
+    <!-- Setting title -->
+    <string name="introducer">ناسێنەر</string>
+
+    <!-- Setting title -->
+    <string name="autoAcceptFolders">قبووڵکردنی خۆکار</string>
+
+    <!-- Setting title -->
+    <string name="pause_device">وەستاندنی ئامێر</string>
+
+    <!-- Setting title -->
+    <string name="untrusted_device">ئامێری متمانەپێنەکراو</string>
+
+    <!-- ActionBar item -->
+    <string name="delete_device">سڕینەوەی ئامێر</string>
+
+    <string name="add_device">زیادکردنی ئامێر</string>
+
+    <!-- Menu item to confirm adding a device -->
+
+    <!-- Title for DeviceSettingsFragment in edit mode -->
+    <string name="edit_device">دەستکاریکردنی ئامێر</string>
+
+    <!-- Dialog shown when attempting to remove a device -->
+    <string name="remove_device_confirm">بەڕاستی دەتەوێت ئەم ئامێرە بسڕیتەوە\؟</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
+    <string name="device_id_required">ناسنامەی ئامێر نابێت بەتاڵ بێت</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
+    <string name="device_id_invalid">ناسنامەی ئامێرەکە بە شێوەیەکی دروست فۆرمات نەکراوە. تکایە دووبارە هەوڵبدەوە و ناسنامەی دروست بنووسە.</string>
+
+    <!-- Toast shown when trying to create a device with an empty name -->
+
+    <!-- Toast shown when trying to create a device with invalid addresses -->
+    <string name="device_addresses_invalid">ناونیشانەکانی ئامێرەکە بە شێوەیەکی دروست فۆرمات نەکراون. تکایە دووبارە هەوڵبدەوە. بۆ زانیاری زیاتر بڕوانە بەڵگەنامەکانی Syncthing.</string>
+
+    <!-- Content description (alt text) for device ID qr code in show device id dialog -->
+    <string name="device_id_qr_code">کۆدی QR ی ناسنامەی ئامێر</string>
+
+    <string name="close_device_id">داخستنی ناسنامەی ئامێر</string>
+
+    <string name="copy">کۆپیکردن</string>
+
+    <!-- Content description for device ID qr code icon -->
+    <string name="scan_qr_code_description">سکانی کۆدی QR</string>
+
+    <!-- Dialog message if no compatible barcode scanner app is installed -->
+
+    <!-- Shown if no folders are configured -->
+    <string name="folders_list_empty">هیچ بۆکەیەک ڕێکنەخراوە. پەنجە بۆ زیادکردنی بۆکەیەکی نوێ بدە.</string>
+    <!-- RecentChangesActivity -->
+
+    <string name="no_recent_changes">هیچ گۆڕانکارییەکی نوێ نەبووە.</string>
+    <string name="recent_changes_title">گۆڕانکارییە نوێیەکان</string>
+    <string name="modified_by_device">ئامێر: %1$s</string>
+    <string name="modification_time">کات: %1$s</string>
+    <string name="more_options">بژاردەی زیاتر</string>
+    <string name="show_exact_times">پیشاندانی کاتە وردەکان</string>
+
+    <string name="this_device">ئەم ئامێرە</string>
+
+    <!-- WebGuiActivity -->
+
+    <!-- Title of the web gui activity -->
+    <string name="web_gui_title">GUI ی وێب</string>
+
+    <!-- Text for WebGuiActivity loading view -->
+    <string name="web_gui_loading">چاوەڕوانی GUI</string>
+
+    <!-- Shown in WebGuiActivity when the web gui could not be loaded. The technical cause is shown
+         below it and written to the log. -->
+    <string name="web_gui_load_failed">GUI ی وێب نەکرا بار بکرێت. تکایە لۆگێک بگرە و ئەمە ڕاپۆرت بکە.</string>
+
+    <!-- WebViewActivity -->
+
+    <!-- Dialog title displayed when an invalid ssl certificate was found -->
+    <string name="security_notice">ئاگادارکردنەوەی ئاسایش</string>
+
+    <!-- Dialog message if an invalid ssl certificate was detected -->
+    <string name="ssl_cert_invalid_text">وێبسایتەکەی لە %1$s دەردەکەوێت بڕوانامەیەکی نادروستی هەبێت بۆ نهێنیکردنی SSL. بەردەوام بیت\؟</string>
+
+    <!-- Text for WebViewActivity loading page -->
+    <string name="web_page_loading">پەڕەکە بار دەکرێت:
+\n%1$s …</string>
+
+    <!-- Text for WebViewActivity openBrowser action button -->
+    <string name="open_in_browser">کردنەوە لە وێبگەڕدا</string>
+
+    <!-- SettingsFragment -->
+
+    <string name="settings_title">ڕێکخستنەکان</string>
+
+    <string name="category_wifi">Wi-Fi</string>
+    <string name="category_mobile_data">داتای مۆبایل</string>
+    <string name="category_battery">پاتری</string>
+    <string name="category_schedule">خشتەبەندی</string>
+    <string name="category_general">گشتی</string>
+    <string name="category_connections">پەیوەندییەکان</string>
+    <string name="category_advanced">پێشکەوتوو</string>
+
+    <string name="category_user_interface">ڕووکاری بەکارهێنەر</string>
+
+    <string name="preference_app_theme_title">بابەت</string>
+    <string name="preference_app_theme_follow_system">شوێنکەوتنی سیستەم</string>
+    <string name="preference_app_theme_follow_light">ڕووناک</string>
+    <string name="preference_app_theme_follow_dark">تاریک</string>
+    <string name="preference_app_theme_amoled" translatable="false">AMOLED</string>
+
+    <string name="category_behaviour">ڕەفتار</string>
+    <string name="category_syncthing_options">بژاردەکانی Syncthing</string>
+    <string name="category_syncthing_options_summary">ئەم مێنووە تەنها بەردەستە ئەگەر Syncthing کاربکات.</string>
+
+    <string name="category_backup">هاوردە و هەناردە</string>
+    <string name="category_debug">چارەسەرکردنی کێشە</string>
+    <string name="category_experimental">تاقیکاری</string>
+
+    <!-- Preference screen - Run conditions -->
+    <string name="run_conditions_title">مەرجەکانی کارکردن</string>
+    <string name="run_conditions_summary">بژاردەکانی خوارەوە بەکاربهێنە بۆ بڕیاردان لەسەر ئەوەی کەی Syncthing کاردەکات.</string>
+
+    <string name="run_on_mobile_data_title">کارکردن لەسەر داتای مۆبایل</string>
+    <string name="run_on_mobile_data_summary">کاتێک ئامێرەکە بە تۆڕی داتای مۆبایلەوە پەیوەندی هەیە کار بکە. ئاگاداربە: ئەمە دەتوانێت بڕێکی زۆر لە داتاکانی پلانی مۆبایلت بەکاربهێنێت ئەگەر بڕێکی زۆر لە داتا هاوکات بکەیت.</string>
+
+    <string name="run_on_roaming_title">کارکردن لە کاتی ڕۆمینگدا</string>
+    <string name="run_on_roaming_summary">ڕێگە بە Syncthing بدە لە کاتی ڕۆمینگدا داتای مۆبایل بەکاربهێنێت.</string>
+
+    <string name="run_on_wifi_title">کارکردن لەسەر Wi-Fi</string>
+    <string name="run_on_wifi_summary">کاتێک ئامێرەکە بە تۆڕی Wi-Fi یان ئیتەرنێتەوە پەیوەندی هەیە کار بکە.</string>
+
+    <string name="run_on_metered_wifi_title">کارکردن لەسەر Wi-Fi ی پێوراو</string>
+    <string name="run_on_metered_wifi_summary">کاتێک ئامێرەکە بە تۆڕێکی Wi-Fi ی پێوراوەوە پەیوەندی هەیە کار بکە، وەک خاڵی گەرم یان تۆڕی بەستنەوە. ئاگاداربە: ئەمە دەتوانێت بەشی زۆری پلانی داتای تۆ بەکاربهێنێت ئەگەر داتای زۆر هاوکات بکەیت.</string>
+    <string name="run_on_whitelisted_wifi_title">کارکردن لەسەر تۆڕە دیاریکراوەکانی Wi-Fi</string>
+    <string name="specify_wifi_ssid_whitelist">هەڵبژاردنی تۆڕەکانی Wi-Fi</string>
+    <string name="run_on_whitelisted_wifi_networks">تۆڕە هەڵبژێردراوەکانی Wi-Fi: %1$s</string>
+    <string name="wifi_ssid_whitelist_empty">هیچ تۆڕێکی Wi-Fi دیاری نەکراوە. پەنجە بدە بۆ دیاریکردنی تۆڕەکان.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">تکایە Wi-Fi داگیرسێنە بۆ هەڵبژاردنی تۆڕەکان.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_location">تکایە شوێن داگیرسێنە بۆ هەڵبژاردنی تۆڕەکان.</string>
+
+
+    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">لە Android 8.1 وە دەستگەیشتن بە شوێن پێویستە بۆ توانای خوێندنەوەی ناوی Wi-Fi. تەنها ئەگەر ئەم مۆڵەتە بدەیتێ دەتوانیت ئەم تایبەتمەندییە بەکاربهێنیت.</string>
+
+    <string name="power_source_title">کارکردن کاتێک ئامێرەکە وزەی لێیەوە</string>
+
+    <string name="power_source_ac_and_battery_power">کارەبا و وزەی پاتری.</string>
+    <string name="power_source_ac_power">کارەبا.</string>
+    <string name="power_source_battery_power">وزەی پاتری.</string>
+
+    <string name="respect_battery_saving_title">ڕێزگرتن لە ڕێکخستنی پاراستنی پاتری ی Android</string>
+    <string name="respect_battery_saving_summary">ئەگەر پاراستنی پاتری چالاک بێت Syncthing ناچالاک بکە.</string>
+
+    <string name="respect_master_sync_title">ڕێزگرتن لە ڕێکخستنی \'هاوکاتکردنی خۆکاری داتا\' ی Android</string>
+    <string name="respect_master_sync_summary">کاتێک بەربڵاوەکەی «هاوکاتکردنی خۆکاری داتا» کە کراوەتەوە لە خشتە خێراکە داخرایەوە، Syncthing ناچالاک بکە.</string>
+
+    <string name="run_in_flight_mode_title">کارکردن بەبێ پەیوەندی تۆڕ</string>
+    <string name="run_in_flight_mode_summary">چالاککردنی ئەم بژاردەیە وا دەکات Syncthing کاربکات تەنانەت کاتێک ئۆفلاینیت. چالاکی بکە ئەگەر ئامێرەکەت کێشەی هەیە لە دۆزینەوەی پەیوەندییە دەستییەکانی Wi-Fi لە کاتی دۆخی فڕیندا.</string>
+
+    <string name="run_on_time_schedule_title">کارکردن بەپێی خشتەبەندی کاتی</string>
+    <string name="run_on_time_schedule_summary">چالاککردنی ئەم بژاردەیە هەوڵدەدات بۆ ماوەیەکی دیاریکراو هاوکاتکردن بکات ئەگەر مەرجەکانی کارکردن هاتبێتە دی و ئەگەر ماوەیەکی دیاریکراو لە دوایین هاوکاتکردنەوە تێپەڕی بێت. ئەمە دەتوانێت زۆر پاتری پارێزێت بەڵام پێویستی بە ئۆنلاین بوونی هاوبەشەکانی هاوکاتکردنە هەیە. تکایە ئاگاداربە: ئەمە لەوانەیە پەڕگە کاتییە تەواونەکراوەکان بەجێبهێڵێت هەتا هاوکاتکردنە خشتەکراوەکەی دواتر ئەنجام بدرێت.</string>
+
+    <string name="sync_duration_minutes_title">ماوەی سووڕی هاوکاتکردن</string>
+    <string name="sync_duration_minutes_summary">%1$s خولەک</string>
+    <string name="sleep_interval_minutes_title">ماوەی نێوانی وەستانەوەی هاوکاتکردن</string>
+
+    <!-- Preferences - Behaviour -->
+
+    <string name="behaviour_autostart_title">دەستپێکردنی خۆکار</string>
+    <string name="behaviour_autostart_summary">لە دەستپێکردنی سیستەمی کارپێکردنەکە پڕۆگرامەکە بە شێوەی خۆکار دەستپێبکە.</string>
+
+
+    <string name="allow_overwrite_files_title">ڕێگەدان بە سەرنووسینی پەڕگە بوونییەکان</string>
+    <string name="allow_overwrite_files_summary">کاتێک پڕۆگرامێکی تر پەڕگەکان بۆ یەکێک لە بۆکەکانمان هاوبەش دەکات.</string>
+
+    <string name="expert_mode_title">دۆخی شارەزا</string>
+
+    <string name="expert_mode_summary">چالاککردنی ئەم بژاردەیە بژاردە پێشکەوتووەکانی ڕێکخستن پیشان دەدات. پێشتر دەبێت سەیری بەڵگەنامەکانی Syncthing بکەیت بۆ دڵنیابوون لەوەی کە دەزانیت چۆن بە دروستی بەکاریان بهێنیت. ڕێکخستنی هەڵە دەتوانێت ببێتە هۆی کەمبوونەوەی پاتری، تێکچوونی سەرچاوەکانی سیستەم یان هاوکاتکردنی ناتەواو.</string>
+
+
+    <string name="start_into_web_gui_title">ڕاستەوخۆ دەستپێکردن لە GUI ی وێبدا</string>
+
+    <string name="start_into_web_gui_summary">لە کاتی دەستپێکردنی پڕۆگرامەکە، GUI ی وێب بکەرەوە لەجیاتی شاشەی سەرەکی</string>
+    <string name="device_name">ناوی ئامێر</string>
+
+    <string name="listen_address">ناونیشانەکانی گوێگرتنی پرۆتۆکۆڵی هاوکاتکردن</string>
+
+    <string name="max_recv_kbps">سنووری ڕێژەی هاتوو (KiB/s)</string>
+
+    <string name="max_send_kbps">سنووری ڕێژەی دەرچوو (KiB/s)</string>
+
+    <string name="global_announce_enabled">دۆزینەوەی جیهانی</string>
+
+    <string name="local_announce_enabled">دۆزینەوەی ناوخۆیی</string>
+
+    <string name="enable_nat_traversal">چالاککردنی NAT Traversal</string>
+
+    <string name="global_announce_server">ڕاژەکارەکانی دۆزینەوەی جیهانی</string>
+
+    <string name="enable_relaying">چالاککردنی ڕاڵەییکردن</string>
+
+    <string name="usage_reporting">ڕاپۆرتی بەکارهێنان بە نەناسراوی</string>
+
+    <string name="crash_reporting">ڕاپۆرتی داڕمان بە نەناسراوی</string>
+
+    <string name="webui_tcp_port_title">دەرگای TCP ی GUI ی وێب</string>
+
+    <string name="webui_remote_access_title">دەستگەیشتنی دوورەوە بۆ GUI ی وێب</string>
+
+    <string name="webui_username_title">ناوی بەکارهێنەری GUI ی وێب</string>
+
+    <string name="webui_password_title">وشەی نهێنی GUI ی وێب</string>
+
+    <string name="webui_remote_access_summary">دیاریبکە بۆ ڕێگەدان بە دەستگەیشتن بە GUI ی وێب لە ئامێرێکی ترەوە. ئەگەر چالاک بکرێت، دەتوانیت بە بەکارهێنەری \'syncthing\' و کلیلی API وەک وشەی نهێنی بچیتە ژوورەوە. بنەڕەتی: ناچالاک (ئەمینترین)</string>
+
+
+
+    <string name="clear_stversions_title">بەتاڵکردنەوەی هەموو بۆکەکانی وەشانبەندی</string>
+    <string name="clear_stversions_summary">پەڕگەکان دەگوازرێنەوە بۆ ڕێڕەوی .stversions کاتێک لەلایەن Syncthing گۆڕانکاریان بەسەردا دێت یان دەسڕێنەوە. لەوانەیە بتوانیت پەڕگە بە ڕێکەوت سڕاوەکان لەوێدا بدۆزیتەوە و بگەڕێنیتەوە، بەڵام وەشانە کۆنەکانی پەڕگەکان شوێنی کۆگای ئامێرەکەت داگیردەکەن.</string>
+    <string name="clear_stversions_question">ئەمە هەموو وەشانە پێشووەکانی پەڕگەکانی Syncthing دەسڕێتەوە. بەردەوام بیت\؟</string>
+    <string name="clear_stversions_done">بۆکەکانی .stversions بە سەرکەوتوویی بەتاڵ کرانەوە.</string>
+
+    <string name="download_support_bundle_title">داگرتنی بەستەی پشتگیری</string>
+
+    <!-- Summary shown when the user clicked the download support bundle button -->
+    <string name="download_support_bundle_in_progress">بەستەی پشتگیری ئامادە دەکرێت بۆ داگرتن …</string>
+
+    <!-- Toast after successful download of the support bundle -->
+    <string name="download_support_bundle_succeeded">بەستەی پشتگیری بە سەرکەوتوویی بۆ %s داگیرا.</string>
+
+    <!-- Toast after failed support bundle download -->
+    <string name="download_support_bundle_failed">داگرتنی بەستەی پشتگیری سەرکەوتوو نەبوو. لۆگەکان بپشکنە.</string>
+
+    <!-- Titles for the preference to undo ignored devices and folders -->
+    <string name="undo_ignored_devices_folders_title">پووچاندنەوەی پشتگوێخستنی ئامێر و بۆکەکان</string>
+    <string name="undo_ignored_devices_folders_question">ئەمە بڕیارە پێشووەکانی پشتگوێخستنی ئامێر و بۆکەکان پووچ دەکاتەوە. بەردەوام بیت\؟</string>
+    <string name="undo_ignored_devices_folders_done">بڕیارەکان بە سەرکەوتوویی پووچ کرانەوە.</string>
+
+    <string name="backup_rel_path_to_zip">ڕێڕەوی ڕێژەیی بۆ ئەرشیفی ڕێکخستن</string>
+
+    <string name="backup_password_title">وشەی نهێنی پاراستنی ڕێکخستن</string>
+    <string name="backup_password_summary">ℹ️ پێشنیارکراو:\nوشەی نهێنییەکی بەهێز بنووسە بۆ نهێنیکردنی ڕێکخستنەکەت لە کاتی هەناردەکردن و کردنەوەی نهێنی لە کاتی هاوردەکردن. ئەم وشە نهێنییە لە شوێنێکی پارێزراودا بهێڵەوە بۆ پرۆسەی گەڕاندنەوە. بۆ بەکارهێنانی تایبەتمەندی هاوردەکردن پێویستت پێی دەبێت.\n\n⚠️ پێشنیارنەکراو:\nبەبێ بەکارهێنانی وشەی نهێنی، پڕۆگرامەکانی تر لەوانەیە بتوانن ڕێکخستنی Syncthing تۆ بخوێننەوە و دەستکاری بکەن. ئاشکراکردنی ڕێکخستنەکە مەترسی ئەوەی هەیە کە کەسێکی خراپنەوە بە بەکارهێنانی هەناردە دزراوەکانی ڕێکخستن دەستگەیشتنی نادەستوور بە پەڕگەکانت بدات.</string>
+
+    <string name="backup_password_set">✅ وشەی نهێنی دانرا: %1$s</string>
+    <string name="backup_password_set_masked">✅ وشەی نهێنی دانرا - پەنجە بدە بۆ گۆڕینی</string>
+    <string name="backup_password_not_set">⚠ وشەی نهێنی دانەنراوە.</string>
+    <string name="toggle_password_visibility">گۆڕینی بینراوی وشەی نهێنی</string>
+    <string name="export_config">هەناردەکردنی ڕێکخستن</string>
+
+    <!-- Toast after entering an invalid tcp port -->
+    <string name="invalid_port_number" tools:ignore="PluralsCandidate">ژمارەی دەرگا دروست نییە. تکایە دەرگایەک لە نێوان %1$d و %2$d بنووسە.</string>
+
+    <!-- Toast after entering invalid integer value -->
+    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">بەهای ژمارەیی دروست نییە. تکایە بەهایەک لە نێوان %1$d و %2$d بنووسە.</string>
+
+    <!-- Experimental options -->
+    <string name="use_proxy">پەیوەندیکردن لە ڕێگەی پرۆکسی</string>
+    <string name="do_not_use_proxy">هیچ پرۆکسییەک ڕێکنەخراوە.</string>
+
+
+    <string name="use_tor_title">بەکارهێنانی Tor</string>
+    <string name="use_tor_summary">هەموو ترافیکەکان بە زۆر لە ڕێگەی Tor بەڕێبکە بۆ زیادکردنی تایبەتمەندی. پێویستی بە Orbot هەیە. بژاردەکانی پرۆکسی ناچالاک دەکات.</string>
+
+    <string name="socks_proxy_address_title">پرۆکسی SOCKS5</string>
+    <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>
+
+    <!-- Toast after entering invalid socks proxy address -->
+    <string name="toast_invalid_socks_proxy_address">بەهاکە پێچەوانەی ڕێسای پرۆکسییە \'socks5://[IP/HOSTNAME]:[PORT]\'</string>
+
+    <string name="http_proxy_address_title">پرۆکسی HTTP(S)</string>
+    <string name="http_proxy_address_example" translatable="false">http://192.168.0.1:8080</string>
+
+    <!-- Toast after entering invalid http proxy address -->
+    <string name="toast_invalid_http_proxy_address">بەهاکە پێچەوانەی ڕێسای پرۆکسییە \'http://[IP/HOSTNAME]:[PORT]\'</string>
+
+    <string name="broadcast_service_control_title">کۆنترۆڵکردنی ڕاژە بە Broadcast</string>
+    <string name="broadcast_service_control_summary">بنەڕەتی: ناچالاک. چالاکی بکە بۆ ئەوەی adb یان پڕۆگرامەکانی لایەنی سێیەم، وەک پڕۆگرامە ئۆتۆماتیکییەکان، ڕێنمایی Syncthing بکەن بۆ شوێنکەوتنی مەرجەکانی کارکردن، دەستپێکردنی بەزۆر یان وەستانەوەی بەزۆر.</string>
+
+    <!-- Dialog shown before config export -->
+    <string name="dialog_confirm_export">بەڕاستی دەتەوێت ڕێکخستنەکەت هەناردە بکەیت\؟ ئەرشیفە بوونییەکە سەرنووسین دەکرێت.</string>
+
+    <!-- Dialog shown before config import -->
+    <string name="dialog_confirm_import">بەڕاستی دەتەوێت ڕێکخستنەکە هاوردە بکەیت\؟ ڕێکخستنە بوونییەکان لەگەڵ لیستی بۆکە هاوبەشکراوەکان و ئامێرەکان دەگۆڕدرێن.</string>
+
+    <!-- PreferenceCategories -->
+    <string name="preference_category_actions">کردارەکان</string>
+    <string name="preference_category_explanation">ڕوونکردنەوە</string>
+    <string name="preference_category_prepare">ئامادەکردن</string>
+
+    <!-- Toast shown after config was exported -->
+    <string name="config_export_successful_no_path">ڕێکخستنەکە هەناردە کرا. تکایە دڵنیابە لە لەبیرکردنەوەی وشەی نهێنی بۆ هاوردەکردنێکی دواتر.</string>
+    <string name="config_export_failed">هەناردەکردنی ڕێکخستن سەرکەوتوو نەبوو. بۆ وردەکارییەکان بڕۆ بۆ ڕێکخستن-چارەسەرکردنی کێشە-کردنەوەی لۆگ.</string>
+
+    <string name="import_config">هاوردەکردنی ڕێکخستن</string>
+
+    <!-- Toast shown after config was imported -->
+    <string name="config_imported_successful">ڕێکخستنەکە هاوردە کرا</string>
+
+    <string name="config_import_failed_no_path">هاوردەکردنی ڕێکخستن سەرکەوتوو نەبوو. بۆ وردەکارییەکان بڕۆ بۆ ڕێکخستن-چارەسەرکردنی کێشە-کردنەوەی لۆگ.</string>
+
+    <string name="dialog_settings_restart_app_title">دووبارە دەستپێکردنەوە پێویستە</string>
+    <string name="dialog_settings_restart_app_question">گۆڕینی ئەم بژاردەیە پێویستی بە دەستپێکردنەوەی یەکسەری پڕۆگرامەکە هەیە. هەموو گۆڕانکارییەکانی تر فڕدەدرێن. بەردەوام بیت\؟</string>
+
+    <!-- Title for the preference to set STTRACE parameters -->
+    <string name="sttrace_title">بژاردەکانی STTRACE</string>
+    <string name="sttrace_none_selected">هیچ ئاسانکارییەکی تێکشکاندن</string>
+
+    <string name="environment_variables">گۆڕاوە ژینگەییەکان</string>
+
+    <!-- Toast after entering invalid STTRACE params -->
+    <string name="toast_invalid_environment_variables">بەهاکە زنجیرەیەکی دروستی گۆڕاوی ژینگەیی نییە</string>
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_database_title">ڕێکخستنەوەی داتابەیس</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_database_question">ئەم کردارە تەنها دەبێت لەسەر بنەمای پێشنیاری تیمی پشتگیریمان ئەنجام بدرێت.
+\nدڵنیایت دەتەوێت داتابەیسەکەی Syncthing پاک بکەیتەوە\؟</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_database_done">داتابەیسەکەی Syncthing بە سەرکەوتوویی ڕێکخرایەوە</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_deltas_title">ڕێکخستنەوەی Delta Indexes</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_question">ئەم کردارە تەنها دەبێت لەسەر بنەمای پێشنیاری تیمی پشتگیریمان ئەنجام بدرێت.
+\nدڵنیایت دەتەوێت delta indexes ی Syncthing پاک بکەیتەوە\؟</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_done">delta indexes ی Syncthing بە سەرکەوتوویی ڕێکخرانەوە</string>
+
+    <!-- Settings / About -->
+    <string name="category_about">دەربارە</string>
+
+    <string name="verbose_log_title">لۆگی وردەکاری</string>
+    <string name="verbose_log_summary">چالاککردنی ئەم بژاردەیە یارمەتی دەدات لۆگی تێکشکاندن لە ئاستێکی زۆر ورددا دروست بکرێت.</string>
+
+
+    <!-- Settings item that opens the log activity -->
+    <string name="open_log">کردنەوەی لۆگ</string>
+
+    <!-- Summary for the log activity -->
+    <string name="open_log_summary">پەنجەرەی لۆگی Syncthing و Android بکەرەوە</string>
+
+    <!-- Menu item linking support forum -->
+    <string name="syncthing_forum_title">فۆڕمی Syncthing</string>
+    <string name="syncthing_forum_summary">بڕۆ بۆ فۆڕمی Syncthing و پشتگیری وەربگرە</string>
+    <string name="syncthing_forum_url" translatable="false">https://forum.syncthing.net/</string>
+
+    <!-- Menu item for pizza -->
+
+    <!-- Menu item linking privacy policy -->
+    <string name="privacy_title">سیاسەتی تایبەتمەندی</string>
+    <string name="privacy_summary">سیاسەتی تایبەتمەندی syncthing-android بکەرەوە، کە بەکارهێنانی داتای کەسی (ئەگەر هەیە) داپۆشێت، وەک شوێن.</string>
+    <string name="privacy_policy_url" translatable="false">https://syncthing.net/android-privacy-policy</string>
+
+    <!-- Settings item that opens issue tracker -->
+    <string name="report_issue_title">ڕاپۆرتکردنی کێشە</string>
+
+    <!-- Summary for the issue tracker settings item -->
+    <string name="open_issue_tracker_summary">دوایگرتەری کێشەی Syncthing-Fork بکەرەوە لە %1$s</string>
+
+    <!-- URL of the issue tracker -->
+    <string name="issue_tracker_url" translatable="false">https://github.com/researchxxl/syncthing-android/issues</string>
+
+    <!-- URL of the GitHub wiki -->
+    <string name="wiki_url" translatable="false">https://github.com/researchxxl/syncthing-android/tree/main/wiki</string>
+
+    <!-- URL of the Syncthing project homepage -->
+
+    <!-- Title of the preference showing upstream version name -->
+    <string name="syncthing_version_title">وەشانی Syncthing</string>
+
+    <!-- Title of the preference showing this app's version name -->
+    <string name="app_version_title">وەشانی پێچەپێچی Syncthing-Fork</string>
+
+    <!-- Title of the preference showing the REST API key -->
+    <string name="syncthing_api_key">کلیلی API ی Syncthing (پەنجە بدە بۆ کۆپیکردن)</string>
+
+    <!-- Shown when the API key is copied to the clipboard -->
+    <string name="api_key_copied_to_clipboard">کلیلی API ی Syncthing کۆپی کرا بۆ کلیپبۆرد</string>
+
+    <!-- Title of the preference showing database size -->
+    <string name="syncthing_database_size">قەبارەی داتابەیسەکەی Syncthing</string>
+
+    <!-- Title of the preference showing the OS open file limit -->
+    <string name="os_open_file_limit">سنووری کردنەوەی پەڕگە لە Android</string>
+    <!-- Title of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_title">مۆڵەتنامەکانی سەرچاوەکراوە</string>
+    
+    <!-- Summary of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_summary">مۆڵەتنامە سەرچاوەکراوە بەکارهاتووەکان پیشان بە</string>
+
+    <!-- FolderPickerAcitivity -->
+
+    <!-- Activity title -->
+    <string name="folder_picker_title">هەڵبژێری بۆکە</string>
+
+    <!-- Storage path overview -->
+    <string name="advanced_storage_path_overview">پێشبینینی پێشکەوتووی ڕێڕەوی کۆگا</string>
+
+    <!-- Current path -->
+    <string name="current_path">ڕێڕەوی ئێستا: %1$s</string>
+
+    <!-- ListView empty text -->
+
+    <!-- Menu item to create folder on the file system -->
+
+    <!-- Menu item to select the current folder -->
+
+    <string name="create_folder_failed">دروستکردنی بۆکە سەرکەوتوو نەبوو</string>
+
+    <!-- Menu item to go up to parent folder -->
+    <string name="folder_go_up">سەرکەوتن بۆ سەرەوە</string>
+
+    <!-- LogActivity -->
+
+    <string name="syncthing_log_title">لۆگی Syncthing</string>
+    <string name="android_log_title">لۆگی Android</string>
+
+    <string name="share_log_file_missing">پەڕگەی لۆگ بۆ هاوبەشکردن نەماوە.</string>
+
+    <string name="share_log_file">هاوبەشکردنی پەڕگەی لۆگ</string>
+
+    <!-- Title of the "log android" menu button -->
+    <string name="view_android_log">بینینی لۆگی Android</string>
+
+    <!-- Title of the "log Syncthing" menu button -->
+    <string name="view_syncthing_log">بینینی لۆگی Syncthing</string>
+
+    <string name="retrieving_logs">لۆگەکان وەردەگیرێن…</string>
+
+    <!-- Title of the "share log" menu button -->
+    <string name="share_title">هاوبەشکردن</string>
+
+    <!-- ShareActivity -->
+
+    <!-- Toast if user didn't complete the welcome wizard yet -->
+    <string name="complete_welcome_wizard_first">سەرەتا، پڕۆگرامەکە لە ڕاکێشەری پڕۆگرامەکان بکەرەوە و ڕێنمایی بەخێرهاتن تەواو بکە پێش هاوبەشکردنی پەڕگەکان.</string>
+
+    <!-- Title of the "share" activity -->
+    <string name="share_activity_title">پاراستن بۆ Syncthing</string>
+
+    <!-- Title of the "save" button -->
+    <string name="save_title">هەڵگرتن</string>
+
+    <!-- Title of the "cancel" button -->
+    <string name="cancel_title">هەڵوەشاندنەوە</string>
+
+    <!-- Title of the "save" button -->
+
+    <!-- New file name template -->
+    <string name="file_name_template">پەڕگەی نوێ %1$s</string>
+
+    <!-- Nothing to share toast -->
+    <string name="nothing_share">هیچ شتێک نییە بۆ هاوبەشکردن</string>
+
+    <!-- Copy success toast partially -->
+    <plurals name="copy_success_partially">
+        <item quantity="one">%1$d پەڕگە کۆپی کرا بۆ بۆکەی «%2$s»، %3$d لە پیشترەوە بوونی هەیە</item>
+        <item quantity="other">%1$d پەڕگە کۆپی کران بۆ بۆکەی «%2$s»، %3$d لە پیشترەوە بوونی هەن</item>
+    </plurals>
+
+    <!-- Copy success toast -->
+    <plurals name="copy_success">
+        <item quantity="one">%1$d پەڕگە کۆپی کرا بۆ بۆکەی «%2$s»</item>
+        <item quantity="other">%1$d پەڕگە کۆپی کران بۆ بۆکەی «%2$s»</item>
+    </plurals>
+
+    <!-- Copy exception toast -->
+    <string name="copy_exception">لە کاتی هاوبەشکردندا هەڵەیەک ڕوویدا، لۆگەکانی پڕۆگرامەکە بپشکنە</string>
+
+    <!-- Copy progress dialog text -->
+    <string name="copy_progress">پەڕگەکان هاوبەش دەکرێن…</string>
+
+    <plurals name="file_name_title">
+        <item quantity="one">ناوی پەڕگە</item>
+        <item quantity="other">لیستی پەڕگەکان</item>
+    </plurals>
+    <!-- Sub Folder title -->
+
+    <!-- RunConditionMonitor -->
+
+    <string name="reason_force_start">Syncthing کاردەکات چونکە تۆ بە زۆر ڕایت کردووە بەبێ گوێدانە مەرجەکانی کارکردن.</string>
+    <string name="reason_force_stop">Syncthing کارناکات چونکە تۆ بە زۆر ڕایت وەستاندووە بەبێ گوێدانە مەرجەکانی کارکردن.</string>
+
+    <!-- Explanations why syncthing is running or not running -->
+    <string name="reason_not_within_time_frame_2">تۆ «کارکردن بەپێی خشتەبەندی کاتی»ت چالاک کردووە و دوایین هاوکاتکردن %s لەمەوبەر بووە.</string>
+    <string name="reason_not_within_time_frame_0_min">کەمتر لە خولەکێک</string>
+    <plurals name="reason_not_within_time_frame_minutes">
+        <item quantity="one">%d خولەک</item>
+        <item quantity="other">%d خولەک</item>
+    </plurals>
+    <string name="reason_not_charging">مۆبایلەکە بەرەو خەرک ناکرێت.</string>
+    <string name="reason_not_on_battery_power">مۆبایلەکە بە وزەی پاتری کارناکات.</string>
+    <string name="reason_not_while_power_saving">Syncthing کارناکات چونکە مۆبایلەکە ئێستا لە دۆخی پاراستنی وزەدایە.</string>
+    <string name="reason_not_while_auto_sync_data_disabled">Syncthing کارناکات چونکە Android ئێستا «هاوکاتکردنی خۆکاری داتا»ی ناچالاک کردووە.</string>
+
+    <!-- … Mobile data -->
+    <string name="reason_mobile_data_disallowed">Syncthing ڕێکنەخراوە بۆ کارکردن لەسەر پەیوەندی داتای مۆبایل.</string>
+    <string name="reason_on_mobile_data">Syncthing ڕێگەی پێدراوە لەسەر داتای مۆبایل کار بکات.</string>
+    <string name="reason_not_on_mobile_data">Syncthing ڕێگەی پێدراوە لەسەر پەیوەندی داتای مۆبایل کار بکات بەڵام داتای مۆبایل پەیوەندی نەکراوە.</string>
+
+    <!-- … Roaming -->
+    <string name="reason_on_roaming_nonroaming_mobile_data">Syncthing ڕێگەی پێدراوە لەسەر پەیوەندییەکانی داتای مۆبایلی ڕۆمینگ و ناڕۆمینگ کار بکات.</string>
+    <string name="reason_on_nonroaming_mobile_data">Syncthing ڕێگەی پێدراوە لەسەر پەیوەندییەکانی داتای مۆبایلی ناڕۆمینگ کار بکات. پەیوەندی چالاکەکە ناڕۆمینگە.</string>
+    <string name="reason_not_nonroaming_mobile_data">Syncthing کارناکات چونکە تۆ ڕێگەت نەداوە لەسەر پەیوەندییەکانی داتای مۆبایلی ڕۆمینگ کار بکات.</string>
+
+    <string name="reason_wifi_disallowed">Syncthing ڕێگەی پێنەدراوە لەسەر WiFi یان ئیتەرنێت کار بکات.</string>
+    <string name="reason_on_wifi">Syncthing ڕێگەی پێدراوە لەسەر WiFi کار بکات و WiFi ئێستا پەیوەندی کراوە.</string>
+    <string name="reason_not_on_wifi">Syncthing ڕێگەی پێدراوە لەسەر WiFi کار بکات بەڵام WiFi پەیوەندی نەکراوە یان مۆبایلەکە لە دۆخی فڕیندایە.</string>
+    <string name="reason_on_metered_nonmetered_wifi">Syncthing ڕێگەی پێدراوە لەسەر پەیوەندییەکانی WiFi ی پێوراو و ناپێوراو کار بکات.</string>
+    <string name="reason_on_whitelisted_wifi">Syncthing ڕێگەی پێدراوە لەسەر تۆڕە ئێستاکەی WiFi کار بکات.</string>
+    <string name="reason_not_on_whitelisted_wifi">Syncthing کارناکات چونکە ناوی تۆڕە ئێستاکەی WiFi لە لیستی ڕەسپێدراواندا نییە.</string>
+    <string name="reason_on_nonmetered_wifi">Syncthing ڕێگەی پێدراوە لەسەر پەیوەندییەکانی WiFi ی ناپێوراو کار بکات. پەیوەندی چالاکەکەی WiFi ناپێوراوە.</string>
+    <string name="reason_not_nonmetered_wifi">Syncthing کارناکات چونکە تۆ ڕێگەت نەداوە لەسەر پەیوەندییەکانی WiFi ی پێوراو کار بکات.</string>
+    <string name="reason_location_unavailable">تۆ «کارکردن لەسەر تۆڕە هەڵبژێردراوەکانی WiFi»ت لە ڕێکخستنەکاندا چالاک کردووە. ڕاژەکانی شوێنی Android ئێستا کوژاونەتەوە. بەپێی سنووردارکردنەکانی Android، Syncthing ناتوانێت ناوی تۆڕە ئێستاکەی WiFi دیاری بکات بۆ بڕیاردان لەسەر ئەوەی دەبێت کار بکات یان نا. چارەسەر: شوێن داگیرسێنە، مۆڵەتی شوێن بدە و WiFi دووبارە پەیوەندی بکەوە.</string>
+    <string name="reason_on_flight_mode">Syncthing کاردەکات چونکە تۆ ڕێگەت داوە کار بکات کاتێک دۆخی فڕین چالاکە.</string>
+    <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor دەستپێنەکراوە. تکایە پڕۆگرامەکە دووبارە دەستپێبکەرەوە و ئەگەر ئەم هەڵەیە دوای دەستپێکردنەوە نامەوێت ڕاپۆرتی کێشەی پێشکەش بکە.</string>
+    <!-- Sync Conditions Dialog -->
+
+    <string name="custom_wifi_ssid_whitelist_empty">هیچ SSID یه کی WiFi ڕەسپێدراوە نییە. تکایە هەندێکیان لە ڕێکخستنەکاندا دیاری بکە.</string>
+
+    <!-- SyncthingService -->
+
+    <!-- Text for the exit button on the drawer -->
+    <string name="exit">چوونەدەرەوە</string>
+
+    <!-- Title of the notification shown while syncthing is running and enabled -->
+    <string name="syncthing_active_details">کارکردن: %1$s</string>
+    <string name="no_remote_devices_connected">هیچ ئامێرێکی دوورەوە پەیوەندی نەکراوە</string>
+
+    <plurals name="device_online_up_to_date">
+        <item quantity="one">%1$d ئامێر ئۆنلاینە و نوێترینە</item>
+        <item quantity="other">%1$d ئامێر ئۆنلاینن و نوێترینن</item>
+    </plurals>
+
+    <plurals name="syncthing_active_syncing_device_online">
+        <item quantity="one">هاوکاتکردن: %1$d%% تەواوە، %2$d ئامێر ئۆنلاینە</item>
+        <item quantity="other">هاوکاتکردن: %1$d%% تەواوە، %2$d ئامێر ئۆنلاینن</item>
+    </plurals>
+
+    <string name="syncthing_disabled">خەوتوو</string>
+
+    <string name="syncthing_terminated">کۆتاییهاتوو</string>
+
+    <!-- Toast shown if syncthing failed to create or read the config -->
+    <string name="executable_not_found">پەڕگەی جێبەجێکراوی ناوەکی «%s» نەماوە. داتاشراوە و دەرچووی logcat بپشکنە.</string>
+    <string name="config_create_failed">دروستکردنی ڕێکخستن سەرکەوتوو نەبوو. دەرچووی logcat بپشکنە.</string>
+    <string name="config_read_failed">خوێندنەوەی ڕێکخستن سەرکەوتوو نەبوو. ڕەچاو بکە کە پشتی لە داتاکانی بۆکە هاوکاتکراوەکانت بهێڵیتەوە، پاشان داتاکانی ئەم پڕۆگرامە لە ڕێکخستنەکانی Android بسڕەوە و دووبارە دەستپێی بکەرەوە.</string>
+
+    <!-- Toast shown if a config file crucial to operation is missing -->
+    <string name="config_file_missing">پەڕگەی ڕێکخستن کە بۆ کارکردن زۆر گرنگە نەماوە</string>
+
+    <!-- Toast shown if a listening tcp port is unavailable -->
+    <string name="webui_tcp_port_unavailable">دەرگای tcp ی WebUI ی %s سەرقاڵە. نموونەی دووەم\؟</string>
+
+    <!-- Label of the default folder created of first start (camera folder). -->
+
+    <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
+
+    <string name="notification_crash_title">داڕماوە (کۆدی دەرچوون %1$s)</string>
+    <string name="notification_crash_text">پەنجە بدە بۆ لۆگەکان (%1$s)</string>
+
+    <string name="notifications_persistent_channel">Syncthing چالاکە</string>
+    <string name="notification_persistent_waiting_channel">چاودێریکردنی مەرجەکانی کارکردن</string>
+    <string name="notifications_other_channel">ئاگادارکردنەوەکانی تر</string>
+
+    <!-- EventProcessor -->
+    <string name="notification_out_of_disk_space">کارتی SD پڕە. پەڕگەکە: %1$s</string>
+
+    <!-- RestApi -->
+
+    <!-- Title of the notification shown when a restart is needed -->
+
+    <!-- Text for positive button in restart dialog -->
+    <!-- Text for the dismiss button of the restart Activity -->
+    <!-- Text of the notification shown when a restart is needed -->
+
+    <!-- Shown when a device ID is copied to the clipboard -->
+    <string name="device_id_copied_to_clipboard">ناسنامەی ئامێر کۆپی کرا بۆ کلیپبۆرد</string>
+    <!-- Strings representing units for file sizes, from smallest to largest -->
+    <string name="file_size_unit_B">B</string>
+    <string name="file_size_unit_KiB">KB</string>
+    <string name="file_size_unit_MiB">MB</string>
+    <string name="file_size_unit_GiB">GB</string>
+    <string name="file_size_unit_TiB">TB</string>
+
+    <!-- Strings representing units for transfer rates, from smallest to largest -->
+    <string name="transfer_rate_unit_B_s">B/s</string>
+    <string name="transfer_rate_unit_KiB_s">KB/s</string>
+    <string name="transfer_rate_unit_MiB_s">MB/s</string>
+    <string name="transfer_rate_unit_GiB_s">GB/s</string>
+    <string name="transfer_rate_unit_TiB_s">TB/s</string>
+
+    <!-- Possible folder states -->
+    <string name="state_failed_items">شکستخواردووەکان (%1$d)</string>
+    <string name="state_up_to_date">نوێترینە</string>
+    <string name="state_local_additions">زیادکراوە ناوخۆییەکان</string>
+    <string name="state_cleaning">پاککردنەوەی وەشانەکان</string>
+    <string name="state_clean_waiting">چاوەڕوانی پاککردنەوە</string>
+    <string name="state_scanning">پشکنین</string>
+    <string name="state_scan_waiting">چاوەڕوانی پشکنین</string>
+    <string name="state_sync_waiting">چاوەڕوانی هاوکاتکردن</string>
+    <string name="state_sync_preparing">ئامادەکاری بۆ هاوکاتکردن</string>
+    <string name="state_syncing_general">هاوکاتکردن</string>
+    <string name="state_syncing">هاوکاتکردن (%1$d%%)</string>
+    <string name="state_error">هەڵە</string>
+    <string name="state_error_message">هەڵە (%1$s)</string>
+    <string name="state_unknown">نەزانراو</string>
+    <string name="state_paused">وەستێنراوە</string>
+    <string name="status_outofsync">دەرەوەی هاوکاتکردن</string>
+    <string name="state_unshared">هاوبەشنەکراو</string>
+
+    <!-- small inline loading indicator -->
+    <string name="state_loading">بارکردن...</string>
+
+    <!-- small inline saving indicator -->
+
+    <!-- Format string for folder size, eg "500 MiB / 1 GiB" -->
+    <string name="folder_size_format">%1$s / %2$s</string>
+
+    <!-- Titles used in the folder type dialog and folder type button in the folder activity -->
+    <string name="folder_type">جۆری بۆکە</string>
+
+    <!-- Displays the current folder type in the folder activity -->
+    <string name="folder_type_sendreceive">ناردن و وەرگرتن</string>
+    <string name="folder_type_sendonly">تەنها ناردن</string>
+    <string name="folder_type_receiveonly">تەنها وەرگرتن</string>
+    <string name="folder_type_receive_encrypted">وەرگرتنی نهێنیکراو</string>
+
+    <!-- Folder type dialog descriptions for folder types -->
+    <string name="folder_type_sendreceive_description">بۆکەکە هەم گۆڕانکارییەکان بۆ ئامێرە دوورەوەکان دەنێرێت و هەم لە ئامێرە دوورەوەکانەوە وەریان دەگرێت.</string>
+    <string name="folder_type_sendonly_description">پەڕگەکان لە گۆڕانکارییەکانی ئامێرەکانی تر پارێزراون، بەڵام گۆڕانکارییەکانی ئەم ئامێرە بۆ باقی کۆمەڵەکە دەنێردرێن.</string>
+    <string name="folder_type_receiveonly_description">پەڕگەکان لە کۆمەڵەکەوە هاوکات دەکرێن، بەڵام هەر گۆڕانکارییەکی ناوخۆیی بۆ ئامێرەکانی تر نانێردرێت.</string>
+    <string name="folder_type_receive_encrypted_description">تەنها داتای نهێنیکراو هەڵدەگرێت و هاوکاتی دەکات. بۆکەکانی هەموو ئامێرە پەیوەندیدارەکان پێویستە بە هەمان وشەی نهێنی ڕێکبخرێن یان لە جۆری \'وەرگرتنی نهێنیکراو\' بن.</string>
+    <!-- Titles used in the pull order dialog and pull order button in the folder activity -->
+    <string name="pull_order">ڕیزبەندی ڕاکێشان</string>
+
+    <!-- Displays the current pull order type in the Folder activity -->
+    <string name="pull_order_type_random">هەڕەمەکی</string>
+    <string name="pull_order_type_alphabetic">بەپێی ئەلفوبێ</string>
+    <string name="pull_order_type_smallestFirst">بچووکترین یەکەم</string>
+    <string name="pull_order_type_largestFirst">گەورەترین یەکەم</string>
+    <string name="pull_order_type_oldestFirst">کۆنترین یەکەم</string>
+    <string name="pull_order_type_newestFirst">نوێترین یەکەم</string>
+
+    <!-- Pull order dialog descriptions for pull order types -->
+    <string name="pull_order_type_random_description">پەڕگەکان بە ڕیزبەندی هەڕەمەکی ڕابکێشە.</string>
+    <string name="pull_order_type_alphabetic_description">پەڕگەکان بەپێی ناوەکانیان بە ڕیزبەندی ئەلفوبێ ڕابکێشە.</string>
+    <string name="pull_order_type_smallestFirst_description">پەڕگەکان بەپێی قەبارەکەیان ڕابکێشە. بچووکترینیان یەکەم.</string>
+    <string name="pull_order_type_largestFirst_description">پەڕگەکان بەپێی قەبارەکەیان ڕابکێشە. گەورەترینیان یەکەم.</string>
+    <string name="pull_order_type_oldestFirst_description">پەڕگەکان بەپێی کاتی گۆڕانکاری ڕابکێشە. کۆنترینیان یەکەم.</string>
+    <string name="pull_order_type_newestFirst_description">پەڕگەکان بەپێی کاتی گۆڕانکاری ڕابکێشە. نوێترینیان یەکەم.</string>
+
+    <!-- Titles used in the file versioning dialog and file versioning button in the folder activity -->
+    <string name="maximum_age">زۆرترین تەمەن</string>
+    <string name="clean_out_after">پاککردنەوە دوای</string>
+    <string name="file_versioning">وەشانبەندی پەڕگە</string>
+    <string name="none"> هیچ</string>
+    <string name="versions_path">ڕێڕەوی وەشانەکان</string>
+    <string name="command">فەرمان</string>
+
+    <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
+
+    <!-- Displays the current file versioning type in the Folder activity -->
+    <string name="type_simple">جۆر: سادە</string>
+    <string name="type_trashcan">جۆر: زبڵدان</string>
+    <string name="type_staggered">جۆر: پلەبەندی</string>
+    <string name="type_external">جۆر: دەرەکی</string>
+
+    <!-- Information displayed about the current file versioning configuration in the folder activity -->
+    <string name="trashcan_versioning_info">پاککردنەوە دوای: %1$s</string>
+    <string name="staggered_versioning_info">زۆرترین تەمەن: %1$d
+\nڕێڕەوی وەشانەکان: %2$s</string>
+    <string name="external_versioning_info">فەرمان: %1$s</string>
+    <string name="simple_versioning_info">هەڵگرتنی وەشانەکان: %1$s</string>
+    <string name="show_device_id">پیشاندانی ناسنامەی ئامێر</string>
+
+    <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
+    <string name="could_not_access_deviceid">نەتوانرا دەستگەیشتن بە ناسنامەی ئامێر.</string>
+    <string name="share_device_id_chooser">هاوبەشکردنی ناسنامەی ئامێر لەگەڵ</string>
+    <string name="run_on_whitelisted_wifi_summary">لیستی ڕەسپێدراوەکان داگیرسێنە بۆ سنووردارکردنی هاوکاتکردن تەنها لەسەر تۆڕە دیاریکراوەکانی WiFi.</string>
+    <string name="custom_sync_conditions_title">مەرجەکانی هاوکاتکردنی تایبەت</string>
+    <string name="custom_sync_conditions_description">ڕێگەت پێدەدات بەبێگەیشتنی دیاری بکەیت بۆ مەرجەکانی کارکردنی گشتی.</string>
+    <string name="custom_sync_conditions_dialog">مەرجەکانی هاوکاتکردن دیاری بکە</string>
+    <!-- Quick Setting icon names and labels -->
+    <string name="qs_force_label">بەزۆر ڕاکردن</string>
+    <string name="qs_forced_to_run">بەزۆر ڕاکرا بۆ کارکردن</string>
+    <string name="qs_forced_to_stop">بەزۆر ڕاکرا بۆ وەستان</string>
+    <string name="qs_following_run_conditions">شوێنکەوتنی مەرجەکانی کارکردن</string>
+    <string name="qs_schedule_label">بۆ 5 خولەک کار بکە</string>
+    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">بۆ %1$d خولەک کار بکە</string>
+    <string name="qs_schedule_disabled">خشتەبەندی ناچالاکە</string>
+    <string name="no_app_to_open_link">هیچ پڕۆگرامێک بەردەست نییە بۆ کردنەوەی ئەم بەستەرە.</string>
+
+    <!-- Custom HTTPS certificate -->
+    <string name="webui_custom_cert_title">بڕوانامەی HTTPS ی تایبەت</string>
+    <string name="webui_custom_cert_summary">بڕوانامەی تایبەتی خۆت بەکاربهێنە بۆ GUI ی وێبی ناوخۆیی</string>
+    <string name="custom_cert_explanation">بڕوانامە واژووکراوەکەی بەخۆی Syncthing بگۆڕە بە بڕوانامەی خۆت. بڕوانامەکە (PEM، لەگەڵ زنجیرە تەواوەکە) و کلیلی تایبەتی بەکاری هەڵبژێرە، ئەنجامەکانی پشتڕاستکردنەوە بپشکنە، پاشان جێبەجێی بکە. Syncthing دووبارە دەستپێدەکاتەوە بۆ بارکردنی بڕوانامە نوێیەکە؛ ئەگەر نەیتوانی بگەڕێتەوە بۆ ئۆنلاین، بڕوانامە پێشووەکە بە شێوەی خۆکار دەگەڕێتەوە.\n\nبۆ بڕوانامەیەک کە بە CA ی خۆت واژوو کراوە، سەرەتا بڕوانامە ڕیشەییەکەی ئەو CA یە لەسەر ئەم ئامێرە دامەزرێنە (ڕێکخستنەکان ← ئاسایش ← دامەزراندنی بڕوانامەی CA).</string>
+    <string name="custom_cert_current_title">بڕوانامەی ئێستا</string>
+    <string name="custom_cert_current_none">هیچ بڕوانامەیەک نەدۆزرایەوە.</string>
+    <string name="custom_cert_subject">بابەت: %1$s</string>
+    <string name="custom_cert_issuer">دەرکەر: %1$s</string>
+    <string name="custom_cert_expires">بەسەرچوون: %1$s</string>
+    <string name="custom_cert_self_signed">واژووکراو بەخۆی (بنەڕەتی)</string>
+    <string name="custom_cert_ca_signed">واژووکراو بە CA</string>
+    <string name="custom_cert_select_cert">هەڵبژاردنی بڕوانامە (.pem)</string>
+    <string name="custom_cert_select_key">هەڵبژاردنی کلیلی تایبەت (.pem)</string>
+    <string name="custom_cert_not_selected">هەڵنەبژێردراوە</string>
+    <string name="custom_cert_apply">جێبەجێکردنی بڕوانامە</string>
+    <string name="custom_cert_reset_title">ڕێکخستنەوە بۆ بڕوانامەی خۆکار-دروستکراو</string>
+    <string name="custom_cert_reset_summary">بڕوانامە تایبەتییەکە بسڕەوە و بهێڵە Syncthing بڕوانامەیەکی نوێی واژووکراوی بەخۆی دروست بکات</string>
+    <string name="custom_cert_reset_question">بڕوانامە ئێستاکە بگۆڕە بە بڕوانامەیەکی تازە دروستکراوی واژووکراوی بەخۆی\؟</string>
+    <string name="custom_cert_applying">جێبەجێکردن — Syncthing دووبارە دەستپێدەکرێتەوە…</string>
+    <string name="custom_cert_applied">بڕوانامەکە جێبەجێ کرا.</string>
+    <string name="custom_cert_applied_pending">پارازرا. لە دەستپێکردنەوەی داهاتووی Syncthing دا کاریگەر دەبێت.</string>
+    <string name="custom_cert_failed">نەتوانرا بڕوانامەکە جێبەجێ بکرێت: %1$s</string>
+    <string name="custom_cert_reset_done">ڕێکخرایەوە بۆ بڕوانامەیەکی نوێی واژووکراوی بەخۆی.</string>
+    <string name="custom_cert_file_too_large">ئەو پەڕگەیە زۆر گەورەیە بۆ ئەوەی بڕوانامە یان کلیلی تایبەت بێت.</string>
+    <string name="custom_cert_read_failed">نەتوانرا پەڕگە هەڵبژێردراوەکە بخوێنرێتەوە.</string>
+    <string name="cert_check_chain">زنجیرەی بڕوانامە</string>
+    <string name="cert_check_trust">متمانەی پێکراوە لەلایەن ئەم ئامێرە</string>
+    <string name="cert_check_validity">ماوەی دروستی</string>
+    <string name="cert_check_key">کلیلی تایبەت</string>
 </resources>

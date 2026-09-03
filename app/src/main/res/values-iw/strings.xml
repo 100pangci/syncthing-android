@@ -1,375 +1,920 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name">Syncthing-Fork</string>
+
+    <string name="app_description">יישום פתוח, אמין ומבוזר לסנכרון קבצים.</string>
+
+    <!-- FirstStartActivity -->
+
+    <!-- Title for dialog displayed on first start -->
+    <string name="welcome_title">ברוך הבא אל Syncthing עבור אנדרואיד</string>
+
+    <!-- Welcome wizard -->
+    <!-- Slide "Introduction" -->
     <string name="welcome_text">היישום Syncthing הוא יישום קוד פתוח לסנכרון קבצים. כדי לשתף נתונים עם התקנים אחרים, אתה צריך להוסיף את מזהה ההתקן הייחודי שלהם לרשימת ההתקנים. לאחר מכן תוכל לבחור אילו תיקיות לשתף עם אילו התקנים. \n \nנא לדווח על כל בעיה שנתקלת בה דרך GitHub.</string>
+
+    <!-- Slide "Storage Permission" -->
     <string name="storage_permission_title">הרשאת אחסון</string>
     <string name="storage_permission_desc">היישום Syncthing צריך לגשת לאחסון שלך כדי לבצע סנכרון קבצים.</string>
     <string name="dialog_all_files_access_not_supported">ההתקן שלך לא תומך בגישה לכל הקבצים</string>
+
+    <!-- Slide "Ignore battery optimizations" -->
     <string name="ignore_doze_permission_title">מיטוב סוללה</string>
-    <string name="app_name">Syncthing-Fork</string>
-    <string name="app_description">יישום פתוח, אמין ומבוזר לסנכרון קבצים.</string>
-    <string name="welcome_title">ברוך הבא אל Syncthing עבור אנדרואיד</string>
-    <string name="folders">תיקיות</string>
-    <string name="ssl_cert_invalid_text">נראה שלאתר שכתובתו %1$s יש תעודה לא חוקית עבור הצפנת SSL. להמשיך?</string>
-    <string name="run_on_mobile_data_summary">פעל כאשר ההתקן מחובר דרך רשת הנתונים הניידים. אזהרה: זה עשוי לצרוך המון נתונים מתוכנית הנתונים של מפעיל הנייד שלך אם אתה מסנכרן כמויות גדולות של נתונים.</string>
+    <string name="ignore_doze_permission_os_notice">ידוע כי טלוויזיות אנדרואיד לפעמים מסיימות את היישום כאשר הוא פועל ברקע. יש פתרון זמין באתר השיתופי שכתובתו \'%1$s/%2$s\'.</string>
+    <string name="ignore_doze_permission_desc">אנדרואיד עשוי להפסיק את הסנכרון לאחר זמן מה. כדי למנוע זאת, כבה את מיטוב הסוללה. להתקנים מסוימים יש יישומי הריגת-משימות נוספים מותקנים מראש. עליך להוסיף את Syncthing לרשימת המותרים שלהם, גם כן.</string>
+    <string name="dialog_disable_battery_optimizations_not_supported">ההתקן שלך אינו תומך בהשבתת מיטובי סוללה</string>
+    <string name="dialog_confirm_skip_ignore_doze_permission">זהירות: אם SyncthingNative נקטע ועושה משהו מוזר, אתה אשם. דלג רק במקרה שההתקן שלך לא תומך בהענקת ההרשאה. לדלג באמת?</string>
+
+    <!-- Slide "Location Permission" -->
     <string name="location_permission_title">הרשאת מיקום</string>
+    <string name="location_permission_desc">ניתן להגדיר את Syncthing כך שיעבוד על רשתות Wi-Fi שנבחרו. אנדרואיד דורש שליישום תהיה הרשאת מיקום כדי לקרוא את השם של רשת Wi-Fi פעילה. אם אתה רוצה להשתמש בתכונה זו, לחץ על הלחצן למעלה. אתה יכול לדלג על שלב זה. ראה את מדיניות הפרטיות שלנו לפרטים נוספים.</string>
     <string name="location_permission_desc_api_29">עצה עבור אנדרואיד 10+: \"כן, כל הזמן\"</string>
+
+    <!-- Slide "Notification Permission" -->
+    <string name="notification_permission_title">הרשאת התראות</string>
+    <string name="notification_permission_desc">נדרש כדי להציג התראות לגבי חיבורי התקנים חדשים, בקשות לשיתוף תיקיות וכדי לשמור על השירות חי ומחובר.</string>
+
+    <!-- Slide "Key Generation" -->
     <string name="key_generation_title">יצירת מפתחות</string>
     <string name="key_generation_success">מפתחות מאובטחים להחלפת נתונים פרטיים נוצרו בהצלחה.</string>
+
+    <!-- Generic texts used everywhere -->
+    <string name="back">חזרה</string>
+    <string name="cont">המשך</string>
     <string name="finish">סיום</string>
     <string name="generic_example">דוגמה</string>
+    <string name="grant_permission">הענק הרשאה</string>
     <string name="permission_granted">הוענקה הרשאה</string>
+    <string name="reason">סיבה:</string>
+
     <string name="accept">קבל</string>
+
     <string name="ignore">התעלם</string>
+
+
     <string name="main_menu">תפריט ראשי</string>
+
+    <string name="refresh">רענן</string>
+
+    <!-- PhotoShootActivity -->
+
     <string name="photo_shoot_launcher_title">סנכרן מצלמה</string>
+    <string name="photo_shoot_activity_title">מצלמת Syncthing-Fork</string>
     <string name="photo_shoot_intro_welcome_title">ברוך הבא למצלמת Syncthing</string>
+    <string name="photo_shoot_intro_no_camera">מצטערים, להתקן הזה אין מצלמה.</string>
     <string name="photo_shoot_intro_missing_permissions">אנו דורשים הרשאות אחסון ומצלמה כדי להמשיך.</string>
     <string name="grant_storage_permission">הענק הרשאת אחסון</string>
     <string name="grant_camera_permission">הענק הרשאת מצלמה</string>
+    <string name="photo_shoot_intro_permission_desc">מצלמת Syncthing דורשת את הסכמתך כדי לצלם תמונות ולאחסן אותן בהתקן שלך. תכונה זו היא אופציונלית. כדי להשתמש בה, הענק הרשאות והקש \"המשך\". אנחנו נגדיר תיקיית מצלמת Syncthing עבורך אשר תוכל לשתף עם התקני Syncthing אחרים מאוחר יותר.</string>
     <string name="photo_shoot_take_picture_success">התמונה נשמרה בהצלחה בתיקייה של מצלמת Syncthing.</string>
     <string name="photo_shoot_take_picture_failure">צילום התמונה נכשל או שביטלת.</string>
+
+    <!-- Label of the folder created by the Syncthing Camera feature. -->
+    <string name="default_syncthing_camera_folder_label">מצלמת Syncthing</string>
+
+    <!-- MainActivity -->
+
+    <!-- Main bottom navigation view -->
+    <string name="activity_main_bottom_navigation_rescan_all">סרוק הכל מחדש</string>
+
+    <!-- Main menu button -->
+
+    <!-- Exception dialog message -->
+
+    <!-- Title of the exit app when running as a service confirmation dialog -->
     <string name="dialog_exit_while_running_as_service_title">אשר כדי לצאת מהיישום</string>
+    <string name="dialog_exit_while_running_as_service_message">לשיקולך: הגדרת את היישום להתחיל באופן אוטומטי באתחול. לפיכך הוא מנטר תנאי ריצה ומסתנכרן בכל עת ברקע כאשר התנאים תואמים. עליך לצאת באופן ידני רק אם אתה נתקל בבעיות חמורות. אחרת, השבת את \'התחל באופן אוטומטי באתחול\' בהגדרות. האם תרצה לצאת עכשיו עד שההתקן יאותחל מחדש?</string>
+
+    <!-- Title of the "add folder" menu action -->
     <string name="add_folder">הוסף תיקייה</string>
+
+    <!-- Title of the "share device id" menu action -->
+
+    <!-- Shown in the chooser dialog when sharing a Device ID -->
+
     <string name="usage_reporting_dialog_title">לאפשר דיווח שימוש אנונימי?</string>
+
     <string name="yes">כן</string>
+
     <string name="no">לא</string>
+
+
+    <!-- URL to open when user chose to open website in usage reporting dialog -->
+
+    <string name="toast_write_storage_permission_required">נדרשת הרשאת כתיבה לאחסון עבור יישום זה</string>
+
     <string name="device_rejected">התקן \"%1$s\" רוצה להתחבר</string>
+
+    <string name="folder_rejected">התקן \"%1$s\" רוצה לשתף תיקייה \"%2$s\"</string>
+
+    <!-- StateDialogActivity -->
+
+    <!-- Text for FoldersFragment and DevicesFragment loading view -->
+    <!-- Shown instead of web_gui_loading if the key does not exist and has to be created -->
+    <string name="web_gui_creating_key">מייצר מפתחות מאובטחים. זה עשוי לקחת כמה דקות…</string>
+
+    <!-- FolderListFragment -->
+
+    <string name="folders_fragment_title">תיקיות</string>
+
+    <!-- Shown if no folders exist -->
+    <string name="folder_list_empty">לא נמצאו תיקיות</string>
+
+    <!-- Format string for folder file count -->
+    <plurals name="files">        <item quantity="one">קובץ %1$d מתוך %2$d</item>        <item quantity="two">%1$d מתוך %2$d קבצים</item>        <item quantity="other">%1$d מתוך %2$d קבצים</item></plurals>
+
+    <!-- Format string for conflict file count -->
+    <plurals name="conflicts">        <item quantity="one">התנגשות %1$d</item>        <item quantity="two">%1$d התנגשויות</item>        <item quantity="other">%1$d התנגשויות</item></plurals>
+
     <string name="override_changes">דרוס שינויים</string>
+
+    <!-- Override Changes Confirmation Dialog -->
+    <string name="override_changes_question">זה יבטל את כל השינויים שנעשו בהתקנים אחרים המשתפים תיקייה זו. להמשיך?</string>
+
     <string name="revert_local_changes">בטל שינויים מקומיים</string>
+
     <string name="delete_unexpected_items">מחק פריטים בלתי צפויים</string>
+
+    <!-- Revert Local Changes Confirmation Dialog -->
     <string name="revert_local_changes_question">זה יבטל את כל השינויים שנעשו בהתקן זה בתוך אותה תיקייה. להמשיך?</string>
+
+    <string name="open_file_manager">פתח מנהל קבצים</string>
     <string name="open_file_with">פתח קובץ עם</string>
     <string name="open_file_no_compatible_app">לא נמצא יישום לפתיחת הקובץ.</string>
+
+    <!-- Suggest File Manager App Dialog -->
     <string name="suggest_file_manager_app_dialog_title">לא נמצא יישום מנהל קבצים תואם</string>
     <string name="suggest_file_manager_app_dialog_text">אנו ממליצים לך להתקין יישום קוד פתוח לניהול קבצים בשם \'Material Files\'. האם תרצה לפתוח את עמוד חנות האפליקציות שלו?</string>
+
+    <!-- DeviceListFragment -->
+
+    <!-- Devices tab title -->
     <string name="devices_fragment_title">התקנים</string>
+
+    <!-- Shown if no devices are configured in add folder dialog -->
+    <string name="devices_list_empty">לא הוגדרו התקנים. הקש כדי להוסיף התקן חדש.</string>
+
+    <!-- Shown in ListView if no devices are configured -->
+    <string name="no_devices_configured">לא הוגדרו התקנים. \nהתחל בהוספת התקן עכשיו.</string>
+
+    <string name="deviceEncryptionPasswordHint">אם לא מהימן, הזן סיסמת הצפנה</string>
+
+    <!-- Indicates that a folder is fully synced to the local device -->
+    <string name="device_up_to_date">מעודכן</string>
+
+    <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
     <string name="device_syncing_percent_bytes">מסנכרן (%1$d%%, %2$s)</string>
+
+    <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">מנותק</string>
     <string name="device_disconnected_not_synced">מנותק (%1$s בהמתנה)</string>
+
+    <!-- Indicates that the device is paused and does not sync -->
     <string name="device_paused">הושהה</string>
+
+    <!-- Indicates that devices does not share any folders -->
     <string name="device_state_unused">לא בשימוש</string>
+
+    <!-- Indicates that the device connection is unknown -->
+
+    <!-- Last seen title -->
     <string name="device_last_seen">נראה לאחרונה: %1$s</string>
     <string name="device_last_seen_never">לעולם לא</string>
+
+    <!-- Title for the listing of shared folders with a colon and space appended -->
     <string name="shared_folders_title_colon">"תיקיות: "</string>
+
+    <!-- Expand the collapsed shared folders list on a device card; parameter is the hidden folder count -->
+    <string name="device_folders_show_more">+%1$d</string>
+
+    <!-- Collapse an expanded shared folders list on a device card -->
+    <string name="device_folders_show_less">הצג פחות</string>
+
+    <!-- Title of the dialog listing the conflict files of a folder -->
+    <string name="conflict_files_title">קבצי התנגשות</string>
+
+    <!-- Header of the grouped status card showing transfer and resource stats -->
+    <string name="status_transfer_resources">העברה ומשאבים</string>
+
+    <!-- Title for current download rate -->
     <string name="download_title">הורדה</string>
+
+    <!-- Title for current upload rate -->
     <string name="upload_title">העלאה</string>
+
+    <!-- StatusFragment -->
+
     <string name="status_fragment_title">מצב</string>
+
     <string name="button_follow_run_conditions">עקוב אחר תנאי ריצה</string>
     <string name="button_force_start">אלץ התחלה \nהתעלם מתנאי ריצה</string>
     <string name="button_force_stop">אלץ עצירה \nהתעלם מתנאי ריצה</string>
+
     <string name="syncthing_starting">היישום Syncthing מתחיל.</string>
     <string name="syncthing_running">היישום Syncthing פועל.</string>
     <string name="syncthing_not_running">היישום Syncthing אינו פועל.</string>
     <string name="syncthing_has_crashed">היישום Syncthing קרס.</string>
+
+    <!-- DrawerFragment -->
+
+    <!-- Same as download_title with a colon and space appended -->
+    <!-- Same as upload_title with a colon and space appended -->
+    <!-- Title for current RAM usage -->
     <string name="ram_usage">שימוש ב־RAM</string>
+    <!-- Title for announce server status -->
     <string name="announce_server">שרת הכרזה מוגדר</string>
+    <!-- Title for uptime status -->
     <string name="uptime">זמן פעולה</string>
+    <string name="restart">הפעלה מחדש</string>
+
+    <string name="dialog_confirm_restart">האם אתה רוצה להפעיל מחדש את Syncthing?</string>
+
+    <!-- FolderActivity -->
+
+    <!-- Setting title -->
+    <string name="folder_id">מזהה תיקייה</string>
+
+    <!-- Setting title -->
     <string name="folder_label">תווית תיקייה</string>
+
+    <!-- Setting title -->
     <string name="directory">תיקייה</string>
     <string name="advanced_directory_selection">בחירת תיקייה מתקדמת</string>
+
+    <!-- Setting title and description -->
     <string name="folder_fileWatcher">עקוב אחר שינויים</string>
-    <string name="folder_ignore_delete_caption">התעלם ממחיקות</string>
     <string name="folder_fileWatcherDescription">מבקש ממערכת ההפעלה להודיע על שינויים לקבצים. אם מושבת, נסוג לסריקות תקופתיות מדי שעה.</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_ignore_delete_caption">התעלם ממחיקות</string>
     <string name="folder_ignore_delete_description">אפשרות מומחה שמשפיעה על הטיפול של עדכוני אינדקס נכנסים. כאשר מוגדרת, היישום מתעלם מעדכונים נכנסים המוגדרים עם דגל המחיקה. ראה את https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_run_script_caption">הרצת סקריפט</string>
+    <string name="folder_run_script_description">אפשרות מומחה להרצת סקריפטים לאחר שתיקייה משנה את מצב הסנכרון שלה. סקריפטים ב-\'.stfolder/*.sh\' יבוצעו, מיקומים אחרים אינם נתמכים מטעמי אבטחה.\nקריאת סקריפט לדוגמה: \'.stfolder/rename-files.sh sync_complete\'</string>
+
+    <!-- Setting title -->
     <string name="folder_pause">השהה תיקייה</string>
+
+    <!-- Setting title -->
     <string name="devices">התקנים</string>
+
+    <!-- Setting title -->
     <string name="keep_versions">שמור גרסאות</string>
+
+    <!-- Setting title -->
     <string name="delete_folder">מחק תיקייה</string>
+
+    <!-- Title for FolderSettingsFragment in create mode -->
     <string name="create_folder">צור תיקייה</string>
+
+    <!-- Title for FolderSettingsFragment in edit mode -->
     <string name="edit_folder">ערוך תיקייה</string>
+
+    <!-- Menu item to confirm folder creation -->
     <string name="create">צור</string>
+
+    <!-- Dialog shown when attempting to remove a folder -->
     <string name="remove_folder_confirm">האם אתה באמת רוצה להסיר את התיקייה הזו מ־Syncthing?</string>
+
+    <!-- Toast shown when trying to create a folder with an empty ID -->
     <string name="folder_id_required">אסור שמזהה התיקייה יהיה ריק</string>
+
+    <!-- Toast shown when trying to create a folder with an empty label -->
     <string name="folder_label_required">אסור שתווית התיקייה תהיה ריקה</string>
+
+    <!-- Toast shown when trying to create a folder with an empty path -->
     <string name="folder_path_required">אסור שנתיב התיקייה יהיה ריק</string>
-    <string name="folder_path_readonly">גרסת האנדרואיד שלך רק מעניקה ל־Syncthing גישת קריאה בלבד לתיקייה שנבחרה.</string>
-    <string name="folder_path_readwrite">גרסת האנדרואיד שלך מעניקה ל־Syncthing גישת קריאה וכתיבה לתיקייה שנבחרה.</string>
+
     <string name="dialog_discard_changes">להשליך את השינויים שלך?</string>
+
+    <!-- Summary shown if we only have readonly access to the folder path -->
+    <string name="folder_path_readonly">גרסת האנדרואיד שלך רק מעניקה ל־Syncthing גישת קריאה בלבד לתיקייה שנבחרה.</string>
+
+    <!-- Summary shown if we only have readwrite access to the folder path -->
+    <string name="folder_path_readwrite">גרסת האנדרואיד שלך מעניקה ל־Syncthing גישת קריאה וכתיבה לתיקייה שנבחרה.</string>
+
+    <!-- Toast shown if the user selected an invalid location for a new syncthing folder -->
     <string name="toast_invalid_folder_selected">מצטערים. לא ניתן להשתמש בתיקייה שנבחרה. נא לבחור תיקייה הממוקמת באחסון הפנימי או החיצוני.</string>
+
     <string name="folder_type_switch_to_receive_encrypted_not_allowed">החלפת תיקיות קיימות ל\'קבלה מוצפנת\' אינה נתמכת.</string>
+
     <string name="ignore_patterns">דפוסי התעלמות</string>
+
+    <!-- DeviceActivity -->
+
+    <!-- Setting title -->
     <string name="device_id">מזהה התקן</string>
+
+    <!-- Status title -->
     <string name="discovered_devices_title">התקנים שהתגלו - הקש כדי לבחור</string>
+
+    <!-- Status text -->
+
+    <!-- Status text -->
     <string name="local_discovery_disabled">השבתת את הגילוי מקומי ב\'הגדרות\' &gt; \'אפשרויות Syncthing\' &gt; \'גילוי מקומי\'. הפעל אותו כדי לחפש התקנים ברשת המקומית.</string>
+
+    <!-- Setting title -->
+
+    <!-- Setting title -->
+    <string name="folders">תיקיות</string>
+
+    <!-- Setting title -->
     <string name="addresses">כתובות</string>
+
+    <!-- Setting title -->
+
+    <!-- Setting title -->
     <string name="compression">דחיסה</string>
+
+    <!-- Strings representing compression options -->
     <string name="compress_never">לעולם לא</string>
     <string name="compress_metadata">מטא-נתונים</string>
     <string name="compress_always">תמיד</string>
+    <!-- Setting title -->
     <string name="introducer">מציג</string>
+
+    <!-- Setting title -->
     <string name="autoAcceptFolders">הסכמה אוטומטית</string>
+
+    <!-- Setting title -->
     <string name="pause_device">השהה התקן</string>
+
+    <!-- Setting title -->
     <string name="untrusted_device">התקן לא מהימן</string>
+
+    <!-- ActionBar item -->
     <string name="delete_device">מחק התקן</string>
+
     <string name="add_device">הוסף התקן</string>
+
+    <!-- Menu item to confirm adding a device -->
+
+    <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">ערוך התקן</string>
+
+    <!-- Dialog shown when attempting to remove a device -->
     <string name="remove_device_confirm">האם אתה באמת רוצה להסיר את ההתקן הזה?</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
     <string name="device_id_required">אסור שמזהה ההתקן יהיה ריק</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
     <string name="device_id_invalid">מזהה ההתקן אינו מעוצב כראוי. נא לנסות שוב ולהזין את המזהה הנכון.</string>
+
+    <!-- Toast shown when trying to create a device with an empty name -->
+
+    <!-- Toast shown when trying to create a device with invalid addresses -->
     <string name="device_addresses_invalid">כתובות ההתקן אינן מעוצבות כראוי. נא לנסות שוב. תסתכל על המסמכים של Syncthing למידע נוסף.</string>
+
+    <!-- Content description (alt text) for device ID qr code in show device id dialog -->
+    <string name="device_id_qr_code">קוד QR של מזהה התקן</string>
+
+    <string name="close_device_id">סגור מזהה התקן</string>
+
+    <string name="copy">העתק</string>
+
+    <!-- Content description for device ID qr code icon -->
     <string name="scan_qr_code_description">סרוק קוד QR</string>
+
+    <!-- Dialog message if no compatible barcode scanner app is installed -->
+
+    <!-- Shown if no folders are configured -->
     <string name="folders_list_empty">לא הוגדרו תיקיות. הקש כדי להוסיף תיקייה חדשה.</string>
+
+    <!-- RecentChangesActivity -->
+
     <string name="no_recent_changes">אין שינויים אחרונים.</string>
     <string name="recent_changes_title">שינויים אחרונים</string>
     <string name="modified_by_device">התקן: %1$s</string>
     <string name="modification_time">זמן: %1$s</string>
+    <string name="more_options">אפשרויות נוספות</string>
+    <string name="show_exact_times">הצג זמנים מדויקים</string>
+
     <string name="this_device">התקן זה</string>
+
+    <!-- WebGuiActivity -->
+
+    <!-- Title of the web gui activity -->
     <string name="web_gui_title">ממשק רשת גרפי</string>
+
+    <!-- Text for WebGuiActivity loading view -->
     <string name="web_gui_loading">ממתין לממשק גרפי</string>
+
+    <!-- Shown in WebGuiActivity when the web gui could not be loaded. The technical cause is shown
+         below it and written to the log. -->
+    <string name="web_gui_load_failed">לא ניתן היה לטעון את ממשק הרשת הגרפי. נא ללכוד יומן ולדווח על כך.</string>
+
+    <!-- WebViewActivity -->
+
+    <!-- Dialog title displayed when an invalid ssl certificate was found -->
     <string name="security_notice">הודעת אבטחה</string>
+
+    <!-- Dialog message if an invalid ssl certificate was detected -->
+    <string name="ssl_cert_invalid_text">נראה שלאתר שכתובתו %1$s יש תעודה לא חוקית עבור הצפנת SSL. להמשיך?</string>
+
+    <!-- Text for WebViewActivity loading page -->
     <string name="web_page_loading">טוען דף אינטרנט: \n%1$s …</string>
+
+    <!-- Text for WebViewActivity openBrowser action button -->
     <string name="open_in_browser">פתח בדפדפן</string>
+
+    <!-- SettingsFragment -->
+
     <string name="settings_title">הגדרות</string>
+
+    <string name="category_wifi">WiFi</string>
+    <string name="category_mobile_data">נתונים ניידים</string>
+    <string name="category_battery">סוללה</string>
+    <string name="category_schedule">לוח זמנים</string>
+    <string name="category_general">כללי</string>
+    <string name="category_connections">חיבורים</string>
+    <string name="category_advanced">מתקדם</string>
+
     <string name="category_user_interface">ממשק משתמש</string>
+
     <string name="preference_app_theme_title">ערכת נושא</string>
     <string name="preference_app_theme_follow_system">עקוב אחר המערכת</string>
     <string name="preference_app_theme_follow_light">בהיר</string>
     <string name="preference_app_theme_follow_dark">כהה</string>
+    <string name="preference_app_theme_amoled" translatable="false">AMOLED</string>
+
     <string name="category_behaviour">התנהגות</string>
     <string name="category_syncthing_options">אפשרויות Syncthing</string>
     <string name="category_syncthing_options_summary">תפריט זה זמין רק אם Syncthing פועל.</string>
+
     <string name="category_backup">ייבוא וייצוא</string>
     <string name="category_debug">פתרון בעיות</string>
     <string name="category_experimental">ניסיוני</string>
+
+    <!-- Preference screen - Run conditions -->
     <string name="run_conditions_title">תנאי ריצה</string>
     <string name="run_conditions_summary">השתמש באפשרויות הבאות כדי להחליט מתי Syncthing יפעל.</string>
+
     <string name="run_on_mobile_data_title">פעל על נתונים ניידים</string>
+    <string name="run_on_mobile_data_summary">פעל כאשר ההתקן מחובר דרך רשת הנתונים הניידים. אזהרה: זה עשוי לצרוך המון נתונים מתוכנית הנתונים של מפעיל הנייד שלך אם אתה מסנכרן כמויות גדולות של נתונים.</string>
+
     <string name="run_on_roaming_title">פעל בזמן נדידה</string>
     <string name="run_on_roaming_summary">אפשר ל־Syncthing להשתמש בנתונים ניידים בזמן נדידה. (!) נא לשלוח משוב ל־GitHub אם זה עובד כראוי.</string>
+
     <string name="run_on_wifi_title">פעל על Wi-Fi</string>
     <string name="run_on_wifi_summary">פעל כאשר ההתקן מחובר לרשת Wi-Fi או אתרנט.</string>
-    <string name="notification_permission_title">הרשאת התראות</string>
-    <string name="dialog_disable_battery_optimizations_not_supported">ההתקן שלך אינו תומך בהשבתת מיטובי סוללה</string>
-    <string name="location_permission_desc">ניתן להגדיר את Syncthing כך שיעבוד על רשתות Wi-Fi שנבחרו. אנדרואיד דורש שליישום תהיה הרשאת מיקום כדי לקרוא את השם של רשת Wi-Fi פעילה. אם אתה רוצה להשתמש בתכונה זו, לחץ על הלחצן למעלה. אתה יכול לדלג על שלב זה. ראה את מדיניות הפרטיות שלנו לפרטים נוספים.</string>
-    <string name="dialog_confirm_skip_ignore_doze_permission">זהירות: אם SyncthingNative נקטע ועושה משהו מוזר, אתה אשם. דלג רק במקרה שההתקן שלך לא תומך בהענקת ההרשאה. לדלג באמת?</string>
-    <string name="photo_shoot_activity_title">מצלמת Syncthing-Fork</string>
-    <string name="cont">המשך</string>
-    <string name="refresh">רענן</string>
-    <string name="photo_shoot_intro_permission_desc">מצלמת Syncthing דורשת את הסכמתך כדי לצלם תמונות ולאחסן אותן בהתקן שלך. תכונה זו היא אופציונלית. כדי להשתמש בה, הענק הרשאות והקש \"המשך\". אנחנו נגדיר תיקיית מצלמת Syncthing עבורך אשר תוכל לשתף עם התקני Syncthing אחרים מאוחר יותר.</string>
-    <string name="ignore_doze_permission_os_notice">ידוע כי טלוויזיות אנדרואיד לפעמים מסיימות את היישום כאשר הוא פועל ברקע. יש פתרון זמין באתר השיתופי שכתובתו \'%1$s/%2$s\'.</string>
-    <string name="ignore_doze_permission_desc">אנדרואיד עשוי להפסיק את הסנכרון לאחר זמן מה. כדי למנוע זאת, כבה את מיטוב הסוללה. להתקנים מסוימים יש יישומי הריגת-משימות נוספים מותקנים מראש. עליך להוסיף את Syncthing לרשימת המותרים שלהם, גם כן.</string>
-    <string name="notification_permission_desc">נדרש כדי להציג התראות לגבי חיבורי התקנים חדשים, בקשות לשיתוף תיקיות וכדי לשמור על השירות חי ומחובר.</string>
-    <string name="reason">סיבה:</string>
-    <string name="folder_id">מזהה תיקייה</string>
-    <string name="back">חזרה</string>
-    <string name="grant_permission">הענק הרשאה</string>
-    <string name="toast_write_storage_permission_required">נדרשת הרשאת כתיבה לאחסון עבור יישום זה</string>
-    <plurals name="files">
-        <item quantity="one">קובץ %1$d מתוך %2$d</item>
-        <item quantity="two">%1$d מתוך %2$d קבצים</item>
-        <item quantity="other">%1$d מתוך %2$d קבצים</item>
-    </plurals>
-    <string name="no_devices_configured">לא הוגדרו התקנים. \nהתחל בהוספת התקן עכשיו.</string>
-    <string name="photo_shoot_intro_no_camera">מצטערים, להתקן הזה אין מצלמה.</string>
-    <string name="deviceEncryptionPasswordHint">אם לא מהימן, הזן סיסמת הצפנה</string>
-    <string name="default_syncthing_camera_folder_label">מצלמת Syncthing</string>
-    <string name="activity_main_bottom_navigation_rescan_all">סרוק הכל מחדש</string>
-    <string name="web_gui_creating_key">מייצר מפתחות מאובטחים. זה עשוי לקחת כמה דקות…</string>
-    <string name="override_changes_question">זה יבטל את כל השינויים שנעשו בהתקנים אחרים המשתפים תיקייה זו. להמשיך?</string>
-    <string name="device_up_to_date">מעודכן</string>
-    <string name="folder_list_empty">לא נמצאו תיקיות</string>
-    <string name="open_file_manager">פתח מנהל קבצים</string>
-    <string name="folder_rejected">התקן \"%1$s\" רוצה לשתף תיקייה \"%2$s\"</string>
-    <string name="folders_fragment_title">תיקיות</string>
-    <string name="dialog_exit_while_running_as_service_message">לשיקולך: הגדרת את היישום להתחיל באופן אוטומטי באתחול. לפיכך הוא מנטר תנאי ריצה ומסתנכרן בכל עת ברקע כאשר התנאים תואמים. עליך לצאת באופן ידני רק אם אתה נתקל בבעיות חמורות. אחרת, השבת את \'התחל באופן אוטומטי באתחול\' בהגדרות. האם תרצה לצאת עכשיו עד שההתקן יאותחל מחדש?</string>
-    <string name="devices_list_empty">לא הוגדרו התקנים. הקש כדי להוסיף התקן חדש.</string>
-    <string name="restart">הפעלה מחדש</string>
-    <string name="dialog_confirm_restart">האם אתה רוצה להפעיל מחדש את Syncthing?</string>
-    <string name="broadcast_service_control_summary">ברירת מחדל: מושבתת. הפעל כדי לאפשר ל-adb או יישומי צד שלישי, למשל יישומי אוטומציה להנחות את Syncthing לעקוב אחר תנאי ריצה, לכפות התחלה או לכפות עצירה.</string>
-    <string name="dialog_confirm_export">האם אתה באמת רוצה לייצא את התצורה שלך? הארכיון הקיים יידרס.</string>
-    <string name="current_path">נתיב נוכחי: %1$s</string>
-    <string name="st_reset_deltas_question">פעולה זו צריכה להתבצע רק על בסיס המלצה מצוות התמיכה שלנו. \nהאם אתה בטוח שברצונך לנקות אינדקסי דלתה של Syncthing?</string>
+
     <string name="run_on_metered_wifi_title">פעל על רשת Wi-Fi לפי שימוש</string>
     <string name="run_on_metered_wifi_summary">פעל כאשר ההתקן מחובר לרשת Wi-Fi עם חיוב לפי שימוש בנתונים, למשל נקודה חמה או רשת לשיתוף אינטרנט. תשומת לב: זה יכול לצרוך חלק גדול מתוכנית הנתונים שלך אם אתה מסנכרן המון נתונים.</string>
+
     <string name="run_on_whitelisted_wifi_title">פעל על רשתות Wi-Fi שצוינו</string>
     <string name="specify_wifi_ssid_whitelist">בחר רשתות Wi-Fi</string>
     <string name="run_on_whitelisted_wifi_networks">רשתות Wi-Fi שנבחרו: %1$s</string>
     <string name="wifi_ssid_whitelist_empty">לא צוינו רשתות Wi-Fi. לחץ כדי לציין רשתות.</string>
+
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">נא להדליק Wi-Fi כדי לבחור רשתות.</string>
+
     <string name="sync_only_wifi_ssids_wifi_turn_on_location">נא להדליק מיקום כדי לבחור רשתות.</string>
+
+
     <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">החל מאנדרואיד 8.1, נדרשת גישת מיקום כדי שיהיה ניתן לקרוא את השם של הרשת Wi-Fi. אתה יכול להשתמש בתכונה זו רק אם אתה מעניק את ההרשאה הזאת.</string>
+
     <string name="power_source_title">פעל כאשר ההתקן מופעל באמצעות</string>
+
     <string name="power_source_ac_and_battery_power">כוח זרם חילופין וסוללה.</string>
     <string name="power_source_ac_power">כוח זרם חילופין.</string>
     <string name="power_source_battery_power">כוח סוללה.</string>
+
     <string name="respect_battery_saving_title">כבד הגדרת חיסכון בסוללה של אנדרואיד</string>
     <string name="respect_battery_saving_summary">השבת את Syncthing אם חיסכון בסוללה פעיל.</string>
+
     <string name="respect_master_sync_title">כבד הגדרת \'סנכרון אוטומטי של נתונים\' של אנדרואיד</string>
     <string name="respect_master_sync_summary">השבת את Syncthing כאשר אריח ההגדרות המהירות \'סנכרון אוטומטי של נתונים\' כבוי.</string>
+
     <string name="run_in_flight_mode_title">פעל ללא חיבור רשת</string>
     <string name="run_in_flight_mode_summary">הפעלת אפשרות זו תגרום ל־Syncthing לפעול אפילו כאשר אתה לא מקוון. הפעל אם להתקן שלך יש בעיות בזיהוי חיבורי Wi-Fi ידניים במהלך מצב טיסה.</string>
+
     <string name="run_on_time_schedule_title">פעל לפי לוח זמנים</string>
     <string name="run_on_time_schedule_summary">הפעלת אפשרות זו תנסה לסנכרן למשך זמן מוגדר אם תנאי ריצה מתקיימים ואם חלפה תקופת פרק הזמן שצוינה מאז הסנכרון האחרון. זה יכול לחסוך המון סוללה אבל דורש ששותפי הסנכרון יהיו מקוונים. שים לב: זה עשוי להשאיר קבצים זמניים חלקיים מאחור עד שהסנכרון המתוכנן הבא יתרחש.</string>
+
     <string name="sync_duration_minutes_title">משך הזמן של מחזור הסנכרון</string>
     <string name="sync_duration_minutes_summary">%1$s דקות</string>
     <string name="sleep_interval_minutes_title">משך הזמן של השהיית הסנכרון</string>
+
+    <!-- Preferences - Behaviour -->
+
     <string name="behaviour_autostart_title">הפעלה אוטומטית</string>
     <string name="behaviour_autostart_summary">התחל את היישום באופן אוטומטי בעת הפעלת מערכת ההפעלה.</string>
+
+
+    <string name="allow_overwrite_files_title">אפשר לדרוס קבצים קיימים</string>
+    <string name="allow_overwrite_files_summary">כאשר יישום אחר משתף קבצים לאחת מהתיקיות שלנו.</string>
+
     <string name="expert_mode_title">מצב מומחה</string>
+
     <string name="expert_mode_summary">הפעלת אפשרות זו תציג אפשרויות תצורה מתקדמות. כדאי שתסתכל על המסמכים של Syncthing תחילה כדי לוודא שאתה יודע איך להשתמש בהן כראוי. הגדרות שגויות עשויות לגרום לריקון הסוללה, מיצוי משאבי מערכת או סנכרון חלקי.</string>
+
+
+    <string name="start_into_web_gui_title">התחל ישירות בממשק רשת גרפי</string>
+ 
+    <string name="start_into_web_gui_summary">כשמתחילים את היישום, פתח את ממשק הרשת הגרפי במקום המסך הראשי</string>
+
+
+
+
+
     <string name="device_name">שם התקן</string>
+
     <string name="listen_address">כתובות האזנה של פרוטוקול הסנכרון</string>
+
     <string name="max_recv_kbps">מגבלת קצב נכנס (KiB/s)</string>
+
     <string name="max_send_kbps">מגבלת קצב יוצא (KiB/s)</string>
+
     <string name="global_announce_enabled">גילוי גלובלי</string>
+
     <string name="local_announce_enabled">גילוי מקומי</string>
+
     <string name="enable_nat_traversal">הפעל חציית NAT</string>
+
     <string name="global_announce_server">שרתי גילוי גלובלי</string>
+
     <string name="enable_relaying">הפעל ממסור</string>
+
     <string name="usage_reporting">דיווח שימוש אנונימי</string>
+
     <string name="crash_reporting">דיווח קריסה אנונימי</string>
-    <string name="webui_remote_access_title">גישה מרוחקת לממשק המשתמש ברשת</string>
+
     <string name="webui_tcp_port_title">יציאת TCP של ממשק המשתמש ברשת</string>
+
+    <string name="webui_remote_access_title">גישה מרוחקת לממשק המשתמש ברשת</string>
+
     <string name="webui_username_title">שם משתמש של ממשק המשתמש ברשת</string>
+
     <string name="webui_password_title">סיסמה של ממשק המשתמש ברשת</string>
+
     <string name="webui_remote_access_summary">ציין כדי להתיר גישה לממשק המשתמש ברשת מהתקן אחר. אם מופעל, תוכל להיכנס עם המשתמש \'syncthing\' ומפתח API בתור סיסמה. ברירת מחדל: מושבת (הכי מאובטח)</string>
+
+
+
+    <string name="clear_stversions_title">ריקון כל התיקיות של ניהול גרסאות</string>
+    <string name="clear_stversions_summary">קבצים מועברים לתיקיית .stversions כאשר הם מוחלפים או נמחקים על ידי Syncthing. ייתכן שתוכל למצוא ולשחזר קבצים שנמחקו בטעות שם, אבל גרסאות ישנות של הקבצים תופסות שטח אחסון בהתקן שלך.</string>
+    <string name="clear_stversions_question">פעולה זו תמחק את כל הגרסאות הישנות של קבצים המטופלים על ידי Syncthing. להמשיך?</string>
+    <string name="clear_stversions_done">תיקיות .stversions נוקו בהצלחה.</string>
+
     <string name="download_support_bundle_title">הורד חבילת תמיכה</string>
+
+    <!-- Summary shown when the user clicked the download support bundle button -->
     <string name="download_support_bundle_in_progress">מכין הורדת חבילת תמיכה …</string>
+
+    <!-- Toast after successful download of the support bundle -->
     <string name="download_support_bundle_succeeded">חבילת תמיכה הורדה בהצלחה אל %s.</string>
+
+    <!-- Toast after failed support bundle download -->
     <string name="download_support_bundle_failed">הורדת חבילת תמיכה נכשלה. בדוק את היומנים.</string>
+
+    <!-- Titles for the preference to undo ignored devices and folders -->
     <string name="undo_ignored_devices_folders_title">בטל התעלמות מהתקנים ותיקיות</string>
     <string name="undo_ignored_devices_folders_question">זה יבטל החלטות קודמות להתעלם מהתקנים ותיקיות. להמשיך?</string>
     <string name="undo_ignored_devices_folders_done">החלטות בוטלו בהצלחה.</string>
+
+    <string name="backup_rel_path_to_zip">נתיב יחסי לארכיון תצורה</string>
+
+    <string name="backup_password_title">סיסמת הגנת תצורה</string>
+    <string name="backup_password_summary">ℹ️ מומלץ:\nהזן סיסמה חזקה אשר תשמש להצפנת התצורה שלך במהלך הייצוא והפענוח בייבוא. שמור את הסיסמה במקום בטוח עבור תהליך השחזור. תצטרך אותה כדי להשתמש בתכונת הייבוא.\n\n⚠️ לא מומלץ:\nלא להשתמש בסיסמה, יישומים אחרים עשויים לקרוא ולהשפיע על תצורת ה-Syncthing שלך. חשיפת התצורה נושאת סיכון שגורם רע עשוי להשיג גישה לא מורשת לקבצים שלך באמצעות ייצוא תצורה שנגנב.</string>
+
+    <string name="backup_password_set">✅ סיסמה הוגדרה: %1$s</string>
+    <string name="backup_password_set_masked">✅ הוגדרה סיסמה - לחץ כדי לשנות</string>
+    <string name="backup_password_not_set">⚠ סיסמה לא הוגדרה.</string>
+    <string name="toggle_password_visibility">שנה מצב נראות של הסיסמה</string>
+
     <string name="export_config">ייצא תצורה</string>
+
+    <!-- Toast after entering an invalid tcp port -->
     <string name="invalid_port_number" tools:ignore="PluralsCandidate">מספר יציאה אינו חוקי. נא להזין יציאה בין %1$d ו־%2$d.</string>
+
+    <!-- Toast after entering invalid integer value -->
     <string name="invalid_integer_value" tools:ignore="PluralsCandidate">ערך קלט אינו חוקי. נא להזין ערך בין %1$d ו־%2$d.</string>
+
+    <!-- Experimental options -->
     <string name="use_proxy">התחבר דרך פרוקסי</string>
     <string name="do_not_use_proxy">לא הוגדר פרוקסי.</string>
+
+
     <string name="use_tor_title">השתמש ב־Tor</string>
     <string name="use_tor_summary">אלץ את כל התעבורה לעבור דרך Tor בשביל פרטיות מוגברת. דורש את Orbot. משבית אפשרויות פרוקסי.</string>
+
     <string name="socks_proxy_address_title">פרוקסי SOCKS5</string>
+    <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>
+
+    <!-- Toast after entering invalid socks proxy address -->
     <string name="toast_invalid_socks_proxy_address">הקלט מפר את תחביר הפרוקסי \'socks5://[IP/HOSTNAME]:[PORT]\'</string>
+
     <string name="http_proxy_address_title">פרוקסי HTTP(S)</string>
+    <string name="http_proxy_address_example" translatable="false">http://192.168.0.1:8080</string>
+
+    <!-- Toast after entering invalid http proxy address -->
     <string name="toast_invalid_http_proxy_address">הקלט מפר את תחביר הפרוקסי \'http://[IP/HOSTNAME]:[PORT]\'</string>
+
     <string name="broadcast_service_control_title">בקרת שירות באמצעות שידור</string>
+    <string name="broadcast_service_control_summary">ברירת מחדל: מושבתת. הפעל כדי לאפשר ל-adb או יישומי צד שלישי, למשל יישומי אוטומציה להנחות את Syncthing לעקוב אחר תנאי ריצה, לכפות התחלה או לכפות עצירה.</string>
+
+    <!-- Dialog shown before config export -->
+    <string name="dialog_confirm_export">האם אתה באמת רוצה לייצא את התצורה שלך? הארכיון הקיים יידרס.</string>
+
+    <!-- Dialog shown before config import -->
     <string name="dialog_confirm_import">האם אתה באמת רוצה לייבא את התצורה? הגדרות קיימות כולל תיקיות משותפות ורשימת התקנים יוחלפו.</string>
+
+    <!-- PreferenceCategories -->
+    <string name="preference_category_actions">פעולות</string>
+    <string name="preference_category_explanation">הסבר</string>
+    <string name="preference_category_prepare">הכנה</string>
+
+    <!-- Toast shown after config was exported -->
+    <string name="config_export_successful_no_path">התצורה יוצאה. נא לוודא לזכור את הסיסמה עבור ייבוא בהמשך.</string>
     <string name="config_export_failed">ייצוא התצורה נכשל. עבור להגדרות-פתרון בעיות-פתיחת יומן כדי לראות פרטים.</string>
+
     <string name="import_config">ייבא תצורה</string>
+
+    <!-- Toast shown after config was imported -->
     <string name="config_imported_successful">התצורה יובאה</string>
+
+    <string name="config_import_failed_no_path">ייבוא תצורה נכשל. עבור להגדרות-פתרון בעיות-פתיחת יומן כדי לראות פרטים.</string>
+
     <string name="dialog_settings_restart_app_title">נדרשת הפעלה מחדש</string>
     <string name="dialog_settings_restart_app_question">שינוי אפשרות זו דורש הפעלה מחדש מיידית של היישום. כל השינויים האחרים יושלכו. להמשיך?</string>
+
+    <!-- Title for the preference to set STTRACE parameters -->
     <string name="sttrace_title">אפשרויות STTRACE</string>
+    <string name="sttrace_none_selected">אין מתקן דיבאג</string>
+
     <string name="environment_variables">משתני סביבה</string>
+
+    <!-- Toast after entering invalid STTRACE params -->
     <string name="toast_invalid_environment_variables">ערך אינו מחרוזת משתנה סביבה חוקית</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
     <string name="st_reset_database_title">אפס מסד נתונים</string>
+    <!-- Syncthing was reset -->
     <string name="st_reset_database_question">פעולה זו צריכה להתבצע רק על בסיס המלצה מצוות התמיכה שלנו. \nהאם אתה בטוח שברצונך לנקות את מסד הנתונים של Syncthing?</string>
+    <!-- Syncthing was reset -->
     <string name="st_reset_database_done">מסד הנתונים של Syncthing אופס בהצלחה</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
     <string name="st_reset_deltas_title">אפס אינדקסי דלתה</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_question">פעולה זו צריכה להתבצע רק על בסיס המלצה מצוות התמיכה שלנו. \nהאם אתה בטוח שברצונך לנקות אינדקסי דלתה של Syncthing?</string>
+    <!-- Syncthing was reset -->
     <string name="st_reset_deltas_done">אינדקסי דלתה של Syncthing אופסו בהצלחה</string>
+
+    <!-- Settings / About -->
     <string name="category_about">אודות</string>
+
     <string name="verbose_log_title">יומן מילולי</string>
     <string name="verbose_log_summary">הפעלת אפשרות זו תעזור ליצור יומני דיבג ברמה מאוד מפורטת.</string>
+
+
+    <!-- Settings item that opens the log activity -->
     <string name="open_log">פתיחת יומן</string>
+
+    <!-- Summary for the log activity -->
     <string name="open_log_summary">פתח את חלון היומנים של Syncthing ואנדרואיד</string>
+
+    <!-- Menu item linking support forum -->
+    <string name="syncthing_forum_title">פורום Syncthing</string>
+    <string name="syncthing_forum_summary">עבור אל פורום Syncthing וקבל תמיכה</string>
+    <string name="syncthing_forum_url" translatable="false">https://forum.syncthing.net/</string>
+
+    <!-- Menu item for pizza -->
+
+    <!-- Menu item linking privacy policy -->
+    <string name="privacy_title">מדיניות פרטיות</string>
+    <string name="privacy_summary">פתח את מדיניות הפרטיות של Syncthing-אנדרואיד, אשר מכסה שימוש (אם בכלל) של נתונים אישיים, למשל מיקום.</string>
+    <string name="privacy_policy_url" translatable="false">https://syncthing.net/android-privacy-policy</string>
+
+    <!-- Settings item that opens issue tracker -->
     <string name="report_issue_title">דווח על בעיה</string>
+
+    <!-- Summary for the issue tracker settings item -->
     <string name="open_issue_tracker_summary">פתח את מערכת מעקב הבעיות של Syncthing-Fork בכתובת %1$s</string>
+
+    <!-- URL of the issue tracker -->
+    <string name="issue_tracker_url" translatable="false">https://github.com/researchxxl/syncthing-android/issues</string>
+
+    <!-- URL of the GitHub wiki -->
+    <string name="wiki_url" translatable="false">https://github.com/researchxxl/syncthing-android/tree/main/wiki</string>
+
+    <!-- URL of the Syncthing project homepage -->
+
+    <!-- Title of the preference showing upstream version name -->
     <string name="syncthing_version_title">גרסת Syncthing</string>
+
+    <!-- Title of the preference showing this app's version name -->
     <string name="app_version_title">גרסת עטיפת Syncthing-Fork</string>
+
+    <!-- Title of the preference showing the REST API key -->
     <string name="syncthing_api_key">מפתח API של Syncthing (לחץ כדי להעתיק)</string>
+
+    <!-- Shown when the API key is copied to the clipboard -->
     <string name="api_key_copied_to_clipboard">מפתח API של Syncthing הועתק ללוח</string>
+
+    <!-- Title of the preference showing database size -->
     <string name="syncthing_database_size">גודל מסד הנתונים של Syncthing</string>
+
+    <!-- Title of the preference showing the OS open file limit -->
     <string name="os_open_file_limit">מגבלת פתיחת קובץ של אנדרואיד</string>
+    
+    <!-- Title of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_title">רישיונות קוד פתוח</string>
+    
+    <!-- Summary of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_summary">הצג את הרישיונות קוד פתוח בשימוש</string>
+
+    <!-- FolderPickerAcitivity -->
+
+    <!-- Activity title -->
     <string name="folder_picker_title">בוחר התיקיות</string>
+
+    <!-- Storage path overview -->
     <string name="advanced_storage_path_overview">סקירת נתיב אחסון מתקדמת</string>
+
+    <!-- Current path -->
+    <string name="current_path">נתיב נוכחי: %1$s</string>
+
+    <!-- ListView empty text -->
+
+    <!-- Menu item to create folder on the file system -->
+
+    <!-- Menu item to select the current folder -->
+
     <string name="create_folder_failed">יצירת תיקייה נכשלה</string>
-    <string name="reason_not_on_whitelisted_wifi">היישום Syncthing אינו פועל מאחר שהשם של רשת ה־WiFi הנוכחית אינו ברשימת המותרים.</string>
-    <string name="file_name_template">קובץ חדש %1$s</string>
-    <string name="syncthing_log_title">יומן Syncthing</string>
+
+    <!-- Menu item to go up to parent folder -->
     <string name="folder_go_up">עלה למעלה</string>
+
+    <!-- LogActivity -->
+
+    <string name="syncthing_log_title">יומן Syncthing</string>
     <string name="android_log_title">יומן אנדרואיד</string>
+
+    <string name="share_log_file_missing">הקובץ יומן לשיתוף חסר.</string>
+
+    <string name="share_log_file">שיתוף קובץ יומן</string>
+
+    <!-- Title of the "log android" menu button -->
     <string name="view_android_log">הצג יומן אנדרואיד</string>
+
+    <!-- Title of the "log Syncthing" menu button -->
     <string name="view_syncthing_log">הצג יומן Syncthing</string>
+
     <string name="retrieving_logs">מאחזר יומנים…</string>
+
+    <!-- Title of the "share log" menu button -->
     <string name="share_title">שיתוף</string>
+
+    <!-- ShareActivity -->
+
+    <!-- Toast if user didn't complete the welcome wizard yet -->
     <string name="complete_welcome_wizard_first">ראשית, פתח את היישום ממגירת היישומים והשלם את אשף הפתיחה לפני שיתוף קבצים.</string>
+
+    <!-- Title of the "share" activity -->
     <string name="share_activity_title">שמירה אל Syncthing</string>
+
+    <!-- Title of the "save" button -->
     <string name="save_title">שמירה</string>
+
+    <!-- Title of the "cancel" button -->
     <string name="cancel_title">ביטול</string>
+
+    <!-- Title of the "save" button -->
+
+    <!-- New file name template -->
+    <string name="file_name_template">קובץ חדש %1$s</string>
+
+    <!-- Nothing to share toast -->
     <string name="nothing_share">אין מה לשתף</string>
-    <plurals name="copy_success_partially">
-        <item quantity="one">קובץ %1$d הועתק לתיקייה \"%2$s\", %3$d כבר קיימים</item>
-        <item quantity="two">%1$d קבצים הועתקו לתיקייה \"%2$s\", %3$d כבר קיימים</item>
-        <item quantity="other">%1$d קבצים הועתקו לתיקייה \"%2$s\", %3$d כבר קיימים</item>
-    </plurals>
-    <plurals name="copy_success">
-        <item quantity="one">קובץ %1$d הועתק לתיקייה \"%2$s\"</item>
-        <item quantity="two">%1$d קבצים הועתקו לתיקייה \"%2$s\"</item>
-        <item quantity="other">%1$d קבצים הועתקו לתיקייה \"%2$s\"</item>
-    </plurals>
+
+    <!-- Copy success toast partially -->
+    <plurals name="copy_success_partially">        <item quantity="one">קובץ %1$d הועתק לתיקייה \"%2$s\", %3$d כבר קיימים</item>        <item quantity="two">%1$d קבצים הועתקו לתיקייה \"%2$s\", %3$d כבר קיימים</item>        <item quantity="other">%1$d קבצים הועתקו לתיקייה \"%2$s\", %3$d כבר קיימים</item></plurals>
+
+    <!-- Copy success toast -->
+    <plurals name="copy_success">        <item quantity="one">קובץ %1$d הועתק לתיקייה \"%2$s\"</item>        <item quantity="two">%1$d קבצים הועתקו לתיקייה \"%2$s\"</item>        <item quantity="other">%1$d קבצים הועתקו לתיקייה \"%2$s\"</item></plurals>
+
+    <!-- Copy exception toast -->
     <string name="copy_exception">אירעה שגיאה במהלך השיתוף, בדוק יומני יישום</string>
+
+    <!-- Copy progress dialog text -->
     <string name="copy_progress">משתף קבצים…</string>
-    <plurals name="file_name_title">
-        <item quantity="one">שם קובץ</item>
-        <item quantity="two">רשימת קבצים</item>
-        <item quantity="other">רשימת קבצים</item>
-    </plurals>
+
+    <plurals name="file_name_title">        <item quantity="one">שם קובץ</item>        <item quantity="two">רשימת קבצים</item>        <item quantity="other">רשימת קבצים</item></plurals>
+
+    <!-- Sub Folder title -->
+
+    <!-- RunConditionMonitor -->
+
     <string name="reason_force_start">היישום Syncthing פועל בגלל שאילצת אותו להתחיל ללא קשר לתנאי הריצה.</string>
     <string name="reason_force_stop">היישום Syncthing אינו פועל בגלל שאילצת אותו לעצור ללא קשר לתנאי הריצה.</string>
+
+    <!-- Explanations why syncthing is running or not running -->
     <string name="reason_not_within_time_frame_2">הפעלת את \'פעל לפי לוח זמנים\' והסנכרון האחרון היה לפני %s.</string>
     <string name="reason_not_within_time_frame_0_min">פחות מדקה</string>
-    <plurals name="reason_not_within_time_frame_minutes">
-        <item quantity="one">דקה %d</item>
-        <item quantity="two">%d דקות</item>
-        <item quantity="other">%d דקות</item>
-    </plurals>
+    <plurals name="reason_not_within_time_frame_minutes">        <item quantity="one">דקה %d</item>        <item quantity="two">%d דקות</item>        <item quantity="other">%d דקות</item></plurals>
     <string name="reason_not_charging">הטלפון לא נטען.</string>
     <string name="reason_not_on_battery_power">הטלפון לא פועל על כוח סוללה.</string>
     <string name="reason_not_while_power_saving">היישום Syncthing אינו פועל מאחר שהטלפון חוסך בחשמל כרגע.</string>
     <string name="reason_not_while_auto_sync_data_disabled">היישום Syncthing אינו פועל מאחר ש\'סנכרון אוטומטי של נתונים\' של אנדרואיד כרגע מושבת.</string>
+
+    <!-- … Mobile data -->
     <string name="reason_mobile_data_disallowed">היישום Syncthing לא מוגדר לפעול על חיבור נתונים ניידים.</string>
     <string name="reason_on_mobile_data">היישום Syncthing מורשה לפעול על נתונים ניידים.</string>
     <string name="reason_not_on_mobile_data">היישום Syncthing מורשה לפעול על חיבור נתונים ניידים אבל נתונים ניידים אינם מחוברים.</string>
-    <string name="reason_on_nonroaming_mobile_data">היישום Syncthing מורשה לפעול על חיבורי נתונים ניידים שלא בנדידה. החיבור הפעיל אינו בנדידה.</string>
+
+    <!-- … Roaming -->
     <string name="reason_on_roaming_nonroaming_mobile_data">היישום Syncthing מורשה לפעול על חיבורי נתונים ניידים בנדידה ולא בנדידה.</string>
+    <string name="reason_on_nonroaming_mobile_data">היישום Syncthing מורשה לפעול על חיבורי נתונים ניידים שלא בנדידה. החיבור הפעיל אינו בנדידה.</string>
     <string name="reason_not_nonroaming_mobile_data">היישום Syncthing אינו פועל כי אסרת עליו לפעול על חיבורי נתונים ניידים בנדידה.</string>
+
     <string name="reason_wifi_disallowed">היישום Syncthing אינו מורשה לפעול על WiFi או אתרנט.</string>
     <string name="reason_on_wifi">היישום Syncthing מורשה לפעול על WiFi וחיבור WiFi כרגע פעיל.</string>
     <string name="reason_not_on_wifi">היישום Syncthing מורשה לפעול על WiFi אבל WiFi אינו מחובר או שהטלפון נמצא במצב טיסה.</string>
     <string name="reason_on_metered_nonmetered_wifi">היישום Syncthing מורשה לרוץ על חיבורי WiFi לפי שימוש ולא לפי שימוש.</string>
     <string name="reason_on_whitelisted_wifi">היישום Syncthing מורשה לרוץ על רשת ה־WiFi הנוכחית.</string>
+    <string name="reason_not_on_whitelisted_wifi">היישום Syncthing אינו פועל מאחר שהשם של רשת ה־WiFi הנוכחית אינו ברשימת המותרים.</string>
+    <string name="reason_on_nonmetered_wifi">היישום Syncthing מורשה לרוץ על חיבורים שלא לפי שימוש. חיבור ה־WiFi הפעיל אינו לפי שימוש.</string>
     <string name="reason_not_nonmetered_wifi">היישום Syncthing אינו פועל כי אסרת עליו לפעול על חיבורי WiFi לפי שימוש.</string>
     <string name="reason_location_unavailable">הפעלת את \'פעל על רשתות WiFi שנבחרו\' בהגדרות. שירותי מיקום של אנדרואיד כרגע כבויים. בהתאם למגבלות של אנדרואיד, Syncthing אינו יכול לקבוע את שם רשת ה־WiFi הנוכחית כדי להחליט אם עליו לפעול. פתרון: הפעל את המיקום, הענק הרשאת מיקום והתחבר מחדש ל־WiFi.</string>
-    <string name="reason_on_nonmetered_wifi">היישום Syncthing מורשה לרוץ על חיבורים שלא לפי שימוש. חיבור ה־WiFi הפעיל אינו לפי שימוש.</string>
     <string name="reason_on_flight_mode">היישום Syncthing פועל כי אפשרת לו לפעול כאשר מצב טיסה פעיל.</string>
     <string name="reason_run_condition_monitor_not_instantiated">לא נוצר מופע של RunConditionMonitor. נא להפעיל מחדש את היישום ולהגיש דוח באגים אם שגיאה זו אינה נעלמת לאחר ההפעלה מחדש.</string>
+
+    <!-- Sync Conditions Dialog -->
+
     <string name="custom_wifi_ssid_whitelist_empty">אין SSID של WiFi ברשימת המותרים. נא לציין כמה בהגדרות.</string>
+
+    <!-- SyncthingService -->
+
+    <!-- Text for the exit button on the drawer -->
     <string name="exit">יציאה</string>
+
+    <!-- Title of the notification shown while syncthing is running and enabled -->
     <string name="syncthing_active_details">פועל: %1$s</string>
     <string name="no_remote_devices_connected">אין התקנים מרוחקים מחוברים</string>
-    <plurals name="syncthing_active_syncing_device_online">
-        <item quantity="one">מסנכרן: %1$d%% הושלמו, התקן %2$d מקוון</item>
-        <item quantity="two">מסנכרן: %1$d%% הושלמו, %2$d התקנים מקוונים</item>
-        <item quantity="other">מסנכרן: %1$d%% הושלמו, %2$d התקנים מקוונים</item>
-    </plurals>
+
+    <plurals name="device_online_up_to_date">        <item quantity="one">התקן %1$d מקוון ומעודכן</item>        <item quantity="two">%1$d התקנים מקוונים ומעודכנים</item>        <item quantity="other">%1$d התקנים מקוונים ומעודכנים</item></plurals>
+
+    <plurals name="syncthing_active_syncing_device_online">        <item quantity="one">מסנכרן: %1$d%% הושלמו, התקן %2$d מקוון</item>        <item quantity="two">מסנכרן: %1$d%% הושלמו, %2$d התקנים מקוונים</item>        <item quantity="other">מסנכרן: %1$d%% הושלמו, %2$d התקנים מקוונים</item></plurals>
+
     <string name="syncthing_disabled">במצב שינה</string>
-    <plurals name="device_online_up_to_date">
-        <item quantity="one">התקן %1$d מקוון ומעודכן</item>
-        <item quantity="two">%1$d התקנים מקוונים ומעודכנים</item>
-        <item quantity="other">%1$d התקנים מקוונים ומעודכנים</item>
-    </plurals>
+
     <string name="syncthing_terminated">הופסק</string>
-    <string name="config_create_failed">יצירת תצורה נכשלה. בדוק פלט logcat.</string>
+
+    <!-- Toast shown if syncthing failed to create or read the config -->
     <string name="executable_not_found">קובץ ההפעלה המרכזי \"%s\" חסר. בדוק פלט בנייה ו־logcat.</string>
+    <string name="config_create_failed">יצירת תצורה נכשלה. בדוק פלט logcat.</string>
     <string name="config_read_failed">קריאת תצורה נכשלה. שקול גיבוי של הנתונים שלך מתיקיות הסנכרון, ואז נקה את הנתונים של יישום זה מהגדרות אנדרואיד ופתח אותו שוב.</string>
+
+    <!-- Toast shown if a config file crucial to operation is missing -->
     <string name="config_file_missing">קובץ תצורה חיוני לפעולה חסר</string>
+
+    <!-- Toast shown if a listening tcp port is unavailable -->
     <string name="webui_tcp_port_unavailable">יציאת TCP %s של ממשק המשתמש ברשת עסוקה. מופע שני?</string>
+
+    <!-- Label of the default folder created of first start (camera folder). -->
+
+    <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
+
     <string name="notification_crash_title">קרס (קוד יציאה %1$s)</string>
     <string name="notification_crash_text">לחץ עבור יומנים (%1$s)</string>
+
     <string name="notifications_persistent_channel">היישום Syncthing פעיל</string>
     <string name="notification_persistent_waiting_channel">מנטר תנאי ריצה</string>
     <string name="notifications_other_channel">התראות אחרות</string>
+
+    <!-- EventProcessor -->
     <string name="notification_out_of_disk_space">כרטיס ה־SD מלא. קובץ %1$s</string>
+
+    <!-- RestApi -->
+
+    <!-- Title of the notification shown when a restart is needed -->
+
+    <!-- Text for positive button in restart dialog -->
+    <!-- Text for the dismiss button of the restart Activity -->
+    <!-- Text of the notification shown when a restart is needed -->
+
+    <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">מזהה התקן הועתק ללוח</string>
+
+    <!-- Strings representing units for file sizes, from smallest to largest -->
     <string name="file_size_unit_B">B</string>
     <string name="file_size_unit_KiB">KB</string>
     <string name="file_size_unit_MiB">MB</string>
     <string name="file_size_unit_GiB">GB</string>
     <string name="file_size_unit_TiB">TB</string>
+
+    <!-- Strings representing units for transfer rates, from smallest to largest -->
     <string name="transfer_rate_unit_B_s">B/s</string>
     <string name="transfer_rate_unit_KiB_s">KB/s</string>
     <string name="transfer_rate_unit_MiB_s">MB/s</string>
     <string name="transfer_rate_unit_GiB_s">GB/s</string>
     <string name="transfer_rate_unit_TiB_s">TB/s</string>
+
+    <!-- Possible folder states -->
     <string name="state_failed_items">פריטים שנכשלו (%1$d)</string>
     <string name="state_up_to_date">מעודכן</string>
     <string name="state_local_additions">הוספות מקומיות</string>
@@ -386,89 +931,118 @@
     <string name="state_unknown">לא ידוע</string>
     <string name="state_paused">הושהה</string>
     <string name="status_outofsync">לא מסונכרן</string>
-    <string name="none">ללא</string>
-    <string name="show_device_id">הצג מזהה התקן</string>
-    <string name="external_versioning_info">פקודה: %1$s</string>
-    <string name="pull_order">סדר משיכת קבצים</string>
-    <string name="staggered_versioning_info">גיל מרבי: %1$d \nנתיב גרסאות: %2$s</string>
-    <string name="simple_versioning_info">שמור גרסאות: %1$s</string>
-    <string name="run_on_whitelisted_wifi_summary">הפעל את רשימת המותרים כדי להגביל את הסנכרון כך שיתקיים רק ברשתות WiFi שצוינו.</string>
-    <string name="pull_order_type_random">אקראי</string>
-    <string name="pull_order_type_random_description">משוך קבצים בסדר אקראי.</string>
-    <string name="pull_order_type_alphabetic_description">משוך קבצים המסודרים לפי שם הקובץ בסדר אלפביתי.</string>
-    <string name="clean_out_after">נקה לאחר</string>
-    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">פעל במשך %1$d דקות</string>
-    <string name="type_staggered">סוג: מדורג</string>
-    <string name="trashcan_versioning_info">נקה לאחר: %1$s</string>
     <string name="state_unshared">לא משותף</string>
+
+    <!-- small inline loading indicator -->
+    <string name="state_loading">טוען…</string>
+
+    <!-- small inline saving indicator -->
+
+    <!-- Format string for folder size, eg "500 MiB / 1 GiB" -->
     <string name="folder_size_format">%1$s מתוך %2$s</string>
+
+    <!-- Titles used in the folder type dialog and folder type button in the folder activity -->
     <string name="folder_type">סוג תיקייה</string>
+
+    <!-- Displays the current folder type in the folder activity -->
     <string name="folder_type_sendreceive">שליחה &amp; קבלה</string>
     <string name="folder_type_sendonly">שליחה בלבד</string>
     <string name="folder_type_receiveonly">קבלה בלבד</string>
     <string name="folder_type_receive_encrypted">קבלה מוצפנת</string>
+
+    <!-- Folder type dialog descriptions for folder types -->
     <string name="folder_type_sendreceive_description">התיקייה גם תשלח שינויים להתקנים מרוחקים וגם תקבל שינויים מהם.</string>
     <string name="folder_type_sendonly_description">הקבצים מוגנים מפני שינויים שנעשו בהתקנים אחרים, אבל שינויים שנעשו בהתקן זה יישלחו לשאר האשכול.</string>
     <string name="folder_type_receiveonly_description">הקבצים מסונכרנים מהאשכול, אבל כל שינוי שנעשה מקומית לא יישלח להתקנים אחרים.</string>
     <string name="folder_type_receive_encrypted_description">מאחסן ומסנכרן נתונים מוצפנים בלבד. תיקיות בכל ההתקנים המחוברים צריכות להיות מוגדרות עם אותה הסיסמה או להיות גם מסוג \'קבלה מוצפנת\'.</string>
+
+    <!-- Titles used in the pull order dialog and pull order button in the folder activity -->
+    <string name="pull_order">סדר משיכת קבצים</string>
+
+    <!-- Displays the current pull order type in the Folder activity -->
+    <string name="pull_order_type_random">אקראי</string>
     <string name="pull_order_type_alphabetic">אלפביתי</string>
     <string name="pull_order_type_smallestFirst">הקטן ביותר תחילה</string>
     <string name="pull_order_type_largestFirst">הגדול ביותר תחילה</string>
     <string name="pull_order_type_oldestFirst">הישן ביותר תחילה</string>
     <string name="pull_order_type_newestFirst">החדש ביותר תחילה</string>
+
+    <!-- Pull order dialog descriptions for pull order types -->
+    <string name="pull_order_type_random_description">משוך קבצים בסדר אקראי.</string>
+    <string name="pull_order_type_alphabetic_description">משוך קבצים המסודרים לפי שם הקובץ בסדר אלפביתי.</string>
     <string name="pull_order_type_smallestFirst_description">משוך קבצים המסודרים לפי גודל הקובץ. הקטן ביותר תחילה בהתאמה.</string>
     <string name="pull_order_type_largestFirst_description">משוך קבצים המסודרים לפי גודל הקובץ. הגדול ביותר תחילה בהתאמה.</string>
     <string name="pull_order_type_oldestFirst_description">משוך קבצים המסודרים לפי זמן השינוי. הישן ביותר תחילה בהתאמה.</string>
     <string name="pull_order_type_newestFirst_description">משוך קבצים המסודרים לפי זמן השינוי. החדש ביותר תחילה בהתאמה.</string>
+
+    <!-- Titles used in the file versioning dialog and file versioning button in the folder activity -->
     <string name="maximum_age">גיל מרבי</string>
+    <string name="clean_out_after">נקה לאחר</string>
     <string name="file_versioning">ניהול גרסאות קבצים</string>
+    <string name="none">ללא</string>
     <string name="versions_path">נתיב גרסאות</string>
     <string name="command">פקודה</string>
+
+    <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
+
+    <!-- Displays the current file versioning type in the Folder activity -->
     <string name="type_simple">סוג: פשוט</string>
     <string name="type_trashcan">סוג: פח אשפה</string>
+    <string name="type_staggered">סוג: מדורג</string>
     <string name="type_external">סוג: חיצוני</string>
+
+    <!-- Information displayed about the current file versioning configuration in the folder activity -->
+    <string name="trashcan_versioning_info">נקה לאחר: %1$s</string>
+    <string name="staggered_versioning_info">גיל מרבי: %1$d \nנתיב גרסאות: %2$s</string>
+    <string name="external_versioning_info">פקודה: %1$s</string>
+    <string name="simple_versioning_info">שמור גרסאות: %1$s</string>
+    <string name="show_device_id">הצג מזהה התקן</string>
+
+    <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
     <string name="could_not_access_deviceid">לא היה ניתן לגשת למזהה ההתקן.</string>
     <string name="share_device_id_chooser">שתף מזהה התקן עם</string>
+    <string name="run_on_whitelisted_wifi_summary">הפעל את רשימת המותרים כדי להגביל את הסנכרון כך שיתקיים רק ברשתות WiFi שצוינו.</string>
     <string name="custom_sync_conditions_title">תנאי סנכרון מותאמים אישית</string>
     <string name="custom_sync_conditions_description">מאפשר לך לציין חריגות לתנאי הריצה הגלובליים.</string>
     <string name="custom_sync_conditions_dialog">ציין תנאי סנכרון</string>
+
+    <!-- Quick Setting icon names and labels -->
     <string name="qs_force_label">אלץ הפעלה</string>
     <string name="qs_forced_to_run">נאלץ לפעול</string>
     <string name="qs_forced_to_stop">נאלץ לעצור</string>
     <string name="qs_following_run_conditions">עוקב אחר תנאי הריצה</string>
     <string name="qs_schedule_label">פעל במשך 5 דקות</string>
+    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">פעל במשך %1$d דקות</string>
     <string name="qs_schedule_disabled">לוח הזמנים מושבת</string>
-    <string name="start_into_web_gui_title">התחל ישירות בממשק רשת גרפי</string>
-    <string name="start_into_web_gui_summary">כשמתחילים את היישום, פתח את ממשק הרשת הגרפי במקום המסך הראשי</string>
-    <string name="config_import_failed_no_path">ייבוא תצורה נכשל. עבור להגדרות-פתרון בעיות-פתיחת יומן כדי לראות פרטים.</string>
-    <string name="clear_stversions_title">ריקון כל התיקיות של ניהול גרסאות</string>
-    <string name="open_source_licenses_title">רישיונות קוד פתוח</string>
-    <string name="folder_run_script_description">אפשרות מומחה להרצת סקריפטים לאחר שתיקייה משנה את מצב הסנכרון שלה. סקריפטים ב-\'.stfolder/*.sh\' יבוצעו, מיקומים אחרים אינם נתמכים מטעמי אבטחה.\nקריאת סקריפט לדוגמה: \'.stfolder/rename-files.sh sync_complete\'</string>
-    <string name="clear_stversions_summary">קבצים מועברים לתיקיית .stversions כאשר הם מוחלפים או נמחקים על ידי Syncthing. ייתכן שתוכל למצוא ולשחזר קבצים שנמחקו בטעות שם, אבל גרסאות ישנות של הקבצים תופסות שטח אחסון בהתקן שלך.</string>
-    <string name="preference_category_actions">פעולות</string>
-    <string name="syncthing_forum_summary">עבור אל פורום Syncthing וקבל תמיכה</string>
-    <string name="privacy_summary">פתח את מדיניות הפרטיות של Syncthing-אנדרואיד, אשר מכסה שימוש (אם בכלל) של נתונים אישיים, למשל מיקום.</string>
-    <string name="privacy_title">מדיניות פרטיות</string>
-    <string name="folder_run_script_caption">הרצת סקריפט</string>
-    <string name="syncthing_forum_title">פורום Syncthing</string>
-    <string name="open_source_licenses_summary">הצג את הרישיונות קוד פתוח בשימוש</string>
-    <string name="clear_stversions_question">פעולה זו תמחק את כל הגרסאות הישנות של קבצים המטופלים על ידי Syncthing. להמשיך?</string>
-    <string name="clear_stversions_done">תיקיות .stversions נוקו בהצלחה.</string>
-    <plurals name="conflicts">
-        <item quantity="one">התנגשות %1$d</item>
-        <item quantity="two">%1$d התנגשויות</item>
-        <item quantity="other">%1$d התנגשויות</item>
-    </plurals>
-    <string name="backup_rel_path_to_zip">נתיב יחסי לארכיון תצורה</string>
-    <string name="backup_password_title">סיסמת הגנת תצורה</string>
-    <string name="backup_password_set">✅ סיסמה הוגדרה: %1$s</string>
-    <string name="backup_password_not_set">⚠ סיסמה לא הוגדרה.</string>
-    <string name="config_export_successful_no_path">התצורה יוצאה. נא לוודא לזכור את הסיסמה עבור ייבוא בהמשך.</string>
-    <string name="preference_category_prepare">הכנה</string>
-    <string name="share_log_file_missing">הקובץ יומן לשיתוף חסר.</string>
-    <string name="share_log_file">שיתוף קובץ יומן</string>
-    <string name="preference_category_explanation">הסבר</string>
-    <string name="backup_password_summary">ℹ️ מומלץ:\nהזן סיסמה חזקה אשר תשמש להצפנת התצורה שלך במהלך הייצוא והפענוח בייבוא. שמור את הסיסמה במקום בטוח עבור תהליך השחזור. תצטרך אותה כדי להשתמש בתכונת הייבוא.\n\n⚠️ לא מומלץ:\nלא להשתמש בסיסמה, יישומים אחרים עשויים לקרוא ולהשפיע על תצורת ה-Syncthing שלך. חשיפת התצורה נושאת סיכון שגורם רע עשוי להשיג גישה לא מורשת לקבצים שלך באמצעות ייצוא תצורה שנגנב.</string>
-    <string name="backup_password_set_masked">✅ הוגדרה סיסמה - לחץ כדי לשנות</string>
-    <string name="toggle_password_visibility">שנה מצב נראות של הסיסמה</string>
+    <string name="no_app_to_open_link">אין יישום זמין לפתיחת קישור זה.</string>
+
+    <!-- Custom HTTPS certificate -->
+    <string name="webui_custom_cert_title">תעודת HTTPS מותאמת אישית</string>
+    <string name="webui_custom_cert_summary">השתמש בתעודה שלך עבור ממשק הרשת המקומי</string>
+    <string name="custom_cert_explanation">החלף את התעודה החתומה עצמית המובנית של Syncthing בתעודה שלך. בחר את התעודה (PEM, כולל כל השרשרת) ואת המפתח הפרטי שלה, בדוק את תוצאות האימות ולאחר מכן החל. Syncthing יופעל מחדש כדי לטעון את התעודה החדשה; אם הוא לא יחזור למצב מקוון, התעודה הקודמת תוחזר אוטומטית.\n\nלתעודה החתומה על ידי ה־CA שלך, התקן תחילה את תעודת השורש של אותו CA בהתקן זה (הגדרות → אבטחה → התקנת תעודת CA).</string>
+    <string name="custom_cert_current_title">התעודה הנוכחית</string>
+    <string name="custom_cert_current_none">לא נמצאה תעודה.</string>
+    <string name="custom_cert_subject">הנושא: %1$s</string>
+    <string name="custom_cert_issuer">המנפיק: %1$s</string>
+    <string name="custom_cert_expires">תפוג: %1$s</string>
+    <string name="custom_cert_self_signed">חתומה עצמית (ברירת מחדל)</string>
+    <string name="custom_cert_ca_signed">חתומה על ידי CA</string>
+    <string name="custom_cert_select_cert">בחר תעודה (.pem)</string>
+    <string name="custom_cert_select_key">בחר מפתח פרטי (.pem)</string>
+    <string name="custom_cert_not_selected">לא נבחר</string>
+    <string name="custom_cert_apply">החל תעודה</string>
+    <string name="custom_cert_reset_title">אפס לתעודה שנוצרה אוטומטית</string>
+    <string name="custom_cert_reset_summary">מחק את התעודה המותאמת אישית ותן ל־Syncthing ליצור תעודה חתומה עצמית חדשה</string>
+    <string name="custom_cert_reset_question">להחליף את התעודה הנוכחית בתעודה חתומה עצמית שנוצרה זה עתה?</string>
+    <string name="custom_cert_applying">מחיל — מפעיל מחדש את Syncthing…</string>
+    <string name="custom_cert_applied">התעודה יושמה.</string>
+    <string name="custom_cert_applied_pending">נשמר. זה ייכנס לתוקף בפעם הבאה ש־Syncthing יופעל.</string>
+    <string name="custom_cert_failed">לא ניתן היה להחיל את התעודה: %1$s</string>
+    <string name="custom_cert_reset_done">בוצע איפוס לתעודה חתומה עצמית חדשה.</string>
+    <string name="custom_cert_file_too_large">הקובץ גדול מכדי להיות תעודה או מפתח.</string>
+    <string name="custom_cert_read_failed">לא ניתן היה לקרוא את הקובץ שנבחר.</string>
+    <string name="cert_check_chain">שרשרת תעודות</string>
+    <string name="cert_check_trust">מהימנה עבור התקן זה</string>
+    <string name="cert_check_validity">תקופת תוקף</string>
+    <string name="cert_check_key">מפתח פרטי</string>
 </resources>

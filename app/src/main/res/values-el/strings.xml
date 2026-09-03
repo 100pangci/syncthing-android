@@ -1,247 +1,988 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <string name="app_name">Syncthing-Fork</string>
+
     <string name="app_description">Μια ανοιχτή, αξιόπιστη και αποκεντρωμένη εφαρμογή συγχρονισμού αρχείων.</string>
+
     <!-- FirstStartActivity -->
+
     <!-- Title for dialog displayed on first start -->
     <string name="welcome_title">Καλώς ορίσατε στο Syncthing για Android</string>
+
+    <!-- Welcome wizard -->
+    <!-- Slide "Introduction" -->
+    <string name="welcome_text">Το Syncthing είναι μια εφαρμογή συγχρονισμού αρχείων ανοιχτού κώδικα. Για να μοιραστείτε δεδομένα με άλλες συσκευές, πρέπει να προσθέσετε τα μοναδικά ID συσκευών τους στη λίστα συσκευών. Στη συνέχεια, μπορείτε να επιλέξετε ποιοι φάκελοι θα μοιράζονται με ποιες συσκευές.
+\n
+\nΠαρακαλούμε αναφέρετε τυχόν προβλήματα που αντιμετωπίζετε μέσω του GitHub.</string>
+
+    <!-- Slide "Storage Permission" -->
+    <string name="storage_permission_title">Άδεια αποθήκευσης</string>
+    <string name="storage_permission_desc">Το Syncthing χρειάζεται πρόσβαση στην αποθήκευση της συσκευής σας για τον συγχρονισμό αρχείων.</string>
+    <string name="dialog_all_files_access_not_supported">Η συσκευή σας δεν υποστηρίζει την πρόσβαση σε όλα τα αρχεία</string>
+
     <!-- Slide "Ignore battery optimizations" -->
     <string name="ignore_doze_permission_title">Βελτιστοποίηση μπαταρίας</string>
+    <string name="ignore_doze_permission_os_notice">Τα Android TV είναι γνωστό ότι τερματίζουν περιστασιακά την εφαρμογή όταν εκτελείται στο παρασκήνιο. Μια λύση είναι διαθέσιμη στο wiki στη διεύθυνση \'%1$s/%2$s\'.</string>
+    <string name="ignore_doze_permission_desc">Το Android ενδέχεται να διακόψει τον συγχρονισμό μετά από κάποιο χρονικό διάστημα. Για να το αποτρέψετε, απενεργοποιήστε τη βελτιστοποίηση μπαταρίας. Ορισμένες συσκευές έχουν προεγκατεστημένες επιπλέον εφαρμογές τερματισμού διεργασιών. Θα πρέπει να προσθέσετε το Syncthing και στη λίστα εξαιρέσεών τους.</string>
     <string name="dialog_disable_battery_optimizations_not_supported">Η συσκευή σας δεν επιτρέπει την απενεργοποίηση των βελτιστοποιήσεων μπαταρίας</string>
+    <string name="dialog_confirm_skip_ignore_doze_permission">Προσοχή: Εάν διακοπεί το SyncthingNative και συμπεριφερθεί περίεργα, εσείς φέρετε την ευθύνη. Παραλείψτε το μόνο εάν η συσκευή σας δεν υποστηρίζει τη χορήγηση της άδειας. Σίγουρα θέλετε να το παραλείψετε;</string>
+
+    <!-- Slide "Location Permission" -->
+    <string name="location_permission_title">Άδεια τοποθεσίας</string>
+    <string name="location_permission_desc">Το Syncthing μπορεί να ρυθμιστεί ώστε να λειτουργεί σε επιλεγμένα δίκτυα Wi-Fi. Το Android απαιτεί από την εφαρμογή να έχει άδεια τοποθεσίας για να διαβάζει το όνομα του ενεργού δικτύου Wi-Fi. Εάν θέλετε να χρησιμοποιήσετε αυτή τη δυνατότητα, πατήστε το παραπάνω κουμπί. Μπορείτε να παραλείψετε αυτό το βήμα. Δείτε την πολιτική απορρήτου μας για περισσότερες λεπτομέρειες.</string>
+    <string name="location_permission_desc_api_29">Συμβουλή για Android 10+: «Να επιτρέπεται πάντα»</string>
+
+    <!-- Slide "Notification Permission" -->
+    <string name="notification_permission_title">Άδεια ειδοποιήσεων</string>
+    <string name="notification_permission_desc">Απαιτείται για την εμφάνιση ειδοποιήσεων σχετικά με νέες συνδέσεις συσκευών και αιτήματα διαμοιρασμού φακέλων, καθώς και για να διατηρηθεί η υπηρεσία ενεργή και συνδεδεμένη.</string>
+
+    <!-- Slide "Key Generation" -->
+    <string name="key_generation_title">Δημιουργία κλειδιών</string>
+    <string name="key_generation_success">Δημιουργήθηκαν επιτυχώς ασφαλή κλειδιά για την ιδιωτική ανταλλαγή δεδομένων.</string>
+
+    <!-- Generic texts used everywhere -->
+    <string name="back">Πίσω</string>
     <string name="cont">Συνέχεια</string>
     <string name="finish">Τέλος</string>
+    <string name="generic_example">Παράδειγμα</string>
+    <string name="grant_permission">Χορήγηση άδειας</string>
+    <string name="permission_granted">Η άδεια χορηγήθηκε</string>
+    <string name="reason">Λόγος:</string>
+
+    <string name="accept">Αποδοχή</string>
+
+    <string name="ignore">Αγνόηση</string>
+
+
+    <string name="main_menu">Κύριο μενού</string>
+
+    <string name="refresh">Ανανέωση</string>
+
+    <!-- PhotoShootActivity -->
+
+    <string name="photo_shoot_launcher_title">Συγχρονισμός. Κάμερα</string>
+    <string name="photo_shoot_activity_title">Κάμερα Syncthing-Fork</string>
+    <string name="photo_shoot_intro_welcome_title">Καλώς ήρθατε στην Κάμερα Syncthing</string>
+    <string name="photo_shoot_intro_no_camera">Λυπούμαστε, αυτή η συσκευή δεν διαθέτει κάμερα.</string>
+    <string name="photo_shoot_intro_missing_permissions">Χρειαζόμαστε άδεια αποθήκευσης και κάμερας για να συνεχίσουμε.</string>
+    <string name="grant_storage_permission">Χορήγηση άδειας αποθήκευσης</string>
+    <string name="grant_camera_permission">Χορήγηση άδειας κάμερας</string>
+    <string name="photo_shoot_intro_permission_desc">Η Κάμερα Syncthing απαιτεί τη συγκατάθεσή σας για να τραβάει φωτογραφίες και να τις αποθηκεύει στη συσκευή σας. Αυτή η δυνατότητα είναι προαιρετική. Για να τη χρησιμοποιήσετε, χορηγήστε τις άδειες και πατήστε «Συνέχεια». Θα δημιουργήσουμε για εσάς έναν φάκελο Κάμερας Syncthing που μπορείτε να μοιραστείτε αργότερα με άλλες συσκευές Syncthing.</string>
+    <string name="photo_shoot_take_picture_success">Η φωτογραφία αποθηκεύτηκε επιτυχώς στον φάκελο Κάμερας Syncthing.</string>
+    <string name="photo_shoot_take_picture_failure">Αποτυχία λήψης φωτογραφίας ή ακυρώσατε τη διαδικασία.</string>
+
+    <!-- Label of the folder created by the Syncthing Camera feature. -->
+    <string name="default_syncthing_camera_folder_label">Κάμερα Syncthing</string>
+
+    <!-- MainActivity -->
+
+    <!-- Main bottom navigation view -->
+    <string name="activity_main_bottom_navigation_rescan_all">Επανασάρωση όλων</string>
+
+    <!-- Main menu button -->
+
+    <!-- Exception dialog message -->
+
+    <!-- Title of the exit app when running as a service confirmation dialog -->
+    <string name="dialog_exit_while_running_as_service_title">Επιβεβαίωση εξόδου από την εφαρμογή</string>
+    <string name="dialog_exit_while_running_as_service_message">Για την ενημέρωσή σας: Έχετε ρυθμίσει την εφαρμογή να ξεκινά αυτόματα κατά την εκκίνηση. Επομένως, παρακολουθεί τις συνθήκες εκτέλεσης και συγχρονίζει ανά πάσα στιγμή στο παρασκήνιο όταν οι συνθήκες πληρούνται. Θα πρέπει να τερματίσετε χειροκίνητα μόνο εάν αντιμετωπίζετε σοβαρά προβλήματα. Διαφορετικά, απενεργοποιήστε τη ρύθμιση «Αυτόματη εκκίνηση κατά την εκκίνηση» στις ρυθμίσεις. Θέλετε να τερματίσετε τώρα μέχρι την επανεκκίνηση της συσκευής;</string>
+
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">Προσθήκη φακέλου</string>
+
     <!-- Title of the "share device id" menu action -->
+
     <!-- Shown in the chooser dialog when sharing a Device ID -->
+
     <string name="usage_reporting_dialog_title">Να επιτραπεί η ανώνυμη αναφορά δεδομένων χρήσης;</string>
+
     <string name="yes">Ναι</string>
+
     <string name="no">Όχι</string>
+
+
+    <!-- URL to open when user chose to open website in usage reporting dialog -->
+
     <string name="toast_write_storage_permission_required">Απαιτείται η άδεια αποθήκευσης δεδομένων για αυτή την εφαρμογή</string>
+
+    <string name="device_rejected">Η συσκευή «%1$s» θέλει να συνδεθεί</string>
+
+    <string name="folder_rejected">Η συσκευή «%1$s» θέλει να μοιραστεί τον φάκελο «%2$s»</string>
+
     <!-- StateDialogActivity -->
+
     <!-- Text for FoldersFragment and DevicesFragment loading view -->
     <!-- Shown instead of web_gui_loading if the key does not exist and has to be created -->
     <string name="web_gui_creating_key">Δημιουργούνται τα κλειδιά κρυπτογράφησης. Αυτή η διαδικασία μπορεί να διαρκέσει μερικά λεπτά.</string>
+
     <!-- FolderListFragment -->
+
     <string name="folders_fragment_title">Φάκελοι</string>
+
     <!-- Shown if no folders exist -->
     <string name="folder_list_empty">Δε βρέθηκαν φάκελοι</string>
+
     <!-- Format string for folder file count -->
-    <plurals name="files">
-        <item quantity="one">%1$d / %2$d αρχείο</item>
-        <item quantity="other">%1$d / %2$d αρχεία</item>
-    </plurals>
+    <plurals name="files">        <item quantity="one">%1$d / %2$d αρχείο</item>        <item quantity="other">%1$d / %2$d αρχεία</item></plurals>
+
+    <!-- Format string for conflict file count -->
+    <plurals name="conflicts">        <item quantity="one">%1$d σύγκρουση</item>        <item quantity="other">%1$d συγκρούσεις</item></plurals>
+
+    <string name="override_changes">Παράκαμψη αλλαγών</string>
+
+    <!-- Override Changes Confirmation Dialog -->
+    <string name="override_changes_question">Αυτό θα αναιρέσει όλες τις αλλαγές που έγιναν στις άλλες συσκευές που μοιράζονται αυτόν τον φάκελο. Να συνεχιστεί;</string>
+
+    <string name="revert_local_changes">Αναίρεση τοπικών αλλαγών</string>
+
+    <string name="delete_unexpected_items">Διαγραφή μη αναμενόμενων στοιχείων</string>
+
+    <!-- Revert Local Changes Confirmation Dialog -->
+    <string name="revert_local_changes_question">Αυτό θα αναιρέσει όλες τις αλλαγές που έγιναν σε αυτή τη συσκευή εντός αυτού του φακέλου. Να συνεχιστεί;</string>
+
+    <string name="open_file_manager">Άνοιγμα διαχειριστή αρχείων</string>
+    <string name="open_file_with">Άνοιγμα αρχείου με</string>
+    <string name="open_file_no_compatible_app">Δεν βρέθηκε εφαρμογή για να ανοίξει το αρχείο.</string>
+
+    <!-- Suggest File Manager App Dialog -->
+    <string name="suggest_file_manager_app_dialog_title">Δεν βρέθηκε συμβατή εφαρμογή διαχειριστή αρχείων</string>
+    <string name="suggest_file_manager_app_dialog_text">Σας συνιστούμε να εγκαταστήσετε την εφαρμογή διαχειριστή αρχείων ανοιχτού κώδικα \'Material Files\'. Θέλετε να ανοίξει η σελίδα της στο κατάστημα εφαρμογών;</string>
+
     <!-- DeviceListFragment -->
+
     <!-- Devices tab title -->
     <string name="devices_fragment_title">Συσκευές</string>
+
+    <!-- Shown if no devices are configured in add folder dialog -->
+    <string name="devices_list_empty">Δεν έχουν ρυθμιστεί συσκευές. Πατήστε για να προσθέσετε μια νέα συσκευή.</string>
+
+    <!-- Shown in ListView if no devices are configured -->
+    <string name="no_devices_configured">Δεν έχουν ρυθμιστεί συσκευές.
+\nΞεκινήστε προσθέτοντας μια συσκευή τώρα.</string>
+
+    <string name="deviceEncryptionPasswordHint">Εάν δεν είναι έμπιστη, εισάγετε τον κωδικό κρυπτογράφησης</string>
+
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">Ενημερωμένο</string>
+
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
+    <string name="device_syncing_percent_bytes">Συγχρονισμός (%1$d%%, %2$s)</string>
+
     <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">Αποσυνδεδεμένο</string>
+    <string name="device_disconnected_not_synced">Αποσυνδεδεμένη (%1$s σε εκκρεμότητα)</string>
+
+    <!-- Indicates that the device is paused and does not sync -->
+    <string name="device_paused">Σε παύση</string>
+
+    <!-- Indicates that devices does not share any folders -->
+    <string name="device_state_unused">Αχρησιμοποίητο</string>
+
     <!-- Indicates that the device connection is unknown -->
+
+    <!-- Last seen title -->
+    <string name="device_last_seen">Τελευταία εμφάνιση: %1$s</string>
+    <string name="device_last_seen_never">Ποτέ</string>
+
+    <!-- Title for the listing of shared folders with a colon and space appended -->
+    <string name="shared_folders_title_colon">"Φάκελοι: "</string>
+
+    <!-- Expand the collapsed shared folders list on a device card; parameter is the hidden folder count -->
+    <string name="device_folders_show_more">+%1$d</string>
+
+    <!-- Collapse an expanded shared folders list on a device card -->
+    <string name="device_folders_show_less">Εμφάνιση λιγότερων</string>
+
+    <!-- Title of the dialog listing the conflict files of a folder -->
+    <string name="conflict_files_title">Αντικρουόμενα αρχεία</string>
+
+    <!-- Header of the grouped status card showing transfer and resource stats -->
+    <string name="status_transfer_resources">Μεταφορά &amp; πόροι</string>
+
     <!-- Title for current download rate -->
     <string name="download_title">Λήψη</string>
+
     <!-- Title for current upload rate -->
     <string name="upload_title">Αποστολή</string>
+
+    <!-- StatusFragment -->
+
+    <string name="status_fragment_title">Κατάσταση</string>
+
+    <string name="button_follow_run_conditions">ΑΚΟΛΟΥΘΗΣΗ ΣΥΝΘΗΚΩΝ ΕΚΤΕΛΕΣΗΣ</string>
+    <string name="button_force_start">ΑΝΑΓΚΑΣΤΙΚΗ ΕΚΚΙΝΗΣΗ
+\nΑΓΝΟΗΣΗ ΣΥΝΘΗΚΩΝ ΕΚΤΕΛΕΣΗΣ</string>
+    <string name="button_force_stop">ΑΝΑΓΚΑΣΤΙΚΟΣ ΤΕΡΜΑΤΙΣΜΟΣ
+\nΑΓΝΟΗΣΗ ΣΥΝΘΗΚΩΝ ΕΚΤΕΛΕΣΗΣ</string>
+
+    <string name="syncthing_starting">Το Syncthing ξεκινά.</string>
+    <string name="syncthing_running">Το Syncthing εκτελείται.</string>
+    <string name="syncthing_not_running">Το Syncthing δεν εκτελείται.</string>
+    <string name="syncthing_has_crashed">Το Syncthing κατέρρευσε.</string>
+
     <!-- DrawerFragment -->
+
     <!-- Same as download_title with a colon and space appended -->
     <!-- Same as upload_title with a colon and space appended -->
     <!-- Title for current RAM usage -->
     <string name="ram_usage">Χρήση RAM</string>
     <!-- Title for announce server status -->
     <string name="announce_server">Διακομιστής ανακοίνωσης</string>
+    <!-- Title for uptime status -->
+    <string name="uptime">Χρόνος λειτουργίας</string>
     <string name="restart">Επανεκκίνηση</string>
+
     <string name="dialog_confirm_restart">Επιθυμείτε να επανεκκινήσετε το Syncthing;</string>
+
     <!-- FolderActivity -->
+
     <!-- Setting title -->
     <string name="folder_id">ID φακέλου</string>
+
     <!-- Setting title -->
     <string name="folder_label">Ετικέτα φακέλου</string>
+
     <!-- Setting title -->
     <string name="directory">Κατάλογος</string>
+    <string name="advanced_directory_selection">Σύνθετη επιλογή καταλόγου</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_fileWatcher">Παρακολούθηση αλλαγών</string>
+    <string name="folder_fileWatcherDescription">Ζητά από το λειτουργικό σύστημα να ενημερώνει για αλλαγές στα αρχεία. Εάν είναι απενεργοποιημένη, γίνεται επαναφορά σε περιοδικές ωριαίες σαρώσεις.</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_ignore_delete_caption">Αγνόηση διαγραφής</string>
+    <string name="folder_ignore_delete_description">Επιλογή για προχωρημένους που επηρεάζει τον χειρισμό των εισερχόμενων ενημερώσεων ευρετηρίου. Όταν είναι ενεργοποιημένη, οι εισερχόμενες ενημερώσεις με τη σημαία διαγραφής αγνοούνται. Δείτε https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_run_script_caption">Εκτέλεση σεναρίου</string>
+    <string name="folder_run_script_description">Επιλογή για προχωρημένους για την εκτέλεση σεναρίων μετά την αλλαγή της κατάστασης συγχρονισμού ενός φακέλου. Θα εκτελεστούν τα σενάρια στο \'.stfolder/*.sh\', ενώ άλλες τοποθεσίες δεν υποστηρίζονται για λόγους ασφαλείας.\nΠαράδειγμα κλήσης σεναρίου: \'.stfolder/rename-files.sh sync_complete\'</string>
+
+    <!-- Setting title -->
+    <string name="folder_pause">Παύση φακέλου</string>
+
     <!-- Setting title -->
     <string name="devices">Συσκευές</string>
+
     <!-- Setting title -->
     <string name="keep_versions">Τήρηση εκδόσεων</string>
+
     <!-- Setting title -->
     <string name="delete_folder">Διαγραφή φακέλου</string>
+
     <!-- Title for FolderSettingsFragment in create mode -->
     <string name="create_folder">Δημιουργία φακέλου</string>
+
     <!-- Title for FolderSettingsFragment in edit mode -->
     <string name="edit_folder">Επεξεργασία φακέλου</string>
+
     <!-- Menu item to confirm folder creation -->
     <string name="create">Δημιουργία</string>
+
     <!-- Dialog shown when attempting to remove a folder -->
     <string name="remove_folder_confirm">Σίγουρα επιθυμείτε να αφαιρέσετε αυτόν τον φάκελο από το Syncthing;</string>
+
     <!-- Toast shown when trying to create a folder with an empty ID -->
     <string name="folder_id_required">Το ID του φακέλου δεν μπορεί να είναι κενό</string>
+
+    <!-- Toast shown when trying to create a folder with an empty label -->
+    <string name="folder_label_required">Η ετικέτα φακέλου δεν μπορεί να είναι κενή</string>
+
     <!-- Toast shown when trying to create a folder with an empty path -->
     <string name="folder_path_required">Το μονοπάτι του φακέλου δεν μπορεί να είναι κενό</string>
+
     <string name="dialog_discard_changes">Να απορριφθούν οι αλλαγές που κάνατε;</string>
+
+    <!-- Summary shown if we only have readonly access to the folder path -->
+    <string name="folder_path_readonly">Η έκδοση Android σας παρέχει στο Syncthing μόνο δικαιώματα ανάγνωσης στον επιλεγμένο φάκελο.</string>
+
+    <!-- Summary shown if we only have readwrite access to the folder path -->
+    <string name="folder_path_readwrite">Η έκδοση Android σας παρέχει στο Syncthing δικαιώματα ανάγνωσης και εγγραφής στον επιλεγμένο φάκελο.</string>
+
+    <!-- Toast shown if the user selected an invalid location for a new syncthing folder -->
+    <string name="toast_invalid_folder_selected">Λυπούμαστε. Ο επιλεγμένος φάκελος δεν μπορεί να χρησιμοποιηθεί. Παρακαλώ επιλέξτε έναν φάκελο στην εσωτερική ή εξωτερική αποθήκευση.</string>
+
+    <string name="folder_type_switch_to_receive_encrypted_not_allowed">Η μετατροπή υπαρχόντων φακέλων σε «Λήψη κρυπτογραφημένων» δεν υποστηρίζεται.</string>
+
     <string name="ignore_patterns">Πρότυπα για αγνόηση</string>
+
     <!-- DeviceActivity -->
+
     <!-- Setting title -->
     <string name="device_id">ID συσκευής</string>
+
+    <!-- Status title -->
+    <string name="discovered_devices_title">Ανακαλυφθείσες συσκευές - Πατήστε για επιλογή</string>
+
+    <!-- Status text -->
+
+    <!-- Status text -->
+    <string name="local_discovery_disabled">Έχετε απενεργοποιήσει την τοπική ανεύρεση στο \'Ρυθμίσεις\' &gt; \'Επιλογές Syncthing\' &gt; \'Τοπική ανεύρεση\'. Ενεργοποιήστε την για την αναζήτηση συσκευών στο τοπικό δίκτυο.</string>
+
     <!-- Setting title -->
+
+    <!-- Setting title -->
+    <string name="folders">Φάκελοι</string>
+
     <!-- Setting title -->
     <string name="addresses">Διευθύνσεις</string>
+
     <!-- Setting title -->
+
     <!-- Setting title -->
     <string name="compression">Συμπίεση</string>
+
     <!-- Strings representing compression options -->
     <string name="compress_never">Ποτέ</string>
     <string name="compress_metadata">Μεταδεδομένα</string>
     <string name="compress_always">Πάντα</string>
     <!-- Setting title -->
     <string name="introducer">Βασικός κόμβος</string>
+
+    <!-- Setting title -->
+    <string name="autoAcceptFolders">Αυτόματη αποδοχή</string>
+
+    <!-- Setting title -->
+    <string name="pause_device">Παύση συσκευής</string>
+
+    <!-- Setting title -->
+    <string name="untrusted_device">Μη έμπιστη συσκευή</string>
+
     <!-- ActionBar item -->
     <string name="delete_device">Διαγραφή συσκευής</string>
+
     <string name="add_device">Προσθήκη συσκευής</string>
+
     <!-- Menu item to confirm adding a device -->
+
     <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">Επεξεργασία συσκευής</string>
+
     <!-- Dialog shown when attempting to remove a device -->
     <string name="remove_device_confirm">Σίγουρα επιθυμείτε να αφαιρέσετε αυτή την συσκευή;</string>
+
     <!-- Toast shown when trying to create a device with an empty ID -->
     <string name="device_id_required">Το ID της συσκευής δεν μπορεί να είναι κενό</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
+    <string name="device_id_invalid">Το ID της συσκευής δεν έχει σωστή μορφή. Παρακαλώ προσπαθήστε ξανά και εισάγετε το σωστό ID.</string>
+
+    <!-- Toast shown when trying to create a device with an empty name -->
+
+    <!-- Toast shown when trying to create a device with invalid addresses -->
+    <string name="device_addresses_invalid">Οι διευθύνσεις της συσκευής δεν έχουν σωστή μορφή. Παρακαλώ προσπαθήστε ξανά. Δείτε τα έγγραφα του Syncthing για περισσότερες πληροφορίες.</string>
+
+    <!-- Content description (alt text) for device ID qr code in show device id dialog -->
+    <string name="device_id_qr_code">Κωδικός QR ID συσκευής</string>
+
+    <string name="close_device_id">Κλείσιμο ID συσκευής</string>
+
+    <string name="copy">Αντιγραφή</string>
+
     <!-- Content description for device ID qr code icon -->
     <string name="scan_qr_code_description">Σάρωση κωδικού QR</string>
+
+    <!-- Dialog message if no compatible barcode scanner app is installed -->
+
+    <!-- Shown if no folders are configured -->
+    <string name="folders_list_empty">Δεν έχουν ρυθμιστεί φάκελοι. Πατήστε για να προσθέσετε έναν νέο φάκελο.</string>
+
+    <!-- RecentChangesActivity -->
+
+    <string name="no_recent_changes">Δεν υπάρχουν πρόσφατες αλλαγές.</string>
+    <string name="recent_changes_title">Πρόσφατες αλλαγές</string>
+    <string name="modified_by_device">Συσκευή: %1$s</string>
+    <string name="modification_time">Ώρα: %1$s</string>
+    <string name="more_options">Περισσότερες επιλογές</string>
+    <string name="show_exact_times">Εμφάνιση ακριβούς ώρας</string>
+
+    <string name="this_device">Αυτή η συσκευή</string>
+
     <!-- WebGuiActivity -->
+
     <!-- Title of the web gui activity -->
     <string name="web_gui_title">Web GUI</string>
+
     <!-- Text for WebGuiActivity loading view -->
     <string name="web_gui_loading">Αναμονή για το GUI</string>
+
+    <!-- Shown in WebGuiActivity when the web gui could not be loaded. The technical cause is shown
+         below it and written to the log. -->
+    <string name="web_gui_load_failed">Δεν ήταν δυνατή η φόρτωση του Web GUI. Παρακαλώ αποθηκεύστε ένα αρχείο καταγραφής και αναφέρετε το πρόβλημα.</string>
+
+    <!-- WebViewActivity -->
+
+    <!-- Dialog title displayed when an invalid ssl certificate was found -->
+    <string name="security_notice">Ειδοποίηση ασφάλειας</string>
+
+    <!-- Dialog message if an invalid ssl certificate was detected -->
+    <string name="ssl_cert_invalid_text">Η ιστοσελίδα στο %1$s φαίνεται να έχει μη έγκυρο πιστοποιητικό για κρυπτογράφηση SSL. Να συνεχιστεί;</string>
+
+    <!-- Text for WebViewActivity loading page -->
+    <string name="web_page_loading">Φόρτωση ιστοσελίδας:
+\n%1$s …</string>
+
+    <!-- Text for WebViewActivity openBrowser action button -->
+    <string name="open_in_browser">Άνοιγμα σε πρόγραμμα περιήγησης</string>
+
     <!-- SettingsFragment -->
+
     <string name="settings_title">Ρυθμίσεις</string>
+
+    <string name="category_wifi">Wi-Fi</string>
+    <string name="category_mobile_data">Δεδομένα κινητού</string>
+    <string name="category_battery">Μπαταρία</string>
+    <string name="category_schedule">Πρόγραμμα</string>
+    <string name="category_general">Γενικά</string>
+    <string name="category_connections">Συνδέσεις</string>
+    <string name="category_advanced">Για προχωρημένους</string>
+
+    <string name="category_user_interface">Διεπαφή χρήστη</string>
+
+    <string name="preference_app_theme_title">Θέμα</string>
+    <string name="preference_app_theme_follow_system">Ακολουθία συστήματος</string>
+    <string name="preference_app_theme_follow_light">Ανοιχτό</string>
+    <string name="preference_app_theme_follow_dark">Σκούρο</string>
+    <string name="preference_app_theme_amoled" translatable="false">AMOLED</string>
+
     <string name="category_behaviour">Συμπεριφορά</string>
     <string name="category_syncthing_options">Επιλογές Syncthing</string>
+    <string name="category_syncthing_options_summary">Αυτό το μενού είναι διαθέσιμο μόνο όταν το Syncthing εκτελείται.</string>
+
+    <string name="category_backup">Εισαγωγή και Εξαγωγή</string>
+    <string name="category_debug">Αντιμετώπιση προβλημάτων</string>
     <string name="category_experimental">Πειραματικά</string>
+
     <!-- Preference screen - Run conditions -->
     <string name="run_conditions_title">Συνθήκες εκτέλεσης</string>
+    <string name="run_conditions_summary">Χρησιμοποιήστε τις παρακάτω επιλογές για να αποφασίσετε πότε θα εκτελείται το Syncthing.</string>
+
+    <string name="run_on_mobile_data_title">Εκτέλεση με δεδομένα κινητού</string>
+    <string name="run_on_mobile_data_summary">Εκτέλεση όταν η συσκευή είναι συνδεδεμένη μέσω δικτύου δεδομένων κινητού. Προσοχή: Αυτό μπορεί να καταναλώσει πολλά δεδομένα από το πρόγραμμα δεδομένων του παρόχου σας εάν συγχρονίζετε μεγάλο όγκο δεδομένων.</string>
+
+    <string name="run_on_roaming_title">Εκτέλεση κατά την περιαγωγή</string>
+    <string name="run_on_roaming_summary">Να επιτρέπεται στο Syncthing η χρήση δεδομένων κινητού κατά την περιαγωγή.</string>
+
+    <string name="run_on_wifi_title">Εκτέλεση σε Wi-Fi</string>
+    <string name="run_on_wifi_summary">Εκτέλεση όταν η συσκευή είναι συνδεδεμένη σε δίκτυο Wi-Fi ή ethernet.</string>
+
+    <string name="run_on_metered_wifi_title">Εκτέλεση σε Wi-Fi με χρέωση</string>
+    <string name="run_on_metered_wifi_summary">Εκτέλεση όταν η συσκευή είναι συνδεδεμένη σε δίκτυο Wi-Fi με χρέωση, π.χ. hotspot ή δίκτυο με κοινή χρήση σύνδεσης. Προσοχή: Αυτό μπορεί να καταναλώσει μεγάλο μέρος του προγράμματος δεδομένων σας εάν συγχρονίζετε πολλά δεδομένα.</string>
+
+    <string name="run_on_whitelisted_wifi_title">Εκτέλεση σε καθορισμένα δίκτυα Wi-Fi</string>
+    <string name="specify_wifi_ssid_whitelist">Επιλογή δικτύων Wi-Fi</string>
+    <string name="run_on_whitelisted_wifi_networks">Επιλεγμένα δίκτυα Wi-Fi: %1$s</string>
+    <string name="wifi_ssid_whitelist_empty">Δεν έχουν καθοριστεί δίκτυα Wi-Fi. Πατήστε για να καθορίσετε δίκτυα.</string>
+
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">Παρακαλώ ενεργοποιήστε το WiFi για να επιλέξετε δίκτυα.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_location">Παρακαλώ ενεργοποιήστε την τοποθεσία για να επιλέξετε δίκτυα.</string>
+
+
+    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">Ξεκινώντας από το Android 8.1, απαιτείται πρόσβαση στην τοποθεσία για να είναι δυνατή η ανάγνωση του ονόματος του Wi-Fi. Μπορείτε να χρησιμοποιήσετε αυτή τη δυνατότητα μόνο εάν χορηγήσετε αυτή την άδεια.</string>
+
+    <string name="power_source_title">Εκτέλεση όταν η συσκευή τροφοδοτείται από</string>
+
+    <string name="power_source_ac_and_battery_power">Εναλλασσόμενο ρεύμα και μπαταρία.</string>
+    <string name="power_source_ac_power">Εναλλασσόμενο ρεύμα.</string>
+    <string name="power_source_battery_power">Μπαταρία.</string>
+
     <string name="respect_battery_saving_title">Υπακοή στη ρύθμιση εξοικονόμησης ενέργειας του Android</string>
+    <string name="respect_battery_saving_summary">Απενεργοποίηση του Syncthing εάν είναι ενεργή η εξοικονόμηση ενέργειας.</string>
+
+    <string name="respect_master_sync_title">Υπακοή στη ρύθμιση «Αυτόματος συγχρονισμός δεδομένων» του Android</string>
+    <string name="respect_master_sync_summary">Απενεργοποίηση του Syncthing όταν το πλακίδιο γρήγορων ρυθμίσεων «Αυτόματος συγχρονισμός δεδομένων» είναι απενεργοποιημένο.</string>
+
+    <string name="run_in_flight_mode_title">Εκτέλεση χωρίς σύνδεση δικτύου</string>
+    <string name="run_in_flight_mode_summary">Η ενεργοποίηση αυτής της επιλογής θα κάνει το Syncthing να εκτελείται ακόμα και όταν είστε εκτός σύνδεσης. Ενεργοποιήστε την εάν η συσκευή σας έχει προβλήματα ανίχνευσης χειροκίνητων συνδέσεων Wi-Fi κατά τη λειτουργία πτήσης.</string>
+
+    <string name="run_on_time_schedule_title">Εκτέλεση σύμφωνα με χρονοπρόγραμμα</string>
+    <string name="run_on_time_schedule_summary">Η ενεργοποίηση αυτής της επιλογής θα επιχειρήσει συγχρονισμό για καθορισμένη διάρκεια εάν πληρούνται οι συνθήκες εκτέλεσης και εάν έχει παρέλθει το καθορισμένο χρονικό διάστημα από τον τελευταίο συγχρονισμό. Αυτό μπορεί να εξοικονομήσει πολλή μπαταρία, αλλά απαιτεί οι συνεργάτες συγχρονισμού να είναι συνδεδεμένοι. Σημείωση: Μπορεί να αφεθούν ημιτελή προσωρινά αρχεία μέχρι τον επόμενο προγραμματισμένο συγχρονισμό.</string>
+
+    <string name="sync_duration_minutes_title">Διάρκεια του κύκλου συγχρονισμού</string>
+    <string name="sync_duration_minutes_summary">%1$s λεπτά</string>
+    <string name="sleep_interval_minutes_title">Διάρκεια του διαστήματος παύσης συγχρονισμού</string>
+
+    <!-- Preferences - Behaviour -->
+
+    <string name="behaviour_autostart_title">Αυτόματη εκκίνηση</string>
+    <string name="behaviour_autostart_summary">Αυτόματη εκκίνηση της εφαρμογής κατά την εκκίνηση του λειτουργικού συστήματος.</string>
+
+
+    <string name="allow_overwrite_files_title">Να επιτρέπεται η αντικατάσταση υπαρχόντων αρχείων</string>
+    <string name="allow_overwrite_files_summary">Όταν μια άλλη εφαρμογή μοιράζεται αρχεία σε έναν από τους φακέλους μας.</string>
+
+    <string name="expert_mode_title">Λειτουργία για προχωρημένους</string>
+
+    <string name="expert_mode_summary">Η ενεργοποίηση αυτής της επιλογής θα εμφανίσει επιλογές σύνθετης διαμόρφωσης. Θα πρέπει πρώτα να ρίξετε μια ματιά στα έγγραφα του Syncthing για να βεβαιωθείτε ότι ξέρετε πώς να τις χρησιμοποιήσετε σωστά. Οι λανθασμένες ρυθμίσεις ενδέχεται να προκαλέσουν εξάντληση της μπαταρίας, εξάντληση πόρων συστήματος ή ημιτελή συγχρονισμό.</string>
+
+
+    <string name="start_into_web_gui_title">Άμεση εκκίνηση στο web GUI</string>
+ 
+    <string name="start_into_web_gui_summary">Κατά την εκκίνηση της εφαρμογής, ανοίγει το web GUI αντί της κύριας οθόνης</string>
+
+
+
+
+
     <string name="device_name">Όνομα συσκευής</string>
+
     <string name="listen_address">Διευθύνσεις ακρόασης πρωτοκόλλου συγχρονισμού</string>
+
     <string name="max_recv_kbps">Περιορισμός ταχύτητας λήψης (KiB/s)</string>
+
     <string name="max_send_kbps">Περιορισμός ταχύτητας αποστολής (KiB/s)</string>
+
     <string name="global_announce_enabled">Καθολική ανεύρεση</string>
+
     <string name="local_announce_enabled">Τοπική ανεύρεση</string>
+
     <string name="enable_nat_traversal">Ενεργοποίηση διάσχισης NAT</string>
+
     <string name="global_announce_server">Διακομιστές καθολικής ανεύρεσης κόμβων</string>
+
     <string name="enable_relaying">Ενεργοποίηση αναμετάδοσης</string>
+
     <string name="usage_reporting">Ανώνυμη αναφορά δεδομένων χρήσης</string>
+
+    <string name="crash_reporting">Ανώνυμες αναφορές σφαλμάτων</string>
+
+    <string name="webui_tcp_port_title">Θύρα TCP Web UI</string>
+
+    <string name="webui_remote_access_title">Απομακρυσμένη πρόσβαση Web UI</string>
+
+    <string name="webui_username_title">Όνομα χρήστη Web UI</string>
+
+    <string name="webui_password_title">Κωδικός πρόσβασης Web UI</string>
+
+    <string name="webui_remote_access_summary">Καθορίστε για να επιτρέπεται η πρόσβαση στο Web UI από άλλη συσκευή. Εάν είναι ενεργοποιημένο, μπορείτε να συνδεθείτε με τον χρήστη \'syncthing\' και το κλειδί API ως κωδικό πρόσβασης. Προεπιλογή: απενεργοποιημένο (πιο ασφαλές)</string>
+
+
+
+    <string name="clear_stversions_title">Εκκαθάριση όλων των φακέλων εκδόσεων</string>
+    <string name="clear_stversions_summary">Τα αρχεία μετακινούνται στον κατάλογο .stversions όταν αντικαθίστανται ή διαγράφονται από το Syncthing. Πιθανότατα μπορείτε να βρείτε και να ανακτήσετε εκεί αρχεία που διαγράφηκαν κατά λάθος, αλλά οι παλιές εκδόσεις των αρχείων καταλαμβάνουν χώρο αποθήκευσης στη συσκευή σας.</string>
+    <string name="clear_stversions_question">Αυτό θα διαγράψει όλες τις προηγούμενες εκδόσεις αρχείων που διαχειρίζεται το Syncthing. Να συνεχιστεί;</string>
+    <string name="clear_stversions_done">Οι φάκελοι .stversions εκκαθαρίστηκαν επιτυχώς.</string>
+
+    <string name="download_support_bundle_title">Λήψη πακέτου υποστήριξης</string>
+
+    <!-- Summary shown when the user clicked the download support bundle button -->
+    <string name="download_support_bundle_in_progress">Προετοιμασία λήψης πακέτου υποστήριξης …</string>
+
+    <!-- Toast after successful download of the support bundle -->
+    <string name="download_support_bundle_succeeded">Το πακέτο υποστήριξης λήφθηκε επιτυχώς στο %s.</string>
+
+    <!-- Toast after failed support bundle download -->
+    <string name="download_support_bundle_failed">Αποτυχία λήψης πακέτου υποστήριξης. Ελέγξτε τα αρχεία καταγραφής.</string>
+
+    <!-- Titles for the preference to undo ignored devices and folders -->
+    <string name="undo_ignored_devices_folders_title">Αναίρεση αγνόησης συσκευών και φακέλων</string>
+    <string name="undo_ignored_devices_folders_question">Αυτό θα αναιρέσει προηγούμενες αποφάσεις να αγνοηθούν συσκευές και φάκελοι. Να συνεχιστεί;</string>
+    <string name="undo_ignored_devices_folders_done">Οι αποφάσεις αναιρέθηκαν επιτυχώς.</string>
+
+    <string name="backup_rel_path_to_zip">Σχετική διαδρομή προς το αρχείο ρυθμίσεων</string>
+
+    <string name="backup_password_title">Κωδικός προστασίας ρυθμίσεων</string>
+    <string name="backup_password_summary">ℹ️ Συνιστάται:\nΕισάγετε έναν ισχυρό κωδικό πρόσβασης για την κρυπτογράφηση των ρυθμίσεων κατά την εξαγωγή και την αποκρυπτογράφηση κατά την εισαγωγή. Φυλάξτε αυτόν τον κωδικό σε ασφαλές μέρος για τη διαδικασία ανάκτησης. Θα τον χρειαστείτε για τη χρήση της δυνατότητας εισαγωγής.\n\n⚠️ Δεν συνιστάται:\nΧωρίς κωδικό πρόσβασης, άλλες εφαρμογές ενδέχεται να μπορέσουν να διαβάσουν και να παραποιήσουν τη διαμόρφωση του Syncthing. Η έκθεση της διαμόρφωσης ενέχει τον κίνδυνο ένας κακόβουλος να αποκτήσει μη εξουσιοδοτημένη πρόσβαση στα αρχεία σας χρησιμοποιώντας κλεμμένες εξαγωγές ρυθμίσεων.</string>
+
+    <string name="backup_password_set">✅ Ο κωδικός ορίστηκε: %1$s</string>
+    <string name="backup_password_set_masked">✅ Ο κωδικός ορίστηκε - Πατήστε για αλλαγή</string>
+    <string name="backup_password_not_set">⚠ Ο κωδικός δεν έχει οριστεί.</string>
+    <string name="toggle_password_visibility">Εναλλαγή ορατότητας κωδικού</string>
+
     <string name="export_config">Εξαγωγή ρυθμίσεων</string>
+
+    <!-- Toast after entering an invalid tcp port -->
+    <string name="invalid_port_number" tools:ignore="PluralsCandidate">Ο αριθμός θύρας δεν είναι έγκυρος. Παρακαλώ εισάγετε μια θύρα μεταξύ %1$d και %2$d.</string>
+
+    <!-- Toast after entering invalid integer value -->
+    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">Η τιμή εισόδου δεν είναι έγκυρη. Παρακαλώ εισάγετε μια τιμή μεταξύ %1$d και %2$d.</string>
+
+    <!-- Experimental options -->
+    <string name="use_proxy">Σύνδεση μέσω διακομιστή μεσολάβησης</string>
+    <string name="do_not_use_proxy">Δεν έχει ρυθμιστεί διακομιστής μεσολάβησης.</string>
+
+
     <string name="use_tor_title">Χρήση του Tor</string>
+    <string name="use_tor_summary">Διοχέτευση όλης της κίνησης μέσω του Tor για αυξημένο απόρρητο. Απαιτεί το Orbot. Απενεργοποιεί τις επιλογές διακομιστή μεσολάβησης.</string>
+
+    <string name="socks_proxy_address_title">Διακομιστής μεσολάβησης SOCKS5</string>
+    <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>
+
+    <!-- Toast after entering invalid socks proxy address -->
+    <string name="toast_invalid_socks_proxy_address">Η είσοδος παραβιάζει τη σύνταξη του διακομιστή μεσολάβησης \'socks5://[IP/HOSTNAME]:[PORT]\'</string>
+
+    <string name="http_proxy_address_title">Διακομιστής μεσολάβησης HTTP(S)</string>
+    <string name="http_proxy_address_example" translatable="false">http://192.168.0.1:8080</string>
+
+    <!-- Toast after entering invalid http proxy address -->
+    <string name="toast_invalid_http_proxy_address">Η είσοδος παραβιάζει τη σύνταξη του διακομιστή μεσολάβησης \'http://[IP/HOSTNAME]:[PORT]\'</string>
+
+    <string name="broadcast_service_control_title">Έλεγχος υπηρεσίας μέσω Broadcast</string>
+    <string name="broadcast_service_control_summary">Προεπιλογή: Απενεργοποιημένο. Ενεργοποιήστε το για να επιτρέψετε στο adb ή σε εφαρμογές τρίτων, π.χ. εφαρμογές αυτοματισμού, να ζητούν από το Syncthing να ακολουθεί τις συνθήκες εκτέλεσης, να εκκινεί ή να τερματίζει με το ζόρι.</string>
+
     <!-- Dialog shown before config export -->
     <string name="dialog_confirm_export">Σίγουρα επιθυμείτε να εξάγετε τις ρυθμίσεις σας; Τυχόν υπάρχοντα αρχεία θα διαγραφούν. \n \nΠΡΟΣΟΧΗ! Οι άλλες εφαρμογές ενδέχεται να μπορούν να διαβάσουν το ιδιωτικό κλειδί από την τοποθεσία του αντιγράφου ασφαλείας και να το χρησιμοποιήσουν για τη λήψη/τροποποίηση των συγχρονισμένων αρχείων.</string>
+
     <!-- Dialog shown before config import -->
     <string name="dialog_confirm_import">Σίγουρα επιθυμείτε να εισάγετε τις νέες ρυθμίσεις; Τυχόν υπάρχοντα αρχεία θα διαγραφούν.</string>
+
+    <!-- PreferenceCategories -->
+    <string name="preference_category_actions">Ενέργειες</string>
+    <string name="preference_category_explanation">Εξήγηση</string>
+    <string name="preference_category_prepare">Προετοιμασία</string>
+
     <!-- Toast shown after config was exported -->
+    <string name="config_export_successful_no_path">Οι ρυθμίσεις εξήχθησαν. Μην ξεχάσετε τον κωδικό για μεταγενέστερη εισαγωγή.</string>
+    <string name="config_export_failed">Η εξαγωγή ρυθμίσεων απέτυχε. Μεταβείτε στο Ρυθμίσεις-Αντιμετώπιση προβλημάτων-Άνοιγμα καταγραφής για λεπτομέρειες.</string>
+
     <string name="import_config">Εισαγωγή ρυθμίσεων</string>
+
     <!-- Toast shown after config was imported -->
     <string name="config_imported_successful">Οι ρυθμίσεις εισήχθησαν</string>
+
+    <string name="config_import_failed_no_path">Η εισαγωγή ρυθμίσεων απέτυχε. Μεταβείτε στο Ρυθμίσεις-Αντιμετώπιση προβλημάτων-Άνοιγμα καταγραφής για λεπτομέρειες.</string>
+
+    <string name="dialog_settings_restart_app_title">Απαιτείται επανεκκίνηση</string>
+    <string name="dialog_settings_restart_app_question">Η αλλαγή αυτής της επιλογής απαιτεί την άμεση επανεκκίνηση της εφαρμογής. Όλες οι άλλες αλλαγές θα απορριφθούν. Να συνεχιστεί;</string>
+
     <!-- Title for the preference to set STTRACE parameters -->
     <string name="sttrace_title">Επιλογές STTRACE</string>
+    <string name="sttrace_none_selected">Καμία δυνατότητα εντοπισμού σφαλμάτων</string>
+
     <string name="environment_variables">Μεταβλητές περιβάλλοντος</string>
+
     <!-- Toast after entering invalid STTRACE params -->
     <string name="toast_invalid_environment_variables">Η τιμή δεν είναι έγκυρη συμβολοσειρά μεταβλητής περιβάλλοντος</string>
+
     <!-- Title for the preference to reset Syncthing indexes -->
     <string name="st_reset_database_title">Επαναφορά βάσης δεδομένων</string>
     <!-- Syncthing was reset -->
+    <string name="st_reset_database_question">Αυτή η ενέργεια θα πρέπει να εκτελείται μόνο μετά από σύσταση της ομάδας υποστήριξής μας.
+\nΣίγουρα θέλετε να εκκαθαριστεί η βάση δεδομένων του Syncthing;</string>
+    <!-- Syncthing was reset -->
     <string name="st_reset_database_done">Η επαναφορά της βάσης δεδομένων του Syncthing ήταν επιτυχής</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_deltas_title">Επαναφορά δεικτών Delta</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_question">Αυτή η ενέργεια θα πρέπει να εκτελείται μόνο μετά από σύσταση της ομάδας υποστήριξής μας.
+\nΣίγουρα θέλετε να εκκαθαριστούν οι δείκτες Delta του Syncthing;</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_done">Οι δείκτες Delta του Syncthing επαναφέρθηκαν επιτυχώς</string>
+
+    <!-- Settings / About -->
     <string name="category_about">Σχετικά με το Syncthing</string>
+
+    <string name="verbose_log_title">Λεπτομερής καταγραφή</string>
+    <string name="verbose_log_summary">Η ενεργοποίηση αυτής της επιλογής θα βοηθήσει στη δημιουργία καταγραφών εντοπισμού σφαλμάτων σε πολύ αναλυτικό επίπεδο.</string>
+
+
     <!-- Settings item that opens the log activity -->
     <string name="open_log">Άνοιγμα καταγραφής συμβάντων</string>
+
     <!-- Summary for the log activity -->
     <string name="open_log_summary">Άνοιγμα του παραθύρου καταγραφής συμβάντων του Syncthing και Android</string>
+
+    <!-- Menu item linking support forum -->
+    <string name="syncthing_forum_title">Φόρουμ Syncthing</string>
+    <string name="syncthing_forum_summary">Μετάβαση στο Φόρουμ Syncthing για υποστήριξη</string>
+    <string name="syncthing_forum_url" translatable="false">https://forum.syncthing.net/</string>
+
+    <!-- Menu item for pizza -->
+
+    <!-- Menu item linking privacy policy -->
+    <string name="privacy_title">Πολιτική απορρήτου</string>
+    <string name="privacy_summary">Άνοιγμα της πολιτικής απορρήτου του syncthing-android, η οποία καλύπτει τη χρήση (εάν υπάρχει) προσωπικών δεδομένων, π.χ. τοποθεσίας.</string>
+    <string name="privacy_policy_url" translatable="false">https://syncthing.net/android-privacy-policy</string>
+
     <!-- Settings item that opens issue tracker -->
     <string name="report_issue_title">Αναφορά προβλήματος</string>
-    <!-- Menu item to donate -->
+
+    <!-- Summary for the issue tracker settings item -->
+    <string name="open_issue_tracker_summary">Άνοιγμα του εργαλείου αναφοράς προβλημάτων του Syncthing-Fork στο %1$s</string>
+
+    <!-- URL of the issue tracker -->
+    <string name="issue_tracker_url" translatable="false">https://github.com/researchxxl/syncthing-android/issues</string>
+
+    <!-- URL of the GitHub wiki -->
+    <string name="wiki_url" translatable="false">https://github.com/researchxxl/syncthing-android/tree/main/wiki</string>
+
+    <!-- URL of the Syncthing project homepage -->
+
     <!-- Title of the preference showing upstream version name -->
     <string name="syncthing_version_title">Έκδοση Syncthing</string>
+
+    <!-- Title of the preference showing this app's version name -->
+    <string name="app_version_title">Έκδοση Syncthing-Fork Wrapper</string>
+
+    <!-- Title of the preference showing the REST API key -->
+    <string name="syncthing_api_key">Κλειδί API Syncthing (πατήστε για αντιγραφή)</string>
+
+    <!-- Shown when the API key is copied to the clipboard -->
+    <string name="api_key_copied_to_clipboard">Το κλειδί API του Syncthing αντιγράφηκε στο πρόχειρο</string>
+
+    <!-- Title of the preference showing database size -->
+    <string name="syncthing_database_size">Μέγεθος βάσης δεδομένων Syncthing</string>
+
+    <!-- Title of the preference showing the OS open file limit -->
+    <string name="os_open_file_limit">Όριο ανοιχτών αρχείων Android</string>
+    
+    <!-- Title of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_title">Άδειες ανοιχτού κώδικα</string>
+    
+    <!-- Summary of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_summary">Εμφάνιση των χρησιμοποιούμενων αδειών ανοιχτού κώδικα</string>
+
     <!-- FolderPickerAcitivity -->
+
     <!-- Activity title -->
     <string name="folder_picker_title">Επιλογέας φακέλων</string>
+
+    <!-- Storage path overview -->
+    <string name="advanced_storage_path_overview">Επισκόπηση σύνθετης διαδρομής αποθήκευσης</string>
+
+    <!-- Current path -->
+    <string name="current_path">Τρέχουσα διαδρομή: %1$s</string>
+
     <!-- ListView empty text -->
+
     <!-- Menu item to create folder on the file system -->
+
     <!-- Menu item to select the current folder -->
+
     <string name="create_folder_failed">Η δημιουργία φακέλου απέτυχε</string>
+
+    <!-- Menu item to go up to parent folder -->
+    <string name="folder_go_up">Μετάβαση επάνω</string>
+
     <!-- LogActivity -->
+
     <string name="syncthing_log_title">Καταγραφή συμβάντων Syncthing</string>
     <string name="android_log_title">Καταγραφή συμβάντων Android</string>
+
+    <string name="share_log_file_missing">Το αρχείο καταγραφής που θέλετε να μοιραστείτε λείπει.</string>
+
+    <string name="share_log_file">Κοινή χρήση αρχείου καταγραφής</string>
+
     <!-- Title of the "log android" menu button -->
     <string name="view_android_log">Εμφάνιση καταγραφής Android</string>
+
     <!-- Title of the "log Syncthing" menu button -->
     <string name="view_syncthing_log">Εμφάνιση καταγραφής Syncthing</string>
+
     <string name="retrieving_logs">Ανάκτηση καταγραφών…</string>
+
     <!-- Title of the "share log" menu button -->
     <string name="share_title">Κοινή χρήση</string>
+
+    <!-- ShareActivity -->
+
+    <!-- Toast if user didn't complete the welcome wizard yet -->
+    <string name="complete_welcome_wizard_first">Πρώτα, εκκινήστε την εφαρμογή από τον συρτάρι εφαρμογών και ολοκληρώστε τον οδηγό υποδοχής πριν μοιραστείτε αρχεία.</string>
+
     <!-- Title of the "share" activity -->
     <string name="share_activity_title">Αποθήκευση στο Syncthing</string>
+
     <!-- Title of the "save" button -->
     <string name="save_title">Αποθήκευση</string>
+
     <!-- Title of the "cancel" button -->
     <string name="cancel_title">Ακύρωση</string>
+
     <!-- Title of the "save" button -->
+
     <!-- New file name template -->
     <string name="file_name_template">Νέο αρχείο %1$s</string>
+
     <!-- Nothing to share toast -->
     <string name="nothing_share">Τίποτα προς κοινή χρήση</string>
+
     <!-- Copy success toast partially -->
-    <plurals name="copy_success_partially">
-        <item quantity="one">Αντεγράφη %1$d αρχείο στον φάκελο «%2$s», %3$d υπάρχουν ήδη</item>
-        <item quantity="other">Αντεγράφησαν %1$d αρχεία στον φάκελο «%2$s», %3$d υπάρχουν ήδη</item>
-    </plurals>
+    <plurals name="copy_success_partially">        <item quantity="one">Αντεγράφη %1$d αρχείο στον φάκελο «%2$s», %3$d υπάρχουν ήδη</item>        <item quantity="other">Αντεγράφησαν %1$d αρχεία στον φάκελο «%2$s», %3$d υπάρχουν ήδη</item></plurals>
+
     <!-- Copy success toast -->
-    <plurals name="copy_success">
-        <item quantity="one">Αντεγράφη %1$d αρχείο στον φάκελο «%2$s»</item>
-        <item quantity="other">Αντεγράφησαν %1$d αρχεία στον φάκελο «%2$s»</item>
-    </plurals>
+    <plurals name="copy_success">        <item quantity="one">Αντεγράφη %1$d αρχείο στον φάκελο «%2$s»</item>        <item quantity="other">Αντεγράφησαν %1$d αρχεία στον φάκελο «%2$s»</item></plurals>
+
     <!-- Copy exception toast -->
     <string name="copy_exception">Προέκυψε ένα σφάλμα κατά την κοινή χρήση, ελέγξτε την καταγραφή συμβάντων της εφαρμογής</string>
+
     <!-- Copy progress dialog text -->
     <string name="copy_progress">Πραγματοποιείται κοινή χρήση αρχείων…</string>
-    <plurals name="file_name_title">
-        <item quantity="one">Όνομα αρχείου</item>
-        <item quantity="other">Λίστα αρχείων</item>
-    </plurals>
+
+    <plurals name="file_name_title">        <item quantity="one">Όνομα αρχείου</item>        <item quantity="other">Λίστα αρχείων</item></plurals>
+
     <!-- Sub Folder title -->
+
+    <!-- RunConditionMonitor -->
+
+    <string name="reason_force_start">Το Syncthing εκτελείται επειδή το αναγκάσατε να ξεκινήσει ανεξάρτητα από τις συνθήκες εκτέλεσης.</string>
+    <string name="reason_force_stop">Το Syncthing δεν εκτελείται επειδή το αναγκάσατε να τερματίσει ανεξάρτητα από τις συνθήκες εκτέλεσης.</string>
+
+    <!-- Explanations why syncthing is running or not running -->
+    <string name="reason_not_within_time_frame_2">Ενεργοποιήσατε το \'Εκτέλεση σύμφωνα με χρονοπρόγραμμα\' και ο τελευταίος συγχρονισμός ήταν πριν από %s.</string>
+    <string name="reason_not_within_time_frame_0_min">λιγότερο από ένα λεπτό</string>
+    <plurals name="reason_not_within_time_frame_minutes">        <item quantity="one">%d λεπτό</item>        <item quantity="other">%d λεπτά</item></plurals>
+    <string name="reason_not_charging">Το τηλέφωνο δεν φορτίζει.</string>
+    <string name="reason_not_on_battery_power">Το τηλέφωνο δεν λειτουργεί με μπαταρία.</string>
+    <string name="reason_not_while_power_saving">Το Syncthing δεν εκτελείται επειδή το τηλέφωνο έχει ενεργή την εξοικονόμηση ενέργειας.</string>
+    <string name="reason_not_while_auto_sync_data_disabled">Το Syncthing δεν εκτελείται επειδή το Android έχει απενεργοποιημένο τον «Αυτόματο συγχρονισμό δεδομένων».</string>
+
+    <!-- … Mobile data -->
+    <string name="reason_mobile_data_disallowed">Το Syncthing δεν έχει ρυθμιστεί για εκτέλεση σε σύνδεση δεδομένων κινητού.</string>
+    <string name="reason_on_mobile_data">Στο Syncthing επιτρέπεται να εκτελείται με δεδομένα κινητού.</string>
+    <string name="reason_not_on_mobile_data">Στο Syncthing επιτρέπεται να εκτελείται σε σύνδεση δεδομένων κινητού, αλλά τα δεδομένα κινητού δεν είναι συνδεδεμένα.</string>
+
+    <!-- … Roaming -->
+    <string name="reason_on_roaming_nonroaming_mobile_data">Στο Syncthing επιτρέπεται να εκτελείται σε συνδέσεις δεδομένων κινητού με και χωρίς περιαγωγή.</string>
+    <string name="reason_on_nonroaming_mobile_data">Στο Syncthing επιτρέπεται να εκτελείται σε συνδέσεις δεδομένων κινητού χωρίς περιαγωγή. Η ενεργή σύνδεση είναι χωρίς περιαγωγή.</string>
+    <string name="reason_not_nonroaming_mobile_data">Το Syncthing δεν εκτελείται επειδή δεν του επιτρέψατε να εκτελείται σε συνδέσεις δεδομένων κινητού με περιαγωγή.</string>
+
+    <string name="reason_wifi_disallowed">Στο Syncthing δεν επιτρέπεται να εκτελείται σε WiFi ή ethernet.</string>
+    <string name="reason_on_wifi">Στο Syncthing επιτρέπεται να εκτελείται σε WiFi και το WiFi είναι αυτή τη στιγμή συνδεδεμένο.</string>
+    <string name="reason_not_on_wifi">Στο Syncthing επιτρέπεται να εκτελείται σε WiFi, αλλά το WiFi δεν είναι συνδεδεμένο ή το τηλέφωνο είναι σε λειτουργία πτήσης.</string>
+    <string name="reason_on_metered_nonmetered_wifi">Στο Syncthing επιτρέπεται να εκτελείται σε συνδέσεις WiFi με και χωρίς χρέωση.</string>
+    <string name="reason_on_whitelisted_wifi">Στο Syncthing επιτρέπεται να εκτελείται στο τρέχον δίκτυο WiFi.</string>
+    <string name="reason_not_on_whitelisted_wifi">Το Syncthing δεν εκτελείται επειδή το όνομα του τρέχοντος δικτύου WiFi δεν είναι στη λίστα εξαιρέσεων.</string>
+    <string name="reason_on_nonmetered_wifi">Στο Syncthing επιτρέπεται να εκτελείται σε συνδέσεις WiFi χωρίς χρέωση. Η ενεργή σύνδεση WiFi είναι χωρίς χρέωση.</string>
+    <string name="reason_not_nonmetered_wifi">Το Syncthing δεν εκτελείται επειδή δεν του επιτρέψατε να εκτελείται σε συνδέσεις WiFi με χρέωση.</string>
+    <string name="reason_location_unavailable">Ενεργοποιήσατε το \'Εκτέλεση σε επιλεγμένα δίκτυα WiFi\' στις ρυθμίσεις. Οι υπηρεσίες τοποθεσίας του Android είναι αυτή τη στιγμή απενεργοποιημένες. Σύμφωνα με τους περιορισμούς του Android, το Syncthing δεν μπορεί να προσδιορίσει το όνομα του τρέχοντος δικτύου WiFi για να αποφασίσει εάν πρέπει να εκτελείται. Λύση: Ενεργοποιήστε την τοποθεσία, χορηγήστε άδεια τοποθεσίας και επανασυνδέστε το WiFi.</string>
+    <string name="reason_on_flight_mode">Το Syncthing εκτελείται επειδή του επιτρέψατε να εκτελείται όταν η λειτουργία πτήσης είναι ενεργή.</string>
+    <string name="reason_run_condition_monitor_not_instantiated">Το RunConditionMonitor δεν έχει δημιουργηθεί. Παρακαλώ επανεκκινήστε την εφαρμογή και υποβάλετε αναφορά σφάλματος εάν αυτό το σφάλμα δεν εξαφανιστεί μετά την επανεκκίνηση.</string>
+
+    <!-- Sync Conditions Dialog -->
+
+    <string name="custom_wifi_ssid_whitelist_empty">Δεν υπάρχουν WiFi SSID στη λίστα εξαιρέσεων. Παρακαλώ καθορίστε μερικά στις ρυθμίσεις.</string>
+
     <!-- SyncthingService -->
+
     <!-- Text for the exit button on the drawer -->
     <string name="exit">Έξοδος</string>
+
     <!-- Title of the notification shown while syncthing is running and enabled -->
+    <string name="syncthing_active_details">Εκτέλεση: %1$s</string>
+    <string name="no_remote_devices_connected">Δεν είναι συνδεδεμένες απομακρυσμένες συσκευές</string>
+
+    <plurals name="device_online_up_to_date">        <item quantity="one">%1$d συσκευή συνδεδεμένη και ενημερωμένη</item>        <item quantity="other">%1$d συσκευές συνδεδεμένες και ενημερωμένες</item></plurals>
+
+    <plurals name="syncthing_active_syncing_device_online">        <item quantity="one">Συγχρονισμός: %1$d%% ολοκληρώθηκε, %2$d συσκευή συνδεδεμένη</item>        <item quantity="other">Συγχρονισμός: %1$d%% ολοκληρώθηκε, %2$d συσκευές συνδεδεμένες</item></plurals>
+
+    <string name="syncthing_disabled">Σε αναστολή</string>
+
+    <string name="syncthing_terminated">Τερματίστηκε</string>
+
+    <!-- Toast shown if syncthing failed to create or read the config -->
+    <string name="executable_not_found">Το εκτελέσιμο \"%s\" λείπει. Ελέγξτε την κατασκευή και την έξοδο logcat.</string>
     <string name="config_create_failed">Αδυναμία δημιουργίας αρχείου ρυθμίσεων</string>
+    <string name="config_read_failed">Αποτυχία ανάγνωσης της διαμόρφωσης. Σκεφτείτε να δημιουργήσετε αντίγραφα ασφαλείας των δεδομένων από τους φακέλους συγχρονισμού σας, στη συνέχεια εκκαθαρίστε τα δεδομένα αυτής της εφαρμογής από τις ρυθμίσεις Android και εκκινήστε την ξανά.</string>
+
+    <!-- Toast shown if a config file crucial to operation is missing -->
+    <string name="config_file_missing">Λείπει ένα αρχείο διαμόρφωσης κρίσιμο για τη λειτουργία</string>
+
+    <!-- Toast shown if a listening tcp port is unavailable -->
+    <string name="webui_tcp_port_unavailable">Η θύρα TCP του WebUI %s είναι κατειλημμένη. Δεύτερη παρουσία;</string>
+
+    <!-- Label of the default folder created of first start (camera folder). -->
+
     <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
+
     <string name="notification_crash_title">Το Syncthing κατέρρευσε %1$s</string>
+    <string name="notification_crash_text">Κάντε κλικ για καταγραφές (%1$s)</string>
+
+    <string name="notifications_persistent_channel">Το Syncthing είναι ενεργό</string>
+    <string name="notification_persistent_waiting_channel">Παρακολούθηση συνθηκών εκτέλεσης</string>
     <string name="notifications_other_channel">Άλλες ειδοποιήσεις</string>
+
+    <!-- EventProcessor -->
+    <string name="notification_out_of_disk_space">Η κάρτα SD είναι γεμάτη. Αρχείο %1$s</string>
+
     <!-- RestApi -->
+
     <!-- Title of the notification shown when a restart is needed -->
+
     <!-- Text for positive button in restart dialog -->
     <!-- Text for the dismiss button of the restart Activity -->
     <!-- Text of the notification shown when a restart is needed -->
+
     <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">Το ID της συσκευής έχει αντιγραφεί στο πρόχειρο</string>
+
     <!-- Strings representing units for file sizes, from smallest to largest -->
     <string name="file_size_unit_B">B</string>
     <string name="file_size_unit_KiB">KiB</string>
     <string name="file_size_unit_MiB">MiB</string>
     <string name="file_size_unit_GiB">GiB</string>
     <string name="file_size_unit_TiB">TiB</string>
+
     <!-- Strings representing units for transfer rates, from smallest to largest -->
     <string name="transfer_rate_unit_B_s">B/s</string>
     <string name="transfer_rate_unit_KiB_s">KiB/s</string>
     <string name="transfer_rate_unit_MiB_s">MiB/s</string>
     <string name="transfer_rate_unit_GiB_s">GiB/s</string>
     <string name="transfer_rate_unit_TiB_s">TiB/s</string>
+
+    <!-- Possible folder states -->
+    <string name="state_failed_items">Αποτυχημένα στοιχεία (%1$d)</string>
+    <string name="state_up_to_date">Ενημερωμένο</string>
+    <string name="state_local_additions">Τοπικές προσθήκες</string>
+    <string name="state_cleaning">Εκκαθάριση εκδόσεων</string>
+    <string name="state_clean_waiting">Αναμονή για εκκαθάριση</string>
     <string name="state_scanning">Σάρωση</string>
+    <string name="state_scan_waiting">Αναμονή για σάρωση</string>
+    <string name="state_sync_waiting">Αναμονή για συγχρονισμό</string>
+    <string name="state_sync_preparing">Προετοιμασία συγχρονισμού</string>
+    <string name="state_syncing_general">Συγχρονισμός</string>
     <string name="state_syncing">Συγχρονισμός (%1$d%%)</string>
     <string name="state_error">Σφάλμα</string>
+    <string name="state_error_message">Σφάλμα (%1$s)</string>
     <string name="state_unknown">Άγνωστο</string>
+    <string name="state_paused">Σε παύση</string>
     <string name="status_outofsync">Μη συγχρονισμένα</string>
+    <string name="state_unshared">Μη διαμοιρασμένο</string>
+
+    <!-- small inline loading indicator -->
+    <string name="state_loading">Φόρτωση...</string>
+
+    <!-- small inline saving indicator -->
+
     <!-- Format string for folder size, eg "500 MiB / 1 GiB" -->
     <string name="folder_size_format">%1$s / %2$s</string>
+
+    <!-- Titles used in the folder type dialog and folder type button in the folder activity -->
+    <string name="folder_type">Τύπος φακέλου</string>
+
+    <!-- Displays the current folder type in the folder activity -->
+    <string name="folder_type_sendreceive">Αποστολή &amp; Λήψη</string>
     <string name="folder_type_sendonly">Μόνο αποστολή</string>
+    <string name="folder_type_receiveonly">Μόνο λήψη</string>
+    <string name="folder_type_receive_encrypted">Λήψη κρυπτογραφημένων</string>
+
+    <!-- Folder type dialog descriptions for folder types -->
+    <string name="folder_type_sendreceive_description">Ο φάκελος θα στέλνει αλλαγές σε απομακρυσμένες συσκευές και θα λαμβάνει αλλαγές από αυτές.</string>
+    <string name="folder_type_sendonly_description">Τα αρχεία προστατεύονται από αλλαγές που γίνονται σε άλλες συσκευές, αλλά οι αλλαγές που γίνονται σε αυτή τη συσκευή θα σταλούν στο υπόλοιπο σύμπλεγμα.</string>
+    <string name="folder_type_receiveonly_description">Τα αρχεία συγχρονίζονται από το σύμπλεγμα, αλλά τυχόν αλλαγές που γίνονται τοπικά δεν θα σταλούν σε άλλες συσκευές.</string>
+    <string name="folder_type_receive_encrypted_description">Αποθηκεύει και συγχρονίζει μόνο κρυπτογραφημένα δεδομένα. Οι φάκελοι σε όλες τις συνδεδεμένες συσκευές πρέπει να ρυθμιστούν με τον ίδιο κωδικό ή να είναι επίσης τύπου «Λήψη κρυπτογραφημένων».</string>
+
+    <!-- Titles used in the pull order dialog and pull order button in the folder activity -->
+    <string name="pull_order">Σειρά λήψης αρχείων</string>
+
+    <!-- Displays the current pull order type in the Folder activity -->
+    <string name="pull_order_type_random">Τυχαία</string>
+    <string name="pull_order_type_alphabetic">Αλφαβητική</string>
+    <string name="pull_order_type_smallestFirst">Μικρότερα πρώτα</string>
+    <string name="pull_order_type_largestFirst">Μεγαλύτερα πρώτα</string>
+    <string name="pull_order_type_oldestFirst">Παλαιότερα πρώτα</string>
+    <string name="pull_order_type_newestFirst">Νεότερα πρώτα</string>
+
+    <!-- Pull order dialog descriptions for pull order types -->
+    <string name="pull_order_type_random_description">Λήψη αρχείων με τυχαία σειρά.</string>
+    <string name="pull_order_type_alphabetic_description">Λήψη αρχείων ταξινομημένων αλφαβητικά κατά όνομα.</string>
+    <string name="pull_order_type_smallestFirst_description">Λήψη αρχείων ταξινομημένων κατά μέγεθος. Μικρότερα πρώτα, αντίστοιχα.</string>
+    <string name="pull_order_type_largestFirst_description">Λήψη αρχείων ταξινομημένων κατά μέγεθος. Μεγαλύτερα πρώτα, αντίστοιχα.</string>
+    <string name="pull_order_type_oldestFirst_description">Λήψη αρχείων ταξινομημένων κατά χρόνο τροποποίησης. Παλαιότερα πρώτα, αντίστοιχα.</string>
+    <string name="pull_order_type_newestFirst_description">Λήψη αρχείων ταξινομημένων κατά χρόνο τροποποίησης. Νεότερα πρώτα, αντίστοιχα.</string>
+
     <!-- Titles used in the file versioning dialog and file versioning button in the folder activity -->
     <string name="maximum_age">Μέγιστη ηλικία</string>
     <string name="clean_out_after">Εκκαθάριση μετά από</string>
@@ -249,19 +990,67 @@
     <string name="none">Απενεργοποιημένη</string>
     <string name="versions_path">Φάκελος τήρησης εκδόσεων</string>
     <string name="command">Εντολή</string>
+
     <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
+
     <!-- Displays the current file versioning type in the Folder activity -->
     <string name="type_simple">Τύπος: απλή</string>
     <string name="type_trashcan">Τύπος: κάδος ανακύκλωσης</string>
     <string name="type_staggered">Τύπος: κλιμακούμενη</string>
     <string name="type_external">Τύπος: εξωτερική</string>
+
     <!-- Information displayed about the current file versioning configuration in the folder activity -->
     <string name="trashcan_versioning_info">Εκκαθάριση μετά από: %1$s</string>
     <string name="staggered_versioning_info">Μέγιστη ηλικία: %1$d \nΦάκελος τήρησης εκδόσεων: %2$s</string>
     <string name="external_versioning_info">Εντολή: %1$s</string>
     <string name="simple_versioning_info">Εκδόσεις προς τήρηση: %1$s</string>
     <string name="show_device_id">Εμφάνιση ID συσκευής</string>
+
     <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
     <string name="could_not_access_deviceid">Δεν ήταν δυνατή η ανάγνωση του ID της συσκευής.</string>
     <string name="share_device_id_chooser">Διαμοιρασμός ID συσκευής με</string>
+    <string name="run_on_whitelisted_wifi_summary">Ενεργοποιήστε τη λίστα εξαιρέσεων για να περιορίσετε τον συγχρονισμό μόνο σε καθορισμένα δίκτυα WiFi.</string>
+    <string name="custom_sync_conditions_title">Προσαρμοσμένες συνθήκες συγχρονισμού</string>
+    <string name="custom_sync_conditions_description">Σας επιτρέπει να καθορίσετε εξαιρέσεις από τις καθολικές συνθήκες εκτέλεσης.</string>
+    <string name="custom_sync_conditions_dialog">Καθορισμός συνθηκών συγχρονισμού</string>
+
+    <!-- Quick Setting icon names and labels -->
+    <string name="qs_force_label">Αναγκαστική εκτέλεση</string>
+    <string name="qs_forced_to_run">Αναγκαστική εκτέλεση</string>
+    <string name="qs_forced_to_stop">Αναγκαστικός τερματισμός</string>
+    <string name="qs_following_run_conditions">Ακολουθεί τις συνθήκες εκτέλεσης</string>
+    <string name="qs_schedule_label">Εκτέλεση για 5 λεπτά</string>
+    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">Εκτέλεση για %1$d λεπτά</string>
+    <string name="qs_schedule_disabled">Το πρόγραμμα είναι απενεργοποιημένο</string>
+    <string name="no_app_to_open_link">Δεν υπάρχει διαθέσιμη εφαρμογή για να ανοίξει αυτόν τον σύνδεσμο.</string>
+
+    <!-- Custom HTTPS certificate -->
+    <string name="webui_custom_cert_title">Προσαρμοσμένο πιστοποιητικό HTTPS</string>
+    <string name="webui_custom_cert_summary">Χρησιμοποιήστε το δικό σας πιστοποιητικό για το τοπικό Web UI</string>
+    <string name="custom_cert_explanation">Αντικαταστήστε το ενσωματωμένο αυτοϋπογεγραμμένο πιστοποιητικό του Syncthing με το δικό σας. Επιλέξτε το πιστοποιητικό (PEM, συμπεριλαμβανομένης ολόκληρης της αλυσίδας) και το ιδιωτικό του κλειδί, ελέγξτε τα αποτελέσματα επικύρωσης και εφαρμόστε τα. Το Syncthing θα επανεκκινήσει για να φορτώσει το νέο πιστοποιητικό· εάν αποτύχει να επιστρέψει σε λειτουργία, το προηγούμενο πιστοποιητικό αποκαθίσταται αυτόματα.\n\nΓια πιστοποιητικό υπογεγραμμένο από τη δική σας αρχή έκδοσης (CA), εγκαταστήστε πρώτα το ριζικό πιστοποιητικό αυτής της CA στη συσκευή (Ρυθμίσεις → Ασφάλεια → Εγκατάσταση πιστοποιητικού CA).</string>
+    <string name="custom_cert_current_title">Τρέχον πιστοποιητικό</string>
+    <string name="custom_cert_current_none">Δεν βρέθηκε πιστοποιητικό.</string>
+    <string name="custom_cert_subject">Θέμα: %1$s</string>
+    <string name="custom_cert_issuer">Εκδότης: %1$s</string>
+    <string name="custom_cert_expires">Λήξη: %1$s</string>
+    <string name="custom_cert_self_signed">Αυτοϋπογεγραμμένο (προεπιλογή)</string>
+    <string name="custom_cert_ca_signed">Υπογεγραμμένο από CA</string>
+    <string name="custom_cert_select_cert">Επιλογή πιστοποιητικού (.pem)</string>
+    <string name="custom_cert_select_key">Επιλογή ιδιωτικού κλειδιού (.pem)</string>
+    <string name="custom_cert_not_selected">Δεν επιλέχθηκε</string>
+    <string name="custom_cert_apply">Εφαρμογή πιστοποιητικού</string>
+    <string name="custom_cert_reset_title">Επαναφορά σε αυτόματα δημιουργημένο πιστοποιητικό</string>
+    <string name="custom_cert_reset_summary">Διαγραφή του προσαρμοσμένου πιστοποιητικού και δημιουργία νέου αυτοϋπογεγραμμένου από το Syncthing</string>
+    <string name="custom_cert_reset_question">Να αντικατασταθεί το τρέχον πιστοποιητικό με ένα νέο αυτοϋπογεγραμμένο;</string>
+    <string name="custom_cert_applying">Εφαρμογή — επανεκκίνηση του Syncthing…</string>
+    <string name="custom_cert_applied">Το πιστοποιητικό εφαρμόστηκε.</string>
+    <string name="custom_cert_applied_pending">Αποθηκεύτηκε. Θα τεθεί σε ισχύ την επόμενη φορά που θα ξεκινήσει το Syncthing.</string>
+    <string name="custom_cert_failed">Δεν ήταν δυνατή η εφαρμογή του πιστοποιητικού: %1$s</string>
+    <string name="custom_cert_reset_done">Επαναφορά σε νέο αυτοϋπογεγραμμένο πιστοποιητικό.</string>
+    <string name="custom_cert_file_too_large">Αυτό το αρχείο είναι πολύ μεγάλο για να είναι πιστοποιητικό ή κλειδί.</string>
+    <string name="custom_cert_read_failed">Δεν ήταν δυνατή η ανάγνωση του επιλεγμένου αρχείου.</string>
+    <string name="cert_check_chain">Αλυσίδα πιστοποιητικού</string>
+    <string name="cert_check_trust">Έμπιστο από αυτή τη συσκευή</string>
+    <string name="cert_check_validity">Περίοδος ισχύος</string>
+    <string name="cert_check_key">Ιδιωτικό κλειδί</string>
 </resources>

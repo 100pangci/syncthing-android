@@ -1,184 +1,1048 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <string name="app_name">Syncthing-Fork</string>
+
     <string name="app_description">Ein open, påliteleg og desentralisert app for filsynkronisering.</string>
+
     <!-- FirstStartActivity -->
+
     <!-- Title for dialog displayed on first start -->
     <string name="welcome_title">Velkommen til Synchting for Android</string>
+
+    <!-- Welcome wizard -->
+    <!-- Slide "Introduction" -->
+    <string name="welcome_text">Syncthing er ein applikasjon med open kjeldekode for filsynkronisering. For å dele data med andre einingar, må du leggje deira unike einings-ID-ar til i eininglista. Deretter kan du velje kva mapper du vil dele med kva einingar.\n\nMeld gjerne frå om problem du møter via GitHub.</string>
+
+    <!-- Slide "Storage Permission" -->
+    <string name="storage_permission_title">Lagringsløyve</string>
+    <string name="storage_permission_desc">Syncthing treng tilgang til lagringa di for å kunne synkronisere filer.</string>
+    <string name="dialog_all_files_access_not_supported">Eininga di støttar ikkje tilgang til alle filer</string>
+
+    <!-- Slide "Ignore battery optimizations" -->
+    <string name="ignore_doze_permission_title">Batterioptimalisering</string>
+    <string name="ignore_doze_permission_os_notice">Android TV-ar er kjende for å avslutte appen nokre gonger når han køyrer i bakgrunnen. Ei løysing finst på wikien på «%1$s/%2$s».</string>
+    <string name="ignore_doze_permission_desc">Android kan stoppe synkroniseringa etter ei stund. For å hindre dette, slå av batterioptimalisering. Saman einingar har ekstra appar som avsluttar prosessar førehandinstallerte. Du bør òg leggje Syncthing til kvitelista deira.</string>
+    <string name="dialog_disable_battery_optimizations_not_supported">Eininga di støttar ikkje å slå av batterioptimalisering</string>
+    <string name="dialog_confirm_skip_ignore_doze_permission">ÅTVARING: Dersom SyncthingNative vert avbroten og gjer noko rart, er det din feil. Hopp berre over dersom eininga di ikkje støttar å gje løyvet. Verkeleg hoppe over?</string>
+
+    <!-- Slide "Location Permission" -->
+    <string name="location_permission_title">Stadløyve</string>
+    <string name="location_permission_desc">Syncthing kan konfigurerast til å arbeide på utvalde Wi-Fi-nettverk. Android krev at appen har stadløyve for å kunne lese namnet på det aktive Wi-Fi-nettverket. Dersom du vil bruke denne funksjonen, trykk på knappen ovanfor. Du kan hoppe over dette steget. Sjå personvernpolicyen vår for meir informasjon.</string>
+    <string name="location_permission_desc_api_29">Tips for Android 10+: «Tillat heile tida»</string>
+
+    <!-- Slide "Notification Permission" -->
+    <string name="notification_permission_title">Varslingsløyve</string>
+    <string name="notification_permission_desc">Naudsynt for å vise varsel om nye einingskoplingar og fildelingsførespurnader, og for å halde tenesta i live og tilkopia.</string>
+
+    <!-- Slide "Key Generation" -->
+    <string name="key_generation_title">Generering av nøklar</string>
+    <string name="key_generation_success">Sikre nøklar for privat datautveksling er vellukka genererte.</string>
+
+    <!-- Generic texts used everywhere -->
+    <string name="back">Tilbake</string>
+    <string name="cont">Fortset</string>
+    <string name="finish">Ferdig</string>
+    <string name="generic_example">Døme</string>
+    <string name="grant_permission">Gje løyve</string>
+    <string name="permission_granted">Løyve gjeve</string>
+    <string name="reason">Årsak:</string>
+
+    <string name="accept">Godta</string>
+
+    <string name="ignore">Ignorer</string>
+
+
+    <string name="main_menu">Hovudmeny</string>
+
+    <string name="refresh">Oppdater</string>
+
+    <!-- PhotoShootActivity -->
+
+    <string name="photo_shoot_launcher_title">Synk. kamera</string>
+    <string name="photo_shoot_activity_title">Syncthing-Fork-kamera</string>
+    <string name="photo_shoot_intro_welcome_title">Velkommen til Syncthing-kameraet</string>
+    <string name="photo_shoot_intro_no_camera">Beklager, denne eininga har ikkje kamera.</string>
+    <string name="photo_shoot_intro_missing_permissions">Vi treng løyve til lagring og kamera for å halde fram.</string>
+    <string name="grant_storage_permission">Gje lagringsløyve</string>
+    <string name="grant_camera_permission">Gje kameratløyve</string>
+    <string name="photo_shoot_intro_permission_desc">Syncthing-kameraet krev samtykket ditt for å ta bilete og lagre dei på eininga di. Denne funksjonen er valfri. For å bruke han, gje løyva og trykk på «Fortset». Vi opprettar ei Syncthing-kameramappe for deg som du seinare kan dele med andre Syncthing-einingar.</string>
+    <string name="photo_shoot_take_picture_success">Biletet vart vellukka lagra i Syncthing-kameramappa.</string>
+    <string name="photo_shoot_take_picture_failure">Klarte ikkje å ta bilete, eller du avbraut.</string>
+
+    <!-- Label of the folder created by the Syncthing Camera feature. -->
+    <string name="default_syncthing_camera_folder_label">Syncthing-kamera</string>
+
+    <!-- MainActivity -->
+
+    <!-- Main bottom navigation view -->
+    <string name="activity_main_bottom_navigation_rescan_all">Skann alt på nytt</string>
+
+    <!-- Main menu button -->
+
+    <!-- Exception dialog message -->
+
+    <!-- Title of the exit app when running as a service confirmation dialog -->
+    <string name="dialog_exit_while_running_as_service_title">Bekreft avslutting av appen</string>
+    <string name="dialog_exit_while_running_as_service_message">For din informasjon: Du har konfigurert appen til å starte automatisk ved oppstart. Difor overvakar han køyreforholda og synkroniserer når som helst i bakgrunnen når vilkåra er oppfylte. Du bør berre avslutte manuelt dersom du støyter på alvorlege problem. Elles: Slå av «Start automatisk ved oppstart» i innstillingane. Vil du avslutte no, fram til eininga er omstarta?</string>
+
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">Legg til mappe</string>
+
     <!-- Title of the "share device id" menu action -->
+
     <!-- Shown in the chooser dialog when sharing a Device ID -->
+
     <string name="usage_reporting_dialog_title">Tillate anonym rapportering av bruk?</string>
+
     <string name="yes">Ja</string>
+
     <string name="no">Nei</string>
+
+
+    <!-- URL to open when user chose to open website in usage reporting dialog -->
+
     <string name="toast_write_storage_permission_required">Løyve til å skrive data er naudsynt for å bruke appen</string>
+
+    <string name="device_rejected">Eininga «%1$s» vil kopla til</string>
+
+    <string name="folder_rejected">Eininga «%1$s» vil dele mappa «%2$s»</string>
+
     <!-- StateDialogActivity -->
+
     <!-- Text for FoldersFragment and DevicesFragment loading view -->
     <!-- Shown instead of web_gui_loading if the key does not exist and has to be created -->
     <string name="web_gui_creating_key">Snikrar sikre nøklar. Dette kan da nokre minutt.</string>
+
     <!-- FolderListFragment -->
+
     <string name="folders_fragment_title">Mapper</string>
+
     <!-- Shown if no folders exist -->
     <string name="folder_list_empty">Ingen mapper funne</string>
+
+    <!-- Format string for folder file count -->
+    <plurals name="files">        <item quantity="one">%1$d / %2$d fil</item>        <item quantity="other">%1$d / %2$d filer</item></plurals>
+
+    <!-- Format string for conflict file count -->
+    <plurals name="conflicts">        <item quantity="one">%1$d konflikt</item>        <item quantity="other">%1$d konfliktar</item></plurals>
+
+    <string name="override_changes">Overstyr endringar</string>
+
+    <!-- Override Changes Confirmation Dialog -->
+    <string name="override_changes_question">Dette vil angre alle endringar gjorde på dei andre einingane som deler denne mappa. Halde fram?</string>
+
+    <string name="revert_local_changes">Angre lokale endringar</string>
+
+    <string name="delete_unexpected_items">Slett uventa element</string>
+
+    <!-- Revert Local Changes Confirmation Dialog -->
+    <string name="revert_local_changes_question">Dette vil angre alle endringar gjorde på denne eininga i den mappa. Halde fram?</string>
+
+    <string name="open_file_manager">Opne filbehandlar</string>
+    <string name="open_file_with">Opne fil med</string>
+    <string name="open_file_no_compatible_app">Fann ingen app som kan opne fila.</string>
+
+    <!-- Suggest File Manager App Dialog -->
+    <string name="suggest_file_manager_app_dialog_title">Fann ingen kompatibel filbehandlarapp</string>
+    <string name="suggest_file_manager_app_dialog_text">Vi tilrår deg å installere filbehandlarappen «Material Files» med open kjeldekode. Vil du opne appbutikksida hennar?</string>
+
     <!-- DeviceListFragment -->
+
     <!-- Devices tab title -->
     <string name="devices_fragment_title">Einingar</string>
+
+    <!-- Shown if no devices are configured in add folder dialog -->
+    <string name="devices_list_empty">Ingen einingar konfigurerte. Trykk for å leggje til ei ny eining.</string>
+
+    <!-- Shown in ListView if no devices are configured -->
+    <string name="no_devices_configured">Ingen einingar konfigurerte.\nByrje med å leggje til ei eining no.</string>
+
+    <string name="deviceEncryptionPasswordHint">Viss eininga er utruverdig, skriv inn krypteringspassord</string>
+
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">Oppdatert</string>
+
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
+    <string name="device_syncing_percent_bytes">Synkroniserer (%1$d%%, %2$s)</string>
+
     <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">Fråkopla</string>
+    <string name="device_disconnected_not_synced">Fråkopla (%1$s ventar)</string>
+
+    <!-- Indicates that the device is paused and does not sync -->
+    <string name="device_paused">Sett på pause</string>
+
+    <!-- Indicates that devices does not share any folders -->
+    <string name="device_state_unused">Ubrukt</string>
+
     <!-- Indicates that the device connection is unknown -->
+
+    <!-- Last seen title -->
+    <string name="device_last_seen">Sist sett: %1$s</string>
+    <string name="device_last_seen_never">Aldri</string>
+
+    <!-- Title for the listing of shared folders with a colon and space appended -->
+    <string name="shared_folders_title_colon">"Mapper: "</string>
+
+    <!-- Expand the collapsed shared folders list on a device card; parameter is the hidden folder count -->
+    <string name="device_folders_show_more">+%1$d</string>
+
+    <!-- Collapse an expanded shared folders list on a device card -->
+    <string name="device_folders_show_less">Vis færre</string>
+
+    <!-- Title of the dialog listing the conflict files of a folder -->
+    <string name="conflict_files_title">Konfliktfiler</string>
+
+    <!-- Header of the grouped status card showing transfer and resource stats -->
+    <string name="status_transfer_resources">Overføring og ressursar</string>
+
     <!-- Title for current download rate -->
     <string name="download_title">Nedlasting</string>
+
     <!-- Title for current upload rate -->
     <string name="upload_title">Opplasting</string>
+
+    <!-- StatusFragment -->
+
+    <string name="status_fragment_title">Status</string>
+
+    <string name="button_follow_run_conditions">FØLG KØYREVILKÅRA</string>
+    <string name="button_force_start">TVINGA START\nIGNORER KØYREVILKÅRA</string>
+    <string name="button_force_stop">TVINGA STOPP\nIGNORER KØYREVILKÅRA</string>
+
+    <string name="syncthing_starting">Syncthing startar.</string>
+    <string name="syncthing_running">Syncthing køyrer.</string>
+    <string name="syncthing_not_running">Syncthing køyrer ikkje.</string>
+    <string name="syncthing_has_crashed">Syncthing har krasja.</string>
+
     <!-- DrawerFragment -->
+
     <!-- Same as download_title with a colon and space appended -->
     <!-- Same as upload_title with a colon and space appended -->
     <!-- Title for current RAM usage -->
     <string name="ram_usage">Minnebruk</string>
     <!-- Title for announce server status -->
     <string name="announce_server">Søketener</string>
+    <!-- Title for uptime status -->
+    <string name="uptime">Oppetid</string>
     <string name="restart">Omstart</string>
+
     <string name="dialog_confirm_restart">Vil du starte om att Syncthing?</string>
+
     <!-- FolderActivity -->
+
     <!-- Setting title -->
     <string name="folder_id">Mappe-ID</string>
+
     <!-- Setting title -->
     <string name="folder_label">Mappenamn</string>
+
     <!-- Setting title -->
     <string name="directory">Katalog</string>
+    <string name="advanced_directory_selection">Avansert katalogval</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_fileWatcher">Vak over endringar</string>
+    <string name="folder_fileWatcherDescription">Ber operativsystemet varsle om endringar i filer. Viss av, fell tilbake til periodisk timesvis skanning.</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_ignore_delete_caption">Ignorer sletting</string>
+    <string name="folder_ignore_delete_description">Ekspertval som påverkar handteringa av innkomande indeksoppdateringar. Når sett, vert innkomande oppdateringar med slettemerket ignorerte. Sjå https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_run_script_caption">Køyr skript</string>
+    <string name="folder_run_script_description">Ekspertval for å køyre skript etter at ei mappe endrar synkroniseringsstatusen sin. Skript i «.stfolder/*.sh» vert køyrde, andre plasseringar er ikkje støtta av tryggingsomsyn.\nDøme på skriptkall: «.stfolder/rename-files.sh sync_complete»</string>
+
+    <!-- Setting title -->
+    <string name="folder_pause">Pause mappe</string>
+
     <!-- Setting title -->
     <string name="devices">Einingar</string>
+
     <!-- Setting title -->
     <string name="keep_versions">Behald versjonar</string>
+
     <!-- Setting title -->
     <string name="delete_folder">Slett mappe</string>
+
     <!-- Title for FolderSettingsFragment in create mode -->
     <string name="create_folder">Lag mappe</string>
+
     <!-- Title for FolderSettingsFragment in edit mode -->
     <string name="edit_folder">Rediger mappe</string>
+
     <!-- Menu item to confirm folder creation -->
     <string name="create">Opprett</string>
+
     <!-- Dialog shown when attempting to remove a folder -->
     <string name="remove_folder_confirm">Vil du verkeleg fjerne denne mappa frå Syncthing?</string>
+
     <!-- Toast shown when trying to create a folder with an empty ID -->
     <string name="folder_id_required">Mappe-ID kan ikkje vere tom</string>
+
+    <!-- Toast shown when trying to create a folder with an empty label -->
+    <string name="folder_label_required">Mappenamnet kan ikkje vere tomt</string>
+
     <!-- Toast shown when trying to create a folder with an empty path -->
     <string name="folder_path_required">Mappestien kan ikkje vere tom</string>
+
+    <string name="dialog_discard_changes">Forkaste endringane dine?</string>
+
+    <!-- Summary shown if we only have readonly access to the folder path -->
+    <string name="folder_path_readonly">Android-versjonen din gjev Syncthing berre lesetilgang til den valde mappa.</string>
+
+    <!-- Summary shown if we only have readwrite access to the folder path -->
+    <string name="folder_path_readwrite">Android-versjonen din gjev Syncthing lese- og skrivetilgang til den valde mappa.</string>
+
+    <!-- Toast shown if the user selected an invalid location for a new syncthing folder -->
+    <string name="toast_invalid_folder_selected">Beklager. Den valde mappa kan ikkje brukast. Vel ei mappe som ligg på intern eller ekstern lagring.</string>
+
+    <string name="folder_type_switch_to_receive_encrypted_not_allowed">Å byte eksisterande mapper til «Receive Encrypted» er ikkje støtta.</string>
+
+    <string name="ignore_patterns">Ignorermønster</string>
+
     <!-- DeviceActivity -->
+
     <!-- Setting title -->
     <string name="device_id">Einings-ID</string>
+
+    <!-- Status title -->
+    <string name="discovered_devices_title">Oppdaga einingar – trykk for å velje</string>
+
+    <!-- Status text -->
+
+    <!-- Status text -->
+    <string name="local_discovery_disabled">Du har slått av lokal oppdaging i «Innstillingar» > «Syncthing-innstillingar» > «Lokal oppdaging». Slå han på for å søkje etter einingar på det lokale nettverket.</string>
+
     <!-- Setting title -->
+
+    <!-- Setting title -->
+    <string name="folders">Mapper</string>
+
     <!-- Setting title -->
     <string name="addresses">Adresser</string>
+
     <!-- Setting title -->
+
     <!-- Setting title -->
     <string name="compression">Komprimering</string>
+
     <!-- Strings representing compression options -->
     <string name="compress_never">Aldri</string>
     <string name="compress_metadata">Metadata</string>
     <string name="compress_always">Alltid</string>
     <!-- Setting title -->
     <string name="introducer">Introduktør</string>
+
+    <!-- Setting title -->
+    <string name="autoAcceptFolders">Auto-godta</string>
+
+    <!-- Setting title -->
+    <string name="pause_device">Pause eining</string>
+
+    <!-- Setting title -->
+    <string name="untrusted_device">Utruverdig eining</string>
+
     <!-- ActionBar item -->
     <string name="delete_device">Slett eining</string>
+
     <string name="add_device">Legg til eining</string>
+
     <!-- Menu item to confirm adding a device -->
+
     <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">Rediger eining</string>
+
     <!-- Dialog shown when attempting to remove a device -->
     <string name="remove_device_confirm">Vil du verkeleg fjerne denne eininga?</string>
+
     <!-- Toast shown when trying to create a device with an empty ID -->
     <string name="device_id_required">Einings-ID kan ikkje vere tom</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
+    <string name="device_id_invalid">Einings-ID-en er ikkje formatert rett. Prøv på nytt og skriv inn rett ID.</string>
+
+    <!-- Toast shown when trying to create a device with an empty name -->
+
+    <!-- Toast shown when trying to create a device with invalid addresses -->
+    <string name="device_addresses_invalid">Einingadressene er ikkje formaterte rett. Prøv på nytt. Sjå Syncthing-dokumentasjonen for meir informasjon.</string>
+
+    <!-- Content description (alt text) for device ID qr code in show device id dialog -->
+    <string name="device_id_qr_code">QR-kode for einings-ID</string>
+
+    <string name="close_device_id">Lukk einings-ID</string>
+
+    <string name="copy">Kopier</string>
+
     <!-- Content description for device ID qr code icon -->
     <string name="scan_qr_code_description">Skann QR-kode</string>
+
+    <!-- Dialog message if no compatible barcode scanner app is installed -->
+
+    <!-- Shown if no folders are configured -->
+    <string name="folders_list_empty">Ingen mapper konfigurerte. Trykk for å leggje til ei ny mappe.</string>
+
+    <!-- RecentChangesActivity -->
+
+    <string name="no_recent_changes">Det er ingen nylege endringar.</string>
+    <string name="recent_changes_title">Nylege endringar</string>
+    <string name="modified_by_device">Eining: %1$s</string>
+    <string name="modification_time">Tid: %1$s</string>
+    <string name="more_options">Fleire val</string>
+    <string name="show_exact_times">Vis eksakte tider</string>
+
+    <string name="this_device">Denne eininga</string>
+
     <!-- WebGuiActivity -->
+
     <!-- Title of the web gui activity -->
     <string name="web_gui_title">Grafisk grensesnitt på verdsveven</string>
+
     <!-- Text for WebGuiActivity loading view -->
     <string name="web_gui_loading">Venter på grafisk grensesnitt</string>
+
+    <!-- Shown in WebGuiActivity when the web gui could not be loaded. The technical cause is shown
+         below it and written to the log. -->
+    <string name="web_gui_load_failed">Klarte ikkje å laste Web-GUI-en. Ta ein logg og meld frå om dette.</string>
+
+    <!-- WebViewActivity -->
+
+    <!-- Dialog title displayed when an invalid ssl certificate was found -->
+    <string name="security_notice">Tryggingsmerknad</string>
+
+    <!-- Dialog message if an invalid ssl certificate was detected -->
+    <string name="ssl_cert_invalid_text">Nettstaden på %1$s ser ut til å ha eit ugyldig sertifikat for SSL-kryptering. Halde fram?</string>
+
+    <!-- Text for WebViewActivity loading page -->
+    <string name="web_page_loading">Lastar nettside:\n%1$s …</string>
+
+    <!-- Text for WebViewActivity openBrowser action button -->
+    <string name="open_in_browser">Opne i nettlesar</string>
+
     <!-- SettingsFragment -->
+
     <string name="settings_title">Innstillingar</string>
+
+    <string name="category_wifi">Wi-Fi</string>
+    <string name="category_mobile_data">Mobildata</string>
+    <string name="category_battery">Batteri</string>
+    <string name="category_schedule">Plan</string>
+    <string name="category_general">Generelt</string>
+    <string name="category_connections">Tilkoplingar</string>
+    <string name="category_advanced">Avansert</string>
+
+    <string name="category_user_interface">Brukargrensesnitt</string>
+
+    <string name="preference_app_theme_title">Tema</string>
+    <string name="preference_app_theme_follow_system">Følg systemet</string>
+    <string name="preference_app_theme_follow_light">Lyst</string>
+    <string name="preference_app_theme_follow_dark">Mørkt</string>
+    <string name="preference_app_theme_amoled" translatable="false">AMOLED</string>
+
+    <string name="category_behaviour">Åtferd</string>
     <string name="category_syncthing_options">Syncthing-innstillingar</string>
+    <string name="category_syncthing_options_summary">Denne menyen er berre tilgjengeleg når Syncthing køyrer.</string>
+
+    <string name="category_backup">Importering og eksport</string>
+    <string name="category_debug">Feilsøking</string>
     <string name="category_experimental">Eksperiment</string>
+
+    <!-- Preference screen - Run conditions -->
+    <string name="run_conditions_title">Køyreforhold</string>
+    <string name="run_conditions_summary">Bruk desse innstillingane til å avgjere når Syncthing skal køyre.</string>
+
+    <string name="run_on_mobile_data_title">Køyr på mobildata</string>
+    <string name="run_on_mobile_data_summary">Køyr når eininga er tilkopia via mobilnettet. ÅTVARING: Dette kan bruke mykje data frå mobilabonnementet ditt dersom du synkroniserer store datamengder.</string>
+
+    <string name="run_on_roaming_title">Køyr ved roaming</string>
+    <string name="run_on_roaming_summary">Tillat Syncthing å bruke mobildata ved roaming.</string>
+
+    <string name="run_on_wifi_title">Køyr på Wi-Fi</string>
+    <string name="run_on_wifi_summary">Køyr når eininga er tilkopia eit Wi-Fi- eller eigenett.</string>
+
+    <string name="run_on_metered_wifi_title">Køyr på målt Wi-Fi</string>
+    <string name="run_on_metered_wifi_summary">Køyr når eininga er tilkopia eit målt Wi-Fi-nettverk, t.d. ein hotspot eller eit utdelt nettverk. Merk: Dette kan bruke ein stor del av dataabonnementet ditt dersom du synkroniserer mykje data.</string>
+
+    <string name="run_on_whitelisted_wifi_title">Køyr på spesifiserte Wi-Fi-nettverk</string>
+    <string name="specify_wifi_ssid_whitelist">Vel Wi-Fi-nettverk</string>
+    <string name="run_on_whitelisted_wifi_networks">Valde Wi-Fi-nettverk: %1$s</string>
+    <string name="wifi_ssid_whitelist_empty">Ingen Wi-Fi-nettverk spesifiserte. Trykk for å spesifisere nettverk.</string>
+
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">Skru på WiFi for å velje nettverk.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_location">Skru på stadtenester for å velje nettverk.</string>
+
+
+    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">Frå og med Android 8.1 er stadtilgang naudsynt for å kunne lese namnet til Wi-Fi-nettverket. Du kan berre bruke denne funksjonen dersom du gjev dette løyvet.</string>
+
+    <string name="power_source_title">Køyr når eininga vert driven av</string>
+
+    <string name="power_source_ac_and_battery_power">Nettspenning og batteri.</string>
+    <string name="power_source_ac_power">Nettspenning.</string>
+    <string name="power_source_battery_power">Batteri.</string>
+
+    <string name="respect_battery_saving_title">Respekter Androids batterisparingsinnstilling</string>
+    <string name="respect_battery_saving_summary">Slå av Syncthing dersom batterisparing er aktiv.</string>
+
+    <string name="respect_master_sync_title">Respekter Androids «Auto-sync data»-innstilling</string>
+    <string name="respect_master_sync_summary">Slå av Syncthing når snørstilla «Auto-sync data» vert slått av.</string>
+
+    <string name="run_in_flight_mode_title">Køyr utan nettverkstilkopling</string>
+    <string name="run_in_flight_mode_summary">Dersom du slår på dette, vil Syncthing køyre sjølv når du er fråkopla. Slå på dersom eininga di har problem med å oppdage manuelle Wi-Fi-tilkoplingar i flymodus.</string>
+
+    <string name="run_on_time_schedule_title">Køyr etter tidsplan</string>
+    <string name="run_on_time_schedule_summary">Med dette valet vil Syncthing prøve å synkronisere i ein konfigurert periode når køyreforholda er oppfylte og eit spesifisert intervall har gått sidan siste synkronisering. Dette kan spare mykje batteri, men krev at synkroniseringspartnarane er online. Merk: Det kan liggje att ufullstendige mellombelse filer fram til neste planlagde synkronisering.</string>
+
+    <string name="sync_duration_minutes_title">Varigheit av synkroniseringssyklusen</string>
+    <string name="sync_duration_minutes_summary">%1$s minutt</string>
+    <string name="sleep_interval_minutes_title">Varigheit av pausen mellom synkroniseringane</string>
+
+    <!-- Preferences - Behaviour -->
+
+    <string name="behaviour_autostart_title">Automatisk start</string>
+    <string name="behaviour_autostart_summary">Start appen automatisk ved oppstart av operativsystemet.</string>
+
+
+    <string name="allow_overwrite_files_title">Tillat overskriving av eksisterande filer</string>
+    <string name="allow_overwrite_files_summary">Når ein annan app deler filer til ein av mappene våre.</string>
+
+    <string name="expert_mode_title">Ekspertmodus</string>
+
+    <string name="expert_mode_summary">Dette valet viser avanserte konfigurasjonsval. Du bør først sjå på Syncthing-dokumentasjonen for å vere sikker på at du veit korleis du bruker dei rett. Feil innstillingar kan føre til tømming av batteri, uttømming av systemressursar eller ufullstendig synkronisering.</string>
+
+
+    <string name="start_into_web_gui_title">Start direkte inn i Web-GUI-en</string>
+ 
+    <string name="start_into_web_gui_summary">Når du startar appen, opne Web-GUI-en i staden for hovudskjermen</string>
+
+
+
+
+
     <string name="device_name">Einingsnamn</string>
+
     <string name="listen_address">Lytteadresse for synkroniseringsprotokoll</string>
+
     <string name="max_recv_kbps">Nedlastingsgrense (KiB/s)</string>
+
     <string name="max_send_kbps">Opplastingsgrense (KiB/s)</string>
+
     <string name="global_announce_enabled">Global søketeneste</string>
+
     <string name="local_announce_enabled">Lokal søketeneste</string>
+
     <string name="enable_nat_traversal">Slå på NAT-gjennomgang</string>
+
+    <string name="global_announce_server">Global oppdagingstenar</string>
+
     <string name="enable_relaying">Aktiver Reléer</string>
+
     <string name="usage_reporting">Anonym rapportering av bruk</string>
+
+    <string name="crash_reporting">Anonym krasjrapportering</string>
+
+    <string name="webui_tcp_port_title">TCP-port for Web-UI</string>
+
+    <string name="webui_remote_access_title">Ekstern tilgang til Web-UI</string>
+
+    <string name="webui_username_title">Brukarnamn for Web-UI</string>
+
+    <string name="webui_password_title">Passord for Web-UI</string>
+
+    <string name="webui_remote_access_summary">Spesifiser for å tillate tilgang til Web-UI-en frå ei anna eining. Viss aktivert, kan du logge på med brukaren «syncthing» og API-nøkkelen som passord. Standard: av (mest sikkert)</string>
+
+
+
+    <string name="clear_stversions_title">Tøm alle versjonsmapper</string>
+    <string name="clear_stversions_summary">Filer vert flytta til .stversions-katalogen når dei vert erstatta eller sletta av Syncthing. Du kan truleg finne og gjenopprette utilsikta sletta filer der, men utdaterte versjonar av filene tek lagringsplass på eininga di.</string>
+    <string name="clear_stversions_question">Dette vil slette alle tidlegare versjonar av filer som Syncthing handterer. Halde fram?</string>
+    <string name="clear_stversions_done">Vellukka tømde .stversions-mappene.</string>
+
+    <string name="download_support_bundle_title">Last ned støttepakke</string>
+
+    <!-- Summary shown when the user clicked the download support bundle button -->
+    <string name="download_support_bundle_in_progress">Førebur nedlasting av støttepakke …</string>
+
+    <!-- Toast after successful download of the support bundle -->
+    <string name="download_support_bundle_succeeded">Støttepakken vart vellukka lasta ned til %s.</string>
+
+    <!-- Toast after failed support bundle download -->
+    <string name="download_support_bundle_failed">Nedlastinga av støttepakken mislykkast. Sjå i loggane.</string>
+
+    <!-- Titles for the preference to undo ignored devices and folders -->
+    <string name="undo_ignored_devices_folders_title">Angre å ignorere einingar og mapper</string>
+    <string name="undo_ignored_devices_folders_question">Dette vil angre tidlegare avgjerder om å ignorere einingar og mapper. Halde fram?</string>
+    <string name="undo_ignored_devices_folders_done">Vellukka angra avgjerdene.</string>
+
+    <string name="backup_rel_path_to_zip">Relativ sti til konfigurasjonsarkivet</string>
+
+    <string name="backup_password_title">Beskyttingspassord for konfigurasjon</string>
+    <string name="backup_password_summary">ℹ️ Tilrådd:\nSkriv inn eit sterkt passord som vert brukt til å kryptere konfigurasjonen ved eksport og dekryptere ved import. Hald passordet på ein trygg stad for gjenopprettingsprosessen. Du treng det for å bruke importfunksjonen.\n\n⚠️ Ikkje tilrådd:\nUtan passord kan andre appar potensielt lese og endre Syncthing-konfigurasjonen din. At konfigurasjonen vert eksponert, inneber risiko for at ein skadeleg aktør får uautorisert tilgang til filene dine med hjelp av stole konfigurasjonseksportar.</string>
+
+    <string name="backup_password_set">✅ Passord sett: %1$s</string>
+    <string name="backup_password_set_masked">✅ Passord sett – trykk for å endre</string>
+    <string name="backup_password_not_set">⚠ Passord ikkje sett.</string>
+    <string name="toggle_password_visibility">Veksle synlegheit for passordet</string>
+
     <string name="export_config">Eksporter innstillingar</string>
+
+    <!-- Toast after entering an invalid tcp port -->
+    <string name="invalid_port_number" tools:ignore="PluralsCandidate">Portnummeret er ikkje gyldig. Skriv inn ein port mellom %1$d og %2$d.</string>
+
+    <!-- Toast after entering invalid integer value -->
+    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">Inntastingsverdien er ikkje gyldig. Skriv inn ein verdi mellom %1$d og %2$d.</string>
+
+    <!-- Experimental options -->
+    <string name="use_proxy">Kople til gjennom ein proxy</string>
+    <string name="do_not_use_proxy">Ingen proxy konfigurert.</string>
+
+
+    <string name="use_tor_title">Bruk Tor</string>
+    <string name="use_tor_summary">Tving all trafikk gjennom Tor for betre personvern. Krev Orbot. Slår av proxy-vala.</string>
+
+    <string name="socks_proxy_address_title">SOCKS5-proxy</string>
+    <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>
+
+    <!-- Toast after entering invalid socks proxy address -->
+    <string name="toast_invalid_socks_proxy_address">Inntastinga bryt proxy-syntaksen «socks5://[IP/HOSTNAME]:[PORT]»</string>
+
+    <string name="http_proxy_address_title">HTTP(S)-proxy</string>
+    <string name="http_proxy_address_example" translatable="false">http://192.168.0.1:8080</string>
+
+    <!-- Toast after entering invalid http proxy address -->
+    <string name="toast_invalid_http_proxy_address">Inntastinga bryt proxy-syntaksen «http://[IP/HOSTNAME]:[PORT]»</string>
+
+    <string name="broadcast_service_control_title">Tenestestyring via kringkasting</string>
+    <string name="broadcast_service_control_summary">Standard: av. Slå på for å la adb eller tredjepartsappar, t.d. automatiseringsappar, gje Syncthing beskjed om å følgje køyreforholda, tvinge start eller tvinge stopp.</string>
+
     <!-- Dialog shown before config export -->
     <string name="dialog_confirm_export">Vil du verkeleg eksportere innstillingane? Eksisterande filer vil verte skrivne over. \n \nÅTVARING: Andre appar kan vere i stand til å lese den private nøkkelen frå tryggingskopien, og bruke den til å laste ned eller endre synkroniserte filer.</string>
+
     <!-- Dialog shown before config import -->
     <string name="dialog_confirm_import">Vil du verkeleg importere ei ny innstillingsfil? Eksisterande filer vil verte skrivne over.</string>
+
+    <!-- PreferenceCategories -->
+    <string name="preference_category_actions">Handlingar</string>
+    <string name="preference_category_explanation">Forklaring</string>
+    <string name="preference_category_prepare">Førebuing</string>
+
     <!-- Toast shown after config was exported -->
+    <string name="config_export_successful_no_path">Konfigurasjonen vart eksportert. Hugs å halde på passordet for seinare import.</string>
+    <string name="config_export_failed">Konfigurasjonseksporten mislykkast. Gå til Innstillingar – Feilsøking – Opne logg for å sjå detaljar.</string>
+
     <string name="import_config">Importer innstillingar</string>
+
     <!-- Toast shown after config was imported -->
     <string name="config_imported_successful">Innstillingar vart importerte</string>
+
+    <string name="config_import_failed_no_path">Konfigurasjonsimporten mislykkast. Gå til Innstillingar – Feilsøking – Opne logg for å sjå detaljar.</string>
+
+    <string name="dialog_settings_restart_app_title">Omstart krevst</string>
+    <string name="dialog_settings_restart_app_question">Å endre dette valet krev umiddelbar omstart av appen. Alle andre endringar vert forkasta. Halde fram?</string>
+
+    <!-- Title for the preference to set STTRACE parameters -->
+    <string name="sttrace_title">STTRACE-val</string>
+    <string name="sttrace_none_selected">Ingen feilsøkingsfunksjon</string>
+
+    <string name="environment_variables">Miljøvariablar</string>
+
+    <!-- Toast after entering invalid STTRACE params -->
+    <string name="toast_invalid_environment_variables">Verdien er ikkje ein gyldig miljøvariabelstreng</string>
+
     <!-- Title for the preference to reset Syncthing indexes -->
     <string name="st_reset_database_title">Nullstill database</string>
     <!-- Syncthing was reset -->
+    <string name="st_reset_database_question">Denne handlinga bør berre utførast ut frå ei tilråding frå støtteteamet vårt.\nEr du sikker på at du vil tømme Syncthings database?</string>
+    <!-- Syncthing was reset -->
     <string name="st_reset_database_done">Vellukka nullstilling av Syncthings database</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_deltas_title">Nullstill delta-indeksar</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_question">Denne handlinga bør berre utførast ut frå ei tilråding frå støtteteamet vårt.\nEr du sikker på at du vil tømme Syncthings delta-indeksar?</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_done">Vellukka nullstilte Syncthings delta-indeksar</string>
+
+    <!-- Settings / About -->
     <string name="category_about">Om</string>
+
+    <string name="verbose_log_title">Utførleg logg</string>
+    <string name="verbose_log_summary">Dette valet vil hjelpe med å generere feilsøkingsloggar på eit svært detaljert nivå.</string>
+
+
     <!-- Settings item that opens the log activity -->
     <string name="open_log">Opne logg</string>
+
     <!-- Summary for the log activity -->
     <string name="open_log_summary">Opne loggvindauget for Syncthing og Android</string>
+
+    <!-- Menu item linking support forum -->
+    <string name="syncthing_forum_title">Syncthing-forum</string>
+    <string name="syncthing_forum_summary">Gå til Syncthing-forumet og få hjelp</string>
+    <string name="syncthing_forum_url" translatable="false">https://forum.syncthing.net/</string>
+
+    <!-- Menu item for pizza -->
+
+    <!-- Menu item linking privacy policy -->
+    <string name="privacy_title">Personvernpolicy</string>
+    <string name="privacy_summary">Opne personvernpolicyen til syncthing-android, som dekkjer bruk (om nokon) av personopplysningar, t.d. lokasjon.</string>
+    <string name="privacy_policy_url" translatable="false">https://syncthing.net/android-privacy-policy</string>
+
     <!-- Settings item that opens issue tracker -->
     <string name="report_issue_title">Meld problem</string>
-    <!-- Menu item to donate -->
+
+    <!-- Summary for the issue tracker settings item -->
+    <string name="open_issue_tracker_summary">Opne problemlista til Syncthing-Fork på %1$s</string>
+
+    <!-- URL of the issue tracker -->
+    <string name="issue_tracker_url" translatable="false">https://github.com/researchxxl/syncthing-android/issues</string>
+
+    <!-- URL of the GitHub wiki -->
+    <string name="wiki_url" translatable="false">https://github.com/researchxxl/syncthing-android/tree/main/wiki</string>
+
+    <!-- URL of the Syncthing project homepage -->
+
     <!-- Title of the preference showing upstream version name -->
     <string name="syncthing_version_title">Syncthing-versjon</string>
+
+    <!-- Title of the preference showing this app's version name -->
+    <string name="app_version_title">Syncthing-Fork wrapper-versjon</string>
+
+    <!-- Title of the preference showing the REST API key -->
+    <string name="syncthing_api_key">Syncthing API-nøkkel (trykk for å kopiere)</string>
+
+    <!-- Shown when the API key is copied to the clipboard -->
+    <string name="api_key_copied_to_clipboard">Syncthing API-nøkkel kopiert til utklippstavla</string>
+
+    <!-- Title of the preference showing database size -->
+    <string name="syncthing_database_size">Storleik på Syncthing-databasen</string>
+
+    <!-- Title of the preference showing the OS open file limit -->
+    <string name="os_open_file_limit">Androids opne filgrense</string>
+    
+    <!-- Title of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_title">Open-kjeldekode-lisensar</string>
+    
+    <!-- Summary of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_summary">Vis dei openkjelde-lisensane som vert brukte</string>
+
     <!-- FolderPickerAcitivity -->
+
     <!-- Activity title -->
     <string name="folder_picker_title">Mappeveljar</string>
+
+    <!-- Storage path overview -->
+    <string name="advanced_storage_path_overview">Avansert oversikt over lagringsstiar</string>
+
+    <!-- Current path -->
+    <string name="current_path">Noverande sti: %1$s</string>
+
     <!-- ListView empty text -->
+
     <!-- Menu item to create folder on the file system -->
+
     <!-- Menu item to select the current folder -->
+
     <string name="create_folder_failed">Lukkast ikkje med å lage mappe</string>
+
+    <!-- Menu item to go up to parent folder -->
+    <string name="folder_go_up">Gå opp</string>
+
+    <!-- LogActivity -->
+
+    <string name="syncthing_log_title">Syncthing-logg</string>
+    <string name="android_log_title">Android-logg</string>
+
+    <string name="share_log_file_missing">Loggfilen som skal delast manglar.</string>
+
+    <string name="share_log_file">Del loggfil</string>
+
     <!-- Title of the "log android" menu button -->
     <string name="view_android_log">Vis Android-logg</string>
+
     <!-- Title of the "log Syncthing" menu button -->
     <string name="view_syncthing_log">Vis Synchting-logg</string>
+
+    <string name="retrieving_logs">Hentar loggar…</string>
+
     <!-- Title of the "share log" menu button -->
     <string name="share_title">Del</string>
+
+    <!-- ShareActivity -->
+
+    <!-- Toast if user didn't complete the welcome wizard yet -->
+    <string name="complete_welcome_wizard_first">Start først appen frå appskuffen og fullfør velkomstveivisaren før du deler filer.</string>
+
+    <!-- Title of the "share" activity -->
+    <string name="share_activity_title">Lagre til Syncthing</string>
+
+    <!-- Title of the "save" button -->
+    <string name="save_title">Lagre</string>
+
+    <!-- Title of the "cancel" button -->
+    <string name="cancel_title">Avbryt</string>
+
+    <!-- Title of the "save" button -->
+
+    <!-- New file name template -->
+    <string name="file_name_template">Ny fil %1$s</string>
+
+    <!-- Nothing to share toast -->
+    <string name="nothing_share">Ingenting å dele</string>
+
+    <!-- Copy success toast partially -->
+    <plurals name="copy_success_partially">        <item quantity="one">%1$d fil kopiert til mappa «%2$s», %3$d finst allereie</item>        <item quantity="other">%1$d filer kopierte til mappa «%2$s», %3$d finst allereie</item></plurals>
+
+    <!-- Copy success toast -->
+    <plurals name="copy_success">        <item quantity="one">%1$d fil kopiert til mappa «%2$s»</item>        <item quantity="other">%1$d filer kopierte til mappa «%2$s»</item></plurals>
+
+    <!-- Copy exception toast -->
+    <string name="copy_exception">Det oppstod ein feil under delinga. Sjå i applikasjonsloggane</string>
+
+    <!-- Copy progress dialog text -->
+    <string name="copy_progress">Deler filer…</string>
+
+    <plurals name="file_name_title">        <item quantity="one">Filnamn</item>        <item quantity="other">Fileliste</item></plurals>
+
+    <!-- Sub Folder title -->
+
+    <!-- RunConditionMonitor -->
+
+    <string name="reason_force_start">Syncthing køyrer fordi du tvinga han til å starte utan omsyn til køyreforholda.</string>
+    <string name="reason_force_stop">Syncthing køyrer ikkje fordi du tvinga han til å stoppe utan omsyn til køyreforholda.</string>
+
+    <!-- Explanations why syncthing is running or not running -->
+    <string name="reason_not_within_time_frame_2">Du har slått på «Køyr etter tidsplan» og siste synkronisering var for %s sidan.</string>
+    <string name="reason_not_within_time_frame_0_min">mindre enn eitt minutt</string>
+    <plurals name="reason_not_within_time_frame_minutes">        <item quantity="one">%d minutt</item>        <item quantity="other">%d minuttar</item></plurals>
+    <string name="reason_not_charging">Telefonen ladar ikkje.</string>
+    <string name="reason_not_on_battery_power">Telefonen køyrer ikkje på batteri.</string>
+    <string name="reason_not_while_power_saving">Syncthing køyrer ikkje fordi telefonen er i strømsparingsmodus for tida.</string>
+    <string name="reason_not_while_auto_sync_data_disabled">Syncthing køyrer ikkje fordi Android har «Auto-sync data» slått av.</string>
+
+    <!-- … Mobile data -->
+    <string name="reason_mobile_data_disallowed">Syncthing er ikkje konfigurert til å køyre på mobilnett.</string>
+    <string name="reason_on_mobile_data">Syncthing har løyve til å køyre på mobildata.</string>
+    <string name="reason_not_on_mobile_data">Syncthing har løyve til å køyre på mobilnettet, men mobildata er ikkje tilkopia.</string>
+
+    <!-- … Roaming -->
+    <string name="reason_on_roaming_nonroaming_mobile_data">Syncthing har løyve til å køyre på både roaming- og ikkje-roaming-mobilnett.</string>
+    <string name="reason_on_nonroaming_mobile_data">Syncthing har løyve til å køyre på ikkje-roaming-mobilnett. Den aktive tilkoplinga er ikkje-roaming.</string>
+    <string name="reason_not_nonroaming_mobile_data">Syncthing køyrer ikkje fordi du ikkje tillét han å køyre på roaming-mobilnett.</string>
+
+    <string name="reason_wifi_disallowed">Syncthing har ikkje løyve til å køyre på Wi-Fi eller eigenett.</string>
+    <string name="reason_on_wifi">Syncthing har løyve til å køyre på Wi-Fi, og Wi-Fi er tilkopia no.</string>
+    <string name="reason_not_on_wifi">Syncthing har løyve til å køyre på Wi-Fi, men Wi-Fi er ikkje tilkopia eller telefonen er i flymodus.</string>
+    <string name="reason_on_metered_nonmetered_wifi">Syncthing har løyve til å køyre på målt og ikkje-målt Wi-Fi.</string>
+    <string name="reason_on_whitelisted_wifi">Syncthing har løyve til å køyre på det noverande Wi-Fi-nettverket.</string>
+    <string name="reason_not_on_whitelisted_wifi">Syncthing køyrer ikkje fordi namnet på det noverande Wi-Fi-nettverket ikkje er på kvitelista.</string>
+    <string name="reason_on_nonmetered_wifi">Syncthing har løyve til å køyre på ikkje-målt Wi-Fi. Den aktive Wi-Fi-tilkoplinga er ikkje-målt.</string>
+    <string name="reason_not_nonmetered_wifi">Syncthing køyrer ikkje fordi du ikkje tillét han å køyre på målt Wi-Fi.</string>
+    <string name="reason_location_unavailable">Du har slått på «Køyr på utvalde Wi-Fi-nettverk» i innstillingane. Androids stadtenester er av for tida. På grunn av Android-restriksjonar kan Syncthing ikkje avgjere kva Wi-Fi-nettverk som er aktive for å finne ut om han skal køyre. Løysing: Skru på lokasjon, gje stadløyve og kople til Wi-Fi på nytt.</string>
+    <string name="reason_on_flight_mode">Syncthing køyrer fordi du tillét han å køyre når flymodus er aktiv.</string>
+    <string name="reason_run_condition_monitor_not_instantiated">Køyreforholdsovervakaren er ikkje oppretta. Start appen på nytt og meld frå om feilen dersom han ikkje forsvinn etter omstart.</string>
+
+    <!-- Sync Conditions Dialog -->
+
+    <string name="custom_wifi_ssid_whitelist_empty">Ingen Wi-Fi SSID-ar på kvitelista. Spesifiser nokre i innstillingane.</string>
+
     <!-- SyncthingService -->
+
     <!-- Text for the exit button on the drawer -->
     <string name="exit">Avslutt</string>
+
     <!-- Title of the notification shown while syncthing is running and enabled -->
+    <string name="syncthing_active_details">Køyrer: %1$s</string>
+    <string name="no_remote_devices_connected">Ingen eksterne einingar tilkopia</string>
+
+    <plurals name="device_online_up_to_date">        <item quantity="one">%1$d eining online og oppdatert</item>        <item quantity="other">%1$d einingar online og oppdaterte</item></plurals>
+
+    <plurals name="syncthing_active_syncing_device_online">        <item quantity="one">Synkroniserer: %1$d%% fullført, %2$d eining online</item>        <item quantity="other">Synkroniserer: %1$d%% fullført, %2$d einingar online</item></plurals>
+
+    <string name="syncthing_disabled">Søv</string>
+
+    <string name="syncthing_terminated">Avslutta</string>
+
+    <!-- Toast shown if syncthing failed to create or read the config -->
+    <string name="executable_not_found">Kjerneprogrammet «%s» manglar. Sjekk build- og logcat-utdata.</string>
+    <string name="config_create_failed">Klarte ikkje å opprette konfigurasjonen. Sjekk logcat-utdata.</string>
+    <string name="config_read_failed">Klarte ikkje å lese konfigurasjonen. Vurder å ta sikkerheitskopi av data frå synkroniseringsmappene dine, slette appens data i Android-innstillingane og starte appen att.</string>
+
+    <!-- Toast shown if a config file crucial to operation is missing -->
+    <string name="config_file_missing">Ei konfigurasjonsfil som er avgjerande for drifta manglar</string>
+
+    <!-- Toast shown if a listening tcp port is unavailable -->
+    <string name="webui_tcp_port_unavailable">WebUI TCP-porten %s er oppteken. Andre instans?</string>
+
+    <!-- Label of the default folder created of first start (camera folder). -->
+
     <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
+
+    <string name="notification_crash_title">Krasja (avslutningskode %1$s)</string>
+    <string name="notification_crash_text">Trykk for loggar (%1$s)</string>
+
+    <string name="notifications_persistent_channel">Syncthing er aktiv</string>
+    <string name="notification_persistent_waiting_channel">Overvakar køyreforholda</string>
+    <string name="notifications_other_channel">Andre varsel</string>
+
+    <!-- EventProcessor -->
+    <string name="notification_out_of_disk_space">SD-kortet er fullt. Fil %1$s</string>
+
     <!-- RestApi -->
+
     <!-- Title of the notification shown when a restart is needed -->
+
     <!-- Text for positive button in restart dialog -->
     <!-- Text for the dismiss button of the restart Activity -->
     <!-- Text of the notification shown when a restart is needed -->
+
     <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">Einings-ID kopiert til utklippstavla</string>
+
     <!-- Strings representing units for file sizes, from smallest to largest -->
     <string name="file_size_unit_B">B</string>
     <string name="file_size_unit_KiB">KiB</string>
     <string name="file_size_unit_MiB">MiB</string>
     <string name="file_size_unit_GiB">GiB</string>
     <string name="file_size_unit_TiB">TiB</string>
+
     <!-- Strings representing units for transfer rates, from smallest to largest -->
     <string name="transfer_rate_unit_B_s">B/s</string>
     <string name="transfer_rate_unit_KiB_s">KiB/s</string>
     <string name="transfer_rate_unit_MiB_s">MiB/s</string>
     <string name="transfer_rate_unit_GiB_s">GiB/s</string>
     <string name="transfer_rate_unit_TiB_s">TiB/s</string>
+
+    <!-- Possible folder states -->
+    <string name="state_failed_items">Mislykka element (%1$d)</string>
+    <string name="state_up_to_date">Oppdatert</string>
+    <string name="state_local_additions">Lokale tillegg</string>
+    <string name="state_cleaning">Rensar versjonar</string>
+    <string name="state_clean_waiting">Ventar på rensing</string>
     <string name="state_scanning">Skannar</string>
+    <string name="state_scan_waiting">Ventar på skanning</string>
+    <string name="state_sync_waiting">Ventar på synkronisering</string>
+    <string name="state_sync_preparing">Førebur synkronisering</string>
+    <string name="state_syncing_general">Synkroniserer</string>
     <string name="state_syncing">Synkroniserer (%1$d%%)</string>
     <string name="state_error">Feil</string>
+    <string name="state_error_message">Feil (%1$s)</string>
     <string name="state_unknown">Ukjend</string>
+    <string name="state_paused">Sett på pause</string>
     <string name="status_outofsync">Ikkje synkronisert</string>
+    <string name="state_unshared">Ikkje delt</string>
+
+    <!-- small inline loading indicator -->
+    <string name="state_loading">Lastar...</string>
+
+    <!-- small inline saving indicator -->
+
     <!-- Format string for folder size, eg "500 MiB / 1 GiB" -->
     <string name="folder_size_format">%1$s / %2$s</string>
+
+    <!-- Titles used in the folder type dialog and folder type button in the folder activity -->
+    <string name="folder_type">Mappetype</string>
+
+    <!-- Displays the current folder type in the folder activity -->
+    <string name="folder_type_sendreceive">Send og motta</string>
+    <string name="folder_type_sendonly">Send berre</string>
+    <string name="folder_type_receiveonly">Motta berre</string>
+    <string name="folder_type_receive_encrypted">Motta kryptert</string>
+
+    <!-- Folder type dialog descriptions for folder types -->
+    <string name="folder_type_sendreceive_description">Mappa sender både endringar til og mottar endringar frå eksterne einingar.</string>
+    <string name="folder_type_sendonly_description">Filer er beskytta mot endringar gjorde på andre einingar, men endringar gjorde på denne eininga vert sende til resten av klynga.</string>
+    <string name="folder_type_receiveonly_description">Filer vert synkroniserte frå klynga, men lokale endringar vert ikkje sende til andre einingar.</string>
+    <string name="folder_type_receive_encrypted_description">Lagrar og synkroniserer berre kryptert data. Mapper på alle tilkopia einingar må setjast opp med same passord eller vere av typen «Motta kryptert».</string>
+
+    <!-- Titles used in the pull order dialog and pull order button in the folder activity -->
+    <string name="pull_order">Henterekkjefølgje for filer</string>
+
+    <!-- Displays the current pull order type in the Folder activity -->
+    <string name="pull_order_type_random">Tilfeldig</string>
+    <string name="pull_order_type_alphabetic">Alfabetisk</string>
+    <string name="pull_order_type_smallestFirst">Minst først</string>
+    <string name="pull_order_type_largestFirst">Størst først</string>
+    <string name="pull_order_type_oldestFirst">Eldst først</string>
+    <string name="pull_order_type_newestFirst">Nyast først</string>
+
+    <!-- Pull order dialog descriptions for pull order types -->
+    <string name="pull_order_type_random_description">Hentar filer i tilfeldig rekkjefølgje.</string>
+    <string name="pull_order_type_alphabetic_description">Hentar filer sorterte alfabetisk etter filnamn.</string>
+    <string name="pull_order_type_smallestFirst_description">Hentar filer sorterte etter filstorleik. Minst først.</string>
+    <string name="pull_order_type_largestFirst_description">Hentar filer sorterte etter filstorleik. Størst først.</string>
+    <string name="pull_order_type_oldestFirst_description">Hentar filer sorterte etter endringstid. Eldst først.</string>
+    <string name="pull_order_type_newestFirst_description">Hentar filer sorterte etter endringstid. Nyast først.</string>
+
+    <!-- Titles used in the file versioning dialog and file versioning button in the folder activity -->
+    <string name="maximum_age">Maksimumsalder</string>
+    <string name="clean_out_after">Rens ut etter</string>
+    <string name="file_versioning">Filversjonering</string>
+    <string name="none"> Ingen</string>
+    <string name="versions_path">Versjonssti</string>
+    <string name="command">Kommando</string>
+
+    <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
+
+    <!-- Displays the current file versioning type in the Folder activity -->
+    <string name="type_simple">Type: Enkel</string>
+    <string name="type_trashcan">Type: Papirkorg</string>
+    <string name="type_staggered">Type: Forskjøva</string>
+    <string name="type_external">Type: Ekstern</string>
+
+    <!-- Information displayed about the current file versioning configuration in the folder activity -->
+    <string name="trashcan_versioning_info">Rensar ut etter: %1$s</string>
+    <string name="staggered_versioning_info">Maksimumsalder: %1$d\nVersjonssti: %2$s</string>
+    <string name="external_versioning_info">Kommando: %1$s</string>
+    <string name="simple_versioning_info">Behald versjonar: %1$s</string>
+    <string name="show_device_id">Vis einings-ID</string>
+
+    <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
+    <string name="could_not_access_deviceid">Klarte ikkje å få tilgang til einings-ID-en.</string>
+    <string name="share_device_id_chooser">Del einings-ID med</string>
+    <string name="run_on_whitelisted_wifi_summary">Slå på kvitelista for å avgrense synkronisering til berre spesifiserte Wi-Fi-nettverk.</string>
+    <string name="custom_sync_conditions_title">Eigne synkroniseringsforhold</string>
+    <string name="custom_sync_conditions_description">Gjer deg i stand til å spesifisere unntak frå dei globale køyreforholda.</string>
+    <string name="custom_sync_conditions_dialog">Spesifiser synkroniseringsforhold</string>
+
+    <!-- Quick Setting icon names and labels -->
+    <string name="qs_force_label">Tving køyring</string>
+    <string name="qs_forced_to_run">Tvinga til å køyre</string>
+    <string name="qs_forced_to_stop">Tvinga til å stoppe</string>
+    <string name="qs_following_run_conditions">Følgjer køyreforholda</string>
+    <string name="qs_schedule_label">Køyr i 5 minutt</string>
+    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">Køyr i %1$d minutt</string>
+    <string name="qs_schedule_disabled">Planen er slått av</string>
+    <string name="no_app_to_open_link">Ingen app er tilgjengeleg for å opne denne lenken.</string>
+
+    <!-- Custom HTTPS certificate -->
+    <string name="webui_custom_cert_title">Tilpassa HTTPS-sertifikat</string>
+    <string name="webui_custom_cert_summary">Bruk ditt eige sertifikat for den lokale Web-UI-en</string>
+    <string name="custom_cert_explanation">Bytt ut Syncthings innebygde sjølvsignerte sertifikat med ditt eige. Vel sertifikatet (PEM, inkludert heile kjeda) og den private nøkkelen, sjekk valideringsresultata og bruk dei. Syncthing vil starte på nytt for å laste inn det nye sertifikatet; dersom han ikkje kjem tilbake online, vert det føre sertifikatet automatisk gjenoppretta.\n\nFor eit sertifikat signert av din eigen CA, installer rot-sertifikatet til den CA-en på denne eininga først (Innstillingar → Tryggleik → Installer CA-sertifikat).</string>
+    <string name="custom_cert_current_title">Noverande sertifikat</string>
+    <string name="custom_cert_current_none">Fann ingen sertifikat.</string>
+    <string name="custom_cert_subject">Emne: %1$s</string>
+    <string name="custom_cert_issuer">Utstadar: %1$s</string>
+    <string name="custom_cert_expires">Utløper: %1$s</string>
+    <string name="custom_cert_self_signed">Sjølvsignert (standard)</string>
+    <string name="custom_cert_ca_signed">CA-signert</string>
+    <string name="custom_cert_select_cert">Vel sertifikat (.pem)</string>
+    <string name="custom_cert_select_key">Vel privat nøkkel (.pem)</string>
+    <string name="custom_cert_not_selected">Ikkje valt</string>
+    <string name="custom_cert_apply">Bruk sertifikatet</string>
+    <string name="custom_cert_reset_title">Nullstill til auto-generert sertifikat</string>
+    <string name="custom_cert_reset_summary">Slett det tilpassa sertifikatet og la Syncthing lage eit nytt sjølvsignert</string>
+    <string name="custom_cert_reset_question">Bytt ut det noverande sertifikatet med eit nyoppretta sjølvsignert?</string>
+    <string name="custom_cert_applying">Brukar sertifikatet – startar Syncthing på nytt…</string>
+    <string name="custom_cert_applied">Sertifikatet er brukt.</string>
+    <string name="custom_cert_applied_pending">Lagra. Det vert verksamt neste gong Syncthing startar.</string>
+    <string name="custom_cert_failed">Klarte ikkje å bruke sertifikatet: %1$s</string>
+    <string name="custom_cert_reset_done">Nullstilt til eit nytt sjølvsignert sertifikat.</string>
+    <string name="custom_cert_file_too_large">Den fila er for stor til å vere eit sertifikat eller ein nøkkel.</string>
+    <string name="custom_cert_read_failed">Klarte ikkje å lese den valde fila.</string>
+    <string name="cert_check_chain">Sertifikatkjede</string>
+    <string name="cert_check_trust">Til å stole på for denne eininga</string>
+    <string name="cert_check_validity">Gyldigheitsperiode</string>
+    <string name="cert_check_key">Privat nøkkel</string>
 </resources>

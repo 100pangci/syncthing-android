@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name">Syncthing-Fork</string>
+
+    <string name="app_description">Avatud, vaba, usaldusväärne ja hajutatud võrgul põhinev failide sünkroonimisrakendus.</string>
+
+    <!-- FirstStartActivity -->
+
+    <!-- Title for dialog displayed on first start -->
+    <string name="welcome_title">Tere tulemast - see on Syncthing Androidi jaoks</string>
+
+    <!-- Welcome wizard -->
+    <!-- Slide "Introduction" -->
+    <string name="welcome_text">Syncthing on avatud lähtekoodiga failide sünkroonimisrakendus. Jagamaks andmeid muude seadmetega pead lisama nende unikaalsed tunnused oma seadmete loendisse. Hiljem saad valida mis kaustu missuguste seadmetega soovid jagada.\n\nKui töö käigus märkad vigu, siis palju teavita neid GitHubis.</string>
+
+    <!-- Slide "Storage Permission" -->
+    <string name="storage_permission_title">Õigused andmeruumi kasutamiseks</string>
+    <string name="storage_permission_desc">Failide sünkroonimise korraldamiseks vajab Syncthing õigust sinu arvuti/seadme andmeruumi kasutamiseks.</string>
+    <string name="dialog_all_files_access_not_supported">Sinu nutiseade ei toeta võimalust lubada ligipääsu kõikidele failidele</string>
+
+    <!-- Slide "Ignore battery optimizations" -->
     <string name="ignore_doze_permission_title">Akukasutuse optimeerimine</string>
+    <string name="ignore_doze_permission_os_notice">Teadaolevalt Android TV kipub taustal töötava rakenduse vahetevahel sulgema. Üks võimalikke lahendusi leidub meie vikis: %1$s/%2$s.</string>
+    <string name="ignore_doze_permission_desc">Android võib mingi aja möödumisel lõpetada sünkroonimise. Sellise olukorra vältimiseks luba selle rakenduse puhul keelata akukasutuse optimeerimine. Mõnes nutiseadmes võib leiduda ka täiendav keeluloend eelpaigaldatud rakenduste jaoks ja siis lisa Syncthing ka sinna.</string>
+    <string name="dialog_disable_battery_optimizations_not_supported">Sinu nutiseadme tarkvara ei võimalda rakendusekohast akukasutuse optimeerimise kasutamist</string>
+    <string name="dialog_confirm_skip_ignore_doze_permission">Ettevaatust: kui SyncthingNative katkestatakse ja teeb midagi imelikku, on see sinu süü. Jäta vahele ainult siis, kui sinu seade ei toeta õiguse andmist. Kas jätame tõesti vahele?</string>
+
+    <!-- Slide "Location Permission" -->
+    <string name="location_permission_title">Õigused asukoha tuvastamiseks</string>
+    <string name="location_permission_desc">Syncthingi saab seadistada töötama valitud WiFi-võrkudes. Android nõuab rakenduselt asukohaluba, et lugeda aktiivse WiFi-võrgu nime. Kui soovid seda funktsiooni kasutada, vajuta ülalolevat nuppu. Selle sammu võid vahele jätta. Lisateavet leiad meie privaatsuspoliitikast.</string>
+    <string name="location_permission_desc_api_29">Näpunäide Android 10+ jaoks: „Luba alati“</string>
+
+    <!-- Slide "Notification Permission" -->
+    <string name="notification_permission_title">Õigused teavituste kuvamiseks</string>
+    <string name="notification_permission_desc">Vajalik teatiste kuvamiseks uute seadmeühenduste ja kausta jagamise taotluste kohta ning teenuse töös ja ühendatud hoidmiseks.</string>
+
+    <!-- Slide "Key Generation" -->
+    <string name="key_generation_title">Krüptovõtmete loomine</string>
+    <string name="key_generation_success">Privaatseks andmevahetuseks mõeldud turvalised võtmed on edukalt loodud.</string>
+
+    <!-- Generic texts used everywhere -->
     <string name="back">Tagasi</string>
     <string name="cont">Jätka</string>
     <string name="finish">Lõpeta</string>
@@ -8,312 +47,1002 @@
     <string name="grant_permission">Anna vastavad õigused</string>
     <string name="permission_granted">Õigused on olemas</string>
     <string name="reason">Põhjus:</string>
+
     <string name="accept">Nõustu</string>
+
     <string name="ignore">Eira</string>
+
+
     <string name="main_menu">Põhimenüü</string>
+
     <string name="refresh">Värskenda andmeid</string>
-    <string name="yes">Jah</string>
-    <string name="no">Ei</string>
-    <string name="toast_write_storage_permission_required">See rakendus vajab õigust andmeruumi kirjutamiseks</string>
-    <string name="device_rejected">„%1$s“ seade soovib luua ühendust</string>
-    <string name="folder_rejected">„%1$s“ seade soovib jagada „%2$s“ kausta</string>
-    <string name="web_gui_creating_key">Loon krüptovõtmeid. Selleks võib kuluda mõni minut…</string>
-    <string name="folders_fragment_title">Kaustad</string>
-    <string name="folder_list_empty">Kaustu ei leidu</string>
-    <plurals name="files">
-        <item quantity="one">%1$d / %2$d fail</item>
-        <item quantity="other">%1$d / %2$d faili</item>
-    </plurals>
-    <plurals name="conflicts">
-        <item quantity="one">%1$d konflikt</item>
-        <item quantity="other">%1$d konflikti</item>
-    </plurals>
-    <string name="download_title">Allalaadimine</string>
-    <string name="upload_title">Üleslaadimine</string>
-    <string name="status_fragment_title">Olek</string>
-    <string name="folder_id">Kausta tunnus</string>
-    <string name="folder_label">Kausta silt</string>
-    <string name="directory">Kaust</string>
-    <string name="devices">Seadmed</string>
-    <string name="keep_versions">Säilita versioonid</string>
-    <string name="delete_folder">Kustuta kaust</string>
-    <string name="create_folder">Loo kaust</string>
-    <string name="edit_folder">Muuda kausta</string>
-    <string name="create">Loo</string>
-    <string name="remove_folder_confirm">Kas sa kindlasti soovid selle kausta Syncthingist eemaldada?</string>
-    <string name="folder_id_required">Kausta tunnus ei tohi olla tühi</string>
-    <string name="folder_label_required">Kausta silt ei tohi olla tühi</string>
-    <string name="folder_path_required">Kausta asukoht ei tohi olla tühi</string>
-    <string name="dialog_discard_changes">Kas loobud muudatustest?</string>
-    <plurals name="file_name_title">
-        <item quantity="one">Failinimi</item>
-        <item quantity="other">Failide loend</item>
-    </plurals>
-    <plurals name="reason_not_within_time_frame_minutes">
-        <item quantity="one">%d minut</item>
-        <item quantity="other">%d minutit</item>
-    </plurals>
-    <plurals name="device_online_up_to_date">
-        <item quantity="one">%1$d seade on võrgus ja uuendatud</item>
-        <item quantity="other">%1$d seadet on võrgus ja uuendatud</item>
-    </plurals>
-    <plurals name="syncthing_active_syncing_device_online">
-        <item quantity="one">Sünkroonimine: %1$d%% valmis, %2$d seade võrgus</item>
-        <item quantity="other">Sünkroonimine: %1$d%% valmis, %2$d seadet võrgus</item>
-    </plurals>
-    <plurals name="copy_success_partially">
-        <item quantity="one">%1$d fail on kopeeritud „%2$s“ kausta, %3$d on juba olemas</item>
-        <item quantity="other">%1$d faili on kopeeritud „%2$s“ kausta, %3$d on juba olemas</item>
-    </plurals>
-    <plurals name="copy_success">
-        <item quantity="one">%1$d fail on kopeeritud „%2$s“ kausta</item>
-        <item quantity="other">%1$d faili on kopeeritud „%2$s“ kausta</item>
-    </plurals>
-    <string name="app_name">Syncthing-Fork</string>
+
+    <!-- PhotoShootActivity -->
+
+    <string name="photo_shoot_launcher_title">Kaamera sünkroonimine</string>
+    <string name="photo_shoot_activity_title">Syncthing-Fork\'i kaamera</string>
+    <string name="photo_shoot_intro_welcome_title">Tere tulemast kasutama Syncthingi kaamerat</string>
+    <string name="photo_shoot_intro_no_camera">Vabandust, selles nutiseadmes pole kaamerat.</string>
+    <string name="photo_shoot_intro_missing_permissions">Jätkamiseks vajame õigust andmeruumi ja kaamera kasutamiseks.</string>
+    <string name="grant_storage_permission">Anna õigused andmeruumi kasutamiseks</string>
+    <string name="grant_camera_permission">Anna õigused kaamera kasutamiseks</string>
+    <string name="photo_shoot_intro_permission_desc">Syncthing Camera vajab sinu nõusolekut piltide tegemiseks ja nende salvestamiseks sinu seadmesse. See funktsioon on vabatahtlik. Kasutamiseks anna õigused ja puuduta „Jätka“. Loome sinu jaoks Syncthing Camera kausta, mida saad hiljem teiste Syncthingi seadmetega jagada.</string>
+    <string name="photo_shoot_take_picture_success">Pilt salvestati edukalt Syncthing Camera kausta.</string>
+    <string name="photo_shoot_take_picture_failure">Pildistamine ebaõnnestus või katkestasid selle.</string>
+
+    <!-- Label of the folder created by the Syncthing Camera feature. -->
+    <string name="default_syncthing_camera_folder_label">Syncthingi kaamera</string>
+
+    <!-- MainActivity -->
+
+    <!-- Main bottom navigation view -->
+    <string name="activity_main_bottom_navigation_rescan_all">Skaneeri kõik uuesti</string>
+
+    <!-- Main menu button -->
+
+    <!-- Exception dialog message -->
+
+    <!-- Title of the exit app when running as a service confirmation dialog -->
+    <string name="dialog_exit_while_running_as_service_title">Kinnita rakendusest väljumine</string>
+    <string name="dialog_exit_while_running_as_service_message">Paari sõnaga sinu tähelepanuks: oled seadistanud rakenduse käivituma automaatselt süsteemi käivitumisel. Seetõttu jälgib see käivitamistingimusi ja sünkroonib taustal igal ajal, kui tingimused on täidetud. Käsitsi välju ainult siis, kui satud tõsiste probleemide otsa. Vastasel juhul keela seadistustes valik „Käivita automaatselt süsteemi käivitumisel“. Kas soovid nüüd väljuda kuni seadme taaskäivitamiseni?</string>
+
+    <!-- Title of the "add folder" menu action -->
     <string name="add_folder">Lisa kaust</string>
-    <string name="app_description">Avatud, vaba, usaldusväärne ja hajutatud võrgul põhinev failide sünkroonimisrakendus.</string>
-    <string name="welcome_title">Tere tulemast - see on Syncthing Androidi jaoks</string>
-    <string name="welcome_text">Syncthing on avatud lähtekoodiga failide sünkroonimisrakendus. Jagamaks andmeid muude seadmetega pead lisama nende unikaalsed tunnused oma seadmete loendisse. Hiljem saad valida mis kaustu missuguste seadmetega soovid jagada.\n\nKui töö käigus märkad vigu, siis palju teavita neid GitHubis.</string>
-    <string name="storage_permission_title">Õigused andmeruumi kasutamiseks</string>
-    <string name="storage_permission_desc">Failide sünkroonimise korraldamiseks vajab Syncthing õigust sinu arvuti/seadme andmeruumi kasutamiseks.</string>
-    <string name="dialog_all_files_access_not_supported">Sinu nutiseade ei toeta võimalust lubada ligipääsu kõikidele failidele</string>
-    <string name="ignore_doze_permission_os_notice">Teadaolevalt Android TV kipub taustal töötava rakenduse vahetevahel sulgema. Üks võimalikke lahendusi leidub meie vikis: %1$s/%2$s.</string>
+
+    <!-- Title of the "share device id" menu action -->
+
+    <!-- Shown in the chooser dialog when sharing a Device ID -->
+
+    <string name="usage_reporting_dialog_title">Kas lubad anonüümset aruandlust kasutuse kohta?</string>
+
+    <string name="yes">Jah</string>
+
+    <string name="no">Ei</string>
+
+
+    <!-- URL to open when user chose to open website in usage reporting dialog -->
+
+    <string name="toast_write_storage_permission_required">See rakendus vajab õigust andmeruumi kirjutamiseks</string>
+
+    <string name="device_rejected">„%1$s“ seade soovib luua ühendust</string>
+
+    <string name="folder_rejected">„%1$s“ seade soovib jagada „%2$s“ kausta</string>
+
+    <!-- StateDialogActivity -->
+
+    <!-- Text for FoldersFragment and DevicesFragment loading view -->
+    <!-- Shown instead of web_gui_loading if the key does not exist and has to be created -->
+    <string name="web_gui_creating_key">Loon krüptovõtmeid. Selleks võib kuluda mõni minut…</string>
+
+    <!-- FolderListFragment -->
+
+    <string name="folders_fragment_title">Kaustad</string>
+
+    <!-- Shown if no folders exist -->
+    <string name="folder_list_empty">Kaustu ei leidu</string>
+
+    <!-- Format string for folder file count -->
+    <plurals name="files">        <item quantity="one">%1$d / %2$d fail</item>        <item quantity="other">%1$d / %2$d faili</item></plurals>
+
+    <!-- Format string for conflict file count -->
+    <plurals name="conflicts">        <item quantity="one">%1$d konflikt</item>        <item quantity="other">%1$d konflikti</item></plurals>
+
+    <string name="override_changes">Sürjuta muudatused</string>
+
+    <!-- Override Changes Confirmation Dialog -->
+    <string name="override_changes_question">See tühistab kõik muudatused, mis on tehtud teistel seadmetel, mis seda kausta jagavad. Jätkame?</string>
+
+    <string name="revert_local_changes">Pööra kohalikud muudatused tagasi</string>
+
+    <string name="delete_unexpected_items">Kustuta mittesoovitud objektid</string>
+
+    <!-- Revert Local Changes Confirmation Dialog -->
+    <string name="revert_local_changes_question">See tühistab kõik muudatused, mis on selles seadmes selles kaustas tehtud. Jätkame?</string>
+
+    <string name="open_file_manager">Ava failihaldur</string>
+    <string name="open_file_with">Ava fail rakendusega</string>
+    <string name="open_file_no_compatible_app">Faili avamiseks ei leidu rakendust.</string>
+
+    <!-- Suggest File Manager App Dialog -->
+    <string name="suggest_file_manager_app_dialog_title">Ühilduvat failihalduri rakendust ei leidu</string>
+    <string name="suggest_file_manager_app_dialog_text">Soovitame sul installida avatud lähtekoodiga failihaldurirakendus „Material Files“. Kas soovid avada selle rakendusepoe lehe?</string>
+
+    <!-- DeviceListFragment -->
+
+    <!-- Devices tab title -->
+    <string name="devices_fragment_title">Seadmed</string>
+
+    <!-- Shown if no devices are configured in add folder dialog -->
+    <string name="devices_list_empty">Ühtegi seadet pole seadistatud. Klõpsa uue seadme lisamiseks.</string>
+
+    <!-- Shown in ListView if no devices are configured -->
+    <string name="no_devices_configured">Ühtegi seadet pole seadistatud. \nAlustamiseks palun lisa esimene seade.</string>
+
+    <string name="deviceEncryptionPasswordHint">Kui pole usaldatud, siis sisesta krüptimise salasõna</string>
+
+    <!-- Indicates that a folder is fully synced to the local device -->
+    <string name="device_up_to_date">Uuendatud ja sünkroonis</string>
+
+    <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
+    <string name="device_syncing_percent_bytes">Sünkroonimisel (%1$d%%, %2$s)</string>
+
+    <!-- Indicates that there is no connection to the device -->
+    <string name="device_disconnected">Ühendus on katkestatud</string>
+    <string name="device_disconnected_not_synced">Ühendus on katkestatud (%1$s ootel)</string>
+
+    <!-- Indicates that the device is paused and does not sync -->
+    <string name="device_paused">Peatatud</string>
+
+    <!-- Indicates that devices does not share any folders -->
+    <string name="device_state_unused">Kasutamata</string>
+
+    <!-- Indicates that the device connection is unknown -->
+
+    <!-- Last seen title -->
+    <string name="device_last_seen">Viimati nähtud: %1$s</string>
     <string name="device_last_seen_never">Mitte kunagi</string>
+
+    <!-- Title for the listing of shared folders with a colon and space appended -->
     <string name="shared_folders_title_colon">"Kaustad: "</string>
+
+    <!-- Expand the collapsed shared folders list on a device card; parameter is the hidden folder count -->
+    <string name="device_folders_show_more">+%1$d</string>
+
+    <!-- Collapse an expanded shared folders list on a device card -->
+    <string name="device_folders_show_less">Kuva vähem</string>
+
+    <!-- Title of the dialog listing the conflict files of a folder -->
+    <string name="conflict_files_title">Konfliktifailid</string>
+
+    <!-- Header of the grouped status card showing transfer and resource stats -->
+    <string name="status_transfer_resources">Edastus ja ressursid</string>
+
+    <!-- Title for current download rate -->
+    <string name="download_title">Allalaadimine</string>
+
+    <!-- Title for current upload rate -->
+    <string name="upload_title">Üleslaadimine</string>
+
+    <!-- StatusFragment -->
+
+    <string name="status_fragment_title">Olek</string>
+
+    <string name="button_follow_run_conditions">JÄRGI KÄIVITAMISTINGIMUSI</string>
+    <string name="button_force_start">SUNDKÄIVITUS\n\nEIRA KÄIVITAMISTINGIMUSI</string>
+    <string name="button_force_stop">SUNDPEATAMINE\n\nEIRA KÄIVITAMISTINGIMUSI</string>
+
+    <string name="syncthing_starting">Syncthing on käivitumas.</string>
+    <string name="syncthing_running">Syncthing on töös.</string>
+    <string name="syncthing_not_running">Syncthing pole töös.</string>
+    <string name="syncthing_has_crashed">Syncthing on kokku jooksnud.</string>
+
+    <!-- DrawerFragment -->
+
+    <!-- Same as download_title with a colon and space appended -->
+    <!-- Same as upload_title with a colon and space appended -->
+    <!-- Title for current RAM usage -->
+    <string name="ram_usage">Muutmälu kasutus</string>
+    <!-- Title for announce server status -->
+    <string name="announce_server">Seadistatud teadaandeserver</string>
+    <!-- Title for uptime status -->
     <string name="uptime">Kasulik tööaeg</string>
     <string name="restart">Käivita uuesti</string>
+
+    <string name="dialog_confirm_restart">Kas sa soovid Syncthingi uuesti käivitada?</string>
+
+    <!-- FolderActivity -->
+
+    <!-- Setting title -->
+    <string name="folder_id">Kausta tunnus</string>
+
+    <!-- Setting title -->
+    <string name="folder_label">Kausta silt</string>
+
+    <!-- Setting title -->
+    <string name="directory">Kaust</string>
+    <string name="advanced_directory_selection">Täpsem kaustavalik</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_fileWatcher">Jälgi muudatusi</string>
+    <string name="folder_fileWatcherDescription">Palub operatsioonisüsteemil teatada failide muudatustest. Keelatuna kasutatakse selle asemel perioodilist tunnist skannimist.</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_ignore_delete_caption">Eira kustutamist</string>
+    <string name="folder_ignore_delete_description">Ekspertvalik, mis mõjutab sissetulevate indeksiuuenduste käsitlemist. Määratuna eiratakse sissetulevaid uuendusi, millel on kustutamise lipp. Vaata: https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_run_script_caption">Käivita skript</string>
+    <string name="folder_run_script_description">Ekspertvalik skriptide käivitamiseks, kui kausta sünkroonimisolek muutub. Täidetakse skriptid asukohas „.stfolder/*.sh“, muid asukohti ei toetata turvalisuskaalutlustel.\nNäide skripti kutsest: „.stfolder/rename-files.sh sync_complete“</string>
+
+    <!-- Setting title -->
+    <string name="folder_pause">Peata kausta sünkroonimine</string>
+
+    <!-- Setting title -->
+    <string name="devices">Seadmed</string>
+
+    <!-- Setting title -->
+    <string name="keep_versions">Säilita versioonid</string>
+
+    <!-- Setting title -->
+    <string name="delete_folder">Kustuta kaust</string>
+
+    <!-- Title for FolderSettingsFragment in create mode -->
+    <string name="create_folder">Loo kaust</string>
+
+    <!-- Title for FolderSettingsFragment in edit mode -->
+    <string name="edit_folder">Muuda kausta</string>
+
+    <!-- Menu item to confirm folder creation -->
+    <string name="create">Loo</string>
+
+    <!-- Dialog shown when attempting to remove a folder -->
+    <string name="remove_folder_confirm">Kas sa kindlasti soovid selle kausta Syncthingist eemaldada?</string>
+
+    <!-- Toast shown when trying to create a folder with an empty ID -->
+    <string name="folder_id_required">Kausta tunnus ei tohi olla tühi</string>
+
+    <!-- Toast shown when trying to create a folder with an empty label -->
+    <string name="folder_label_required">Kausta silt ei tohi olla tühi</string>
+
+    <!-- Toast shown when trying to create a folder with an empty path -->
+    <string name="folder_path_required">Kausta asukoht ei tohi olla tühi</string>
+
+    <string name="dialog_discard_changes">Kas loobud muudatustest?</string>
+
+    <!-- Summary shown if we only have readonly access to the folder path -->
+    <string name="folder_path_readonly">Sinu Androidi versioon annab Syncthingile valitud kaustale ainult lugemisõiguse.</string>
+
+    <!-- Summary shown if we only have readwrite access to the folder path -->
+    <string name="folder_path_readwrite">Sinu Androidi versioon annab Syncthingile valitud kaustale lugemis- ja kirjutamisõiguse.</string>
+
+    <!-- Toast shown if the user selected an invalid location for a new syncthing folder -->
+    <string name="toast_invalid_folder_selected">Vabandust. Valitud kausta ei saa kasutada. Palun vali kaust, mis asub sise- või välismälus.</string>
+
+    <string name="folder_type_switch_to_receive_encrypted_not_allowed">Olemasolevate kaustade ümberlülitamine režiimile „Vastuvõtmine krüptituna“ ei ole toetatud.</string>
+
+    <string name="ignore_patterns">Eira mustreid</string>
+
+    <!-- DeviceActivity -->
+
+    <!-- Setting title -->
+    <string name="device_id">Seadme tunnus</string>
+
+    <!-- Status title -->
+    <string name="discovered_devices_title">Avastatud seadmed - puuduta valimiseks</string>
+
+    <!-- Status text -->
+
+    <!-- Status text -->
+    <string name="local_discovery_disabled">Sa oled kohaliku avastamise keelanud valikutes „Seadistused“ > „Syncthingi valikud“ > „Kohalik avastamine“. Luba see, et otsida seadmeid kohtvõrgus.</string>
+
+    <!-- Setting title -->
+
+    <!-- Setting title -->
     <string name="folders">Kaustad</string>
+
+    <!-- Setting title -->
     <string name="addresses">Aadressid</string>
+
+    <!-- Setting title -->
+
+    <!-- Setting title -->
     <string name="compression">Pakkimine</string>
+
+    <!-- Strings representing compression options -->
     <string name="compress_never">Mitte kunagi</string>
     <string name="compress_metadata">Metateave</string>
     <string name="compress_always">Alati</string>
+    <!-- Setting title -->
+    <string name="introducer">Tutvustaja</string>
+
+    <!-- Setting title -->
+    <string name="autoAcceptFolders">Nõustu automaatselt</string>
+
+    <!-- Setting title -->
+    <string name="pause_device">Peata seadme sünkroonimine</string>
+
+    <!-- Setting title -->
+    <string name="untrusted_device">Mitteusaldusväärne seade</string>
+
+    <!-- ActionBar item -->
+    <string name="delete_device">Kustuta seade</string>
+
+    <string name="add_device">Lisa seade</string>
+
+    <!-- Menu item to confirm adding a device -->
+
+    <!-- Title for DeviceSettingsFragment in edit mode -->
+    <string name="edit_device">Muuda seadet</string>
+
+    <!-- Dialog shown when attempting to remove a device -->
+    <string name="remove_device_confirm">Kas sa kindlasti soovid selle seadme eemaldada?</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
+    <string name="device_id_required">Seadme tunnus ei saa jääda tühjaks</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
+    <string name="device_id_invalid">Seadme tunnus pole korrektselt vormindatud. Palun sisesta õige tunnus ja proovi uuesti.</string>
+
+    <!-- Toast shown when trying to create a device with an empty name -->
+
+    <!-- Toast shown when trying to create a device with invalid addresses -->
+    <string name="device_addresses_invalid">Seadme aadressid pole korrektselt vormindatud. Palun sisesta korrektne aadress ja proovi uuesti. Üksikasjalikku teavet leiad Synctingi dokumentatsioonist.</string>
+
+    <!-- Content description (alt text) for device ID qr code in show device id dialog -->
+    <string name="device_id_qr_code">Seadmetunnuse QR-kood</string>
+
+    <string name="close_device_id">Sulge seadmetunnus</string>
+
     <string name="copy">Kopeeri</string>
+
+    <!-- Content description for device ID qr code icon -->
+    <string name="scan_qr_code_description">Skaneeri QR-koodi</string>
+
+    <!-- Dialog message if no compatible barcode scanner app is installed -->
+
+    <!-- Shown if no folders are configured -->
+    <string name="folders_list_empty">Ühtegi kausta pole seadistatud. Klõpsa uue kausta lisamiseks.</string>
+
+    <!-- RecentChangesActivity -->
+
+    <string name="no_recent_changes">Hiljutisi muudatusi pole.</string>
+    <string name="recent_changes_title">Hiljutised muudatused</string>
+    <string name="modified_by_device">Seade: %1$s</string>
+    <string name="modification_time">Aeg: %1$s</string>
+    <string name="more_options">Rohkem valikuid</string>
+    <string name="show_exact_times">Kuva täpsed kellaajad</string>
+
+    <string name="this_device">See seade</string>
+
+    <!-- WebGuiActivity -->
+
+    <!-- Title of the web gui activity -->
+    <string name="web_gui_title">Veebipõhine kasutajaliides</string>
+
+    <!-- Text for WebGuiActivity loading view -->
+    <string name="web_gui_loading">Ootan kasutajaliidese järgi</string>
+
+    <!-- Shown in WebGuiActivity when the web gui could not be loaded. The technical cause is shown
+         below it and written to the log. -->
+    <string name="web_gui_load_failed">Veebiliidese laadimine ebaõnnestus. Palun salvesta logi ja teata sellest.</string>
+
+    <!-- WebViewActivity -->
+
+    <!-- Dialog title displayed when an invalid ssl certificate was found -->
+    <string name="security_notice">Turvateavitus</string>
+
+    <!-- Dialog message if an invalid ssl certificate was detected -->
+    <string name="ssl_cert_invalid_text">Veebilehel %1$s näib olevat SSL-krüptimise jaoks kehtetu sertifikaat. Jätkame?</string>
+
+    <!-- Text for WebViewActivity loading page -->
+    <string name="web_page_loading">Laadin veebilehte: \n%1$s …</string>
+
+    <!-- Text for WebViewActivity openBrowser action button -->
+    <string name="open_in_browser">Ava veebibrauseris</string>
+
+    <!-- SettingsFragment -->
+
     <string name="settings_title">Seadistused</string>
+
+    <string name="category_wifi">Wi-Fi</string>
+    <string name="category_mobile_data">Mobiilne andmeühendus</string>
+    <string name="category_battery">Aku</string>
+    <string name="category_schedule">Ajakava</string>
+    <string name="category_general">Üldine</string>
+    <string name="category_connections">Ühendused</string>
+    <string name="category_advanced">Täpsemalt</string>
+
+    <string name="category_user_interface">Kasutajaliides</string>
+
     <string name="preference_app_theme_title">Kujundus</string>
+    <string name="preference_app_theme_follow_system">Järgi süsteemi kujundust</string>
     <string name="preference_app_theme_follow_light">Hele kujundus</string>
     <string name="preference_app_theme_follow_dark">Tume kujundus</string>
+    <string name="preference_app_theme_amoled" translatable="false">AMOLED</string>
+
     <string name="category_behaviour">Käitumine</string>
+    <string name="category_syncthing_options">Syncthingi eelistused</string>
+    <string name="category_syncthing_options_summary">See menüü on saadaval vaid siis, kui Syncthing töötab.</string>
+
+    <string name="category_backup">Import ja eksport</string>
     <string name="category_debug">Veaotsing</string>
     <string name="category_experimental">Katseline</string>
+
+    <!-- Preference screen - Run conditions -->
+    <string name="run_conditions_title">Käivitamise tingimused</string>
+    <string name="run_conditions_summary">Järgnevate eelistustega saad määrata millal Syncthing töötab.</string>
+
+    <string name="run_on_mobile_data_title">Käivita mobiilse andmeühenduse puhul</string>
+    <string name="run_on_mobile_data_summary">Käivita siis, kui nutiseade on ühendatud mobiilse andmeühendusega. Hoiatus: suurte andmemahtude sünkroonimisel võib see kulutada märkimisväärse osa sinu mobiilioperaatori andmemahust.</string>
+
+    <string name="run_on_roaming_title">Käivita võrgurändluses</string>
+    <string name="run_on_roaming_summary">Luba Syncthingil kasutada mobiilset andmeühendust võrgurändluse ajal.</string>
+
+    <string name="run_on_wifi_title">Käivita WiFi-võrkudes</string>
+    <string name="run_on_wifi_summary">Käivita siis, kui nutiseade on ühendatud WiFi- või kohtvõrguga.</string>
+
+    <string name="run_on_metered_wifi_title">Käivita mahupõhistes WiFi-võrkudes</string>
+    <string name="run_on_metered_wifi_summary">Käivita siis, kui nutiseade on ühendatud mahupõhise WiFi-võrguga, milleks võib olla kuumkoht või teisest nutiseadmest jagatud võrk. Tähelepanu: kui sünkroonid palju andmeid, siis see võib kulutada märgatava osa sinu lepingus lubatud andmemahust.</string>
+
+    <string name="run_on_whitelisted_wifi_title">Käivita määratud WiFi-võrkudes</string>
+    <string name="specify_wifi_ssid_whitelist">Vali WiFi-võrgud</string>
+    <string name="run_on_whitelisted_wifi_networks">Valitud WiFi-võrgud: %1$s</string>
+    <string name="wifi_ssid_whitelist_empty">Ühtegi WiFi-võrku pole määratletud. Lisamiseks klõpsa.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">Võrkude valimiseks lülita WiFi sisse.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_location">Võrkude valimiseks palun lisa asukohatuvastus sisse.</string>
+
+
+    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">Alates Android 8.1-st on WiFi nime lugemiseks vajalik asukohaluba. Saad seda funktsiooni kasutada ainult siis, kui selle õiguse annad.</string>
+
+    <string name="power_source_title">Käivita siis, kui seade saab toidet:</string>
+
+    <string name="power_source_ac_and_battery_power">Toitevõrgust ja akust.</string>
+    <string name="power_source_ac_power">Võrgutoitel.</string>
+    <string name="power_source_battery_power">Akutoitel.</string>
+
+    <string name="respect_battery_saving_title">Arvesta Androidi akusäästuseadega</string>
+    <string name="respect_battery_saving_summary">Keela Syncthing, kui akusäästurežiim on aktiivne.</string>
+
+    <string name="respect_master_sync_title">Arvesta Androidi seadistusega „Andmete automaatne sünkroonimine“</string>
+    <string name="respect_master_sync_summary">Keela Syncthing, kui kiirseadistuste paan „Andmete automaatne sünkroonimine“ on välja lülitatud.</string>
+
+    <string name="run_in_flight_mode_title">Käivita ilma võrguühenduseta</string>
+    <string name="run_in_flight_mode_summary">Selle valiku lubamine paneb Syncthingi töötama ka siis, kui oled võrguühenduseta. Luba see, kui sinu seadmel on probleeme käsitsi ühendatud WiFi-võrkude tuvastamisega lennurežiimi ajal.</string>
+
+    <string name="run_on_time_schedule_title">Käivita ajakava järgi</string>
+    <string name="run_on_time_schedule_summary">Selle valiku lubamine proovib seadistatud kestuse vältel sünkroonida, kui käivitamistingimused on täidetud ja viimasest sünkroonimisest on möödunud määratud ajavahemik. See säästab palju akut, kuid nõuab, et sünkroonimispartnerid oleksid võrgus. Pane tähele: kuni järgmise ajastatud sünkroonimiseni võib see maha jätta mittetäielikke ajutisi faile.</string>
+
+    <string name="sync_duration_minutes_title">Sünkroonimistsükli kestus</string>
+    <string name="sync_duration_minutes_summary">%1$s minutit</string>
+    <string name="sleep_interval_minutes_title">Pausi kestus sünkroonimistsüklis</string>
+
+    <!-- Preferences - Behaviour -->
+
     <string name="behaviour_autostart_title">Käivita automaatselt</string>
+    <string name="behaviour_autostart_summary">Käivita rakendus automaatselt koos operatsioonisüsteemiga.</string>
+
+
+    <string name="allow_overwrite_files_title">Luba olemasolevate failide ülekirjutamist</string>
+    <string name="allow_overwrite_files_summary">Seda juhul, kui muu rakendus jagab faile mõnesse selle rakenduse poolt kasutatavasse kausta.</string>
+
+    <string name="expert_mode_title">Eksperdi seadistused</string>
+
+    <string name="expert_mode_summary">Selle valiku lubamine kuvab täpsemad seadistamisvalikud. Enne kasutamist tutvu kindlasti Syncthingi dokumentatsiooniga, et teaksid, kuidas neid õigesti kasutada. Valed seadistused võivad põhjustada aku kiiret tühjenemist, süsteemiressursside ammendumist või mittetäielikku sünkroonimist.</string>
+
+
+    <string name="start_into_web_gui_title">Käivita otse veebiliidesest</string>
+ 
+    <string name="start_into_web_gui_summary">Rakenduse käivitumisel ava veebiliides põhiekraani asemel</string>
+
+
+
+
+
+    <string name="device_name">Seadme nimi</string>
+
+    <string name="listen_address">Sünkroonimisprotokolli kuulamisportide aadressid</string>
+
+    <string name="max_recv_kbps">Allalaaditava sisu kiiruspiirang (KiB/s)</string>
+
+    <string name="max_send_kbps">Üleslaaditava sisu kiiruspiirang (KiB/s)</string>
+
+    <string name="global_announce_enabled">Üldine avastamine</string>
+
+    <string name="local_announce_enabled">Kohalik avastamine</string>
+
+    <string name="enable_nat_traversal">Lülita sisse kohandumine võrguaadresside teisendusega</string>
+
+    <string name="global_announce_server">Üldised avastamisserverid</string>
+
+    <string name="enable_relaying">Luba edastussõlmede kasutamine</string>
+
+    <string name="usage_reporting">Anonüümne aruandlus kasutuse kohta</string>
+
+    <string name="crash_reporting">Anonüümne teavitus kokkujooksmisest</string>
+
+    <string name="webui_tcp_port_title">Veebiliidese TCP-port</string>
+
+    <string name="webui_remote_access_title">Kaugjuurdepääs veebiliidesele</string>
+
+    <string name="webui_username_title">Kasutajanimi võrgupõhises kasutajaliideses</string>
+
+    <string name="webui_password_title">Salasõna võrgupõhises kasutajaliideses</string>
+
+    <string name="webui_remote_access_summary">Määra, kas lubada veebiliidesele juurdepääs teisest seadmest. Lubatuna saad sisse logida kasutajanimega „syncthing“ ja API-võtmega paroolina. Vaikimisi: keelatud (kõige turvalisem)</string>
+
+
+
+    <string name="clear_stversions_title">Tühjenda kõik versioonikaustad</string>
+    <string name="clear_stversions_summary">Failid liigutatakse .stversions-kataloogi, kui Syncthing need asendab või kustutab. Sealt leiad ja saad taastada kogemata kustutatud faile, kuid iganenud failiversioonid võtavad sinu seadme salvestusruumi.</string>
+    <string name="clear_stversions_question">See kustutab kõik Syncthingi hallatud failide varasemad versioonid. Jätkame?</string>
+    <string name="clear_stversions_done">.stversions-kaustade tühjendamine õnnestus.</string>
+
+    <string name="download_support_bundle_title">Laadi alla tugiteenuste pakk (Support Bundle)</string>
+
+    <!-- Summary shown when the user clicked the download support bundle button -->
+    <string name="download_support_bundle_in_progress">Tugiteenuste pakki (Support Bundle) valmistatakse allalaadimiseks …</string>
+
+    <!-- Toast after successful download of the support bundle -->
+    <string name="download_support_bundle_succeeded">Tugiteenuste pakk (Support Bundle) laaditi edukalt alla asukohta %s.</string>
+
+    <!-- Toast after failed support bundle download -->
+    <string name="download_support_bundle_failed">Tugiteenuste pakki (Support Bundle) ei õnnestunud alla laadida. Kontrolli logisid.</string>
+
+    <!-- Titles for the preference to undo ignored devices and folders -->
+    <string name="undo_ignored_devices_folders_title">Tühista seadmete ja kaustade ignoreerimine</string>
+    <string name="undo_ignored_devices_folders_question">See tühistab varasemad otsused seadmete ja kaustade ignoreerimise kohta. Jätkame?</string>
+    <string name="undo_ignored_devices_folders_done">Otsuste tagasipööramine õnnestus.</string>
+
+    <string name="backup_rel_path_to_zip">Konfiguratsiooniarhiivi suhteline asukoht</string>
+
+    <string name="backup_password_title">Seadista kaitsmine salasõnaga</string>
+    <string name="backup_password_summary">ℹ️ Soovitatav:\nSisesta tugev parool, mida kasutatakse seadistuste eksportimisel krüptimiseks ja importimisel dekrüptimiseks. Hoia seda parooli turvalises kohas, et see oleks taastamiseks käepärast. Seda läheb vaja importimisfunktsiooni kasutamiseks.\n\n⚠️ Ei ole soovitatav:\nParoolita kasutamisel võivad teised rakendused potentsiaalselt lugeda ja muuta sinu Syncthingi seadistusi. Seadistuste paljastamine kannab riski, et pahatahtlik isik võib varastatud seadistuste ekspordi abil saada volitamata juurdepääsu sinu failidele.</string>
+
+    <string name="backup_password_set">✅ Salasõna on lisatud: %1$s</string>
+    <string name="backup_password_set_masked">✅ Salasõna on lisatud - muutmiseks klõpsa</string>
+    <string name="backup_password_not_set">⚠ Salasõna pole lisatud.</string>
+    <string name="toggle_password_visibility">Lülita salasõna nähtavus sisse/välja</string>
+
+    <string name="export_config">Ekspordi seadistused</string>
+
+    <!-- Toast after entering an invalid tcp port -->
+    <string name="invalid_port_number" tools:ignore="PluralsCandidate">Pordinumber pole korrektne. Palun sisesta number vahemikust %1$d kuni %2$d.</string>
+
+    <!-- Toast after entering invalid integer value -->
+    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">Sisendväärtus pole korrektne. Palun sisesta väärtus vahemikust %1$d kuni %2$d.</string>
+
+    <!-- Experimental options -->
+    <string name="use_proxy">Ühenda proksi kaudu</string>
+    <string name="do_not_use_proxy">Proksit pole seadistatud.</string>
+
+
+    <string name="use_tor_title">Kasuta Tori võrku</string>
+    <string name="use_tor_summary">Parema privaatsuse nimel juhi kogu võrguliiklus läbi Tori võrgu. Eeldab Orboti kasutamist ja sellega lülitavad proksi seadistused välja.</string>
+
+    <string name="socks_proxy_address_title">SOCKS5 puhverserver</string>
+    <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>
+
+    <!-- Toast after entering invalid socks proxy address -->
+    <string name="toast_invalid_socks_proxy_address">Sisend ei vasta proksi süntaksile - socks5://[IP/HOSTNAME]:[PORT]</string>
+
+    <string name="http_proxy_address_title">HTTP(S) puhverserver</string>
+    <string name="http_proxy_address_example" translatable="false">http://192.168.0.1:8080</string>
+
+    <!-- Toast after entering invalid http proxy address -->
+    <string name="toast_invalid_http_proxy_address">Sisend ei vasta proksi süntaksile - http://[IP/HOSTNAME]:[PORT]</string>
+
+    <string name="broadcast_service_control_title">Teenuse juhtimine broadcast-teadete kaudu</string>
+    <string name="broadcast_service_control_summary">Vaikimisi: keelatud. Luba, et adb või kolmanda osapoole rakendused (nt automatiseerimisrakendused) saavad juhendada Syncthingi käivitamistingimuste järgimiseks, sundkäivitamiseks või sundpeatamiseks.</string>
+
+    <!-- Dialog shown before config export -->
+    <string name="dialog_confirm_export">Kas sa tõesti soovid oma seadistusi eksportida? Olemasolev arhiiv kirjutatakse üle.</string>
+
+    <!-- Dialog shown before config import -->
+    <string name="dialog_confirm_import">Kas sa tõesti soovid seadistusi importida? Olemasolevad seadistused, sealhulgas jagatud kaustade ja seadmete loend, asendatakse.</string>
+
+    <!-- PreferenceCategories -->
     <string name="preference_category_actions">Tegevused</string>
     <string name="preference_category_explanation">Selgitus</string>
     <string name="preference_category_prepare">Valmista ette</string>
+
+    <!-- Toast shown after config was exported -->
+    <string name="config_export_successful_no_path">Seadistused on eksporditud. Palun jäta parool meelde hilisemaks importimiseks.</string>
+    <string name="config_export_failed">Seadistuste eksportimine ebaõnnestus. Üksikasjade vaatamiseks ava Seadistused-Veaotsing-Logi.</string>
+
+    <string name="import_config">Impordi seadistused</string>
+
+    <!-- Toast shown after config was imported -->
+    <string name="config_imported_successful">Seadistused on imporditud</string>
+
+    <string name="config_import_failed_no_path">Seadistuste importimine ebaõnnestus. Üksikasjade vaatamiseks ava Seadistused-Veaotsing-Logi.</string>
+
+    <string name="dialog_settings_restart_app_title">Palun käivita rakendus uuesti</string>
+    <string name="dialog_settings_restart_app_question">Selle valiku muutmine nõuab rakenduse viivitamatut taaskäivitamist. Kõik muud muudatused jäetakse kõrvale. Jätkame?</string>
+
+    <!-- Title for the preference to set STTRACE parameters -->
+    <string name="sttrace_title">STTRACE\'i valikud</string>
+    <string name="sttrace_none_selected">Diagnostikafunktsioon pole valitud</string>
+
+    <string name="environment_variables">Keskkonnamuutujad</string>
+
+    <!-- Toast after entering invalid STTRACE params -->
+    <string name="toast_invalid_environment_variables">Väärtus ei ole korrektne keskkonnamuutuja sõne</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_database_title">Nulli ja lähtesta andmebaas</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_database_question">Seda toimingut tohiks teha ainult meie tugimeeskonna soovituse põhjal.\n\nKas oled kindel, et soovid Syncthingi andmebaasi tühjendada?</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_database_done">Syncthingi andmebaasi lähtestamine õnnestus</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_deltas_title">Lähtesta deltaindeksid</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_question">Seda toimingut tohiks teha ainult meie tugimeeskonna soovituse põhjal.\n\nKas oled kindel, et soovid Syncthingi deltaindeksid tühjendada?</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_done">Syncthingi deltaindeksite lähtestamine õnnestus</string>
+
+    <!-- Settings / About -->
     <string name="category_about">Rakenduse teave</string>
+
+    <string name="verbose_log_title">Jutukas logi</string>
+    <string name="verbose_log_summary">Selle valiku lubamine aitab koostada väga üksikasjalikke diagnostikaloge.</string>
+
+
+    <!-- Settings item that opens the log activity -->
+    <string name="open_log">Ava logi</string>
+
+    <!-- Summary for the log activity -->
+    <string name="open_log_summary">Ava Syncthingi ja Androidi logiaken</string>
+
+    <!-- Menu item linking support forum -->
+    <string name="syncthing_forum_title">Syncthingi foorum</string>
+    <string name="syncthing_forum_summary">Mine Syncthingi foorumisse ja saa tuge</string>
+    <string name="syncthing_forum_url" translatable="false">https://forum.syncthing.net/</string>
+
+    <!-- Menu item for pizza -->
+
+    <!-- Menu item linking privacy policy -->
+    <string name="privacy_title">Andmekaitse - ja privaatsusreeglid</string>
+    <string name="privacy_summary">Ava syncthing-androidi privaatsuspoliitika, mis kirjeldab isikuandmete (nt asukohaandmete) kasutamist (kui üldse).</string>
+    <string name="privacy_policy_url" translatable="false">https://syncthing.net/android-privacy-policy</string>
+
+    <!-- Settings item that opens issue tracker -->
+    <string name="report_issue_title">Teata veast või problemist</string>
+
+    <!-- Summary for the issue tracker settings item -->
+    <string name="open_issue_tracker_summary">Ava Syncthing-Forki veahaldur aadressil %1$s</string>
+
+    <!-- URL of the issue tracker -->
+    <string name="issue_tracker_url" translatable="false">https://github.com/researchxxl/syncthing-android/issues</string>
+
+    <!-- URL of the GitHub wiki -->
+    <string name="wiki_url" translatable="false">https://github.com/researchxxl/syncthing-android/tree/main/wiki</string>
+
+    <!-- URL of the Syncthing project homepage -->
+
+    <!-- Title of the preference showing upstream version name -->
+    <string name="syncthing_version_title">Syncthingi versioon</string>
+
+    <!-- Title of the preference showing this app's version name -->
+    <string name="app_version_title">Syncthing-Forki ümbriku versioon</string>
+
+    <!-- Title of the preference showing the REST API key -->
+    <string name="syncthing_api_key">Syncthingi API võti (klõpsa kopeerimiseks)</string>
+
+    <!-- Shown when the API key is copied to the clipboard -->
+    <string name="api_key_copied_to_clipboard">Syncthing API võti on kopeeritud lõikelauale</string>
+
+    <!-- Title of the preference showing database size -->
+    <string name="syncthing_database_size">Syncthingi andmebaasi suurus</string>
+
+    <!-- Title of the preference showing the OS open file limit -->
+    <string name="os_open_file_limit">Avatud failide ülempiir Androidis</string>
+    
+    <!-- Title of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_title">Avatud lähtekoodiga tarkvara litsentsid</string>
+    
+    <!-- Summary of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_summary">Näita kasutatud avatud lähtekoodiga tarkvara litsentse</string>
+
+    <!-- FolderPickerAcitivity -->
+
+    <!-- Activity title -->
+    <string name="folder_picker_title">Kaustavalija</string>
+
+    <!-- Storage path overview -->
+    <string name="advanced_storage_path_overview">Täpsem salvestusruumi asukohtade ülevaade</string>
+
+    <!-- Current path -->
+    <string name="current_path">Praegune asukoht: %1$s</string>
+
+    <!-- ListView empty text -->
+
+    <!-- Menu item to create folder on the file system -->
+
+    <!-- Menu item to select the current folder -->
+
+    <string name="create_folder_failed">Kausta loomine ei õnnestunud</string>
+
+    <!-- Menu item to go up to parent folder -->
+    <string name="folder_go_up">Liigu üles</string>
+
+    <!-- LogActivity -->
+
+    <string name="syncthing_log_title">Syncthingi logi</string>
+    <string name="android_log_title">Androidi logi</string>
+
+    <string name="share_log_file_missing">Jagatav logifail on puudu.</string>
+
+    <string name="share_log_file">Jaga logifaili</string>
+
+    <!-- Title of the "log android" menu button -->
+    <string name="view_android_log">Vaata Androidi logi</string>
+
+    <!-- Title of the "log Syncthing" menu button -->
+    <string name="view_syncthing_log">Vaata Syncthingi logi</string>
+
+    <string name="retrieving_logs">Laadin logisid…</string>
+
+    <!-- Title of the "share log" menu button -->
     <string name="share_title">Jaga</string>
+
+    <!-- ShareActivity -->
+
+    <!-- Toast if user didn't complete the welcome wizard yet -->
+    <string name="complete_welcome_wizard_first">Esmalt käivita rakendus rakenduste loendist ja läbi tervitusviisard enne failide jagamist.</string>
+
+    <!-- Title of the "share" activity -->
+    <string name="share_activity_title">Salvesta Syncthingi</string>
+
+    <!-- Title of the "save" button -->
     <string name="save_title">Salvesta</string>
+
+    <!-- Title of the "cancel" button -->
     <string name="cancel_title">Katkesta</string>
+
+    <!-- Title of the "save" button -->
+
+    <!-- New file name template -->
+    <string name="file_name_template">Uus fail %1$s</string>
+
+    <!-- Nothing to share toast -->
+    <string name="nothing_share">Pole midagi jagada</string>
+
+    <!-- Copy success toast partially -->
+    <plurals name="copy_success_partially">        <item quantity="one">%1$d fail on kopeeritud „%2$s“ kausta, %3$d on juba olemas</item>        <item quantity="other">%1$d faili on kopeeritud „%2$s“ kausta, %3$d on juba olemas</item></plurals>
+
+    <!-- Copy success toast -->
+    <plurals name="copy_success">        <item quantity="one">%1$d fail on kopeeritud „%2$s“ kausta</item>        <item quantity="other">%1$d faili on kopeeritud „%2$s“ kausta</item></plurals>
+
+    <!-- Copy exception toast -->
+    <string name="copy_exception">Jagamisel tekkis viga - lisateavet leiad rakenduse logidest</string>
+
+    <!-- Copy progress dialog text -->
+    <string name="copy_progress">Jagan faile…</string>
+
+    <plurals name="file_name_title">        <item quantity="one">Failinimi</item>        <item quantity="other">Failide loend</item></plurals>
+
+    <!-- Sub Folder title -->
+
+    <!-- RunConditionMonitor -->
+
+    <string name="reason_force_start">Syncthing töötab, sest sundisid seda käivituma hoolimata käivitamistingimustest.</string>
+    <string name="reason_force_stop">Syncthing ei tööta, sest sundisid seda peatuma hoolimata käivitamistingimustest.</string>
+
+    <!-- Explanations why syncthing is running or not running -->
+    <string name="reason_not_within_time_frame_2">Sa lubasid valiku „Käivita ajakava järgi“ ja viimane sünkroonimine toimus %s tagasi.</string>
+    <string name="reason_not_within_time_frame_0_min">vähem kui minut</string>
+    <plurals name="reason_not_within_time_frame_minutes">        <item quantity="one">%d minut</item>        <item quantity="other">%d minutit</item></plurals>
+    <string name="reason_not_charging">Telefon pole laadimas.</string>
+    <string name="reason_not_on_battery_power">Telefon ei tööta akutoitel.</string>
+    <string name="reason_not_while_power_saving">Syncthing ei tööta, sest telefon on hetkel akusäästurežiimis.</string>
+    <string name="reason_not_while_auto_sync_data_disabled">Syncthing ei tööta, sest Androidil on hetkel „Andmete automaatne sünkroonimine“ keelatud.</string>
+
+    <!-- … Mobile data -->
+    <string name="reason_mobile_data_disallowed">Syncthing ei ole seadistatud töötama mobiilse andmeühenduse korral.</string>
+    <string name="reason_on_mobile_data">Syncthingil on lubatud töötada mobiilse andmeühenduse korral.</string>
+    <string name="reason_not_on_mobile_data">Syncthingil on lubatud töötada mobiilse andmeühenduse korral, kuid mobiilne andmeühendus puudub.</string>
+
+    <!-- … Roaming -->
+    <string name="reason_on_roaming_nonroaming_mobile_data">Syncthingil on lubatud töötada nii võrgurändluses kui ka ilma selleta mobiilsetel andmeühendustel.</string>
+    <string name="reason_on_nonroaming_mobile_data">Syncthingil on lubatud töötada võrgurändluseta mobiilsetel andmeühendustel. Aktiivne ühendus ei ole võrgurändluses.</string>
+    <string name="reason_not_nonroaming_mobile_data">Syncthing ei tööta, sest keelasid sellel töötamast võrgurändlusega mobiilsetel andmeühendustel.</string>
+
+    <string name="reason_wifi_disallowed">Syncthingil ei ole lubatud töötada WiFi- või Etherneti-võrgus.</string>
+    <string name="reason_on_wifi">Syncthingil on lubatud töötada WiFi-võrgus ja WiFi on hetkel ühendatud.</string>
+    <string name="reason_not_on_wifi">Syncthingil on lubatud töötada WiFi-võrgus, kuid WiFi ei ole ühendatud või telefon on lennurežiimis.</string>
+    <string name="reason_on_metered_nonmetered_wifi">Syncthingil on lubatud töötada nii mahupõhistes kui ka mitte-mahupõhistes WiFi-võrkudes.</string>
+    <string name="reason_on_whitelisted_wifi">Syncthingil on lubatud töötada praeguses WiFi-võrgus.</string>
+    <string name="reason_not_on_whitelisted_wifi">Syncthing ei tööta, sest praeguse WiFi-võrgu nimi ei ole lubatud loendis.</string>
+    <string name="reason_on_nonmetered_wifi">Syncthingil on lubatud töötada mitte-mahupõhistes WiFi-võrkudes. Aktiivne WiFi-ühendus ei ole mahupõhine.</string>
+    <string name="reason_not_nonmetered_wifi">Syncthing ei tööta, sest keelasid sellel mahupõhistes WiFi-võrkudes töötamise.</string>
+    <string name="reason_location_unavailable">Sa lubasid seadistustes valiku „Käivita määratud WiFi-võrkudes“. Androidi asukohateenused on hetkel välja lülitatud. Androidi piirangute tõttu ei suuda Syncthing määrata praeguse WiFi-võrgu nime, et otsustada, kas see peaks töötama. Lahendus: lülita asukohateenus sisse, anna asukohaluba ja ühenda WiFi uuesti.</string>
+    <string name="reason_on_flight_mode">Syncthing töötab, sest lubasid sellel lennurežiimi ajal töötamise.</string>
+    <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor ei ole lähtestatud. Palun taaskäivita rakendus ja esita veateade, kui viga pärast taaskäivitamist ei kao.</string>
+
+    <!-- Sync Conditions Dialog -->
+
+    <string name="custom_wifi_ssid_whitelist_empty">Ühtegi WiFi-identifikaatorit (SSID) pole lubatud loendisse lisatud. Palun määra need seadistustes.</string>
+
+    <!-- SyncthingService -->
+
+    <!-- Text for the exit button on the drawer -->
     <string name="exit">Välju</string>
+
+    <!-- Title of the notification shown while syncthing is running and enabled -->
+    <string name="syncthing_active_details">Töös: %1$s</string>
+    <string name="no_remote_devices_connected">Ühtegi kaugseadet pole ühendatud</string>
+
+    <plurals name="device_online_up_to_date">        <item quantity="one">%1$d seade on võrgus ja uuendatud</item>        <item quantity="other">%1$d seadet on võrgus ja uuendatud</item></plurals>
+
+    <plurals name="syncthing_active_syncing_device_online">        <item quantity="one">Sünkroonimine: %1$d%% valmis, %2$d seade võrgus</item>        <item quantity="other">Sünkroonimine: %1$d%% valmis, %2$d seadet võrgus</item></plurals>
+
     <string name="syncthing_disabled">Puhkab</string>
+
     <string name="syncthing_terminated">Lõpetatud</string>
+
+    <!-- Toast shown if syncthing failed to create or read the config -->
+    <string name="executable_not_found">Tuumprogramm „%s“ puudub. Kontrolli ehitust ja logcati väljundit.</string>
+    <string name="config_create_failed">Seadistuse loomine ebaõnnestus. Kontrolli logcati väljundit.</string>
+    <string name="config_read_failed">Seadistuste lugemine ebaõnnestus. Kaalu andmete varundamist sünkroonimiskaustadest, seejärel tühjenda selle rakenduse andmed Androidi seadistustes ja käivita see uuesti.</string>
+
+    <!-- Toast shown if a config file crucial to operation is missing -->
+    <string name="config_file_missing">Tööks vajalik seadistusfail puudub</string>
+
+    <!-- Toast shown if a listening tcp port is unavailable -->
+    <string name="webui_tcp_port_unavailable">Veebiliidese TCP-port %s on hõivatud. Töötab veel üks eksemplar?</string>
+
+    <!-- Label of the default folder created of first start (camera folder). -->
+
+    <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
+
+    <string name="notification_crash_title">Jooksis kokku (väljumiskood %1$s)</string>
+    <string name="notification_crash_text">Klõpsa logide vaatamiseks (%1$s)</string>
+
+    <string name="notifications_persistent_channel">Syncthing on aktiivne</string>
+    <string name="notification_persistent_waiting_channel">Käivitamistingimuste jälgimine</string>
+    <string name="notifications_other_channel">Muud teavitused</string>
+
+    <!-- EventProcessor -->
+    <string name="notification_out_of_disk_space">Mälukaart on täis. Fail %1$s</string>
+
+    <!-- RestApi -->
+
+    <!-- Title of the notification shown when a restart is needed -->
+
+    <!-- Text for positive button in restart dialog -->
+    <!-- Text for the dismiss button of the restart Activity -->
+    <!-- Text of the notification shown when a restart is needed -->
+
+    <!-- Shown when a device ID is copied to the clipboard -->
+    <string name="device_id_copied_to_clipboard">Seadme tunnus on kopeeritud lõikelauale</string>
+
+    <!-- Strings representing units for file sizes, from smallest to largest -->
     <string name="file_size_unit_B">B</string>
     <string name="file_size_unit_KiB">KB</string>
     <string name="file_size_unit_MiB">MiB</string>
     <string name="file_size_unit_GiB">GiB</string>
     <string name="file_size_unit_TiB">TiB</string>
+
+    <!-- Strings representing units for transfer rates, from smallest to largest -->
     <string name="transfer_rate_unit_B_s">B/s</string>
     <string name="transfer_rate_unit_KiB_s">KiB/s</string>
     <string name="transfer_rate_unit_MiB_s">MiB/s</string>
     <string name="transfer_rate_unit_GiB_s">GiB/s</string>
     <string name="transfer_rate_unit_TiB_s">TiB/s</string>
-    <string name="state_scanning">Skaneerin</string>
-    <string name="state_syncing_general">Sünkroonin</string>
-    <string name="state_error">Viga</string>
-    <string name="state_unknown">Pole teada</string>
-    <string name="state_paused">Peatatud</string>
-    <string name="state_unshared">Pole jagatud</string>
-    <string name="pull_order_type_random">Juhuslik</string>
-    <string name="pull_order_type_alphabetic">Tähestikuline</string>
-    <string name="none">Puudub</string>
-    <string name="command">Käsk</string>
-    <string name="location_permission_title">Õigused asukoha tuvastamiseks</string>
-    <string name="notification_permission_title">Õigused teavituste kuvamiseks</string>
-    <string name="key_generation_title">Krüptovõtmete loomine</string>
-    <string name="photo_shoot_launcher_title">Kaamera sünkroonimine</string>
-    <string name="photo_shoot_activity_title">Syncthing-Fork\'i kaamera</string>
-    <string name="default_syncthing_camera_folder_label">Syncthingi kaamera</string>
-    <string name="activity_main_bottom_navigation_rescan_all">Skaneeri kõik uuesti</string>
-    <string name="override_changes">Sürjuta muudatused</string>
-    <string name="ram_usage">Muutmälu kasutus</string>
-    <string name="folder_ignore_delete_caption">Eira kustutamist</string>
-    <string name="folder_run_script_caption">Käivita skript</string>
-    <string name="folder_pause">Peata kausta sünkroonimine</string>
-    <string name="ignore_patterns">Eira mustreid</string>
-    <string name="device_id">Seadme tunnus</string>
-    <string name="autoAcceptFolders">Nõustu automaatselt</string>
-    <string name="pause_device">Peata seadme sünkroonimine</string>
-    <string name="untrusted_device">Mitteusaldusväärne seade</string>
-    <string name="delete_device">Kustuta seade</string>
-    <string name="add_device">Lisa seade</string>
-    <string name="edit_device">Muuda seadet</string>
-    <string name="recent_changes_title">Hiljutised muudatused</string>
-    <string name="modified_by_device">Seade: %1$s</string>
-    <string name="modification_time">Aeg: %1$s</string>
-    <string name="this_device">See seade</string>
-    <string name="web_gui_title">Veebipõhine kasutajaliides</string>
-    <string name="security_notice">Turvateavitus</string>
-    <string name="category_user_interface">Kasutajaliides</string>
-    <string name="preference_app_theme_follow_system">Järgi süsteemi kujundust</string>
-    <string name="category_syncthing_options">Syncthingi eelistused</string>
-    <string name="run_conditions_title">Käivitamise tingimused</string>
-    <string name="power_source_ac_power">Võrgutoitel.</string>
-    <string name="power_source_battery_power">Akutoitel.</string>
-    <string name="sync_duration_minutes_summary">%1$s minutit</string>
-    <string name="expert_mode_title">Eksperdi seadistused</string>
-    <string name="device_name">Seadme nimi</string>
-    <string name="global_announce_enabled">Üldine avastamine</string>
-    <string name="local_announce_enabled">Kohalik avastamine</string>
-    <string name="enable_relaying">Luba edastussõlmede kasutamine</string>
-    <string name="export_config">Ekspordi seadistused</string>
-    <string name="use_tor_title">Kasuta Tori võrku</string>
-    <string name="socks_proxy_address_title">SOCKS5 puhverserver</string>
-    <string name="http_proxy_address_title">HTTP(S) puhverserver</string>
-    <string name="import_config">Impordi seadistused</string>
-    <string name="dialog_settings_restart_app_title">Palun käivita rakendus uuesti</string>
-    <string name="sttrace_title">STTRACE\'i valikud</string>
-    <string name="environment_variables">Keskkonnamuutujad</string>
-    <string name="st_reset_database_title">Nulli ja lähtesta andmebaas</string>
-    <string name="verbose_log_title">Jutukas logi</string>
-    <string name="open_log">Ava logi</string>
-    <string name="syncthing_forum_title">Syncthingi foorum</string>
-    <string name="privacy_title">Andmekaitse - ja privaatsusreeglid</string>
-    <string name="report_issue_title">Teata veast või problemist</string>
-    <string name="syncthing_version_title">Syncthingi versioon</string>
-    <string name="folder_picker_title">Kaustavalija</string>
-    <string name="folder_go_up">Liigu üles</string>
-    <string name="syncthing_log_title">Syncthingi logi</string>
-    <string name="android_log_title">Androidi logi</string>
-    <string name="retrieving_logs">Laadin logisid…</string>
-    <string name="copy_progress">Jagan faile…</string>
-    <string name="syncthing_active_details">Töös: %1$s</string>
-    <string name="notifications_persistent_channel">Syncthing on aktiivne</string>
-    <string name="notifications_other_channel">Muud teavitused</string>
+
+    <!-- Possible folder states -->
+    <string name="state_failed_items">Ebaõnnestunud üksused (%1$d)</string>
+    <string name="state_up_to_date">Uuendatud</string>
     <string name="state_local_additions">Kohalikud lisandused</string>
     <string name="state_cleaning">Kustutan versioone</string>
+    <string name="state_clean_waiting">Ootab puhastamist</string>
+    <string name="state_scanning">Skaneerin</string>
+    <string name="state_scan_waiting">Ootab skannimist</string>
+    <string name="state_sync_waiting">Ootab sünkroonimist</string>
+    <string name="state_sync_preparing">Valmistub sünkroonimiseks</string>
+    <string name="state_syncing_general">Sünkroonin</string>
     <string name="state_syncing">Sünkroonimisel (%1$d%%)</string>
+    <string name="state_error">Viga</string>
     <string name="state_error_message">Viga (%1$s)</string>
+    <string name="state_unknown">Pole teada</string>
+    <string name="state_paused">Peatatud</string>
+    <string name="status_outofsync">Pole sünkroonis</string>
+    <string name="state_unshared">Pole jagatud</string>
+
+    <!-- small inline loading indicator -->
+    <string name="state_loading">Laadimine…</string>
+
+    <!-- small inline saving indicator -->
+
+    <!-- Format string for folder size, eg "500 MiB / 1 GiB" -->
+    <string name="folder_size_format">%1$s / %2$s</string>
+
+    <!-- Titles used in the folder type dialog and folder type button in the folder activity -->
     <string name="folder_type">Kausta tüüp</string>
+
+    <!-- Displays the current folder type in the folder activity -->
+    <string name="folder_type_sendreceive">Saada ja vastu võtta</string>
     <string name="folder_type_sendonly">Ainult saatmine</string>
     <string name="folder_type_receiveonly">Ainult vastuvõtmine</string>
     <string name="folder_type_receive_encrypted">Vastuvõtmine krüptituna</string>
+
+    <!-- Folder type dialog descriptions for folder types -->
+    <string name="folder_type_sendreceive_description">Kaust saadab muudatusi kaugseadmetele ja võtab neilt muudatusi vastu.</string>
+    <string name="folder_type_sendonly_description">Failid on kaitstud teistel seadmetel tehtud muudatuste eest, kuid sellel seadmel tehtud muudatused saadetakse ülejäänud kogumisse.</string>
+    <string name="folder_type_receiveonly_description">Failid sünkroonitakse kogumist, kuid kohalikult tehtud muudatusi teistele seadmetele ei saadeta.</string>
+    <string name="folder_type_receive_encrypted_description">Salvestab ja sünkroonib ainult krüpteeritud andmeid. Kõigi ühendatud seadmete kaustade jaoks tuleb määrata sama parool või peavad need samuti olema tüübiga „Vastuvõtmine krüptituna“.</string>
+
+    <!-- Titles used in the pull order dialog and pull order button in the folder activity -->
+    <string name="pull_order">Failide tõmbamise järjekord</string>
+
+    <!-- Displays the current pull order type in the Folder activity -->
+    <string name="pull_order_type_random">Juhuslik</string>
+    <string name="pull_order_type_alphabetic">Tähestikuline</string>
     <string name="pull_order_type_smallestFirst">Esmalt väiksemad</string>
     <string name="pull_order_type_largestFirst">Esmalt suuremad</string>
     <string name="pull_order_type_oldestFirst">Esmalt vanemad</string>
     <string name="pull_order_type_newestFirst">Esmalt uuemad</string>
+
+    <!-- Pull order dialog descriptions for pull order types -->
+    <string name="pull_order_type_random_description">Tõmba faile juhuslikus järjekorras.</string>
+    <string name="pull_order_type_alphabetic_description">Tõmba faile tähestikulises järjekorras failinime alusel.</string>
+    <string name="pull_order_type_smallestFirst_description">Tõmba faile failisuuruse alusel. Väikseimad esimesena.</string>
+    <string name="pull_order_type_largestFirst_description">Tõmba faile failisuuruse alusel. Suurimad esimesena.</string>
+    <string name="pull_order_type_oldestFirst_description">Tõmba faile muutmise aja alusel. Vanimad esimesena.</string>
+    <string name="pull_order_type_newestFirst_description">Tõmba faile muutmise aja alusel. Uusimad esimesena.</string>
+
+    <!-- Titles used in the file versioning dialog and file versioning button in the folder activity -->
     <string name="maximum_age">Maksimaalne vanus</string>
+    <string name="clean_out_after">Eemalda pärast</string>
     <string name="file_versioning">Failide versioonihaldus</string>
+    <string name="none">Puudub</string>
     <string name="versions_path">Versioonide asukoht</string>
+    <string name="command">Käsk</string>
+
+    <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
+
+    <!-- Displays the current file versioning type in the Folder activity -->
     <string name="type_simple">Tüüp: lihtne</string>
     <string name="type_trashcan">Tüüp: prügikast</string>
     <string name="type_staggered">Tüüp: järkjärguline</string>
     <string name="type_external">Tüüp: väline</string>
+
+    <!-- Information displayed about the current file versioning configuration in the folder activity -->
+    <string name="trashcan_versioning_info">Eemaldamine pärast: %1$s</string>
+    <string name="staggered_versioning_info">Maksimaalne vanus: %1$d\n\nVersioonide asukoht: %2$s</string>
     <string name="external_versioning_info">Käsk: %1$s</string>
+    <string name="simple_versioning_info">Säilita versioonid: %1$s</string>
+    <string name="show_device_id">Kuva seadme tunnus</string>
+
+    <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
+    <string name="could_not_access_deviceid">Seadme tunnusele ei õnnestunud ligi pääseda.</string>
+    <string name="share_device_id_chooser">Jaga seadme tunnust</string>
+    <string name="run_on_whitelisted_wifi_summary">Lülita lubatud loend sisse, et piirata sünkroonimine ainult määratud WiFi-võrkudega.</string>
+    <string name="custom_sync_conditions_title">Kohandatud sünkroonimistingimused</string>
+    <string name="custom_sync_conditions_description">Võimaldab määrata erandeid üldistele käivitamistingimustele.</string>
+    <string name="custom_sync_conditions_dialog">Määra sünkroonimistingimused</string>
+
+    <!-- Quick Setting icon names and labels -->
     <string name="qs_force_label">Käivita sundkorras</string>
+    <string name="qs_forced_to_run">Sundkorras käivitatud</string>
+    <string name="qs_forced_to_stop">Sundkorras peatatud</string>
+    <string name="qs_following_run_conditions">Järgib käivitamistingimusi</string>
+    <string name="qs_schedule_label">Käivita 5 minutiks</string>
+    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">Käivita %1$d minutiks</string>
     <string name="qs_schedule_disabled">Ajastamine on lülitatud välja</string>
-    <string name="grant_storage_permission">Anna õigused andmeruumi kasutamiseks</string>
-    <string name="grant_camera_permission">Anna õigused kaamera kasutamiseks</string>
-    <string name="revert_local_changes">Pööra kohalikud muudatused tagasi</string>
-    <string name="delete_unexpected_items">Kustuta mittesoovitud objektid</string>
-    <string name="open_file_manager">Ava failihaldur</string>
-    <string name="open_file_with">Ava fail rakendusega</string>
-    <string name="device_up_to_date">Uuendatud ja sünkroonis</string>
-    <string name="device_syncing_percent_bytes">Sünkroonimisel (%1$d%%, %2$s)</string>
-    <string name="device_disconnected_not_synced">Ühendus on katkestatud (%1$s ootel)</string>
-    <string name="device_last_seen">Viimati nähtud: %1$s</string>
-    <string name="button_follow_run_conditions">JÄRGI KÄIVITAMISTINGIMUSI</string>
-    <string name="syncthing_starting">Syncthing on käivitumas.</string>
-    <string name="syncthing_running">Syncthing on töös.</string>
-    <string name="syncthing_has_crashed">Syncthing on kokku jooksnud.</string>
-    <string name="folder_fileWatcher">Jälgi muudatusi</string>
-    <string name="close_device_id">Sulge seadmetunnus</string>
-    <string name="scan_qr_code_description">Skaneeri QR-koodi</string>
-    <string name="web_gui_loading">Ootan kasutajaliidese järgi</string>
-    <string name="open_in_browser">Ava veebibrauseris</string>
-    <string name="category_backup">Import ja eksport</string>
-    <string name="run_on_roaming_title">Käivita võrgurändluses</string>
-    <string name="run_on_wifi_title">Käivita WiFi-võrkudes</string>
-    <string name="specify_wifi_ssid_whitelist">Vali WiFi-võrgud</string>
-    <string name="enable_nat_traversal">Lülita sisse kohandumine võrguaadresside teisendusega</string>
-    <string name="global_announce_server">Üldised avastamisserverid</string>
-    <string name="usage_reporting">Anonüümne aruandlus kasutuse kohta</string>
-    <string name="crash_reporting">Anonüümne teavitus kokkujooksmisest</string>
-    <string name="webui_username_title">Kasutajanimi võrgupõhises kasutajaliideses</string>
-    <string name="webui_password_title">Salasõna võrgupõhises kasutajaliideses</string>
-    <string name="photo_shoot_intro_welcome_title">Tere tulemast kasutama Syncthingi kaamerat</string>
-    <string name="photo_shoot_intro_no_camera">Vabandust, selles nutiseadmes pole kaamerat.</string>
-    <string name="photo_shoot_intro_missing_permissions">Jätkamiseks vajame õigust andmeruumi ja kaamera kasutamiseks.</string>
-    <string name="usage_reporting_dialog_title">Kas lubad anonüümset aruandlust kasutuse kohta?</string>
-    <string name="device_disconnected">Ühendus on katkestatud</string>
-    <string name="device_paused">Peatatud</string>
-    <string name="device_state_unused">Kasutamata</string>
-    <string name="syncthing_not_running">Syncthing pole töös.</string>
-    <string name="dialog_confirm_restart">Kas sa soovid Syncthingi uuesti käivitada?</string>
-    <string name="remove_device_confirm">Kas sa kindlasti soovid selle seadme eemaldada?</string>
-    <string name="device_id_required">Seadme tunnus ei saa jääda tühjaks</string>
-    <string name="device_id_invalid">Seadme tunnus pole korrektselt vormindatud. Palun sisesta õige tunnus ja proovi uuesti.</string>
-    <string name="device_addresses_invalid">Seadme aadressid pole korrektselt vormindatud. Palun sisesta korrektne aadress ja proovi uuesti. Üksikasjalikku teavet leiad Synctingi dokumentatsioonist.</string>
-    <string name="device_id_qr_code">Seadmetunnuse QR-kood</string>
-    <string name="folders_list_empty">Ühtegi kausta pole seadistatud. Klõpsa uue kausta lisamiseks.</string>
-    <string name="no_recent_changes">Hiljutisi muudatusi pole.</string>
-    <string name="web_page_loading">Laadin veebilehte: \n%1$s …</string>
-    <string name="category_syncthing_options_summary">See menüü on saadaval vaid siis, kui Syncthing töötab.</string>
-    <string name="run_conditions_summary">Järgnevate eelistustega saad määrata millal Syncthing töötab.</string>
-    <string name="run_on_metered_wifi_title">Käivita mahupõhistes WiFi-võrkudes</string>
-    <string name="run_on_wifi_summary">Käivita siis, kui nutiseade on ühendatud WiFi- või kohtvõrguga.</string>
-    <string name="run_on_metered_wifi_summary">Käivita siis, kui nutiseade on ühendatud mahupõhise WiFi-võrguga, milleks võib olla kuumkoht või teisest nutiseadmest jagatud võrk. Tähelepanu: kui sünkroonid palju andmeid, siis see võib kulutada märgatava osa sinu lepingus lubatud andmemahust.</string>
-    <string name="run_on_whitelisted_wifi_title">Käivita määratud WiFi-võrkudes</string>
-    <string name="run_on_whitelisted_wifi_networks">Valitud WiFi-võrgud: %1$s</string>
-    <string name="wifi_ssid_whitelist_empty">Ühtegi WiFi-võrku pole määratletud. Lisamiseks klõpsa.</string>
-    <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">Võrkude valimiseks lülita WiFi sisse.</string>
-    <string name="sync_only_wifi_ssids_wifi_turn_on_location">Võrkude valimiseks palun lisa asukohatuvastus sisse.</string>
-    <string name="sync_duration_minutes_title">Sünkroonimistsükli kestus</string>
-    <string name="sleep_interval_minutes_title">Pausi kestus sünkroonimistsüklis</string>
-    <string name="behaviour_autostart_summary">Käivita rakendus automaatselt koos operatsioonisüsteemiga.</string>
-    <string name="allow_overwrite_files_title">Luba olemasolevate failide ülekirjutamist</string>
-    <string name="allow_overwrite_files_summary">Seda juhul, kui muu rakendus jagab faile mõnesse selle rakenduse poolt kasutatavasse kausta.</string>
-    <string name="suggest_file_manager_app_dialog_title">Ühilduvat failihalduri rakendust ei leidu</string>
-    <string name="open_file_no_compatible_app">Faili avamiseks ei leidu rakendust.</string>
-    <string name="devices_fragment_title">Seadmed</string>
-    <string name="devices_list_empty">Ühtegi seadet pole seadistatud. Klõpsa uue seadme lisamiseks.</string>
-    <string name="toggle_password_visibility">Lülita salasõna nähtavus sisse/välja</string>
-    <string name="backup_password_not_set">⚠ Salasõna pole lisatud.</string>
-    <string name="backup_password_set_masked">✅ Salasõna on lisatud - muutmiseks klõpsa</string>
-    <string name="backup_password_set">✅ Salasõna on lisatud: %1$s</string>
-    <string name="syncthing_api_key">Syncthingi API võti (klõpsa kopeerimiseks)</string>
-    <string name="api_key_copied_to_clipboard">Syncthing API võti on kopeeritud lõikelauale</string>
-    <string name="syncthing_database_size">Syncthingi andmebaasi suurus</string>
-    <string name="os_open_file_limit">Avatud failide ülempiir Androidis</string>
-    <string name="open_source_licenses_title">Avatud lähtekoodiga tarkvara litsentsid</string>
-    <string name="open_source_licenses_summary">Näita kasutatud avatud lähtekoodiga tarkvara litsentse</string>
-    <string name="share_log_file_missing">Jagatav logifail on puudu.</string>
-    <string name="copy_exception">Jagamisel tekkis viga - lisateavet leiad rakenduse logidest</string>
-    <string name="file_name_template">Uus fail %1$s</string>
-    <string name="nothing_share">Pole midagi jagada</string>
-    <string name="no_devices_configured">Ühtegi seadet pole seadistatud. \nAlustamiseks palun lisa esimene seade.</string>
-    <string name="deviceEncryptionPasswordHint">Kui pole usaldatud, siis sisesta krüptimise salasõna</string>
-    <string name="max_send_kbps">Üleslaaditava sisu kiiruspiirang (KiB/s)</string>
-    <string name="max_recv_kbps">Allalaaditava sisu kiiruspiirang (KiB/s)</string>
-    <string name="current_path">Praegune asukoht: %1$s</string>
-    <string name="create_folder_failed">Kausta loomine ei õnnestunud</string>
-    <string name="share_log_file">Jaga logifaili</string>
-    <string name="view_android_log">Vaata Androidi logi</string>
-    <string name="view_syncthing_log">Vaata Syncthingi logi</string>
-    <string name="reason_not_charging">Telefon pole laadimas.</string>
-    <string name="reason_not_on_battery_power">Telefon ei tööta akutoitel.</string>
-    <string name="no_remote_devices_connected">Ühtegi kaugseadet pole ühendatud</string>
-    <string name="ignore_doze_permission_desc">Android võib mingi aja möödumisel lõpetada sünkroonimise. Sellise olukorra vältimiseks luba selle rakenduse puhul keelata akukasutuse optimeerimine. Mõnes nutiseadmes võib leiduda ka täiendav keeluloend eelpaigaldatud rakenduste jaoks ja siis lisa Syncthing ka sinna.</string>
-    <string name="dialog_disable_battery_optimizations_not_supported">Sinu nutiseadme tarkvara ei võimalda rakendusekohast akukasutuse optimeerimise kasutamist</string>
-    <string name="download_support_bundle_title">Laadi alla tugiteenuste pakk (Support Bundle)</string>
-    <string name="undo_ignored_devices_folders_done">Otsuste tagasipööramine õnnestus.</string>
-    <string name="backup_password_title">Seadista kaitsmine salasõnaga</string>
-    <string name="do_not_use_proxy">Proksit pole seadistatud.</string>
-    <string name="config_imported_successful">Seadistused on imporditud</string>
-    <string name="st_reset_deltas_title">Lähtesta deltaindeksid</string>
-    <string name="invalid_port_number" tools:ignore="PluralsCandidate">Pordinumber pole korrektne. Palun sisesta number vahemikust %1$d kuni %2$d.</string>
-    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">Sisendväärtus pole korrektne. Palun sisesta väärtus vahemikust %1$d kuni %2$d.</string>
-    <string name="use_proxy">Ühenda proksi kaudu</string>
-    <string name="use_tor_summary">Parema privaatsuse nimel juhi kogu võrguliiklus läbi Tori võrgu. Eeldab Orboti kasutamist ja sellega lülitavad proksi seadistused välja.</string>
-    <string name="toast_invalid_socks_proxy_address">Sisend ei vasta proksi süntaksile - socks5://[IP/HOSTNAME]:[PORT]</string>
-    <string name="toast_invalid_http_proxy_address">Sisend ei vasta proksi süntaksile - http://[IP/HOSTNAME]:[PORT]</string>
+    <string name="no_app_to_open_link">Selle lingi avamiseks pole ühtegi rakendust saadaval.</string>
+
+    <!-- Custom HTTPS certificate -->
+    <string name="webui_custom_cert_title">Kohandatud HTTPS-sertifikaat</string>
+    <string name="webui_custom_cert_summary">Kasuta kohaliku veebiliidese jaoks oma sertifikaati</string>
+    <string name="custom_cert_explanation">Asenda Syncthingi sisseehitatud iseallkirjastatud sertifikaat enda omaga. Vali sertifikaat (PEM, sealhulgas täielik ahel) ja selle privaatvõti, kontrolli valideerimistulemusi ja seejärel rakenda. Syncthing taaskäivitub uue sertifikaadi laadimiseks; kui see ei naase veebi, taastatakse eelmine sertifikaat automaatselt.\n\nKui sertifikaadi on allkirjastanud sinu enda CA, paigalda selle CA juursertifikaat esmalt sellesse seadmesse (Seadistused → Turvalisus → Paigalda CA-sertifikaat).</string>
+    <string name="custom_cert_current_title">Praegune sertifikaat</string>
+    <string name="custom_cert_current_none">Sertifikaati ei leitud.</string>
+    <string name="custom_cert_subject">Subjekt: %1$s</string>
+    <string name="custom_cert_issuer">Väljaandja: %1$s</string>
+    <string name="custom_cert_expires">Aegub: %1$s</string>
+    <string name="custom_cert_self_signed">Iseallkirjastatud (vaikimisi)</string>
+    <string name="custom_cert_ca_signed">CA allkirjastatud</string>
+    <string name="custom_cert_select_cert">Vali sertifikaat (.pem)</string>
+    <string name="custom_cert_select_key">Vali privaatvõti (.pem)</string>
+    <string name="custom_cert_not_selected">Pole valitud</string>
+    <string name="custom_cert_apply">Rakenda sertifikaat</string>
+    <string name="custom_cert_reset_title">Lähtesta automaatselt loodud sertifikaadile</string>
+    <string name="custom_cert_reset_summary">Kustuta kohandatud sertifikaat ja lase Syncthingil luua uus iseallkirjastatud sertifikaat</string>
+    <string name="custom_cert_reset_question">Asenda praegune sertifikaat värskelt loodud iseallkirjastatud sertifikaadiga?</string>
+    <string name="custom_cert_applying">Rakendamine — Syncthing taaskäivitub…</string>
+    <string name="custom_cert_applied">Sertifikaat on rakendatud.</string>
+    <string name="custom_cert_applied_pending">Salvestatud. See jõustub järgmisel Syncthingi käivitumisel.</string>
+    <string name="custom_cert_failed">Sertifikaadi rakendamine ei õnnestunud: %1$s</string>
+    <string name="custom_cert_reset_done">Lähtestatud uuele iseallkirjastatud sertifikaadile.</string>
+    <string name="custom_cert_file_too_large">Fail on sertifikaadi või võtme jaoks liiga suur.</string>
+    <string name="custom_cert_read_failed">Valitud faili ei õnnestunud lugeda.</string>
+    <string name="cert_check_chain">Sertifikaadiahel</string>
+    <string name="cert_check_trust">Selle seadme poolt usaldatud</string>
+    <string name="cert_check_validity">Kehtivusaeg</string>
+    <string name="cert_check_key">Privaatvõti</string>
 </resources>

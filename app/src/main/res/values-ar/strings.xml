@@ -1,506 +1,429 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <string name="app_name">Syncthing-Fork</string>
-    <string name="cont">متابعة</string>
-    <!-- Title of the "add folder" menu action -->
-    <string name="add_folder">إضافة مجلد</string>
-    <!-- Title of the "share device id" menu action -->
-    <!-- Shown in the chooser dialog when sharing a Device ID -->
-    <string name="yes">نعم</string>
-    <string name="no">لا</string>
-    <!-- Indicates that the device connection is unknown -->
-    <!-- Setting title -->
-    <string name="state_error">خطأ</string>
-    <string name="state_unknown">مجهول</string>
+
     <string name="app_description">تطبيق مزامنة ملفات مفتوح المصدر، موثوق، ولامركزي.</string>
+
+    <!-- FirstStartActivity -->
+
+    <!-- Title for dialog displayed on first start -->
     <string name="welcome_title">مرحبًا بك في Syncthing لأندرويد</string>
+
+    <!-- Welcome wizard -->
+    <!-- Slide "Introduction" -->
+    <string name="welcome_text">Syncthing هو تطبيق مزامنة ملفات مفتوح المصدر. لمشاركة البيانات مع أجهزة أخرى، تحتاج إلى إضافة معرّفات الأجهزة الفريدة الخاصة بها إلى قائمة الأجهزة. بعد ذلك، يمكنك تحديد المجلدات التي ترغب في مشاركتها ومع أي أجهزة. \n \nيرجى الإبلاغ عن أي مشاكل تواجهك عبر GitHub.</string>
+
+    <!-- Slide "Storage Permission" -->
+    <string name="storage_permission_title">إذن التخزين</string>
+    <string name="storage_permission_desc">يحتاج Syncthing للوصول إلى مساحة التخزين لديك لِمزامنة الملفات.</string>
+    <string name="dialog_all_files_access_not_supported">جهازك لا يدعم الوصول إلى جميع الملفات</string>
+
+    <!-- Slide "Ignore battery optimizations" -->
+    <string name="ignore_doze_permission_title">تحسين البطارية</string>
+    <string name="ignore_doze_permission_os_notice">من المعروف أن أجهزة Android TV تُنهي التطبيق أحيانًا عندما يعمل في الخلفية. يتوفر حل على الويكي في \'‎%1$s/%2$s‏\'.</string>
+    <string name="ignore_doze_permission_desc">قد يوقف أندرويد المزامنة بعد بعض الوقت. لمنع ذلك، قم بإيقاف تحسين البطارية. تحتوي بعض الأجهزة على تطبيقات إضافية مثبتة مسبقًا لإنهاء المهام. يجب عليك إضافة Syncthing إلى قائمتها البيضاء أيضًا.</string>
+    <string name="dialog_disable_battery_optimizations_not_supported">جهازك لا يدعم تعطيل تحسينات البطارية</string>
+    <string name="dialog_confirm_skip_ignore_doze_permission">تنبيه: إذا تمت مقاطعة SyncthingNative وقام بشيء غريب، فأنت المسؤول. تخطَّ فقط في حالة عدم دعم جهازك لمنح الإذن. هل تريد التخطي حقًا؟</string>
+
+    <!-- Slide "Location Permission" -->
+    <string name="location_permission_title">إذن الموقع</string>
+    <string name="location_permission_desc">يمكن تكوين Syncthing للعمل على شبكات Wi-Fi محددة. يتطلب أندرويد أن يكون لدى التطبيق إذن الموقع لقراءة اسم شبكة Wi-Fi النشطة. إذا كنت ترغب في استخدام هذه الميزة، اضغط على الزر أعلاه. يمكنك تخطي هذه الخطوة. راجع سياسة الخصوصية الخاصة بنا لمزيد من التفاصيل.</string>
+    <string name="location_permission_desc_api_29">نصيحة لأندرويد 10 والإصدارات اللاحقة: السماح طوال الوقت</string>
+
+    <!-- Slide "Notification Permission" -->
     <string name="notification_permission_title">إذن الإشعارات</string>
     <string name="notification_permission_desc">مطلوب لإظهار الإشعارات المتعلقة باتصالات الأجهزة الجديدة، وطلبات مشاركة المجلدات، وللحفاظ على الخدمة نشطة ومتصلة.</string>
-    <string name="back">رجوع</string>
+
+    <!-- Slide "Key Generation" -->
     <string name="key_generation_title">إنشاء المفتاح</string>
+    <string name="key_generation_success">نجح إنشاء مفاتيح آمنة لتبادل البيانات الخاصة.</string>
+
+    <!-- Generic texts used everywhere -->
+    <string name="back">رجوع</string>
+    <string name="cont">متابعة</string>
+    <string name="finish">إنهاء</string>
     <string name="generic_example">مثال</string>
     <string name="grant_permission">منح الإذن</string>
     <string name="permission_granted">تم منح الإذن</string>
     <string name="reason">السبب:</string>
-    <string name="photo_shoot_take_picture_success">تم حفظ الصورة بنجاح في مجلد آلة تصوير Syncthing.</string>
-    <string name="welcome_text">Syncthing هو تطبيق مزامنة ملفات مفتوح المصدر. لمشاركة البيانات مع أجهزة أخرى، تحتاج إلى إضافة معرّفات الأجهزة الفريدة الخاصة بها إلى قائمة الأجهزة. بعد ذلك، يمكنك تحديد المجلدات التي ترغب في مشاركتها ومع أي أجهزة. \n \nيرجى الإبلاغ عن أي مشاكل تواجهك عبر GitHub.</string>
-    <string name="dialog_confirm_skip_ignore_doze_permission">تنبيه: إذا تمت مقاطعة SyncthingNative وقام بشيء غريب، فأنت المسؤول. تخطَّ فقط في حالة عدم دعم جهازك لمنح الإذن. هل تريد التخطي حقًا؟</string>
+
     <string name="accept">قبول</string>
+
     <string name="ignore">تجاهل</string>
+
+
     <string name="main_menu">القائمة الرئيسية</string>
+
     <string name="refresh">تحديث</string>
+
+    <!-- PhotoShootActivity -->
+
+    <string name="photo_shoot_launcher_title">مزامنة آلة التصوير</string>
     <string name="photo_shoot_activity_title">آلة تصوير Syncthing-Fork</string>
     <string name="photo_shoot_intro_welcome_title">مرحبًا بك في آلة تصوير Syncthing</string>
     <string name="photo_shoot_intro_no_camera">عُذرًا، هذا الجهاز لا يتضمّن آلة تصوير.</string>
     <string name="photo_shoot_intro_missing_permissions">نحن بحاجة إلى إذن التخزين وآلة التصوير للمتابعة.</string>
     <string name="grant_storage_permission">منح إذن التخزين</string>
     <string name="grant_camera_permission">منح إذن آلة التصوير</string>
-    <string name="photo_shoot_take_picture_failure">فشل التقاط الصورة أو أنك ألغيت العملية.</string>
-    <string name="default_syncthing_camera_folder_label">آلة تصوير Syncthing</string>
-    <string name="activity_main_bottom_navigation_rescan_all">إعادة فحص الكل</string>
-    <string name="location_permission_desc">يمكن تكوين Syncthing للعمل على شبكات Wi-Fi محددة. يتطلب أندرويد أن يكون لدى التطبيق إذن الموقع لقراءة اسم شبكة Wi-Fi النشطة. إذا كنت ترغب في استخدام هذه الميزة، اضغط على الزر أعلاه. يمكنك تخطي هذه الخطوة. راجع سياسة الخصوصية الخاصة بنا لمزيد من التفاصيل.</string>
-    <string name="location_permission_desc_api_29">نصيحة لأندرويد 10 والإصدارات اللاحقة: السماح طوال الوقت</string>
-    <string name="finish">إنهاء</string>
-    <string name="storage_permission_desc">يحتاج Syncthing للوصول إلى مساحة التخزين لديك لِمزامنة الملفات.</string>
-    <string name="storage_permission_title">إذن التخزين</string>
-    <string name="dialog_all_files_access_not_supported">جهازك لا يدعم الوصول إلى جميع الملفات</string>
-    <string name="ignore_doze_permission_title">تحسين البطارية</string>
-    <string name="ignore_doze_permission_os_notice">من المعروف أن أجهزة Android TV تُنهي التطبيق أحيانًا عندما يعمل في الخلفية. يتوفر حل على الويكي في \'‎%1$s/%2$s‏\'.</string>
-    <string name="ignore_doze_permission_desc">قد يوقف أندرويد المزامنة بعد بعض الوقت. لمنع ذلك، قم بإيقاف تحسين البطارية. تحتوي بعض الأجهزة على تطبيقات إضافية مثبتة مسبقًا لإنهاء المهام. يجب عليك إضافة Syncthing إلى قائمتها البيضاء أيضًا.</string>
-    <string name="dialog_disable_battery_optimizations_not_supported">جهازك لا يدعم تعطيل تحسينات البطارية</string>
-    <string name="location_permission_title">إذن الموقع</string>
-    <string name="photo_shoot_launcher_title">مزامنة آلة التصوير</string>
-    <string name="key_generation_success">نجح إنشاء مفاتيح آمنة لتبادل البيانات الخاصة.</string>
     <string name="photo_shoot_intro_permission_desc">تتطلب آلة تصوير Syncthing موافقتك لالتقاط الصور وتخزينها على جهازك. هذه الميزة اختيارية. لاستخدامها، امنح الأذونات وانقر على متابعة. سنقوم بإعداد مجلد آلة تصوير Syncthing لك والذي يمكنك مشاركته مع أجهزة Syncthing أخرى لاحقًا.</string>
-    <string name="start_into_web_gui_title">بدء مباشرة في واجهة المستخدم الرسومية للـ Web</string>
-    <string name="webui_remote_access_summary">حدد للسماح بالوصول إلى واجهة المستخدم الرسومية للويب من جهاز آخر. إذا تم تمكينه، يمكنك تسجيل الدخول باستخدام المستخدم syncthing ومفتاح API ككلمة مرور. الافتراضي: معطل (الأكثر أمانًا)</string>
-    <string name="undo_ignored_devices_folders_question">سيؤدي هذا إلى التراجع عن القرارات السابقة بتجاهل الأجهزة والمجلدات. هل تريد المتابعة؟</string>
-    <string name="undo_ignored_devices_folders_done">نجح التراجع عن القرارات.</string>
-    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">القيمة المدخلة غير صالحة. يرجى إدخال قيمة بين ‎%1$d‏ و ‎%2$d‏.</string>
-    <string name="use_proxy">اتصال عبر وكيل</string>
-    <string name="use_tor_title">استخدم Tor</string>
-    <string name="socks_proxy_address_title">وكيل SOCKS5</string>
-    <string name="import_config">استيراد الإعدادات</string>
-    <string name="config_imported_successful">تمّ استيراد التكوين</string>
-    <string name="st_reset_deltas_question">يجب تنفيذ هذا الإجراء فقط بناءً على توصية من فريق الدعم لدينا. \nهل أنت متأكد أنك تريد مسح فهارس دلتا الخاصة بـ Syncthing؟</string>
-    <string name="verbose_log_title">سِجِلّ مُفصّل</string>
-    <string name="verbose_log_summary">سيساعد تمكين هذا الخيار في إنشاء سجلّات تصحيح الأخطاء بمستوى تفصيلي عالٍ.</string>
-    <string name="report_issue_title">إبلاغ عن مشكلة</string>
-    <string name="app_version_title">إصدار Syncthing-Fork Wrapper</string>
-    <string name="api_key_copied_to_clipboard">تم نسخ مفتاح API الخاص بـ Syncthing إلى الحافظة</string>
-    <string name="open_issue_tracker_summary">فتح متتبع مشاكل Syncthing-Fork على ‎%1$s</string>
-    <string name="share_title">مشاركة</string>
-    <string name="complete_welcome_wizard_first">أولاً، قم بتشغيل التطبيق من درج التطبيقات وأكمل معالج الترحيب قبل مشاركة الملفات.</string>
-    <string name="share_activity_title">حفظ في Syncthing</string>
-    <string name="nothing_share">لا شيء للمشاركة</string>
-    <string name="notification_crash_text">انقر للسّجلات ‎(%1$s)</string>
-    <string name="notifications_persistent_channel">Syncthing نشط</string>
-    <string name="notifications_other_channel">إشعارات أخرى</string>
-    <string name="notification_out_of_disk_space">بطاقة SD ممتلئة. الملف ‎%1$s</string>
-    <string name="pull_order_type_alphabetic">أبجدي</string>
-    <string name="pull_order_type_smallestFirst">الأصغر أوّلاً</string>
-    <string name="pull_order_type_largestFirst">الأكبر أوّلاً</string>
-    <string name="pull_order_type_oldestFirst">الأقدم أوّلاً</string>
-    <string name="pull_order_type_largestFirst_description">سحب الملفات مرتبة حسب حجم الملف. الأكبر أوّلاً على التوالي.</string>
-    <string name="clean_out_after">تنظيف بعد</string>
-    <string name="type_staggered">النوع: متدرج</string>
-    <string name="trashcan_versioning_info">تنظيف بعد: ‎%1$s</string>
-    <string name="external_versioning_info">الأمر: ‎%1$s</string>
-    <string name="could_not_access_deviceid">تعذر الوصول إلى معرّف الجهاز.</string>
-    <string name="state_error_message">خطأ ‎(%1$s)</string>
-    <string name="command">أمر</string>
-    <string name="folder_list_empty">لم يتم العثور على مجلدات</string>
-    <string name="devices_fragment_title">أجهزة</string>
-    <string name="deviceEncryptionPasswordHint">إذا كان غير موثوق به، فأدخل كلمة مرور التّشفير</string>
-    <string name="device_up_to_date">مُحدَّث</string>
-    <string name="ram_usage">استخدام الذاكرة العشوائية (RAM)</string>
-    <string name="introducer">مُقدِّم</string>
-    <string name="compression">ضغط</string>
-    <string name="edit_device">تعديل جهاز</string>
-    <string name="remove_device_confirm">هل تريد حقًا إزالة هذا الجهاز؟</string>
-    <string name="device_id_required">يجب ألا يكون معرّف الجهاز فارغًا</string>
-    <string name="device_id_invalid">معرّف الجهاز غير منسق بشكل صحيح. يرجى إعادة المحاولة وإدخال المعرّف الصحيح.</string>
-    <string name="folders_list_empty">لا توجد مجلدات مُعَدّة. انقر لإضافة مجلد جديد.</string>
-    <string name="category_behaviour">سُلوك</string>
-    <string name="category_syncthing_options">خيارات Syncthing</string>
-    <string name="category_syncthing_options_summary">هذه القائمة متاحة فقط عندما يكون Syncthing قيد التشغيل.</string>
-    <string name="run_on_roaming_summary">السماح لـ Syncthing باستخدام بيانات الجوال أثناء التجوال.</string>
-    <string name="run_on_metered_wifi_title">تشغيل باستخدام Wi-Fi محدود السعة</string>
-    <string name="run_on_metered_wifi_summary">التشغيل عندما يكون الجهاز متصلاً بشبكة Wi-Fi محدودة الاستخدام، على سبيل المثال نقطة اتصال أو شبكة مربوطة. انتباه: يمكن أن يستهلك هذا جزءًا كبيرًا من باقة بياناتك إذا قمت بمزامنة الكثير من البيانات.</string>
-    <string name="specify_wifi_ssid_whitelist">اختيار شبكات Wi-Fi</string>
-    <string name="run_on_whitelisted_wifi_networks">شبكات Wi-Fi المختارة: ‎%1$s</string>
-    <string name="wifi_ssid_whitelist_empty">لم يتم تحديد شبكات Wi-Fi. انقر لتحديد الشبكات.</string>
-    <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">يرجى تشغيل Wi-Fi لإختيار الشبكات.</string>
-    <string name="respect_battery_saving_summary">تعطيل Syncthing إذا كان توفير البطارية نشطًا.</string>
-    <string name="respect_master_sync_title">احترام إعداد المزامنة التلقائية للبيانات في أندرويد</string>
-    <string name="run_on_time_schedule_title">تشغيل وفقًا لجدول زمني</string>
-    <string name="run_in_flight_mode_title">تشغيل دون اتصال بالشبكة</string>
-    <string name="run_in_flight_mode_summary">سيؤدي تمكين هذا الخيار إلى تشغيل Syncthing حتى عندما تكون غير متصل بالإنترنت. قم بتمكينه إذا كان جهازك يواجه مشاكل في اكتشاف اتصالات Wi-Fi اليدوية أثناء وضع الطيران.</string>
-    <string name="behaviour_autostart_title">تشغيل تلقائي</string>
-    <string name="behaviour_autostart_summary">بدء التطبيق تلقائيًا عند انطلاق نظام التشغيل.</string>
-    <string name="expert_mode_title">وضع الخبير</string>
-    <string name="webui_username_title">اسم مستخدم واجهة المستخدم الرسومية للـ Web</string>
-    <string name="download_support_bundle_succeeded">نجح تنزيل حُزمة الدعم إلى ‎%s‏.</string>
-    <string name="export_config">تصدير الإعدادات</string>
-    <string name="do_not_use_proxy">لم يتم إعداد أي وكيل.</string>
-    <string name="toast_invalid_http_proxy_address">المعلومة المدخلة تخالف صيغة الوكيل \'http://[IP/HOSTNAME]:[PORT]\'</string>
-    <string name="broadcast_service_control_title">تحكم في الخدمة عن طريق البث</string>
-    <string name="sttrace_title">خيارات STTRACE</string>
-    <string name="environment_variables">متغيرات البيئة</string>
-    <string name="save_title">حفظ</string>
-    <string name="syncthing_disabled">في وضع السكون</string>
-    <string name="state_scan_waiting">في انتظار الفحص</string>
-    <string name="folder_type_sendonly_description">الملفات محمية من التغييرات التي تتم على الأجهزة الأخرى، ولكن التغييرات التي تتم على هذا الجهاز سيتم إرسالها إلى بقية المجموعة.</string>
-    <string name="none">لا شيء</string>
-    <string name="android_log_title">سِجِل أندرويد</string>
-    <string name="view_android_log">عرض سجل أندرويد</string>
-    <string name="reason_not_nonroaming_mobile_data">Syncthing ليس قيد التشغيل لأنك لم تسمح له بالتشغيل على اتصالات بيانات الجوال أثناء التجوال.</string>
-    <string name="reason_not_on_wifi">يُسمح لـ Syncthing بالتشغيل على Wi-Fi ولكن Wi-Fi ليس متصلاً أو الهاتف في وضع الطيران.</string>
-    <string name="reason_on_metered_nonmetered_wifi">يُسمح لـ Syncthing بالعمل على اتصالات Wi-Fi المحدودة وغير المحدودة الاستخدام.</string>
-    <string name="reason_on_whitelisted_wifi">يُسمح لـ Syncthing بالعمل على شبكة Wi-Fi الحالية.</string>
-    <string name="notification_crash_title">تعطل (رمز الخروج ‎‏%1$s)</string>
-    <string name="state_cleaning">تنظيف الإصدارات</string>
-    <string name="state_clean_waiting">في انتظار التنظيف</string>
-    <string name="state_scanning">الفحص جارٍ</string>
-    <string name="file_versioning">إدارة إصدارات الملفات</string>
-    <string name="custom_sync_conditions_title">شروط مزامنة مخصصة</string>
-    <string name="custom_sync_conditions_description">يَسمح لك بتحديد استثناءات لشروط التشغيل العامة.</string>
-    <string name="custom_sync_conditions_dialog">تحديد شروط المزامنة</string>
-    <plurals name="syncthing_active_syncing_device_online">
-        <item quantity="zero">مزامنة: %%‎%1$d‏ مكتمل، لا أجهزة متصلة بالإنترنت</item>
-        <item quantity="one">مزامنة: %%‎%1$d‏ مكتمل، جهاز واحد متصل بالإنترنت</item>
-        <item quantity="two">مزامنة: %%‎%1$d‏ مكتمل، جهازان متصلان بالإنترنت</item>
-        <item quantity="few">مزامنة: %%‎%1$d‏ مكتمل، ‎%2$d‏ أجهزة متصلة بالإنترنت</item>
-        <item quantity="many">مزامنة: %%‎%1$d‏ مكتمل، ‎%2$d‏ جهازًا متصلًا بالإنترنت</item>
-        <item quantity="other">مزامنة: %%‎%1$d‏ مكتمل، ‎%2$d‏ جهاز متصل بالإنترنت</item>
-    </plurals>
-    <string name="devices_list_empty">لا توجد أجهزة مُعَدّة. انقر لإضافة جهاز جديد.</string>
-    <string name="reason_mobile_data_disallowed">Syncthing غير مكوّن للتشغيل على اتصال بيانات الجوال.</string>
-    <string name="reason_on_roaming_nonroaming_mobile_data">يُسمح لـ Syncthing بالعمل على اتصالات بيانات الجوال أثناء التجوال وخارجه.</string>
-    <string name="enable_relaying">تفعيل إعادة التّرحيل</string>
-    <string name="usage_reporting">إبلاغ مجهول عن الاستخدام</string>
-    <string name="crash_reporting">إبلاغ مجهول عن الأعطال</string>
-    <string name="webui_tcp_port_title">منفذ TCP لواجهة المستخدم الرسومية للـ Web</string>
-    <string name="webui_remote_access_title">وصول عن بُعد لواجهة المستخدم الرسومية للـ Web</string>
-    <string name="webui_password_title">كلمة مرور واجهة المستخدم الرسومية للـ Web</string>
-    <string name="clear_stversions_title">إفراغ جميع مجلدات حفظ الإصدارات</string>
-    <string name="clear_stversions_question">سيؤدي هذا إلى حذف جميع الإصدارات السابقة من الملفات التي يتعامل معها Syncthing. هل تريد المتابعة؟</string>
-    <string name="clear_stversions_done">تم إفراغ مجلدات ‎.stversions ‏بنجاح.</string>
-    <string name="download_support_bundle_in_progress">تحضير تنزيل حُزمة الدعم…</string>
-    <string name="undo_ignored_devices_folders_title">تراجع عن تجاهل الأجهزة والمجلدات</string>
-    <string name="invalid_port_number" tools:ignore="PluralsCandidate">رقم المنفذ غير صالح. يرجى إدخال منفذ بين ‎%1$d‏ و ‎%2$d‏.</string>
-    <string name="http_proxy_address_title">وكيل HTTP(S)</string>
-    <string name="broadcast_service_control_summary">الافتراضي: معطل. قم بالتمكين للسماح لـ adb أو تطبيقات الطرف الثالث، على سبيل المثال تطبيقات الأتمتة، بتوجيه Syncthing لاتباع شروط التشغيل، أو التشغيل الإجباري، أو الإيقاف الإجباري.</string>
-    <string name="current_path">المسار الحالي: ‎%1$s</string>
-    <string name="copy_progress">مشاركة الملفات…</string>
-    <string name="reason_on_nonroaming_mobile_data">يُسمح لـ Syncthing بالتشغيل على اتصالات بيانات الجوال بدون تجوال. الاتصال النشط بدون تجوال.</string>
-    <string name="reason_on_flight_mode">Syncthing قيد التشغيل لأنك سمحت له بالعمل عندما يكون وضع الطيران نشطًا.</string>
-    <string name="syncthing_active_details">قيد التشغيل: ‎%1$s</string>
-    <plurals name="device_online_up_to_date">
-        <item quantity="zero">%1$d جهاز متصل ومحدّث</item>
-        <item quantity="one">جهاز واحد (%1$d) متصل ومحدّث</item>
-        <item quantity="two">جهازين متصلين ومحدثين</item>
-        <item quantity="few">%1$d أجهزة متصلة ومحدّثة</item>
-        <item quantity="many">%1$d جهازًا متصلًا ومحدثًا</item>
-        <item quantity="other">%1$d جهاز متصل ومحدث</item>
-    </plurals>
-    <string name="syncthing_terminated">تم إنهاؤها</string>
-    <string name="folder_run_script_caption">تشغيل برنامج نَصّي</string>
-    <string name="discovered_devices_title">الأجهزة المُكتَشَفة - أنقر للإختيار</string>
-    <string name="local_discovery_disabled">لقد قمت بتعطيل الاكتشاف المحلي في الإعدادات &gt; خيارات Syncthing &gt; الاكتشاف المحلي. قم بتمكينه للبحث عن الأجهزة على الشبكة المحلية.</string>
-    <string name="folders">مجلدات</string>
-    <string name="addresses">عناوين</string>
-    <string name="modification_time">الوقت: ‎%1$s</string>
-    <string name="run_on_mobile_data_summary">التشغيل عندما يكون الجهاز متصلاً عبر شبكة بيانات الجوال. تحذير: يمكن أن يستهلك هذا الكثير من البيانات من باقة بيانات مشغل الهاتف المحمول الخاص بك إذا قمت بمزامنة كميات كبيرة من البيانات.</string>
-    <string name="run_on_roaming_title">تشغيل أثناء التجوال</string>
-    <string name="run_on_wifi_title">تشغيل على Wi-Fi</string>
-    <string name="run_on_wifi_summary">تشغيل عندما يكون الجهاز متصلاً بشبكة Wi-Fi أو Ethernet.</string>
-    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">بدءًا من أندرويد 8.1، يلزم الوصول إلى الموقع لتتمكن من قراءة اسم شبكة Wi-Fi. يمكنك استخدام هذه الميزة فقط إذا منحت هذا الإذن.</string>
-    <string name="power_source_ac_and_battery_power">طاقة التيار المتردد والبطارية.</string>
-    <string name="power_source_ac_power">مربوط بالشاحن.</string>
-    <string name="power_source_battery_power">على البطارية.</string>
-    <string name="respect_battery_saving_title">احترام إعداد توفير البطارية في أندرويد</string>
-    <string name="listen_address">عناوين الاستماع لنظام المزامنة</string>
-    <string name="max_recv_kbps">حد نسق الاستقبال (كيلوبايت/الثانية)</string>
-    <string name="max_send_kbps">حد نسق الإرسال (كيلوبايت/الثانية)</string>
-    <string name="global_announce_enabled">اكتشاف عالمي</string>
-    <string name="enable_nat_traversal">تمكين اجتياز تَرجمة عناوين الشبكة (NAT)</string>
-    <string name="open_log">فتح السّجل</string>
-    <string name="open_source_licenses_title">تراخيص المصادر المفتوحة</string>
-    <string name="advanced_storage_path_overview">نظرة عامة على مسار التخزين المتقدم</string>
-    <string name="view_syncthing_log">عرض سجل Syncthing</string>
-    <string name="custom_wifi_ssid_whitelist_empty">لا توجد معرّفات SSID لشبكات Wi-Fi في القائمة البيضاء. يرجى تحديد بعضها في الإعدادات.</string>
-    <string name="no_remote_devices_connected">لا توجد أجهزة بعيدة متصلة</string>
-    <string name="executable_not_found">الملف التنفيذي الأساسي \"‏‎%s\" مفقود. تحقق من البناء ومخرجات بيانات logcat.</string>
-    <string name="notification_persistent_waiting_channel">مراقبة شروط التشغيل</string>
-    <string name="versions_path">مسار الإصدارات</string>
-    <string name="no_recent_changes">لا توجد تغييرات حديثة.</string>
-    <string name="modified_by_device">الجهاز: ‎%1$s</string>
-    <string name="settings_title">إعدادات</string>
-    <string name="file_size_unit_KiB">كيلوبايت</string>
-    <string name="file_size_unit_GiB">جيجابايت</string>
-    <string name="cancel_title">إلغاء</string>
-    <string name="reason_not_on_mobile_data">يُسمح لـ Syncthing بالعمل على اتصال بيانات الجوال ولكن بيانات الجوال ليست متصلة.</string>
-    <string name="folder_type_receiveonly">استقبال فقط</string>
-    <string name="type_external">النوع: خارجي</string>
-    <string name="qs_force_label">تشغيل إجباري</string>
-    <string name="qs_forced_to_stop">تم الإجبار على الإيقاف</string>
+    <string name="photo_shoot_take_picture_success">تم حفظ الصورة بنجاح في مجلد آلة تصوير Syncthing.</string>
+    <string name="photo_shoot_take_picture_failure">فشل التقاط الصورة أو أنك ألغيت العملية.</string>
+
+    <!-- Label of the folder created by the Syncthing Camera feature. -->
+    <string name="default_syncthing_camera_folder_label">آلة تصوير Syncthing</string>
+
+    <!-- MainActivity -->
+
+    <!-- Main bottom navigation view -->
+    <string name="activity_main_bottom_navigation_rescan_all">إعادة فحص الكل</string>
+
+    <!-- Main menu button -->
+
+    <!-- Exception dialog message -->
+
+    <!-- Title of the exit app when running as a service confirmation dialog -->
     <string name="dialog_exit_while_running_as_service_title">تأكيد الخروج من التطبيق</string>
+    <string name="dialog_exit_while_running_as_service_message">تنبيه: لقد قمت بتهيئة التطبيق ليعمل تلقائيًا عند الإقلاع. لذلك، فإنه يراقب شروط التشغيل ويزامن في أي وقت في الخلفية عند تطابق الشروط. يجب عليك الخروج يدويًا فقط إذا واجهت مشاكل خطيرة. وإلا، قم بتعطيل البدء تلقائيًا عند الإقلاع في الإعدادات. هل ترغب في الخروج الآن حتى إعادة تشغيل الجهاز؟</string>
+
+    <!-- Title of the "add folder" menu action -->
+    <string name="add_folder">إضافة مجلد</string>
+
+    <!-- Title of the "share device id" menu action -->
+
+    <!-- Shown in the chooser dialog when sharing a Device ID -->
+
+    <string name="usage_reporting_dialog_title">سماح بالإبلاغ المجهول عن الاستخدام؟</string>
+
+    <string name="yes">نعم</string>
+
+    <string name="no">لا</string>
+
+
+    <!-- URL to open when user chose to open website in usage reporting dialog -->
+
+    <string name="toast_write_storage_permission_required">إذن الكتابة على التخزين ضروري لهذا التطبيق</string>
+
     <string name="device_rejected">الجهاز \"‎%1$s‏\" يُريد الاتصال</string>
+
+    <string name="folder_rejected">الجهاز \"‏‎%1$s\" يريد مشاركة المجلد \"‎%2$s‏\"</string>
+
+    <!-- StateDialogActivity -->
+
+    <!-- Text for FoldersFragment and DevicesFragment loading view -->
+    <!-- Shown instead of web_gui_loading if the key does not exist and has to be created -->
+    <string name="web_gui_creating_key">إنشاء مفاتيح آمنة جارٍ. قد يستغرق هذا بضع دقائق…</string>
+
+    <!-- FolderListFragment -->
+
+    <string name="folders_fragment_title">مجلدات</string>
+
+    <!-- Shown if no folders exist -->
+    <string name="folder_list_empty">لم يتم العثور على مجلدات</string>
+
+    <!-- Format string for folder file count -->
+    <plurals name="files">        <item quantity="zero">%1$d / %2$d ملفات</item>        <item quantity="one">%1$d / %2$d ملف</item>        <item quantity="two">%1$d / %2$d ملفان</item>        <item quantity="few">%1$d / %2$d ملفات</item>        <item quantity="many">%1$d / %2$d ملف</item>        <item quantity="other">%1$d / %2$d ملف</item></plurals>
+
+    <!-- Format string for conflict file count -->
+    <plurals name="conflicts">        <item quantity="zero">لا تعارض</item>        <item quantity="one">تعارض واحد</item>        <item quantity="two">تعارضان</item>        <item quantity="few">تعارضات ‎(%1$d)</item>        <item quantity="many">تعارضات ‎(%1$d)</item>        <item quantity="other">تعارضات ‎(%1$d)</item></plurals>
+
+    <string name="override_changes">تجاوز التغييرات</string>
+
+    <!-- Override Changes Confirmation Dialog -->
+    <string name="override_changes_question">سيؤدي هذا إلى التراجع عن جميع التغييرات التي تم إجراؤها على الأجهزة الأخرى التي تشارك هذا المجلد. هل تريد المتابعة؟</string>
+
+    <string name="revert_local_changes">تراجع عن التغييرات المحلية</string>
+
+    <string name="delete_unexpected_items">حذف العناصر غير المتوقعة</string>
+
+    <!-- Revert Local Changes Confirmation Dialog -->
+    <string name="revert_local_changes_question">سيؤدي هذا إلى التراجع عن جميع التغييرات التي تم إجراؤها على هذا الجهاز داخل ذلك المجلد. هل تريد المتابعة؟</string>
+
+    <string name="open_file_manager">فتح مدير الملفات</string>
+    <string name="open_file_with">فتح الملف باستخدام</string>
     <string name="open_file_no_compatible_app">لم يتم العثور على تطبيق متوافق لفتح الملف.</string>
+
+    <!-- Suggest File Manager App Dialog -->
+    <string name="suggest_file_manager_app_dialog_title">لم يتم العثور على تطبيق متوافق لإدارة الملفات</string>
+    <string name="suggest_file_manager_app_dialog_text">نوصيك بتثبيت تطبيق مدير الملفات مفتوح المصدر \'Material Files\'. هل ترغب في فتح صفحته في متجر التطبيقات؟</string>
+
+    <!-- DeviceListFragment -->
+
+    <!-- Devices tab title -->
+    <string name="devices_fragment_title">أجهزة</string>
+
+    <!-- Shown if no devices are configured in add folder dialog -->
+    <string name="devices_list_empty">لا توجد أجهزة مُعَدّة. انقر لإضافة جهاز جديد.</string>
+
+    <!-- Shown in ListView if no devices are configured -->
+    <string name="no_devices_configured">لا توجد أجهزة مُعَدّة. \nابدأ بإضافة جهاز الآن.</string>
+
+    <string name="deviceEncryptionPasswordHint">إذا كان غير موثوق به، فأدخل كلمة مرور التّشفير</string>
+
+    <!-- Indicates that a folder is fully synced to the local device -->
+    <string name="device_up_to_date">مُحدَّث</string>
+
+    <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
+    <string name="device_syncing_percent_bytes">مزامنة ‎(%1$d%%، %2$s)</string>
+
+    <!-- Indicates that there is no connection to the device -->
+    <string name="device_disconnected">مُنفصل</string>
+    <string name="device_disconnected_not_synced">منفصل (‎%1$s‏ مُعلّق)</string>
+
+    <!-- Indicates that the device is paused and does not sync -->
+    <string name="device_paused">متوقف مؤقتًا</string>
+
+    <!-- Indicates that devices does not share any folders -->
+    <string name="device_state_unused">غير مستخدَم</string>
+
+    <!-- Indicates that the device connection is unknown -->
+
+    <!-- Last seen title -->
+    <string name="device_last_seen">آخر ظهور: ‎%1$s</string>
+    <string name="device_last_seen_never">أبدًا</string>
+
+    <!-- Title for the listing of shared folders with a colon and space appended -->
+    <string name="shared_folders_title_colon">"مجلدات: "</string>
+
+    <!-- Expand the collapsed shared folders list on a device card; parameter is the hidden folder count -->
+    <string name="device_folders_show_more">+%1$d</string>
+
+    <!-- Collapse an expanded shared folders list on a device card -->
+    <string name="device_folders_show_less">إظهار أقل</string>
+
+    <!-- Title of the dialog listing the conflict files of a folder -->
+    <string name="conflict_files_title">ملفات التعارض</string>
+
+    <!-- Header of the grouped status card showing transfer and resource stats -->
+    <string name="status_transfer_resources">النقل والموارد</string>
+
+    <!-- Title for current download rate -->
+    <string name="download_title">تنزيل</string>
+
+    <!-- Title for current upload rate -->
+    <string name="upload_title">رفع</string>
+
+    <!-- StatusFragment -->
+
+    <string name="status_fragment_title">الحالة</string>
+
+    <string name="button_follow_run_conditions">اتّبع شروط التشغيل</string>
+    <string name="button_force_start">تشغيل إجباري \nتجاهل شروط التشغيل</string>
+    <string name="button_force_stop">إيقاف إجباري \nتجاهل شروط التشغيل</string>
+
+    <string name="syncthing_starting">Syncthing ينطلق.</string>
     <string name="syncthing_running">Syncthing قيد التشغيل.</string>
     <string name="syncthing_not_running">Syncthing ليس قيد التشغيل.</string>
     <string name="syncthing_has_crashed">لقد تعطل Syncthing.</string>
+
+    <!-- DrawerFragment -->
+
+    <!-- Same as download_title with a colon and space appended -->
+    <!-- Same as upload_title with a colon and space appended -->
+    <!-- Title for current RAM usage -->
+    <string name="ram_usage">استخدام الذاكرة العشوائية (RAM)</string>
+    <!-- Title for announce server status -->
+    <string name="announce_server">خادم الإعلان المُعَد</string>
+    <!-- Title for uptime status -->
     <string name="uptime">مُدة التشغيل</string>
-    <string name="folder_id">معرّف المجلد</string>
-    <string name="folder_ignore_delete_caption">تجاهل الحذف</string>
-    <string name="folder_ignore_delete_description">خيار متقدم يؤثر على معالجة تحديثات الفهرس الواردة. عند التعيين، يتم تجاهل التحديثات الواردة التي تحمل علامة الحذف. راجع https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
-    <string name="folder_pause">إيقاف المجلد مؤقتًا</string>
-    <string name="devices">أجهزة</string>
-    <string name="keep_versions">احتفظ بالإصدارات</string>
-    <string name="delete_folder">حذف المجلد</string>
-    <string name="dialog_discard_changes">هل تريد تجاهل تغييراتك؟</string>
-    <string name="ignore_patterns">أنماط التجاهل</string>
-    <string name="folder_path_required">يجب ألا يكون مسار المجلد فارغًا</string>
-    <string name="compress_metadata">بيانات وصفية</string>
-    <string name="compress_always">دائمًا</string>
-    <string name="download_support_bundle_title">تنزيل حُزمة الدعم</string>
-    <string name="dialog_settings_restart_app_question">يتطلب تغيير هذا الخيار إعادة تشغيل فورية للتطبيق. سيتم تجاهل جميع التغييرات الأخرى. متابعة؟</string>
-    <string name="syncthing_version_title">إصدار Syncthing</string>
-    <string name="file_size_unit_MiB">ميجابايت</string>
-    <string name="transfer_rate_unit_KiB_s">كيلوبايت/الثّانية</string>
-    <string name="transfer_rate_unit_MiB_s">ميجابايت/الثّانية</string>
-    <string name="transfer_rate_unit_GiB_s">جيجابايت/الثّانية</string>
-    <string name="file_size_unit_B">بايت</string>
-    <string name="pull_order_type_oldestFirst_description">سحب الملفات مرتبة حسب وقت التعديل. الأقدم أوّّلاً على التوالي.</string>
-    <string name="pull_order_type_newestFirst_description">سحب الملفات مرتبة حسب وقت التعديل. الأحدث أوّلاً على التوالي.</string>
-    <string name="qs_forced_to_run">تم الإجبار على التشغيل</string>
-    <string name="qs_schedule_disabled">الجدول الزمني مُعطَّل</string>
-    <string name="revert_local_changes">تراجع عن التغييرات المحلية</string>
-    <string name="device_disconnected_not_synced">منفصل (‎%1$s‏ مُعلّق)</string>
-    <string name="device_paused">متوقف مؤقتًا</string>
     <string name="restart">إعادة التشغيل</string>
-    <string name="compress_never">أبدًا</string>
-    <string name="delete_device">حذف الجهاز</string>
-    <string name="this_device">هذا الجهاز</string>
-    <string name="preference_app_theme_follow_dark">داكن</string>
-    <string name="run_conditions_summary">استخدم الخيارات التالية لتحديد متى سيتم تشغيل Syncthing.</string>
-    <string name="run_on_mobile_data_title">تشغيل باستخدام بيانات الجوال</string>
-    <string name="device_name">اسم الجهاز</string>
-    <string name="local_announce_enabled">اكتشاف مَحلّي</string>
-    <string name="open_log_summary">فتح نافذة سجل Syncthing وأندرويد</string>
-    <string name="syncthing_forum_title">منتدى Syncthing</string>
-    <string name="reason_on_mobile_data">يُسمح لـ Syncthing بالتشغيل على بيانات الجوال.</string>
-    <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor غير مُهيأ. يرجى إعادة تشغيل التطبيق وتقديم تقرير خطأ إذا لم يختفِ هذا الخطأ بعد إعادة التشغيل.</string>
-    <string name="state_local_additions">إضافات مَحلية</string>
-    <string name="state_sync_waiting">في انتظار المزامنة</string>
-    <string name="state_sync_preparing">تحضير للمزامنة</string>
-    <string name="state_syncing_general">المزامنة جارية</string>
-    <string name="state_syncing">مزامنة جارية ‎(%1$d%%)</string>
-    <string name="status_outofsync">غير مُتزامن</string>
-    <string name="state_unshared">غير مُشتَرَك</string>
-    <string name="folder_type">نوع المجلد</string>
-    <string name="folder_type_sendreceive_description">سيقوم المجلد بإرسال التغييرات واستقبالها من الأجهزة البعيدة.</string>
-    <string name="maximum_age">العمر الأقصى</string>
-    <string name="pull_order_type_random">عشوائي</string>
-    <string name="simple_versioning_info">احتفاظ بالإصدارات: ‎%1$s</string>
-    <string name="run_on_whitelisted_wifi_summary">شغّل القائمة البيضاء لتقييد المزامنة لتحدُث فقط على شبكات Wi-Fi محددة.</string>
-    <string name="folder_size_format">%1$s / %2$s</string>
-    <string name="folder_type_sendreceive">إرسال واستقبال</string>
-    <string name="folder_type_sendonly">إرسال فقط</string>
-    <string name="folder_type_receive_encrypted">استقبال مُشفّر</string>
-    <string name="pull_order">ترتيب سحب الملفات</string>
-    <string name="override_changes_question">سيؤدي هذا إلى التراجع عن جميع التغييرات التي تم إجراؤها على الأجهزة الأخرى التي تشارك هذا المجلد. هل تريد المتابعة؟</string>
+
+    <string name="dialog_confirm_restart">هل تريد إعادة تشغيل Syncthing؟</string>
+
+    <!-- FolderActivity -->
+
+    <!-- Setting title -->
+    <string name="folder_id">معرّف المجلد</string>
+
+    <!-- Setting title -->
     <string name="folder_label">اسم المجلد</string>
+
+    <!-- Setting title -->
     <string name="directory">دليل</string>
     <string name="advanced_directory_selection">اختيار متقدم للدليل</string>
+
+    <!-- Setting title and description -->
     <string name="folder_fileWatcher">مراقبة التغييرات</string>
-    <string name="autoAcceptFolders">قبول تلقائي</string>
-    <string name="pause_device">إيقاف الجهاز مؤقتًا</string>
-    <string name="untrusted_device">جهاز غير موثوق به</string>
-    <string name="recent_changes_title">تغييرات حديثة</string>
-    <string name="sync_only_wifi_ssids_wifi_turn_on_location">يرجى تشغيل الموقع لإختيار الشبكات.</string>
-    <string name="power_source_title">تشغيل عندما يُزوَّد الجهاز بالطاقة بواسطة</string>
-    <string name="global_announce_server">خوادم الاكتشاف العالمية</string>
-    <string name="create_folder_failed">فشل إنشاء المجلد</string>
-    <string name="folder_go_up">انتقال للأعلى</string>
-    <string name="syncthing_log_title">سِجِل Syncthing</string>
-    <string name="reason_wifi_disallowed">لم يُسمح لـ Syncthing بالعمل على Wi-Fi أو Ethernet.</string>
-    <string name="reason_on_wifi">يُسمح لـ Syncthing بالعمل على Wi-Fi و Wi-Fi متصل حاليًا.</string>
-    <string name="device_id_copied_to_clipboard">تم نسخ معرّف الجهاز إلى الحافظة</string>
-    <string name="state_failed_items">عناصر فاشلة ‎(%1$d)</string>
-    <string name="state_up_to_date">مُحدَّث</string>
-    <string name="pull_order_type_newestFirst">الأحدث أوّلاً</string>
-    <string name="pull_order_type_random_description">سحب الملفات بترتيب عشوائي.</string>
-    <string name="pull_order_type_alphabetic_description">سحب الملفات مرتبة أبجديًا حسب اسم الملف.</string>
-    <string name="pull_order_type_smallestFirst_description">سحب الملفات مرتبة حسب حجم الملف. الأصغر أوّلاً على التوالي.</string>
-    <string name="show_device_id">عرض معرّف الجهاز</string>
-    <plurals name="files">
-        <item quantity="zero">%1$d / %2$d ملفات</item>
-        <item quantity="one">%1$d / %2$d ملف</item>
-        <item quantity="two">%1$d / %2$d ملفان</item>
-        <item quantity="few">%1$d / %2$d ملفات</item>
-        <item quantity="many">%1$d / %2$d ملف</item>
-        <item quantity="other">%1$d / %2$d ملف</item>
-    </plurals>
-    <string name="config_export_failed">فشل تصدير التكوين. انتقل إلى الإعدادات - استكشاف الأخطاء وإصلاحها - افتح السّجل لمعرفة التّفاصيل.</string>
-    <string name="toast_invalid_environment_variables">هذه القيمة ليست صالحة كسلسلة متغيرة بيئيّة</string>
-    <string name="st_reset_deltas_done">نجحت إعادة ضبط فهارس الإختلافات لـ Syncthing</string>
-    <string name="category_about">حولَ</string>
-    <string name="reason_not_within_time_frame_0_min">أقل من دقيقة</string>
-    <string name="reason_not_charging">لا يتم شحن الهاتف حاليا.</string>
-    <string name="exit">خروج</string>
-    <string name="config_create_failed">فَشِلَ إنشاء التّكوين. تحقق من مُخرجات البيانات لـ logcat.</string>
-    <string name="staggered_versioning_info">العمر الأقصى: ‎%1$d \nمسار الإصدارات: ‎%2$s</string>
-    <plurals name="copy_success_partially">
-        <item quantity="zero">تم نسخ %1$d ملف إلى المجلد \"%2$s\"، %3$d موجود بالفعل</item>
-        <item quantity="one">تم نسخ %1$d ملف إلى المجلد \"%2$s\"، %3$d موجودة بالفعل</item>
-        <item quantity="two">تم نسخ %1$d ملفين إلى المجلد \"%2$s\"، %3$d موجودة بالفعل</item>
-        <item quantity="few">تم نسخ %1$d ملفات إلى المجلد \"%2$s\"، %3$d موجودة بالفعل</item>
-        <item quantity="many">تم نسخ %1$d ملفًا إلى المجلد \"%2$s\"، %3$d موجودة بالفعل</item>
-        <item quantity="other">تم نسخ %1$d ملف إلى المجلد \"%2$s\"، %3$d موجودة بالفعل</item>
-    </plurals>
-    <plurals name="copy_success">
-        <item quantity="zero">لم يُنسَخ أي ملف إلى المجلد \"‎%2$s\"</item>
-        <item quantity="one">نُسِخَ ‎%1$d‏ ملف إلى المجلد \"‎%2$s\"</item>
-        <item quantity="two">نُسِخَ ملفان إلى المجلد \"‎%2$s\"</item>
-        <item quantity="few">نُسِخَت ‎%1$d‏ ملفات إلى المجلد \"‎%2$s\"</item>
-        <item quantity="many">نُسِخَ ‎%1$d‏ ملفًا إلى المجلد \"‎%2$s\"</item>
-        <item quantity="other">نُسِخَ ‎%1$d‏ ملفًا إلى المجلد \"‎%2$s\"</item>
-    </plurals>
-    <plurals name="file_name_title">
-        <item quantity="zero">لا ملف</item>
-        <item quantity="one">اسم الملف</item>
-        <item quantity="two">اسم الملفين</item>
-        <item quantity="few">قائمة أسماء الملفات</item>
-        <item quantity="many">قائمة أسماء الملفات</item>
-        <item quantity="other">قائمة أسماء الملفات</item>
-    </plurals>
-    <plurals name="conflicts">
-        <item quantity="zero">لا تعارض</item>
-        <item quantity="one">تعارض واحد</item>
-        <item quantity="two">تعارضان</item>
-        <item quantity="few">تعارضات ‎(%1$d)</item>
-        <item quantity="many">تعارضات ‎(%1$d)</item>
-        <item quantity="other">تعارضات ‎(%1$d)</item>
-    </plurals>
-    <string name="dialog_exit_while_running_as_service_message">تنبيه: لقد قمت بتهيئة التطبيق ليعمل تلقائيًا عند الإقلاع. لذلك، فإنه يراقب شروط التشغيل ويزامن في أي وقت في الخلفية عند تطابق الشروط. يجب عليك الخروج يدويًا فقط إذا واجهت مشاكل خطيرة. وإلا، قم بتعطيل البدء تلقائيًا عند الإقلاع في الإعدادات. هل ترغب في الخروج الآن حتى إعادة تشغيل الجهاز؟</string>
-    <string name="usage_reporting_dialog_title">سماح بالإبلاغ المجهول عن الاستخدام؟</string>
-    <string name="toast_write_storage_permission_required">إذن الكتابة على التخزين ضروري لهذا التطبيق</string>
-    <string name="web_gui_creating_key">إنشاء مفاتيح آمنة جارٍ. قد يستغرق هذا بضع دقائق…</string>
-    <string name="folders_fragment_title">مجلدات</string>
-    <string name="override_changes">تجاوز التغييرات</string>
-    <string name="delete_unexpected_items">حذف العناصر غير المتوقعة</string>
-    <string name="revert_local_changes_question">سيؤدي هذا إلى التراجع عن جميع التغييرات التي تم إجراؤها على هذا الجهاز داخل ذلك المجلد. هل تريد المتابعة؟</string>
-    <string name="open_file_manager">فتح مدير الملفات</string>
-    <string name="open_file_with">فتح الملف باستخدام</string>
-    <string name="suggest_file_manager_app_dialog_title">لم يتم العثور على تطبيق متوافق لإدارة الملفات</string>
-    <string name="suggest_file_manager_app_dialog_text">نوصيك بتثبيت تطبيق مدير الملفات مفتوح المصدر \'Material Files\'. هل ترغب في فتح صفحته في متجر التطبيقات؟</string>
-    <string name="no_devices_configured">لا توجد أجهزة مُعَدّة. \nابدأ بإضافة جهاز الآن.</string>
-    <string name="device_syncing_percent_bytes">مزامنة ‎(%1$d%%، %2$s)</string>
-    <string name="web_gui_title">واجهة المستخدم الرسومية للـ Web</string>
-    <string name="device_last_seen_never">أبدًا</string>
-    <string name="shared_folders_title_colon">"مجلدات: "</string>
-    <string name="download_title">تنزيل</string>
-    <string name="upload_title">رفع</string>
-    <string name="status_fragment_title">الحالة</string>
-    <string name="button_follow_run_conditions">اتّبع شروط التشغيل</string>
-    <string name="button_force_start">تشغيل إجباري \nتجاهل شروط التشغيل</string>
-    <string name="device_disconnected">مُنفصل</string>
-    <string name="device_state_unused">غير مستخدَم</string>
-    <string name="device_last_seen">آخر ظهور: ‎%1$s</string>
-    <string name="button_force_stop">إيقاف إجباري \nتجاهل شروط التشغيل</string>
-    <string name="syncthing_starting">Syncthing ينطلق.</string>
-    <string name="announce_server">خادم الإعلان المُعَد</string>
-    <string name="dialog_confirm_restart">هل تريد إعادة تشغيل Syncthing؟</string>
     <string name="folder_fileWatcherDescription">يطلب من نظام التشغيل الإشعار بالتغييرات التي تطرأ على الملفات. إذا تم تعطيله، فإنه يعود إلى عمليات فحص دورية كل ساعة.</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_ignore_delete_caption">تجاهل الحذف</string>
+    <string name="folder_ignore_delete_description">خيار متقدم يؤثر على معالجة تحديثات الفهرس الواردة. عند التعيين، يتم تجاهل التحديثات الواردة التي تحمل علامة الحذف. راجع https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_run_script_caption">تشغيل برنامج نَصّي</string>
     <string name="folder_run_script_description">خيار متقدم لتشغيل برامج نصية بعد تغيير مجلد لحالة المزامنة الخاصة به. سيتم تنفيذ البرامج النصية في \'.stfolder/*.sh\'، ولا يتم دعم المواقع الأخرى لاعتبارات أمنية.\nمثال على استدعاء البرنامج النصي: \'.stfolder/rename-files.sh sync_complete\'</string>
-    <string name="scan_qr_code_description">مسح رمز الاستجابة السريعة (QR)</string>
+
+    <!-- Setting title -->
+    <string name="folder_pause">إيقاف المجلد مؤقتًا</string>
+
+    <!-- Setting title -->
+    <string name="devices">أجهزة</string>
+
+    <!-- Setting title -->
+    <string name="keep_versions">احتفظ بالإصدارات</string>
+
+    <!-- Setting title -->
+    <string name="delete_folder">حذف المجلد</string>
+
+    <!-- Title for FolderSettingsFragment in create mode -->
     <string name="create_folder">إنشاء مجلد</string>
+
+    <!-- Title for FolderSettingsFragment in edit mode -->
     <string name="edit_folder">تعديل مجلد</string>
+
+    <!-- Menu item to confirm folder creation -->
     <string name="create">إنشاء</string>
+
+    <!-- Dialog shown when attempting to remove a folder -->
     <string name="remove_folder_confirm">هل تريد حقًا إزالة هذا المجلد من Syncthing؟</string>
+
+    <!-- Toast shown when trying to create a folder with an empty ID -->
     <string name="folder_id_required">يجب ألا يكون معرّف المجلد فارغًا</string>
+
+    <!-- Toast shown when trying to create a folder with an empty label -->
     <string name="folder_label_required">يجب ألا يكون اسم المجلد فارغًا</string>
+
+    <!-- Toast shown when trying to create a folder with an empty path -->
+    <string name="folder_path_required">يجب ألا يكون مسار المجلد فارغًا</string>
+
+    <string name="dialog_discard_changes">هل تريد تجاهل تغييراتك؟</string>
+
+    <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">يمنح إصدار Android الخاص بك Syncthing فقط حقَّ القراءة للمجلد المحدد.</string>
+
+    <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">يمنح إصدار Android الخاص بك Syncthing حقَّ القراءة والكتابة للمجلد المختار.</string>
+
+    <!-- Toast shown if the user selected an invalid location for a new syncthing folder -->
     <string name="toast_invalid_folder_selected">عذرًا. لا يمكن استخدام المجلد المحدد. يرجى تحديد مجلد موجود على وحدة التخزين الداخلية أو الخارجية.</string>
+
     <string name="folder_type_switch_to_receive_encrypted_not_allowed">تبديل المجلدات الحالية إلى \"استلام مُشفَّر\" غير مدعوم.</string>
+
+    <string name="ignore_patterns">أنماط التجاهل</string>
+
+    <!-- DeviceActivity -->
+
+    <!-- Setting title -->
     <string name="device_id">معرّف الجهاز</string>
+
+    <!-- Status title -->
+    <string name="discovered_devices_title">الأجهزة المُكتَشَفة - أنقر للإختيار</string>
+
+    <!-- Status text -->
+
+    <!-- Status text -->
+    <string name="local_discovery_disabled">لقد قمت بتعطيل الاكتشاف المحلي في الإعدادات &gt; خيارات Syncthing &gt; الاكتشاف المحلي. قم بتمكينه للبحث عن الأجهزة على الشبكة المحلية.</string>
+
+    <!-- Setting title -->
+
+    <!-- Setting title -->
+    <string name="folders">مجلدات</string>
+
+    <!-- Setting title -->
+    <string name="addresses">عناوين</string>
+
+    <!-- Setting title -->
+
+    <!-- Setting title -->
+    <string name="compression">ضغط</string>
+
+    <!-- Strings representing compression options -->
+    <string name="compress_never">أبدًا</string>
+    <string name="compress_metadata">بيانات وصفية</string>
+    <string name="compress_always">دائمًا</string>
+    <!-- Setting title -->
+    <string name="introducer">مُقدِّم</string>
+
+    <!-- Setting title -->
+    <string name="autoAcceptFolders">قبول تلقائي</string>
+
+    <!-- Setting title -->
+    <string name="pause_device">إيقاف الجهاز مؤقتًا</string>
+
+    <!-- Setting title -->
+    <string name="untrusted_device">جهاز غير موثوق به</string>
+
+    <!-- ActionBar item -->
+    <string name="delete_device">حذف الجهاز</string>
+
     <string name="add_device">إضافة جهاز</string>
+
+    <!-- Menu item to confirm adding a device -->
+
+    <!-- Title for DeviceSettingsFragment in edit mode -->
+    <string name="edit_device">تعديل جهاز</string>
+
+    <!-- Dialog shown when attempting to remove a device -->
+    <string name="remove_device_confirm">هل تريد حقًا إزالة هذا الجهاز؟</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
+    <string name="device_id_required">يجب ألا يكون معرّف الجهاز فارغًا</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
+    <string name="device_id_invalid">معرّف الجهاز غير منسق بشكل صحيح. يرجى إعادة المحاولة وإدخال المعرّف الصحيح.</string>
+
+    <!-- Toast shown when trying to create a device with an empty name -->
+
+    <!-- Toast shown when trying to create a device with invalid addresses -->
     <string name="device_addresses_invalid">عناوين الجهاز غير منسقة بشكل صحيح. يرجى إعادة المحاولة. انظر إلى وثائق Syncthing لمزيد من المعلومات.</string>
-    <string name="web_page_loading">تحميل صفحة الـ Web جارٍ: \n%1$s …</string>
-    <string name="security_notice">إشعار أمني</string>
-    <string name="ssl_cert_invalid_text">يبدو أن موقع الـ Web في ‎%1$s‏ يحتوي على شهادة غير صالحة لتشفير SSL. هل تريد المتابعة؟</string>
-    <string name="open_in_browser">فتح في المتصفح</string>
-    <string name="category_user_interface">واجهة المستخدم</string>
-    <string name="preference_app_theme_title">مظهر</string>
-    <string name="preference_app_theme_follow_system">اتّباع النّظام</string>
-    <string name="web_gui_loading">في انتظار واجهة المستخدم الرسومية</string>
-    <string name="preference_app_theme_follow_light">فاتح</string>
-    <string name="category_backup">استيراد وتصدير</string>
-    <string name="category_debug">استكشاف الأخطاء وإصلاحها</string>
-    <string name="category_experimental">تجريبي</string>
-    <string name="run_conditions_title">شروط التشغيل</string>
-    <string name="run_on_whitelisted_wifi_title">تشغيل على شبكات Wi-Fi محددة</string>
-    <string name="respect_master_sync_summary">تعطيل Syncthing عند تعطيل مربع الإعدادات السريعة المسمى \"المزامنة التلقائية للبيانات\".</string>
-    <string name="run_on_time_schedule_summary">سيحاول تمكين هذا الخيار المزامنة لمدة مكوّنة إذا تم استيفاء شروط التشغيل وإذا انقضت فترة فاصلة محددة منذ المزامنة الأخيرة. يمكن أن يوفر هذا الكثير من طاقة البطارية ولكنه يتطلب أن يكون شركاء المزامنة متصلين بالإنترنت. يرجى ملاحظة: قد يترك هذا ملفات مؤقتة غير مكتملة حتى تتم المزامنة المجدولة التالية.</string>
-    <string name="sync_duration_minutes_title">مدة دورة المزامنة</string>
-    <string name="sync_duration_minutes_summary">%1$s دقائق</string>
-    <string name="sleep_interval_minutes_title">طول فترة توقف المزامنة</string>
-    <string name="expert_mode_summary">سيؤدي تمكين هذا الخيار إلى إظهار خيارات التكوين المتقدمة. يجب عليك إلقاء نظرة على وثائق Syncthing أولاً للتأكد من أنك تعرف كيفية استخدامها بشكل صحيح. قد تتسبب الإعدادات غير الصحيحة في استنزاف البطارية أو استنفاد موارد النظام أو المزامنة غير المكتملة.</string>
-    <string name="start_into_web_gui_summary">عند بدء التطبيق، افتح واجهة المستخدم الرسومية للـ Web بدلاً من الشاشة الرئيسة</string>
-    <string name="clear_stversions_summary">يتم نقل الملفات إلى دليل .stversions عند استبدالها أو حذفها بواسطة Syncthing. يمكنك على الأرجح العثور على الملفات المحذوفة عن طريق الخطأ واستعادتها هناك، ولكن الإصدارات القديمة من الملفات تشغل مساحة تخزين على جهازك.</string>
-    <string name="download_support_bundle_failed">فَشِلَ تنزيل حُزمة الدّعم. تحقق من السّجلات.</string>
-    <string name="use_tor_summary">حصر كافة حركة البيانات عبر Tor لزيادة الخصوصية. يتطلب Orbot. يُعطّل خيارات الوكيل.</string>
-    <string name="toast_invalid_socks_proxy_address">المعلومة المدخلة تخالف صيغة الوكيل \'socks5://[IP/HOSTNAME]:[PORT]\'</string>
-    <string name="st_reset_database_done">نجحت إعادة ضبط قاعدة بيانات Syncthing</string>
-    <string name="st_reset_deltas_title">إعادة ضبط فهارس الإختلافات</string>
-    <string name="dialog_confirm_export">هل تريد حقاً تصدير التكوين الخاص بك؟ سيتم استبدال الأرشيف الموجود.</string>
-    <string name="dialog_confirm_import">هل تريد حقاً استيراد التكوين؟ سيتم استبدال الإعدادات الحالية بما في ذلك المجلدات المشتركة وقائمة الأجهزة.</string>
-    <string name="dialog_settings_restart_app_title">إعادة التشغيل مطلوبة</string>
-    <string name="st_reset_database_title">إعادة ضبط قاعدة البيانات</string>
-    <string name="st_reset_database_question">يجب تنفيذ هذا الإجراء فقط بناءً على توصية من فريق الدعم لدينا. \nهل أنت متأكد أنك تريد مسح قاعدة بيانات Syncthing؟</string>
-    <string name="syncthing_forum_summary">اذهب إلى منتدى Syncthing واحصل على الدعم</string>
-    <string name="privacy_title">سياسة الخصوصية</string>
-    <string name="reason_on_nonmetered_wifi">يُسمح لـ Syncthing بالتشغيل على اتصالات Wi-Fi غير المحدودة الاستخدام. اتصال Wi-Fi النشط غير محدود الاستخدام.</string>
-    <string name="reason_not_nonmetered_wifi">Syncthing ليس قيد التشغيل لأنك لم تسمح له بالعمل على اتصالات Wi-Fi المحدودة الاستخدام.</string>
-    <string name="privacy_summary">فتح سياسة خصوصية syncthing-android، التي تغطي استخدام (إن وجد) البيانات الشخصية، على سبيل المثال، الموقع.</string>
-    <string name="syncthing_api_key">مفتاح API الخاص بـ Syncthing (انقر للنسخ)</string>
-    <string name="syncthing_database_size">حجم قاعدة بيانات Syncthing</string>
-    <string name="os_open_file_limit">حد الملفات المفتوحة في أندرويد</string>
-    <string name="open_source_licenses_summary">عرض تراخيص المصادر المفتوحة المُستخدَمة</string>
-    <string name="folder_picker_title">منتقي المجلدات</string>
-    <string name="retrieving_logs">استرداد السّجلات…</string>
-    <string name="file_name_template">ملف جديد ‎%1$s</string>
-    <string name="copy_exception">حدث خطأ أثناء المشاركة، تحقق من سجلّات التطبيق</string>
-    <string name="reason_force_start">Syncthing يعمل لأنك أجبرته على الإنطلاق بِغَضِّ النّظر عن شروط التشغيل.</string>
-    <string name="reason_force_stop">Syncthing ليس قيد التشغيل لأنك أجبرته على التوقف بغض النظر عن شروط التشغيل.</string>
-    <string name="reason_not_within_time_frame_2">لقد قمت بتمكين \"تشغيل وفقًا لجدول زمني\" وكانت المزامنة الأخيرة منذ ‎%s.</string>
-    <plurals name="reason_not_within_time_frame_minutes">
-        <item quantity="zero">أقل من دقيقة</item>
-        <item quantity="one">دقيقة واحدة</item>
-        <item quantity="two">دقيقتان</item>
-        <item quantity="few">%d دقائق</item>
-        <item quantity="many">%d دقيقة</item>
-        <item quantity="other">%d دقيقة</item>
-    </plurals>
-    <string name="reason_not_on_battery_power">الهاتف لا يعمل الآن على طاقة البطارية.</string>
-    <string name="reason_not_while_power_saving">Syncthing ليس قيد التشغيل لأن الهاتف حاليًا في وضع توفير الطاقة.</string>
-    <string name="reason_not_while_auto_sync_data_disabled">Syncthing ليس قيد التشغيل لأن المزامنة التلقائية للبيانات معطلة حاليًا في Android.</string>
-    <string name="reason_not_on_whitelisted_wifi">Syncthing ليس قيد التشغيل لأن اسم شبكة Wi-Fi الحالية ليس في القائمة البيضاء.</string>
-    <string name="file_size_unit_TiB">تيرابايت</string>
-    <string name="transfer_rate_unit_B_s">بايت/الثّانية</string>
-    <string name="transfer_rate_unit_TiB_s">تيرابايت/الثّانية</string>
-    <string name="state_paused">متوقف مؤقتًا</string>
-    <string name="reason_location_unavailable">لقد قمت بتمكين التشغيل على شبكات Wi-Fi محددة في الإعدادات. خدمات الموقع في أندرويد معطلة حاليًا. وفقًا لقيود أندرويد، لا يمكن لـ Syncthing تحديد اسم شبكة Wi-Fi الحالية لتحديد ما إذا كان يجب تشغيله. الحل: قم بتشغيل الموقع، امنح إذن الموقع وأعد توصيل Wi-Fi.</string>
-    <string name="config_read_failed">فشل قراءة التكوين. ضع في اعتبارك نسخ بياناتك احتياطيًا من مجلدات المزامنة الخاصة بك، ثم امسح بيانات هذا التطبيق من إعدادات أندرويد وقم بتشغيله مرة أخرى.</string>
-    <string name="config_file_missing">ملف تكوين أساسي للتشغيل مفقود</string>
-    <string name="webui_tcp_port_unavailable">منفذ TCP لواجهة المستخدم الرسومية \"‏‎%s\" مشغول. هل هناك نسخة ثانية تعمل؟</string>
-    <string name="folder_type_receiveonly_description">تتم مزامنة الملفات من المجموعة، ولكن أي تغييرات يتم إجراؤها محليًا لن يتم إرسالها إلى الأجهزة الأخرى.</string>
-    <string name="folder_type_receive_encrypted_description">يخزن ويزامن البيانات المشفرة فقط. يجب إعداد المجلدات على جميع الأجهزة المتصلة بنفس كلمة المرور أو أن تكون من نوع استقبال مشفر أيضًا.</string>
-    <string name="type_simple">النوع: بسيط</string>
-    <string name="type_trashcan">النوع: سلة مهملات</string>
-    <string name="share_device_id_chooser">مشاركة معرّف الجهاز مع</string>
-    <string name="qs_following_run_conditions">اتّباع شروط التشغيل</string>
-    <string name="qs_schedule_label">تشغيل لمدة 5 دقائق</string>
-    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">تشغيل لمدة ‎%1$d‏ دقائق</string>
-    <string name="folder_rejected">الجهاز \"‏‎%1$s\" يريد مشاركة المجلد \"‎%2$s‏\"</string>
-    <string name="backup_rel_path_to_zip">المسار النسبي لأرشيف التكوين</string>
-    <string name="backup_password_title">كلمة حماية التكوين</string>
-    <string name="backup_password_set">✅ تم تعيين كلمة المرور: ‎%1$s</string>
-    <string name="backup_password_not_set">⚠ لم يتم تعيين كلمة المرور.</string>
-    <string name="preference_category_actions">إجراءات</string>
-    <string name="preference_category_explanation">شرح</string>
-    <string name="preference_category_prepare">تحضير</string>
-    <string name="config_export_successful_no_path">صُدِّرَ التّكوين. يرجى التأكد من تذكر كلمة المرور لاستيراده لاحقاً.</string>
-    <string name="config_import_failed_no_path">فشل استيراد التكوين. انتقل إلى الإعدادات - استكشاف الأخطاء وإصلاحها - افتح السّجل لمعرفة التّفاصيل.</string>
-    <string name="share_log_file_missing">ملف السّجل المختار للمشاركة مفقود.</string>
-    <string name="share_log_file">مشاركة ملف السّجل</string>
-    <string name="backup_password_summary">ℹ️ موصى به:\nأدخل كلمة مرور قوية تُستخدم لتشفير التهيئة أثناء التصدير وفك التشفير عند الاستيراد. احتفظ بكلمة المرور هذه في مكان آمن لعملية الاسترداد. ستحتاج إليها لاستخدام ميزة الاستيراد.\n\n⚠️ غير مستحسن:\nعدم استخدام كلمة مرور، من المحتمل أن تكون التطبيقات الأخرى قادرة على قراءة تكوين Syncthing الخاص بك والتلاعب به. ينطوي تعريض التهيئة على خطر أن يتمكن فاعل سيء من الوصول غير المصرح به إلى ملفاتك باستخدام صادرات التهيئة المسروقة.</string>
+
+    <!-- Content description (alt text) for device ID qr code in show device id dialog -->
     <string name="device_id_qr_code">رمز الاستجابة السريعة (QR Code) لِمُعرّف الجهاز</string>
+
     <string name="close_device_id">إغلاق معرف الجهاز</string>
+
     <string name="copy">نسخ</string>
+
+    <!-- Content description for device ID qr code icon -->
+    <string name="scan_qr_code_description">مسح رمز الاستجابة السريعة (QR)</string>
+
+    <!-- Dialog message if no compatible barcode scanner app is installed -->
+
+    <!-- Shown if no folders are configured -->
+    <string name="folders_list_empty">لا توجد مجلدات مُعَدّة. انقر لإضافة مجلد جديد.</string>
+
+    <!-- RecentChangesActivity -->
+
+    <string name="no_recent_changes">لا توجد تغييرات حديثة.</string>
+    <string name="recent_changes_title">تغييرات حديثة</string>
+    <string name="modified_by_device">الجهاز: ‎%1$s</string>
+    <string name="modification_time">الوقت: ‎%1$s</string>
+    <string name="more_options">المزيد من الخيارات</string>
+    <string name="show_exact_times">إظهار الأوقات الدقيقة</string>
+
+    <string name="this_device">هذا الجهاز</string>
+
+    <!-- WebGuiActivity -->
+
+    <!-- Title of the web gui activity -->
+    <string name="web_gui_title">واجهة المستخدم الرسومية للـ Web</string>
+
+    <!-- Text for WebGuiActivity loading view -->
+    <string name="web_gui_loading">في انتظار واجهة المستخدم الرسومية</string>
+
+    <!-- Shown in WebGuiActivity when the web gui could not be loaded. The technical cause is shown
+         below it and written to the log. -->
+    <string name="web_gui_load_failed">تعذّر تحميل واجهة الويب. يُرجى التقاط سجل والإبلاغ عن هذه المشكلة.</string>
+
+    <!-- WebViewActivity -->
+
+    <!-- Dialog title displayed when an invalid ssl certificate was found -->
+    <string name="security_notice">إشعار أمني</string>
+
+    <!-- Dialog message if an invalid ssl certificate was detected -->
+    <string name="ssl_cert_invalid_text">يبدو أن موقع الـ Web في ‎%1$s‏ يحتوي على شهادة غير صالحة لتشفير SSL. هل تريد المتابعة؟</string>
+
+    <!-- Text for WebViewActivity loading page -->
+    <string name="web_page_loading">تحميل صفحة الـ Web جارٍ: \n%1$s …</string>
+
+    <!-- Text for WebViewActivity openBrowser action button -->
+    <string name="open_in_browser">فتح في المتصفح</string>
+
+    <!-- SettingsFragment -->
+
+    <string name="settings_title">إعدادات</string>
+
     <string name="category_wifi">Wi-Fi</string>
     <string name="category_mobile_data">بيانات الهاتف المحمول</string>
     <string name="category_battery">بطارية</string>
@@ -508,10 +431,618 @@
     <string name="category_general">عام</string>
     <string name="category_connections">اتصالات</string>
     <string name="category_advanced">متقدم</string>
+
+    <string name="category_user_interface">واجهة المستخدم</string>
+
+    <string name="preference_app_theme_title">مظهر</string>
+    <string name="preference_app_theme_follow_system">اتّباع النّظام</string>
+    <string name="preference_app_theme_follow_light">فاتح</string>
+    <string name="preference_app_theme_follow_dark">داكن</string>
+    <string name="preference_app_theme_amoled" translatable="false">AMOLED</string>
+
+    <string name="category_behaviour">سُلوك</string>
+    <string name="category_syncthing_options">خيارات Syncthing</string>
+    <string name="category_syncthing_options_summary">هذه القائمة متاحة فقط عندما يكون Syncthing قيد التشغيل.</string>
+
+    <string name="category_backup">استيراد وتصدير</string>
+    <string name="category_debug">استكشاف الأخطاء وإصلاحها</string>
+    <string name="category_experimental">تجريبي</string>
+
+    <!-- Preference screen - Run conditions -->
+    <string name="run_conditions_title">شروط التشغيل</string>
+    <string name="run_conditions_summary">استخدم الخيارات التالية لتحديد متى سيتم تشغيل Syncthing.</string>
+
+    <string name="run_on_mobile_data_title">تشغيل باستخدام بيانات الجوال</string>
+    <string name="run_on_mobile_data_summary">التشغيل عندما يكون الجهاز متصلاً عبر شبكة بيانات الجوال. تحذير: يمكن أن يستهلك هذا الكثير من البيانات من باقة بيانات مشغل الهاتف المحمول الخاص بك إذا قمت بمزامنة كميات كبيرة من البيانات.</string>
+
+    <string name="run_on_roaming_title">تشغيل أثناء التجوال</string>
+    <string name="run_on_roaming_summary">السماح لـ Syncthing باستخدام بيانات الجوال أثناء التجوال.</string>
+
+    <string name="run_on_wifi_title">تشغيل على Wi-Fi</string>
+    <string name="run_on_wifi_summary">تشغيل عندما يكون الجهاز متصلاً بشبكة Wi-Fi أو Ethernet.</string>
+
+    <string name="run_on_metered_wifi_title">تشغيل باستخدام Wi-Fi محدود السعة</string>
+    <string name="run_on_metered_wifi_summary">التشغيل عندما يكون الجهاز متصلاً بشبكة Wi-Fi محدودة الاستخدام، على سبيل المثال نقطة اتصال أو شبكة مربوطة. انتباه: يمكن أن يستهلك هذا جزءًا كبيرًا من باقة بياناتك إذا قمت بمزامنة الكثير من البيانات.</string>
+
+    <string name="run_on_whitelisted_wifi_title">تشغيل على شبكات Wi-Fi محددة</string>
+    <string name="specify_wifi_ssid_whitelist">اختيار شبكات Wi-Fi</string>
+    <string name="run_on_whitelisted_wifi_networks">شبكات Wi-Fi المختارة: ‎%1$s</string>
+    <string name="wifi_ssid_whitelist_empty">لم يتم تحديد شبكات Wi-Fi. انقر لتحديد الشبكات.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">يرجى تشغيل Wi-Fi لإختيار الشبكات.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_location">يرجى تشغيل الموقع لإختيار الشبكات.</string>
+
+
+    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">بدءًا من أندرويد 8.1، يلزم الوصول إلى الموقع لتتمكن من قراءة اسم شبكة Wi-Fi. يمكنك استخدام هذه الميزة فقط إذا منحت هذا الإذن.</string>
+
+    <string name="power_source_title">تشغيل عندما يُزوَّد الجهاز بالطاقة بواسطة</string>
+
+    <string name="power_source_ac_and_battery_power">طاقة التيار المتردد والبطارية.</string>
+    <string name="power_source_ac_power">مربوط بالشاحن.</string>
+    <string name="power_source_battery_power">على البطارية.</string>
+
+    <string name="respect_battery_saving_title">احترام إعداد توفير البطارية في أندرويد</string>
+    <string name="respect_battery_saving_summary">تعطيل Syncthing إذا كان توفير البطارية نشطًا.</string>
+
+    <string name="respect_master_sync_title">احترام إعداد المزامنة التلقائية للبيانات في أندرويد</string>
+    <string name="respect_master_sync_summary">تعطيل Syncthing عند تعطيل مربع الإعدادات السريعة المسمى \"المزامنة التلقائية للبيانات\".</string>
+
+    <string name="run_in_flight_mode_title">تشغيل دون اتصال بالشبكة</string>
+    <string name="run_in_flight_mode_summary">سيؤدي تمكين هذا الخيار إلى تشغيل Syncthing حتى عندما تكون غير متصل بالإنترنت. قم بتمكينه إذا كان جهازك يواجه مشاكل في اكتشاف اتصالات Wi-Fi اليدوية أثناء وضع الطيران.</string>
+
+    <string name="run_on_time_schedule_title">تشغيل وفقًا لجدول زمني</string>
+    <string name="run_on_time_schedule_summary">سيحاول تمكين هذا الخيار المزامنة لمدة مكوّنة إذا تم استيفاء شروط التشغيل وإذا انقضت فترة فاصلة محددة منذ المزامنة الأخيرة. يمكن أن يوفر هذا الكثير من طاقة البطارية ولكنه يتطلب أن يكون شركاء المزامنة متصلين بالإنترنت. يرجى ملاحظة: قد يترك هذا ملفات مؤقتة غير مكتملة حتى تتم المزامنة المجدولة التالية.</string>
+
+    <string name="sync_duration_minutes_title">مدة دورة المزامنة</string>
+    <string name="sync_duration_minutes_summary">%1$s دقائق</string>
+    <string name="sleep_interval_minutes_title">طول فترة توقف المزامنة</string>
+
+    <!-- Preferences - Behaviour -->
+
+    <string name="behaviour_autostart_title">تشغيل تلقائي</string>
+    <string name="behaviour_autostart_summary">بدء التطبيق تلقائيًا عند انطلاق نظام التشغيل.</string>
+
+
     <string name="allow_overwrite_files_title">السماح باستبدال الملفات الموجودة مُسبقا</string>
     <string name="allow_overwrite_files_summary">عندما يشارك تطبيق آخر ملفاتٍ في أحد مجلداتنا.</string>
+
+    <string name="expert_mode_title">وضع الخبير</string>
+
+    <string name="expert_mode_summary">سيؤدي تمكين هذا الخيار إلى إظهار خيارات التكوين المتقدمة. يجب عليك إلقاء نظرة على وثائق Syncthing أولاً للتأكد من أنك تعرف كيفية استخدامها بشكل صحيح. قد تتسبب الإعدادات غير الصحيحة في استنزاف البطارية أو استنفاد موارد النظام أو المزامنة غير المكتملة.</string>
+
+
+    <string name="start_into_web_gui_title">بدء مباشرة في واجهة المستخدم الرسومية للـ Web</string>
+ 
+    <string name="start_into_web_gui_summary">عند بدء التطبيق، افتح واجهة المستخدم الرسومية للـ Web بدلاً من الشاشة الرئيسة</string>
+
+
+
+
+
+    <string name="device_name">اسم الجهاز</string>
+
+    <string name="listen_address">عناوين الاستماع لنظام المزامنة</string>
+
+    <string name="max_recv_kbps">حد نسق الاستقبال (كيلوبايت/الثانية)</string>
+
+    <string name="max_send_kbps">حد نسق الإرسال (كيلوبايت/الثانية)</string>
+
+    <string name="global_announce_enabled">اكتشاف عالمي</string>
+
+    <string name="local_announce_enabled">اكتشاف مَحلّي</string>
+
+    <string name="enable_nat_traversal">تمكين اجتياز تَرجمة عناوين الشبكة (NAT)</string>
+
+    <string name="global_announce_server">خوادم الاكتشاف العالمية</string>
+
+    <string name="enable_relaying">تفعيل إعادة التّرحيل</string>
+
+    <string name="usage_reporting">إبلاغ مجهول عن الاستخدام</string>
+
+    <string name="crash_reporting">إبلاغ مجهول عن الأعطال</string>
+
+    <string name="webui_tcp_port_title">منفذ TCP لواجهة المستخدم الرسومية للـ Web</string>
+
+    <string name="webui_remote_access_title">وصول عن بُعد لواجهة المستخدم الرسومية للـ Web</string>
+
+    <string name="webui_username_title">اسم مستخدم واجهة المستخدم الرسومية للـ Web</string>
+
+    <string name="webui_password_title">كلمة مرور واجهة المستخدم الرسومية للـ Web</string>
+
+    <string name="webui_remote_access_summary">حدد للسماح بالوصول إلى واجهة المستخدم الرسومية للويب من جهاز آخر. إذا تم تمكينه، يمكنك تسجيل الدخول باستخدام المستخدم syncthing ومفتاح API ككلمة مرور. الافتراضي: معطل (الأكثر أمانًا)</string>
+
+
+
+    <string name="clear_stversions_title">إفراغ جميع مجلدات حفظ الإصدارات</string>
+    <string name="clear_stversions_summary">يتم نقل الملفات إلى دليل .stversions عند استبدالها أو حذفها بواسطة Syncthing. يمكنك على الأرجح العثور على الملفات المحذوفة عن طريق الخطأ واستعادتها هناك، ولكن الإصدارات القديمة من الملفات تشغل مساحة تخزين على جهازك.</string>
+    <string name="clear_stversions_question">سيؤدي هذا إلى حذف جميع الإصدارات السابقة من الملفات التي يتعامل معها Syncthing. هل تريد المتابعة؟</string>
+    <string name="clear_stversions_done">تم إفراغ مجلدات ‎.stversions ‏بنجاح.</string>
+
+    <string name="download_support_bundle_title">تنزيل حُزمة الدعم</string>
+
+    <!-- Summary shown when the user clicked the download support bundle button -->
+    <string name="download_support_bundle_in_progress">تحضير تنزيل حُزمة الدعم…</string>
+
+    <!-- Toast after successful download of the support bundle -->
+    <string name="download_support_bundle_succeeded">نجح تنزيل حُزمة الدعم إلى ‎%s‏.</string>
+
+    <!-- Toast after failed support bundle download -->
+    <string name="download_support_bundle_failed">فَشِلَ تنزيل حُزمة الدّعم. تحقق من السّجلات.</string>
+
+    <!-- Titles for the preference to undo ignored devices and folders -->
+    <string name="undo_ignored_devices_folders_title">تراجع عن تجاهل الأجهزة والمجلدات</string>
+    <string name="undo_ignored_devices_folders_question">سيؤدي هذا إلى التراجع عن القرارات السابقة بتجاهل الأجهزة والمجلدات. هل تريد المتابعة؟</string>
+    <string name="undo_ignored_devices_folders_done">نجح التراجع عن القرارات.</string>
+
+    <string name="backup_rel_path_to_zip">المسار النسبي لأرشيف التكوين</string>
+
+    <string name="backup_password_title">كلمة حماية التكوين</string>
+    <string name="backup_password_summary">ℹ️ موصى به:\nأدخل كلمة مرور قوية تُستخدم لتشفير التهيئة أثناء التصدير وفك التشفير عند الاستيراد. احتفظ بكلمة المرور هذه في مكان آمن لعملية الاسترداد. ستحتاج إليها لاستخدام ميزة الاستيراد.\n\n⚠️ غير مستحسن:\nعدم استخدام كلمة مرور، من المحتمل أن تكون التطبيقات الأخرى قادرة على قراءة تكوين Syncthing الخاص بك والتلاعب به. ينطوي تعريض التهيئة على خطر أن يتمكن فاعل سيء من الوصول غير المصرح به إلى ملفاتك باستخدام صادرات التهيئة المسروقة.</string>
+
+    <string name="backup_password_set">✅ تم تعيين كلمة المرور: ‎%1$s</string>
     <string name="backup_password_set_masked">✅ تم تعيين كلمة المرور - انقر للتغيير</string>
+    <string name="backup_password_not_set">⚠ لم يتم تعيين كلمة المرور.</string>
     <string name="toggle_password_visibility">إظهار أو إخفاء كلمة المرور</string>
+
+    <string name="export_config">تصدير الإعدادات</string>
+
+    <!-- Toast after entering an invalid tcp port -->
+    <string name="invalid_port_number" tools:ignore="PluralsCandidate">رقم المنفذ غير صالح. يرجى إدخال منفذ بين ‎%1$d‏ و ‎%2$d‏.</string>
+
+    <!-- Toast after entering invalid integer value -->
+    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">القيمة المدخلة غير صالحة. يرجى إدخال قيمة بين ‎%1$d‏ و ‎%2$d‏.</string>
+
+    <!-- Experimental options -->
+    <string name="use_proxy">اتصال عبر وكيل</string>
+    <string name="do_not_use_proxy">لم يتم إعداد أي وكيل.</string>
+
+
+    <string name="use_tor_title">استخدم Tor</string>
+    <string name="use_tor_summary">حصر كافة حركة البيانات عبر Tor لزيادة الخصوصية. يتطلب Orbot. يُعطّل خيارات الوكيل.</string>
+
+    <string name="socks_proxy_address_title">وكيل SOCKS5</string>
+    <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>
+
+    <!-- Toast after entering invalid socks proxy address -->
+    <string name="toast_invalid_socks_proxy_address">المعلومة المدخلة تخالف صيغة الوكيل \'socks5://[IP/HOSTNAME]:[PORT]\'</string>
+
+    <string name="http_proxy_address_title">وكيل HTTP(S)</string>
+    <string name="http_proxy_address_example" translatable="false">http://192.168.0.1:8080</string>
+
+    <!-- Toast after entering invalid http proxy address -->
+    <string name="toast_invalid_http_proxy_address">المعلومة المدخلة تخالف صيغة الوكيل \'http://[IP/HOSTNAME]:[PORT]\'</string>
+
+    <string name="broadcast_service_control_title">تحكم في الخدمة عن طريق البث</string>
+    <string name="broadcast_service_control_summary">الافتراضي: معطل. قم بالتمكين للسماح لـ adb أو تطبيقات الطرف الثالث، على سبيل المثال تطبيقات الأتمتة، بتوجيه Syncthing لاتباع شروط التشغيل، أو التشغيل الإجباري، أو الإيقاف الإجباري.</string>
+
+    <!-- Dialog shown before config export -->
+    <string name="dialog_confirm_export">هل تريد حقاً تصدير التكوين الخاص بك؟ سيتم استبدال الأرشيف الموجود.</string>
+
+    <!-- Dialog shown before config import -->
+    <string name="dialog_confirm_import">هل تريد حقاً استيراد التكوين؟ سيتم استبدال الإعدادات الحالية بما في ذلك المجلدات المشتركة وقائمة الأجهزة.</string>
+
+    <!-- PreferenceCategories -->
+    <string name="preference_category_actions">إجراءات</string>
+    <string name="preference_category_explanation">شرح</string>
+    <string name="preference_category_prepare">تحضير</string>
+
+    <!-- Toast shown after config was exported -->
+    <string name="config_export_successful_no_path">صُدِّرَ التّكوين. يرجى التأكد من تذكر كلمة المرور لاستيراده لاحقاً.</string>
+    <string name="config_export_failed">فشل تصدير التكوين. انتقل إلى الإعدادات - استكشاف الأخطاء وإصلاحها - افتح السّجل لمعرفة التّفاصيل.</string>
+
+    <string name="import_config">استيراد الإعدادات</string>
+
+    <!-- Toast shown after config was imported -->
+    <string name="config_imported_successful">تمّ استيراد التكوين</string>
+
+    <string name="config_import_failed_no_path">فشل استيراد التكوين. انتقل إلى الإعدادات - استكشاف الأخطاء وإصلاحها - افتح السّجل لمعرفة التّفاصيل.</string>
+
+    <string name="dialog_settings_restart_app_title">إعادة التشغيل مطلوبة</string>
+    <string name="dialog_settings_restart_app_question">يتطلب تغيير هذا الخيار إعادة تشغيل فورية للتطبيق. سيتم تجاهل جميع التغييرات الأخرى. متابعة؟</string>
+
+    <!-- Title for the preference to set STTRACE parameters -->
+    <string name="sttrace_title">خيارات STTRACE</string>
     <string name="sttrace_none_selected">لا توجد خاصية تصحيح الأخطاء</string>
+
+    <string name="environment_variables">متغيرات البيئة</string>
+
+    <!-- Toast after entering invalid STTRACE params -->
+    <string name="toast_invalid_environment_variables">هذه القيمة ليست صالحة كسلسلة متغيرة بيئيّة</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_database_title">إعادة ضبط قاعدة البيانات</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_database_question">يجب تنفيذ هذا الإجراء فقط بناءً على توصية من فريق الدعم لدينا. \nهل أنت متأكد أنك تريد مسح قاعدة بيانات Syncthing؟</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_database_done">نجحت إعادة ضبط قاعدة بيانات Syncthing</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_deltas_title">إعادة ضبط فهارس الإختلافات</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_question">يجب تنفيذ هذا الإجراء فقط بناءً على توصية من فريق الدعم لدينا. \nهل أنت متأكد أنك تريد مسح فهارس دلتا الخاصة بـ Syncthing؟</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_done">نجحت إعادة ضبط فهارس الإختلافات لـ Syncthing</string>
+
+    <!-- Settings / About -->
+    <string name="category_about">حولَ</string>
+
+    <string name="verbose_log_title">سِجِلّ مُفصّل</string>
+    <string name="verbose_log_summary">سيساعد تمكين هذا الخيار في إنشاء سجلّات تصحيح الأخطاء بمستوى تفصيلي عالٍ.</string>
+
+
+    <!-- Settings item that opens the log activity -->
+    <string name="open_log">فتح السّجل</string>
+
+    <!-- Summary for the log activity -->
+    <string name="open_log_summary">فتح نافذة سجل Syncthing وأندرويد</string>
+
+    <!-- Menu item linking support forum -->
+    <string name="syncthing_forum_title">منتدى Syncthing</string>
+    <string name="syncthing_forum_summary">اذهب إلى منتدى Syncthing واحصل على الدعم</string>
+    <string name="syncthing_forum_url" translatable="false">https://forum.syncthing.net/</string>
+
+    <!-- Menu item for pizza -->
+
+    <!-- Menu item linking privacy policy -->
+    <string name="privacy_title">سياسة الخصوصية</string>
+    <string name="privacy_summary">فتح سياسة خصوصية syncthing-android، التي تغطي استخدام (إن وجد) البيانات الشخصية، على سبيل المثال، الموقع.</string>
+    <string name="privacy_policy_url" translatable="false">https://syncthing.net/android-privacy-policy</string>
+
+    <!-- Settings item that opens issue tracker -->
+    <string name="report_issue_title">إبلاغ عن مشكلة</string>
+
+    <!-- Summary for the issue tracker settings item -->
+    <string name="open_issue_tracker_summary">فتح متتبع مشاكل Syncthing-Fork على ‎%1$s</string>
+
+    <!-- URL of the issue tracker -->
+    <string name="issue_tracker_url" translatable="false">https://github.com/researchxxl/syncthing-android/issues</string>
+
+    <!-- URL of the GitHub wiki -->
+    <string name="wiki_url" translatable="false">https://github.com/researchxxl/syncthing-android/tree/main/wiki</string>
+
+    <!-- URL of the Syncthing project homepage -->
+
+    <!-- Title of the preference showing upstream version name -->
+    <string name="syncthing_version_title">إصدار Syncthing</string>
+
+    <!-- Title of the preference showing this app's version name -->
+    <string name="app_version_title">إصدار Syncthing-Fork Wrapper</string>
+
+    <!-- Title of the preference showing the REST API key -->
+    <string name="syncthing_api_key">مفتاح API الخاص بـ Syncthing (انقر للنسخ)</string>
+
+    <!-- Shown when the API key is copied to the clipboard -->
+    <string name="api_key_copied_to_clipboard">تم نسخ مفتاح API الخاص بـ Syncthing إلى الحافظة</string>
+
+    <!-- Title of the preference showing database size -->
+    <string name="syncthing_database_size">حجم قاعدة بيانات Syncthing</string>
+
+    <!-- Title of the preference showing the OS open file limit -->
+    <string name="os_open_file_limit">حد الملفات المفتوحة في أندرويد</string>
+    
+    <!-- Title of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_title">تراخيص المصادر المفتوحة</string>
+    
+    <!-- Summary of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_summary">عرض تراخيص المصادر المفتوحة المُستخدَمة</string>
+
+    <!-- FolderPickerAcitivity -->
+
+    <!-- Activity title -->
+    <string name="folder_picker_title">منتقي المجلدات</string>
+
+    <!-- Storage path overview -->
+    <string name="advanced_storage_path_overview">نظرة عامة على مسار التخزين المتقدم</string>
+
+    <!-- Current path -->
+    <string name="current_path">المسار الحالي: ‎%1$s</string>
+
+    <!-- ListView empty text -->
+
+    <!-- Menu item to create folder on the file system -->
+
+    <!-- Menu item to select the current folder -->
+
+    <string name="create_folder_failed">فشل إنشاء المجلد</string>
+
+    <!-- Menu item to go up to parent folder -->
+    <string name="folder_go_up">انتقال للأعلى</string>
+
+    <!-- LogActivity -->
+
+    <string name="syncthing_log_title">سِجِل Syncthing</string>
+    <string name="android_log_title">سِجِل أندرويد</string>
+
+    <string name="share_log_file_missing">ملف السّجل المختار للمشاركة مفقود.</string>
+
+    <string name="share_log_file">مشاركة ملف السّجل</string>
+
+    <!-- Title of the "log android" menu button -->
+    <string name="view_android_log">عرض سجل أندرويد</string>
+
+    <!-- Title of the "log Syncthing" menu button -->
+    <string name="view_syncthing_log">عرض سجل Syncthing</string>
+
+    <string name="retrieving_logs">استرداد السّجلات…</string>
+
+    <!-- Title of the "share log" menu button -->
+    <string name="share_title">مشاركة</string>
+
+    <!-- ShareActivity -->
+
+    <!-- Toast if user didn't complete the welcome wizard yet -->
+    <string name="complete_welcome_wizard_first">أولاً، قم بتشغيل التطبيق من درج التطبيقات وأكمل معالج الترحيب قبل مشاركة الملفات.</string>
+
+    <!-- Title of the "share" activity -->
+    <string name="share_activity_title">حفظ في Syncthing</string>
+
+    <!-- Title of the "save" button -->
+    <string name="save_title">حفظ</string>
+
+    <!-- Title of the "cancel" button -->
+    <string name="cancel_title">إلغاء</string>
+
+    <!-- Title of the "save" button -->
+
+    <!-- New file name template -->
+    <string name="file_name_template">ملف جديد ‎%1$s</string>
+
+    <!-- Nothing to share toast -->
+    <string name="nothing_share">لا شيء للمشاركة</string>
+
+    <!-- Copy success toast partially -->
+    <plurals name="copy_success_partially">        <item quantity="zero">تم نسخ %1$d ملف إلى المجلد \"%2$s\"، %3$d موجود بالفعل</item>        <item quantity="one">تم نسخ %1$d ملف إلى المجلد \"%2$s\"، %3$d موجودة بالفعل</item>        <item quantity="two">تم نسخ %1$d ملفين إلى المجلد \"%2$s\"، %3$d موجودة بالفعل</item>        <item quantity="few">تم نسخ %1$d ملفات إلى المجلد \"%2$s\"، %3$d موجودة بالفعل</item>        <item quantity="many">تم نسخ %1$d ملفًا إلى المجلد \"%2$s\"، %3$d موجودة بالفعل</item>        <item quantity="other">تم نسخ %1$d ملف إلى المجلد \"%2$s\"، %3$d موجودة بالفعل</item></plurals>
+
+    <!-- Copy success toast -->
+    <plurals name="copy_success">        <item quantity="zero">لم يُنسَخ أي ملف إلى المجلد \"‎%2$s\"</item>        <item quantity="one">نُسِخَ ‎%1$d‏ ملف إلى المجلد \"‎%2$s\"</item>        <item quantity="two">نُسِخَ ملفان إلى المجلد \"‎%2$s\"</item>        <item quantity="few">نُسِخَت ‎%1$d‏ ملفات إلى المجلد \"‎%2$s\"</item>        <item quantity="many">نُسِخَ ‎%1$d‏ ملفًا إلى المجلد \"‎%2$s\"</item>        <item quantity="other">نُسِخَ ‎%1$d‏ ملفًا إلى المجلد \"‎%2$s\"</item></plurals>
+
+    <!-- Copy exception toast -->
+    <string name="copy_exception">حدث خطأ أثناء المشاركة، تحقق من سجلّات التطبيق</string>
+
+    <!-- Copy progress dialog text -->
+    <string name="copy_progress">مشاركة الملفات…</string>
+
+    <plurals name="file_name_title">        <item quantity="zero">لا ملف</item>        <item quantity="one">اسم الملف</item>        <item quantity="two">اسم الملفين</item>        <item quantity="few">قائمة أسماء الملفات</item>        <item quantity="many">قائمة أسماء الملفات</item>        <item quantity="other">قائمة أسماء الملفات</item></plurals>
+
+    <!-- Sub Folder title -->
+
+    <!-- RunConditionMonitor -->
+
+    <string name="reason_force_start">Syncthing يعمل لأنك أجبرته على الإنطلاق بِغَضِّ النّظر عن شروط التشغيل.</string>
+    <string name="reason_force_stop">Syncthing ليس قيد التشغيل لأنك أجبرته على التوقف بغض النظر عن شروط التشغيل.</string>
+
+    <!-- Explanations why syncthing is running or not running -->
+    <string name="reason_not_within_time_frame_2">لقد قمت بتمكين \"تشغيل وفقًا لجدول زمني\" وكانت المزامنة الأخيرة منذ ‎%s.</string>
+    <string name="reason_not_within_time_frame_0_min">أقل من دقيقة</string>
+    <plurals name="reason_not_within_time_frame_minutes">        <item quantity="zero">أقل من دقيقة</item>        <item quantity="one">دقيقة واحدة</item>        <item quantity="two">دقيقتان</item>        <item quantity="few">%d دقائق</item>        <item quantity="many">%d دقيقة</item>        <item quantity="other">%d دقيقة</item></plurals>
+    <string name="reason_not_charging">لا يتم شحن الهاتف حاليا.</string>
+    <string name="reason_not_on_battery_power">الهاتف لا يعمل الآن على طاقة البطارية.</string>
+    <string name="reason_not_while_power_saving">Syncthing ليس قيد التشغيل لأن الهاتف حاليًا في وضع توفير الطاقة.</string>
+    <string name="reason_not_while_auto_sync_data_disabled">Syncthing ليس قيد التشغيل لأن المزامنة التلقائية للبيانات معطلة حاليًا في Android.</string>
+
+    <!-- … Mobile data -->
+    <string name="reason_mobile_data_disallowed">Syncthing غير مكوّن للتشغيل على اتصال بيانات الجوال.</string>
+    <string name="reason_on_mobile_data">يُسمح لـ Syncthing بالتشغيل على بيانات الجوال.</string>
+    <string name="reason_not_on_mobile_data">يُسمح لـ Syncthing بالعمل على اتصال بيانات الجوال ولكن بيانات الجوال ليست متصلة.</string>
+
+    <!-- … Roaming -->
+    <string name="reason_on_roaming_nonroaming_mobile_data">يُسمح لـ Syncthing بالعمل على اتصالات بيانات الجوال أثناء التجوال وخارجه.</string>
+    <string name="reason_on_nonroaming_mobile_data">يُسمح لـ Syncthing بالتشغيل على اتصالات بيانات الجوال بدون تجوال. الاتصال النشط بدون تجوال.</string>
+    <string name="reason_not_nonroaming_mobile_data">Syncthing ليس قيد التشغيل لأنك لم تسمح له بالتشغيل على اتصالات بيانات الجوال أثناء التجوال.</string>
+
+    <string name="reason_wifi_disallowed">لم يُسمح لـ Syncthing بالعمل على Wi-Fi أو Ethernet.</string>
+    <string name="reason_on_wifi">يُسمح لـ Syncthing بالعمل على Wi-Fi و Wi-Fi متصل حاليًا.</string>
+    <string name="reason_not_on_wifi">يُسمح لـ Syncthing بالتشغيل على Wi-Fi ولكن Wi-Fi ليس متصلاً أو الهاتف في وضع الطيران.</string>
+    <string name="reason_on_metered_nonmetered_wifi">يُسمح لـ Syncthing بالعمل على اتصالات Wi-Fi المحدودة وغير المحدودة الاستخدام.</string>
+    <string name="reason_on_whitelisted_wifi">يُسمح لـ Syncthing بالعمل على شبكة Wi-Fi الحالية.</string>
+    <string name="reason_not_on_whitelisted_wifi">Syncthing ليس قيد التشغيل لأن اسم شبكة Wi-Fi الحالية ليس في القائمة البيضاء.</string>
+    <string name="reason_on_nonmetered_wifi">يُسمح لـ Syncthing بالتشغيل على اتصالات Wi-Fi غير المحدودة الاستخدام. اتصال Wi-Fi النشط غير محدود الاستخدام.</string>
+    <string name="reason_not_nonmetered_wifi">Syncthing ليس قيد التشغيل لأنك لم تسمح له بالعمل على اتصالات Wi-Fi المحدودة الاستخدام.</string>
+    <string name="reason_location_unavailable">لقد قمت بتمكين التشغيل على شبكات Wi-Fi محددة في الإعدادات. خدمات الموقع في أندرويد معطلة حاليًا. وفقًا لقيود أندرويد، لا يمكن لـ Syncthing تحديد اسم شبكة Wi-Fi الحالية لتحديد ما إذا كان يجب تشغيله. الحل: قم بتشغيل الموقع، امنح إذن الموقع وأعد توصيل Wi-Fi.</string>
+    <string name="reason_on_flight_mode">Syncthing قيد التشغيل لأنك سمحت له بالعمل عندما يكون وضع الطيران نشطًا.</string>
+    <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor غير مُهيأ. يرجى إعادة تشغيل التطبيق وتقديم تقرير خطأ إذا لم يختفِ هذا الخطأ بعد إعادة التشغيل.</string>
+
+    <!-- Sync Conditions Dialog -->
+
+    <string name="custom_wifi_ssid_whitelist_empty">لا توجد معرّفات SSID لشبكات Wi-Fi في القائمة البيضاء. يرجى تحديد بعضها في الإعدادات.</string>
+
+    <!-- SyncthingService -->
+
+    <!-- Text for the exit button on the drawer -->
+    <string name="exit">خروج</string>
+
+    <!-- Title of the notification shown while syncthing is running and enabled -->
+    <string name="syncthing_active_details">قيد التشغيل: ‎%1$s</string>
+    <string name="no_remote_devices_connected">لا توجد أجهزة بعيدة متصلة</string>
+
+    <plurals name="device_online_up_to_date">        <item quantity="zero">%1$d جهاز متصل ومحدّث</item>        <item quantity="one">جهاز واحد (%1$d) متصل ومحدّث</item>        <item quantity="two">جهازين متصلين ومحدثين</item>        <item quantity="few">%1$d أجهزة متصلة ومحدّثة</item>        <item quantity="many">%1$d جهازًا متصلًا ومحدثًا</item>        <item quantity="other">%1$d جهاز متصل ومحدث</item></plurals>
+
+    <plurals name="syncthing_active_syncing_device_online">        <item quantity="zero">مزامنة: %%‎%1$d‏ مكتمل، لا أجهزة متصلة بالإنترنت</item>        <item quantity="one">مزامنة: %%‎%1$d‏ مكتمل، جهاز واحد متصل بالإنترنت</item>        <item quantity="two">مزامنة: %%‎%1$d‏ مكتمل، جهازان متصلان بالإنترنت</item>        <item quantity="few">مزامنة: %%‎%1$d‏ مكتمل، ‎%2$d‏ أجهزة متصلة بالإنترنت</item>        <item quantity="many">مزامنة: %%‎%1$d‏ مكتمل، ‎%2$d‏ جهازًا متصلًا بالإنترنت</item>        <item quantity="other">مزامنة: %%‎%1$d‏ مكتمل، ‎%2$d‏ جهاز متصل بالإنترنت</item></plurals>
+
+    <string name="syncthing_disabled">في وضع السكون</string>
+
+    <string name="syncthing_terminated">تم إنهاؤها</string>
+
+    <!-- Toast shown if syncthing failed to create or read the config -->
+    <string name="executable_not_found">الملف التنفيذي الأساسي \"‏‎%s\" مفقود. تحقق من البناء ومخرجات بيانات logcat.</string>
+    <string name="config_create_failed">فَشِلَ إنشاء التّكوين. تحقق من مُخرجات البيانات لـ logcat.</string>
+    <string name="config_read_failed">فشل قراءة التكوين. ضع في اعتبارك نسخ بياناتك احتياطيًا من مجلدات المزامنة الخاصة بك، ثم امسح بيانات هذا التطبيق من إعدادات أندرويد وقم بتشغيله مرة أخرى.</string>
+
+    <!-- Toast shown if a config file crucial to operation is missing -->
+    <string name="config_file_missing">ملف تكوين أساسي للتشغيل مفقود</string>
+
+    <!-- Toast shown if a listening tcp port is unavailable -->
+    <string name="webui_tcp_port_unavailable">منفذ TCP لواجهة المستخدم الرسومية \"‏‎%s\" مشغول. هل هناك نسخة ثانية تعمل؟</string>
+
+    <!-- Label of the default folder created of first start (camera folder). -->
+
+    <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
+
+    <string name="notification_crash_title">تعطل (رمز الخروج ‎‏%1$s)</string>
+    <string name="notification_crash_text">انقر للسّجلات ‎(%1$s)</string>
+
+    <string name="notifications_persistent_channel">Syncthing نشط</string>
+    <string name="notification_persistent_waiting_channel">مراقبة شروط التشغيل</string>
+    <string name="notifications_other_channel">إشعارات أخرى</string>
+
+    <!-- EventProcessor -->
+    <string name="notification_out_of_disk_space">بطاقة SD ممتلئة. الملف ‎%1$s</string>
+
+    <!-- RestApi -->
+
+    <!-- Title of the notification shown when a restart is needed -->
+
+    <!-- Text for positive button in restart dialog -->
+    <!-- Text for the dismiss button of the restart Activity -->
+    <!-- Text of the notification shown when a restart is needed -->
+
+    <!-- Shown when a device ID is copied to the clipboard -->
+    <string name="device_id_copied_to_clipboard">تم نسخ معرّف الجهاز إلى الحافظة</string>
+
+    <!-- Strings representing units for file sizes, from smallest to largest -->
+    <string name="file_size_unit_B">بايت</string>
+    <string name="file_size_unit_KiB">كيلوبايت</string>
+    <string name="file_size_unit_MiB">ميجابايت</string>
+    <string name="file_size_unit_GiB">جيجابايت</string>
+    <string name="file_size_unit_TiB">تيرابايت</string>
+
+    <!-- Strings representing units for transfer rates, from smallest to largest -->
+    <string name="transfer_rate_unit_B_s">بايت/الثّانية</string>
+    <string name="transfer_rate_unit_KiB_s">كيلوبايت/الثّانية</string>
+    <string name="transfer_rate_unit_MiB_s">ميجابايت/الثّانية</string>
+    <string name="transfer_rate_unit_GiB_s">جيجابايت/الثّانية</string>
+    <string name="transfer_rate_unit_TiB_s">تيرابايت/الثّانية</string>
+
+    <!-- Possible folder states -->
+    <string name="state_failed_items">عناصر فاشلة ‎(%1$d)</string>
+    <string name="state_up_to_date">مُحدَّث</string>
+    <string name="state_local_additions">إضافات مَحلية</string>
+    <string name="state_cleaning">تنظيف الإصدارات</string>
+    <string name="state_clean_waiting">في انتظار التنظيف</string>
+    <string name="state_scanning">الفحص جارٍ</string>
+    <string name="state_scan_waiting">في انتظار الفحص</string>
+    <string name="state_sync_waiting">في انتظار المزامنة</string>
+    <string name="state_sync_preparing">تحضير للمزامنة</string>
+    <string name="state_syncing_general">المزامنة جارية</string>
+    <string name="state_syncing">مزامنة جارية ‎(%1$d%%)</string>
+    <string name="state_error">خطأ</string>
+    <string name="state_error_message">خطأ ‎(%1$s)</string>
+    <string name="state_unknown">مجهول</string>
+    <string name="state_paused">متوقف مؤقتًا</string>
+    <string name="status_outofsync">غير مُتزامن</string>
+    <string name="state_unshared">غير مُشتَرَك</string>
+
+    <!-- small inline loading indicator -->
     <string name="state_loading">التحميل جارٍ...</string>
+
+    <!-- small inline saving indicator -->
+
+    <!-- Format string for folder size, eg "500 MiB / 1 GiB" -->
+    <string name="folder_size_format">%1$s / %2$s</string>
+
+    <!-- Titles used in the folder type dialog and folder type button in the folder activity -->
+    <string name="folder_type">نوع المجلد</string>
+
+    <!-- Displays the current folder type in the folder activity -->
+    <string name="folder_type_sendreceive">إرسال واستقبال</string>
+    <string name="folder_type_sendonly">إرسال فقط</string>
+    <string name="folder_type_receiveonly">استقبال فقط</string>
+    <string name="folder_type_receive_encrypted">استقبال مُشفّر</string>
+
+    <!-- Folder type dialog descriptions for folder types -->
+    <string name="folder_type_sendreceive_description">سيقوم المجلد بإرسال التغييرات واستقبالها من الأجهزة البعيدة.</string>
+    <string name="folder_type_sendonly_description">الملفات محمية من التغييرات التي تتم على الأجهزة الأخرى، ولكن التغييرات التي تتم على هذا الجهاز سيتم إرسالها إلى بقية المجموعة.</string>
+    <string name="folder_type_receiveonly_description">تتم مزامنة الملفات من المجموعة، ولكن أي تغييرات يتم إجراؤها محليًا لن يتم إرسالها إلى الأجهزة الأخرى.</string>
+    <string name="folder_type_receive_encrypted_description">يخزن ويزامن البيانات المشفرة فقط. يجب إعداد المجلدات على جميع الأجهزة المتصلة بنفس كلمة المرور أو أن تكون من نوع استقبال مشفر أيضًا.</string>
+
+    <!-- Titles used in the pull order dialog and pull order button in the folder activity -->
+    <string name="pull_order">ترتيب سحب الملفات</string>
+
+    <!-- Displays the current pull order type in the Folder activity -->
+    <string name="pull_order_type_random">عشوائي</string>
+    <string name="pull_order_type_alphabetic">أبجدي</string>
+    <string name="pull_order_type_smallestFirst">الأصغر أوّلاً</string>
+    <string name="pull_order_type_largestFirst">الأكبر أوّلاً</string>
+    <string name="pull_order_type_oldestFirst">الأقدم أوّلاً</string>
+    <string name="pull_order_type_newestFirst">الأحدث أوّلاً</string>
+
+    <!-- Pull order dialog descriptions for pull order types -->
+    <string name="pull_order_type_random_description">سحب الملفات بترتيب عشوائي.</string>
+    <string name="pull_order_type_alphabetic_description">سحب الملفات مرتبة أبجديًا حسب اسم الملف.</string>
+    <string name="pull_order_type_smallestFirst_description">سحب الملفات مرتبة حسب حجم الملف. الأصغر أوّلاً على التوالي.</string>
+    <string name="pull_order_type_largestFirst_description">سحب الملفات مرتبة حسب حجم الملف. الأكبر أوّلاً على التوالي.</string>
+    <string name="pull_order_type_oldestFirst_description">سحب الملفات مرتبة حسب وقت التعديل. الأقدم أوّّلاً على التوالي.</string>
+    <string name="pull_order_type_newestFirst_description">سحب الملفات مرتبة حسب وقت التعديل. الأحدث أوّلاً على التوالي.</string>
+
+    <!-- Titles used in the file versioning dialog and file versioning button in the folder activity -->
+    <string name="maximum_age">العمر الأقصى</string>
+    <string name="clean_out_after">تنظيف بعد</string>
+    <string name="file_versioning">إدارة إصدارات الملفات</string>
+    <string name="none">لا شيء</string>
+    <string name="versions_path">مسار الإصدارات</string>
+    <string name="command">أمر</string>
+
+    <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
+
+    <!-- Displays the current file versioning type in the Folder activity -->
+    <string name="type_simple">النوع: بسيط</string>
+    <string name="type_trashcan">النوع: سلة مهملات</string>
+    <string name="type_staggered">النوع: متدرج</string>
+    <string name="type_external">النوع: خارجي</string>
+
+    <!-- Information displayed about the current file versioning configuration in the folder activity -->
+    <string name="trashcan_versioning_info">تنظيف بعد: ‎%1$s</string>
+    <string name="staggered_versioning_info">العمر الأقصى: ‎%1$d \nمسار الإصدارات: ‎%2$s</string>
+    <string name="external_versioning_info">الأمر: ‎%1$s</string>
+    <string name="simple_versioning_info">احتفاظ بالإصدارات: ‎%1$s</string>
+    <string name="show_device_id">عرض معرّف الجهاز</string>
+
+    <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
+    <string name="could_not_access_deviceid">تعذر الوصول إلى معرّف الجهاز.</string>
+    <string name="share_device_id_chooser">مشاركة معرّف الجهاز مع</string>
+    <string name="run_on_whitelisted_wifi_summary">شغّل القائمة البيضاء لتقييد المزامنة لتحدُث فقط على شبكات Wi-Fi محددة.</string>
+    <string name="custom_sync_conditions_title">شروط مزامنة مخصصة</string>
+    <string name="custom_sync_conditions_description">يَسمح لك بتحديد استثناءات لشروط التشغيل العامة.</string>
+    <string name="custom_sync_conditions_dialog">تحديد شروط المزامنة</string>
+
+    <!-- Quick Setting icon names and labels -->
+    <string name="qs_force_label">تشغيل إجباري</string>
+    <string name="qs_forced_to_run">تم الإجبار على التشغيل</string>
+    <string name="qs_forced_to_stop">تم الإجبار على الإيقاف</string>
+    <string name="qs_following_run_conditions">اتّباع شروط التشغيل</string>
+    <string name="qs_schedule_label">تشغيل لمدة 5 دقائق</string>
+    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">تشغيل لمدة ‎%1$d‏ دقائق</string>
+    <string name="qs_schedule_disabled">الجدول الزمني مُعطَّل</string>
+    <string name="no_app_to_open_link">لا يوجد تطبيق متاح لفتح هذا الرابط.</string>
+
+    <!-- Custom HTTPS certificate -->
+    <string name="webui_custom_cert_title">شهادة HTTPS مخصصة</string>
+    <string name="webui_custom_cert_summary">استخدام شهادة خاصة بك لواجهة الويب المحلية</string>
+    <string name="custom_cert_explanation">استبدل شهادة Syncthing المدمجة الموقّعة ذاتيًا بشهادتك الخاصة. اختر الشهادة (PEM، بما يشمل السلسلة الكاملة) ومفتاحها الخاص، وتحقق من نتائج التحقق، ثم طبّق. ستتم إعادة تشغيل Syncthing لتحميل الشهادة الجديدة؛ وإذا فشل في العودة إلى الإنترنت، فستتم استعادة الشهادة السابقة تلقائيًا.\n\nإذا كانت الشهادة موقّعة من مرجع تصديق (CA) خاص بك، فثبّت الشهادة الجذرية لذلك المرجع على هذا الجهاز أولاً (الإعدادات ← الأمان ← تثبيت شهادة مرجع تصديق).</string>
+    <string name="custom_cert_current_title">الشهادة الحالية</string>
+    <string name="custom_cert_current_none">لم يتم العثور على شهادة.</string>
+    <string name="custom_cert_subject">الموضوع: %1$s</string>
+    <string name="custom_cert_issuer">المُصدِر: %1$s</string>
+    <string name="custom_cert_expires">تنتهي صلاحيتها: %1$s</string>
+    <string name="custom_cert_self_signed">موقّعة ذاتيًا (افتراضي)</string>
+    <string name="custom_cert_ca_signed">موقّعة من مرجع تصديق</string>
+    <string name="custom_cert_select_cert">تحديد الشهادة (.pem)</string>
+    <string name="custom_cert_select_key">تحديد المفتاح الخاص (.pem)</string>
+    <string name="custom_cert_not_selected">غير محدد</string>
+    <string name="custom_cert_apply">تطبيق الشهادة</string>
+    <string name="custom_cert_reset_title">إعادة التعيين إلى شهادة مولّدة تلقائيًا</string>
+    <string name="custom_cert_reset_summary">حذف الشهادة المخصصة والسماح لـ Syncthing بإنشاء شهادة جديدة موقّعة ذاتيًا</string>
+    <string name="custom_cert_reset_question">استبدال الشهادة الحالية بشهادة جديدة موقّعة ذاتيًا؟</string>
+    <string name="custom_cert_applying">جارٍ التطبيق — إعادة تشغيل Syncthing…</string>
+    <string name="custom_cert_applied">تم تطبيق الشهادة.</string>
+    <string name="custom_cert_applied_pending">تم الحفظ. سيسري هذا عند تشغيل Syncthing في المرة القادمة.</string>
+    <string name="custom_cert_failed">تعذّر تطبيق الشهادة: %1$s</string>
+    <string name="custom_cert_reset_done">تمت إعادة التعيين إلى شهادة جديدة موقّعة ذاتيًا.</string>
+    <string name="custom_cert_file_too_large">هذا الملف أكبر من أن يكون شهادة أو مفتاحًا.</string>
+    <string name="custom_cert_read_failed">تعذّرت قراءة الملف المحدد.</string>
+    <string name="cert_check_chain">سلسلة الشهادات</string>
+    <string name="cert_check_trust">موثوق به على هذا الجهاز</string>
+    <string name="cert_check_validity">فترة الصلاحية</string>
+    <string name="cert_check_key">المفتاح الخاص</string>
 </resources>

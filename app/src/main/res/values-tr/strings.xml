@@ -1,556 +1,1048 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <string name="app_name">Syncthing-Fork</string>
+
     <string name="app_description">Açık, güvenilir ve merkezi olmayan bir dosya eşitleme uygulaması.</string>
+
     <!-- FirstStartActivity -->
+
     <!-- Title for dialog displayed on first start -->
     <string name="welcome_title">Android için Syncthing\'e Hoş Geldiniz</string>
+
+    <!-- Welcome wizard -->
+    <!-- Slide "Introduction" -->
+    <string name="welcome_text">Syncthing bir açık kaynaklı dosya eşitleme uygulamasıdır. Diğer cihazlarla veri paylaşmak için onların benzersiz cihaz kimliklerini cihaz listesine eklemeniz gerekir. Daha sonra hangi klasörlerin hangi cihazlarla paylaşılacağını seçebilirsiniz. \n \nLütfen karşılaştığınız herhangi bir sorunu GitHub aracılığıyla bildirin.</string>
+
+    <!-- Slide "Storage Permission" -->
+    <string name="storage_permission_title">Depolama İzni</string>
+    <string name="storage_permission_desc">Dosya eşitlemesi yapmak için Syncthing\'in depolama alanınıza erişmesi gerekiyor.</string>
+    <string name="dialog_all_files_access_not_supported">Cihazınız tüm dosyalara erişimi desteklemiyor</string>
+
     <!-- Slide "Ignore battery optimizations" -->
     <string name="ignore_doze_permission_title">Pil İyileştirme</string>
+    <string name="ignore_doze_permission_os_notice">Android TV\'lerin, arka planda çalışırken uygulamayı ara sıra sonlandırdığı bilinmektedir. \'%1$s/%2$s\' adresindeki vikide bir çözüm mevcuttur.</string>
+    <string name="ignore_doze_permission_desc">Android bir süre sonra eşitlemeyi durdurabilir. Bunu önlemek için pil iyileştirmeyi kapatın. Bazı cihazlarda önceden yüklenmiş ek görev sonlandırma uygulamaları bulunur. Syncthing\'i de beyaz listeye eklemelisiniz.</string>
+    <string name="dialog_disable_battery_optimizations_not_supported">Cihazınız pil iyileştirmelerini etkisizleştirmeyi desteklemiyor</string>
+    <string name="dialog_confirm_skip_ignore_doze_permission">Dikkat Edin: Eğer SyncthingNative kesintiye uğrarsa ve tuhaf bir şey yaparsa suçlu siz olursunuz. Yalnızca cihazınızın izin verilmesini desteklememesi durumunda atlayın. Gerçekten atlansın mı?</string>
+
+    <!-- Slide "Location Permission" -->
+    <string name="location_permission_title">Konum İzni</string>
+    <string name="location_permission_desc">Syncthing, seçilen kablosuz (Wi-Fi) ağlarda çalışacak şekilde yapılandırılabilir. Android, uygulamanın etkin kablosuz (Wi-Fi) ağ adını okuyabilmesi için konum iznine sahip olmasını gerektirir. Eğer bu özelliği kullanmak istiyorsanız, yukarıdaki düğmeye basın. Bu adımı atlayabilirsiniz. Daha fazla ayrıntı için gizlilik ilkemize bakın.</string>
+    <string name="location_permission_desc_api_29">Android 10+ için ipucu: \"Her zaman izin ver\"</string>
+
+    <!-- Slide "Notification Permission" -->
+    <string name="notification_permission_title">Bildirim İzni</string>
+    <string name="notification_permission_desc">Yeni cihaz bağlantıları, klasör paylaşım istekleri ile ilgili bildirimleri göstermek ve hizmeti canlı ve bağlı tutmak için gereklidir.</string>
+
+    <!-- Slide "Key Generation" -->
+    <string name="key_generation_title">Anahtar Üretme</string>
+    <string name="key_generation_success">Özel veri alışverişi için güvenli anahtarlar başarılı olarak üretildi.</string>
+
+    <!-- Generic texts used everywhere -->
+    <string name="back">Geri</string>
     <string name="cont">Devam</string>
+    <string name="finish">Bitti</string>
+    <string name="generic_example">Örnek</string>
+    <string name="grant_permission">İzin ver</string>
+    <string name="permission_granted">İzin verildi</string>
+    <string name="reason">Sebep:</string>
+
+    <string name="accept">Kabul Et</string>
+
+    <string name="ignore">Yoksay</string>
+
+
+    <string name="main_menu">Ana Menü</string>
+
+    <string name="refresh">Yenile</string>
+
+    <!-- PhotoShootActivity -->
+
+    <string name="photo_shoot_launcher_title">Sync. Kamera</string>
+    <string name="photo_shoot_activity_title">Syncthing-Fork Kamera</string>
+    <string name="photo_shoot_intro_welcome_title">Syncthing Kamera\'ya Hoş Geldiniz</string>
+    <string name="photo_shoot_intro_no_camera">Üzgünüz, bu cihazın kamerası yok.</string>
+    <string name="photo_shoot_intro_missing_permissions">Devam etmek için depolama ve kamera iznine ihtiyacımız var.</string>
+    <string name="grant_storage_permission">Depolama izni ver</string>
+    <string name="grant_camera_permission">Kamera izni ver</string>
+    <string name="photo_shoot_intro_permission_desc">Syncthing Camera, resim çekmek ve bunları cihazınızda saklamak için onayınızı gerektirir. Bu özellik isteğe bağlıdır. Kullanmak için izinleri verin ve \"Devam\"a dokunun. Daha sonra diğer Syncthing cihazlarıyla paylaşabileceğiniz bir Syncthing Camera klasörü oluşturacağız.</string>
+    <string name="photo_shoot_take_picture_success">Resim başarılı olarak Syncthing Camera klasörüne kaydedildi.</string>
+    <string name="photo_shoot_take_picture_failure">Resim çekme başarısız oldu veya iptal ettiniz.</string>
+
+    <!-- Label of the folder created by the Syncthing Camera feature. -->
+    <string name="default_syncthing_camera_folder_label">Syncthing Kamera</string>
+
+    <!-- MainActivity -->
+
+    <!-- Main bottom navigation view -->
+    <string name="activity_main_bottom_navigation_rescan_all">Tümünü Yeniden Tara</string>
+
+    <!-- Main menu button -->
+
+    <!-- Exception dialog message -->
+
+    <!-- Title of the exit app when running as a service confirmation dialog -->
+    <string name="dialog_exit_while_running_as_service_title">Uygulamadan çıkmayı onaylayın</string>
+    <string name="dialog_exit_while_running_as_service_message">Değerlendirmeniz için: Uygulamayı açılışta otomatik olarak başlayacak şekilde yapılandırdınız. Bu nedenle, çalıştırma koşullarını izler ve koşullar eşleştiğinde arka planda herhangi bir zamanda eşitlenir. Yalnızca ciddi sorunlarla karşılaşırsanız el ile çıkmalısınız. Aksi takdirde, ayarlarda \'Açılışta otomatik başlat\' seçeneğini etkisizleştirin. Cihaz yeniden başlatılıncaya kadar şimdi çıkmak ister misiniz?</string>
+
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">Klasör Ekle</string>
+
     <!-- Title of the "share device id" menu action -->
+
     <!-- Shown in the chooser dialog when sharing a Device ID -->
+
     <string name="usage_reporting_dialog_title">İsimsiz Kullanım Bildirmeye İzin Verilsin Mi?</string>
+
     <string name="yes">Evet</string>
+
     <string name="no">Hayır</string>
+
+
+    <!-- URL to open when user chose to open website in usage reporting dialog -->
+
     <string name="toast_write_storage_permission_required">Bu uygulama için depolama yazma izni gerekir</string>
+
+    <string name="device_rejected">\"%1$s\" cihazı bağlanmak istiyor</string>
+
+    <string name="folder_rejected">\"%1$s\" cihazı \"%2$s\" klasörünü paylaşmak istiyor</string>
+
     <!-- StateDialogActivity -->
+
     <!-- Text for FoldersFragment and DevicesFragment loading view -->
     <!-- Shown instead of web_gui_loading if the key does not exist and has to be created -->
     <string name="web_gui_creating_key">Güvenli anahtarlar üretiliyor. Bu birkaç dakika alabilir.…</string>
+
     <!-- FolderListFragment -->
+
     <string name="folders_fragment_title">Klasörler</string>
+
     <!-- Shown if no folders exist -->
     <string name="folder_list_empty">Bulunan klasörler yok</string>
+
+    <!-- Format string for folder file count -->
+    <plurals name="files">        <item quantity="one">%1$d / %2$d Dosya</item>        <item quantity="other">%1$d / %2$d Dosya</item></plurals>
+
+    <!-- Format string for conflict file count -->
+    <plurals name="conflicts">        <item quantity="one">%1$d çakışma</item>        <item quantity="other">%1$d çakışma</item></plurals>
+
+    <string name="override_changes">Değişiklikleri geçersiz kıl</string>
+
+    <!-- Override Changes Confirmation Dialog -->
+    <string name="override_changes_question">Bu işlem, bu klasörü paylaşan diğer cihazlarda yapılan tüm değişiklikleri geri alacak. İlerlensin mi?</string>
+
+    <string name="revert_local_changes">Yerel değişiklikleri geri al</string>
+
+    <string name="delete_unexpected_items">Beklenmeyen öğeleri sil</string>
+
+    <!-- Revert Local Changes Confirmation Dialog -->
+    <string name="revert_local_changes_question">Bu işlem, bu cihazdaki klasörle yapılan tüm değişiklikleri geri alacak. İlerlensin mi?</string>
+
+    <string name="open_file_manager">Dosya yöneticisini aç</string>
+    <string name="open_file_with">Dosyayı birlikte aç</string>
+    <string name="open_file_no_compatible_app">Dosyayı açmak için bulunan uygulama yok.</string>
+
+    <!-- Suggest File Manager App Dialog -->
+    <string name="suggest_file_manager_app_dialog_title">Bulunan uyumlu dosya yöneticisi uygulaması yok</string>
+    <string name="suggest_file_manager_app_dialog_text">Açık kaynaklı dosya yöneticisi uygulaması \'Material Files\'ı yüklemenizi öneririz. Uygulama mağazası sayfasını açmak ister misiniz?</string>
+
     <!-- DeviceListFragment -->
+
     <!-- Devices tab title -->
     <string name="devices_fragment_title">Cihazlar</string>
+
+    <!-- Shown if no devices are configured in add folder dialog -->
+    <string name="devices_list_empty">Yapılandırılmış cihazlar yok. Yeni bir cihaz eklemek için dokunun.</string>
+
+    <!-- Shown in ListView if no devices are configured -->
+    <string name="no_devices_configured">Yapılandırılmış cihazlar yok. \nŞimdi bir cihaz ekleyerek başlayın.</string>
+
+    <string name="deviceEncryptionPasswordHint">Eğer güvenilmezse, şifreleme parolasını girin</string>
+
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">Güncel</string>
+
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
+    <string name="device_syncing_percent_bytes">Eşitleniyor (%%%1$d, %2$s)</string>
+
     <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">Bağlantı kesildi</string>
+    <string name="device_disconnected_not_synced">Bağlantı kesildi (%1$s beklemede)</string>
+
+    <!-- Indicates that the device is paused and does not sync -->
+    <string name="device_paused">Duraklatıldı</string>
+
+    <!-- Indicates that devices does not share any folders -->
+    <string name="device_state_unused">Kullanılmayan</string>
+
     <!-- Indicates that the device connection is unknown -->
+
+    <!-- Last seen title -->
+    <string name="device_last_seen">Son görülme: %1$s</string>
+    <string name="device_last_seen_never">Yok</string>
+
+    <!-- Title for the listing of shared folders with a colon and space appended -->
+    <string name="shared_folders_title_colon">"Klasörler: "</string>
+
+    <!-- Expand the collapsed shared folders list on a device card; parameter is the hidden folder count -->
+    <string name="device_folders_show_more">+%1$d</string>
+
+    <!-- Collapse an expanded shared folders list on a device card -->
+    <string name="device_folders_show_less">Daha az göster</string>
+
+    <!-- Title of the dialog listing the conflict files of a folder -->
+    <string name="conflict_files_title">Çakışan dosyalar</string>
+
+    <!-- Header of the grouped status card showing transfer and resource stats -->
+    <string name="status_transfer_resources">İletim &amp; kaynaklar</string>
+
     <!-- Title for current download rate -->
     <string name="download_title">İndirme</string>
+
     <!-- Title for current upload rate -->
     <string name="upload_title">Gönderme</string>
+
+    <!-- StatusFragment -->
+
+    <string name="status_fragment_title">Durum</string>
+
+    <string name="button_follow_run_conditions">ÇALIŞTIRMA KOŞULLARINI TAKİP ET</string>
+    <string name="button_force_start">BAŞLATMAYA ZORLA \nÇALIŞTIRMA KOŞULLARINI YOKSAY</string>
+    <string name="button_force_stop">DURDURMAYA ZORLA \nÇALIŞTIRMA KOŞULLARINI YOKSAY</string>
+
+    <string name="syncthing_starting">Syncthing başlıyor.</string>
+    <string name="syncthing_running">Syncthing çalışıyor.</string>
+    <string name="syncthing_not_running">Syncthing çalışmıyor.</string>
+    <string name="syncthing_has_crashed">Syncthing çöktü.</string>
+
     <!-- DrawerFragment -->
+
     <!-- Same as download_title with a colon and space appended -->
     <!-- Same as upload_title with a colon and space appended -->
     <!-- Title for current RAM usage -->
     <string name="ram_usage">Bellek Kullanımı</string>
     <!-- Title for announce server status -->
     <string name="announce_server">Yapılandırılmış Duyuru Sunucusu</string>
+    <!-- Title for uptime status -->
+    <string name="uptime">Çalışma Süresi</string>
     <string name="restart">Yeniden başlat</string>
+
     <string name="dialog_confirm_restart">Syncthing\'i yeniden başlatmak istiyor musunuz?</string>
+
     <!-- FolderActivity -->
+
     <!-- Setting title -->
     <string name="folder_id">Klasör Kimliği</string>
+
     <!-- Setting title -->
     <string name="folder_label">Klasör Etiketi</string>
+
     <!-- Setting title -->
     <string name="directory">Dizin</string>
+    <string name="advanced_directory_selection">Gelişmiş Dizin Seçimi</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_fileWatcher">Değişiklikleri izle</string>
+    <string name="folder_fileWatcherDescription">İşletim sisteminden dosyalardaki değişiklikler hakkında bildirimde bulunmasını ister. Eğer etkisizleştirilirse, düzenli saatlik taramalara geri döner.</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_ignore_delete_caption">Silmeyi Yoksay</string>
+    <string name="folder_ignore_delete_description">Gelen indeks güncellemelerinin işlenmesini etkileyen uzman seçeneği. Ayarlandığında, silme işareti ayarlıyken gelen güncellemeler yoksayılır. Bkz. https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_run_script_caption">Komut Kodu Çalıştır</string>
+    <string name="folder_run_script_description">Bir klasör eşitleme durumunu değiştirdikten sonra komut kodlarını çalıştırmak için uzman seçeneği. \'.stfolder/*.sh\' konumunda olan komut kodları çalıştırılacaktır, güvenlik hususları için diğer yerler desteklenmez.\nÖrnek komut kodu çağrısı: \'.stfolder/rename-files.sh sync_complete\'</string>
+
+    <!-- Setting title -->
+    <string name="folder_pause">Klasörü Duraklat</string>
+
     <!-- Setting title -->
     <string name="devices">Cihazlar</string>
+
     <!-- Setting title -->
     <string name="keep_versions">Sürümleri Tut</string>
+
     <!-- Setting title -->
     <string name="delete_folder">Klasörü Sil</string>
+
     <!-- Title for FolderSettingsFragment in create mode -->
     <string name="create_folder">Klasör Oluştur</string>
+
     <!-- Title for FolderSettingsFragment in edit mode -->
     <string name="edit_folder">Klasörü Düzenle</string>
+
     <!-- Menu item to confirm folder creation -->
     <string name="create">Oluştur</string>
+
     <!-- Dialog shown when attempting to remove a folder -->
     <string name="remove_folder_confirm">Bu klasörü Syncthing\'den gerçekten silmek istiyor musunuz?</string>
+
     <!-- Toast shown when trying to create a folder with an empty ID -->
     <string name="folder_id_required">Klasör kimliği boş olmamak zorundadır</string>
+
+    <!-- Toast shown when trying to create a folder with an empty label -->
+    <string name="folder_label_required">Klasör etiketi boş olmamak zorundadır</string>
+
     <!-- Toast shown when trying to create a folder with an empty path -->
     <string name="folder_path_required">Klasör yolu boş olmamak zorundadır</string>
+
     <string name="dialog_discard_changes">Değişiklikleriniz yoksayılsın mı?</string>
+
+    <!-- Summary shown if we only have readonly access to the folder path -->
+    <string name="folder_path_readonly">Android sürümünüz, Syncthing\'e seçilen klasöre yalnızca salt okunur erişimi verir.</string>
+
+    <!-- Summary shown if we only have readwrite access to the folder path -->
+    <string name="folder_path_readwrite">Android sürümünüz, Syncthing\'e seçilen klasöre okuma ve yazma erişimi verir.</string>
+
+    <!-- Toast shown if the user selected an invalid location for a new syncthing folder -->
+    <string name="toast_invalid_folder_selected">Üzgünüz. Seçilen klasör kullanılamaz. Lütfen dahili veya harici depolamada bulunan bir klasör seçin.</string>
+
+    <string name="folder_type_switch_to_receive_encrypted_not_allowed">Varolan klasörlerin \'Şifrelenmiş Al\' olarak değiştirilmesi desteklenmiyor.</string>
+
+    <string name="ignore_patterns">Yoksayma Şekilleri</string>
+
     <!-- DeviceActivity -->
+
     <!-- Setting title -->
     <string name="device_id">Cihaz kimliği</string>
+
+    <!-- Status title -->
+    <string name="discovered_devices_title">Keşfedilen cihazlar - Seçmek için dokunun</string>
+
+    <!-- Status text -->
+
+    <!-- Status text -->
+    <string name="local_discovery_disabled">\'Ayarlar\' &gt; \'Syncthing Seçenekleri\' &gt; \'Yerel Keşif\' bölümünde yerel keşfi etkisizleştirdiniz. Yerel ağdaki cihazları aramak için etkinleştirin.</string>
+
     <!-- Setting title -->
+
+    <!-- Setting title -->
+    <string name="folders">Klasörler</string>
+
     <!-- Setting title -->
     <string name="addresses">Adresler</string>
+
     <!-- Setting title -->
+
     <!-- Setting title -->
     <string name="compression">Sıkıştırma</string>
+
     <!-- Strings representing compression options -->
     <string name="compress_never">Asla</string>
     <string name="compress_metadata">Üstveri</string>
     <string name="compress_always">Her zaman</string>
     <!-- Setting title -->
     <string name="introducer">Tanıtıcı</string>
+
+    <!-- Setting title -->
+    <string name="autoAcceptFolders">Otomatik Kabul Et</string>
+
+    <!-- Setting title -->
+    <string name="pause_device">Cihazı Duraklat</string>
+
+    <!-- Setting title -->
+    <string name="untrusted_device">Güvenilmeyen Cihaz</string>
+
     <!-- ActionBar item -->
     <string name="delete_device">Cihazı Sil</string>
+
     <string name="add_device">Cihaz Ekle</string>
+
     <!-- Menu item to confirm adding a device -->
+
     <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">Cihazı Düzenle</string>
+
     <!-- Dialog shown when attempting to remove a device -->
     <string name="remove_device_confirm">Bu cihazı gerçekten silmek istiyor musunuz?</string>
+
     <!-- Toast shown when trying to create a device with an empty ID -->
     <string name="device_id_required">Cihaz kimliği boş olmamak zorundadır</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
+    <string name="device_id_invalid">Cihaz kimliği doğru olarak biçimlendirilmemiş. Lütfen tekrar deneyin ve doğru kimliği girin.</string>
+
+    <!-- Toast shown when trying to create a device with an empty name -->
+
+    <!-- Toast shown when trying to create a device with invalid addresses -->
+    <string name="device_addresses_invalid">Cihaz adresleri doğru olarak biçimlendirilmemiş. Lütfen tekrar deneyin. Daha fazla bilgi için Syncthing belgelerine bakın.</string>
+
+    <!-- Content description (alt text) for device ID qr code in show device id dialog -->
+    <string name="device_id_qr_code">Cihaz Kimliği QR Kodu</string>
+
+    <string name="close_device_id">Cihaz kimliğini kapat</string>
+
+    <string name="copy">Kopyala</string>
+
     <!-- Content description for device ID qr code icon -->
     <string name="scan_qr_code_description">QR Kodu Tara</string>
+
+    <!-- Dialog message if no compatible barcode scanner app is installed -->
+
+    <!-- Shown if no folders are configured -->
+    <string name="folders_list_empty">Yapılandırılmış klasörler yok. Yeni bir klasör eklemek için dokunun.</string>
+
+    <!-- RecentChangesActivity -->
+
+    <string name="no_recent_changes">Son değişiklikler yok.</string>
+    <string name="recent_changes_title">Son değişiklikler</string>
+    <string name="modified_by_device">Cihaz: %1$s</string>
+    <string name="modification_time">Zaman: %1$s</string>
+    <string name="more_options">Diğer seçenekler</string>
+    <string name="show_exact_times">Tam zamanları göster</string>
+
+    <string name="this_device">Bu cihaz</string>
+
     <!-- WebGuiActivity -->
+
     <!-- Title of the web gui activity -->
     <string name="web_gui_title">Web GKA</string>
+
     <!-- Text for WebGuiActivity loading view -->
     <string name="web_gui_loading">GKA için bekleniyor</string>
+
+    <!-- Shown in WebGuiActivity when the web gui could not be loaded. The technical cause is shown
+         below it and written to the log. -->
+    <string name="web_gui_load_failed">Web GKA yüklenemedi. Lütfen bir günlük kaydedin ve bunu bildirin.</string>
+
+    <!-- WebViewActivity -->
+
+    <!-- Dialog title displayed when an invalid ssl certificate was found -->
+    <string name="security_notice">Güvenlik Bildirimi</string>
+
+    <!-- Dialog message if an invalid ssl certificate was detected -->
+    <string name="ssl_cert_invalid_text">%1$s adresindeki web sitesinin SSL şifrelemesi için geçersiz bir sertifikası var gibi görünüyor. İlerlensin mi?</string>
+
+    <!-- Text for WebViewActivity loading page -->
+    <string name="web_page_loading">Web sayfası yükleniyor: \n%1$s …</string>
+
+    <!-- Text for WebViewActivity openBrowser action button -->
+    <string name="open_in_browser">Tarayıcıda aç</string>
+
     <!-- SettingsFragment -->
+
     <string name="settings_title">Ayarlar</string>
+
+    <string name="category_wifi">Wi-Fi</string>
+    <string name="category_mobile_data">Mobil Veri</string>
+    <string name="category_battery">Pil</string>
+    <string name="category_schedule">Zamanlama</string>
+    <string name="category_general">Genel</string>
+    <string name="category_connections">Bağlantılar</string>
+    <string name="category_advanced">Gelişmiş</string>
+
+    <string name="category_user_interface">Kullanıcı Arayüzü</string>
+
+    <string name="preference_app_theme_title">Tema</string>
+    <string name="preference_app_theme_follow_system">Sistemi takip et</string>
+    <string name="preference_app_theme_follow_light">Açık</string>
+    <string name="preference_app_theme_follow_dark">Koyu</string>
+    <string name="preference_app_theme_amoled" translatable="false">AMOLED</string>
+
     <string name="category_behaviour">Davranış</string>
     <string name="category_syncthing_options">Syncthing Seçenekleri</string>
+    <string name="category_syncthing_options_summary">Bu menü yalnızca Syncthing çalışıyorsa kullanılabilir.</string>
+
+    <string name="category_backup">İçe ve Dışa aktar</string>
+    <string name="category_debug">Sorun Giderme</string>
     <string name="category_experimental">Deneysel</string>
+
     <!-- Preference screen - Run conditions -->
     <string name="run_conditions_title">Çalıştırma Koşulları</string>
+    <string name="run_conditions_summary">Syncthing\'in ne zaman çalışacağına karar vermek için aşağıdaki seçenekleri kullanın.</string>
+
+    <string name="run_on_mobile_data_title">Mobil veride çalıştır</string>
+    <string name="run_on_mobile_data_summary">Cihaz mobil veri ağı üzerinden bağlandığında çalıştır. Uyarı: Büyük miktarda veriyi eşitlerseniz bu, mobil operatör veri planınızdan çok fazla veri tüketebilir.</string>
+
+    <string name="run_on_roaming_title">Dolaşımdayken çalıştır</string>
+    <string name="run_on_roaming_summary">Syncthing\'in dolaşım sırasında mobil verileri kullanmasına izin verin.</string>
+
+    <string name="run_on_wifi_title">Kablosuzda (Wi-Fi) çalıştır</string>
+    <string name="run_on_wifi_summary">Cihaz bir kablosuz (Wi-Fi) veya kablolu (ethernet) ağa bağlandığında çalıştır.</string>
+
+    <string name="run_on_metered_wifi_title">Tarifeli kablosuzda (Wi-Fi) çalıştır</string>
+    <string name="run_on_metered_wifi_summary">Cihaz tarifeli bir kablosuz (Wi-Fi) ağa bağlıyken çalıştır, örn. etkin nokta veya bağlı ağ. Dikkat: Çok fazla veri eşitlerseniz, bu işlem veri planınızın büyük bir bölümünü tüketebilir.</string>
+
+    <string name="run_on_whitelisted_wifi_title">Belirtilen kablosuz (Wi-Fi) ağlarda çalıştır</string>
+    <string name="specify_wifi_ssid_whitelist">Kablosuz (Wi-Fi) ağları seçin</string>
+    <string name="run_on_whitelisted_wifi_networks">Seçilen kablosuz (Wi-Fi) ağlar: %1$s</string>
+    <string name="wifi_ssid_whitelist_empty">Belirtilen kablosuz (Wi-Fi) ağlar yok. Ağları belirtmek için tıklayın.</string>
+
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">Ağları seçmek için lütfen kablosuzu (Wi-Fi) açın.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_location">Ağları seçmek için lütfen konumu açın.</string>
+
+
+    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">Android 8.1\'den başlayarak, kablosuz (Wi-Fi) adını okuyabilmek için konum erişimi gereklidir. Bu özelliği yalnızca bu izni verirseniz kullanabilirsiniz.</string>
+
+    <string name="power_source_title">Cihaza şununla güç verildiğinde çalıştır</string>
+
+    <string name="power_source_ac_and_battery_power">Priz ve pil gücü.</string>
+    <string name="power_source_ac_power">Priz gücü.</string>
+    <string name="power_source_battery_power">Pil gücü.</string>
+
+    <string name="respect_battery_saving_title">Android pil tasarrufu ayarına uy</string>
+    <string name="respect_battery_saving_summary">Pil tasarrufu etkinse Syncthing\'i etkisizleştirir.</string>
+
+    <string name="respect_master_sync_title">Android \'Verileri otomatik eşitle\' ayarına uy</string>
+    <string name="respect_master_sync_summary">Hızlı ayarlar kutucuğu \'Verileri otomatik eşitle\' kapatıldığında Syncthing\'i etkisizleştirir.</string>
+
+    <string name="run_in_flight_mode_title">Ağ bağlantısı olmadan çalıştır</string>
+    <string name="run_in_flight_mode_summary">Bu seçeneğin etkinleştirilmesi, Syncthing\'in çevrimdışı olduğunuzda bile çalışmasına neden olacak. Cihazınız uçuş modu sırasında elle kablosuz (Wi-Fi) bağlantıları algılamada sorun yaşıyorsa etkinleştirin.</string>
+
+    <string name="run_on_time_schedule_title">Zaman planlamasına göre çalıştır</string>
+    <string name="run_on_time_schedule_summary">Bu seçeneği etkinleştirmek, çalıştırma koşulları karşılanırsa ve son eşitlemeden bu yana belirli bir aralık süresi geçmişse, yapılandırılmış bir süre boyunca eşitlemeye çalışacak. Bu, büyük miktarda pil tasarrufu sağlayabilir ancak eşitleme ortaklarının çevrimiçi olmasını gerektirir. Lütfen unutmayın: Bu, bir sonraki planlı eşitleme gerçekleşene kadar tamamlanmamış geçici dosyaların geride kalmasına neden olabilir.</string>
+
+    <string name="sync_duration_minutes_title">Eşitleme döngüsünün süresi</string>
+    <string name="sync_duration_minutes_summary">%1$s dakika</string>
+    <string name="sleep_interval_minutes_title">Eşitleme duraklatma aralığının süresi</string>
+
+    <!-- Preferences - Behaviour -->
+
+    <string name="behaviour_autostart_title">Otomatik başlat</string>
+    <string name="behaviour_autostart_summary">Uygulamayı işletim sistemi başlatıldığında otomatik olarak başlatır.</string>
+
+
+    <string name="allow_overwrite_files_title">Varolan dosyaların üzerine yazılmasına izin ver</string>
+    <string name="allow_overwrite_files_summary">Başka bir uygulama, klasörlerimizden birinde dosyaları paylaştığında.</string>
+
+    <string name="expert_mode_title">Uzman modu</string>
+
+    <string name="expert_mode_summary">Bu seçeneğin etkinleştirilmesi gelişmiş yapılandırma seçeneklerini gösterecek. Bunları nasıl doğru kullanacağınızı bildiğinizden emin olmak için önce Syncthing Belgelerine bir göz atmalısınız. Yanlış ayarlar pilin tükenmesine, sistem kaynaklarının tükenmesine veya tamamlanmamış eşitlemeye neden olabilir.</string>
+
+
+    <string name="start_into_web_gui_title">Doğrudan web GKA içinde başlat</string>
+ 
+    <string name="start_into_web_gui_summary">Uygulamayı başlatırken, ana ekran yerine web Grafiksel Kullanıcı Arayüzü\'nü açar</string>
+
+
+
+
+
     <string name="device_name">Cihaz Adı</string>
+
     <string name="listen_address">Eşitleme Protokolü Dinleme Adresleri</string>
+
     <string name="max_recv_kbps">Gelen Hız Sınırı (KiB/s)</string>
+
     <string name="max_send_kbps">Giden Hız Sınırı (KiB/s)</string>
+
     <string name="global_announce_enabled">Genel Keşif</string>
+
     <string name="local_announce_enabled">Yerel Keşif</string>
+
     <string name="enable_nat_traversal">NAT Geçişini etkinleştir</string>
+
     <string name="global_announce_server">Genel Keşif Sunucuları</string>
+
+    <string name="enable_relaying">Geçişi etkinleştir</string>
+
     <string name="usage_reporting">İsimsiz Kullanım Bildirme</string>
+
+    <string name="crash_reporting">İsimsiz Çökme Bildirme</string>
+
+    <string name="webui_tcp_port_title">Web Arayüzü TCP B.Noktası</string>
+
+    <string name="webui_remote_access_title">Web Arayüzü uzak erişim</string>
+
+    <string name="webui_username_title">Web Arayüzü Kullanıcı Adı</string>
+
+    <string name="webui_password_title">Web Arayüzü Parolası</string>
+
+    <string name="webui_remote_access_summary">Web kullanıcı arayüzüne başka bir cihazdan erişime izin vermeyi belirler. Eğer etkinleştirildiyse, kullanıcı \'syncthing\' ve parola olarak API anahtarıyla oturum açabilirsiniz. Varsayılan: etkisizleştirildi (en güvenli)</string>
+
+
+
+    <string name="clear_stversions_title">Tüm sürümlendirme klasörlerini boşalt</string>
+    <string name="clear_stversions_summary">Syncthing ile değiştirildiğinde veya silindiğinde dosyalar .stversions dizinine taşınır. Muhtemelen orada, silinen dosyaları bulabilir ve kurtarabilirsiniz, ancak dosyaların eskimiş sürümleri cihazınızda depolama alanı kaplar.</string>
+    <string name="clear_stversions_question">Bu, Syncthing tarafından işlenen dosyaların önceki tüm sürümlerini silecek. Devam edilsin mi?</string>
+    <string name="clear_stversions_done">.stversions klasörleri başarılı olarak temizlendi.</string>
+
+    <string name="download_support_bundle_title">Destek Paketini İndir</string>
+
+    <!-- Summary shown when the user clicked the download support bundle button -->
+    <string name="download_support_bundle_in_progress">Destek Paketi indirmesi hazırlanıyor…</string>
+
+    <!-- Toast after successful download of the support bundle -->
+    <string name="download_support_bundle_succeeded">Destek Paketi başarılı olarak %s klasörüne indirildi.</string>
+
+    <!-- Toast after failed support bundle download -->
+    <string name="download_support_bundle_failed">Destek Paketini indirme başarısız. Günlükleri gözden geçirin.</string>
+
+    <!-- Titles for the preference to undo ignored devices and folders -->
+    <string name="undo_ignored_devices_folders_title">Yoksayılan cihazları ve klasörleri geri al</string>
+    <string name="undo_ignored_devices_folders_question">Bu, cihazları ve klasörleri yoksayan önceki kararları geri alacak. Devam edilsin mi?</string>
+    <string name="undo_ignored_devices_folders_done">Kararlar başarılı olarak geri alındı.</string>
+
+    <string name="backup_rel_path_to_zip">Yapılandırma arşivine göreceli yol</string>
+
+    <string name="backup_password_title">Yapılandırma koruma parolası</string>
+    <string name="backup_password_summary">ℹ️ Önerilir:\nDışa aktarma sırasında yapılandırmanızı şifrelemek için kullanılacak güçlü bir parola girin ve içe aktarmada şifresini çözün. Bu parolayı kurtarma işlemi için güvenli bir yerde tutun. İçe aktarma özelliğini kullanmak için buna ihtiyacınız olacak.\n\n⚠️ Önerilmez:\nParola kullanmamak, diğer uygulamalar potansiyel olarak Syncthing yapılandırmanızı okuyabilir ve kandırabilir. Yapılandırmanın ortaya çıkması, kötü bir aktörün çalınan yapılandırma dışa aktarmalarını kullanarak dosyalarınıza yetkisiz erişim elde etme riski taşır.</string>
+
+    <string name="backup_password_set">✅ Parola şuna ayarlı: %1$s</string>
+    <string name="backup_password_set_masked">✅ Parola ayarlandı - Değiştirmek için dokunun</string>
+    <string name="backup_password_not_set">⚠ Parola ayarlı değil.</string>
+    <string name="toggle_password_visibility">Parola görünürlüğünü değiştir</string>
+
     <string name="export_config">Yapılandırmayı Dışa Aktar</string>
+
+    <!-- Toast after entering an invalid tcp port -->
+    <string name="invalid_port_number" tools:ignore="PluralsCandidate">Bağlantı noktası numarası geçerli değil. Lütfen %1$d ile %2$d arasında bir bağlantı noktası girin.</string>
+
+    <!-- Toast after entering invalid integer value -->
+    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">Giriş değeri geçerli değil. Lütfen %1$d ile %2$d arasında bir değer girin.</string>
+
+    <!-- Experimental options -->
+    <string name="use_proxy">Proksi aracılığıyla bağlan</string>
+    <string name="do_not_use_proxy">Yapılandırılmış proksi yok.</string>
+
+
     <string name="use_tor_title">Tor kullan</string>
+    <string name="use_tor_summary">Artırılmış gizlilik için tüm trafiği Tor üzerinden zorlayın. Orbot gerektirir. Proksi seçeneklerini etkisizleştirir.</string>
+
+    <string name="socks_proxy_address_title">SOCKS5 proksi</string>
+    <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>
+
+    <!-- Toast after entering invalid socks proxy address -->
+    <string name="toast_invalid_socks_proxy_address">Girdi, \'socks5://[IP/ANAMAKİNEADI]:[B.NOKTASI]\' proksi sözdizimini ihlal ediyor</string>
+
+    <string name="http_proxy_address_title">HTTP(S) proksi</string>
+    <string name="http_proxy_address_example" translatable="false">http://192.168.0.1:8080</string>
+
+    <!-- Toast after entering invalid http proxy address -->
+    <string name="toast_invalid_http_proxy_address">Girdi, \'http://[IP/ANAMAKİNEADI]:[B.NOKTASI]\' proksi sözdizimini ihlal ediyor</string>
+
+    <string name="broadcast_service_control_title">Yayına Göre Hizmet Denetimi</string>
+    <string name="broadcast_service_control_summary">Varsayılan: Etkisizleştirildi. Adb veya üçüncü taraf uygulamaların, örn. otomasyon uygulamalarının Syncthing\'e çalıştırma koşullarını takip etmesi, başlatmaya zorlaması veya durdurmaya zorlaması amacıyla talimat vermesine izin vermek için etkinleştirin.</string>
+
     <!-- Dialog shown before config export -->
     <string name="dialog_confirm_export">Yeni yapılandırmayı gerçekten dışa aktarmak istiyor musunuz? Varolan dosyaların üzerine yazılacaktır.</string>
+
     <!-- Dialog shown before config import -->
     <string name="dialog_confirm_import">Yapılandırmayı gerçekten içe aktarmak istiyor musunuz? Paylaşılan klasörler ve cihazlar listesi dahil varolan ayarlar değiştirilecektir.</string>
+
+    <!-- PreferenceCategories -->
+    <string name="preference_category_actions">Eylemler</string>
+    <string name="preference_category_explanation">Açıklama</string>
+    <string name="preference_category_prepare">Hazırlık</string>
+
     <!-- Toast shown after config was exported -->
+    <string name="config_export_successful_no_path">Yapılandırma dışa aktarıldı. Lütfen daha sonraki bir içe aktarma için parolayı hatırladığınızdan emin olun.</string>
+    <string name="config_export_failed">Yapılandırmayı dışa aktarma başarısız oldu. Ayrıntıları görmek için Ayarlar-Sorun Giderme-Günlüğü Aç\'a gidin.</string>
+
     <string name="import_config">Yapılandırmayı İçe Aktar</string>
+
     <!-- Toast shown after config was imported -->
     <string name="config_imported_successful">Yapılandırma içe aktarıldı</string>
+
+    <string name="config_import_failed_no_path">Yapılandırmayı içe aktarma başarısız oldu. Ayrıntıları görmek için Ayarlar-Sorun Giderme-Günlüğü Aç\'a gidin.</string>
+
+    <string name="dialog_settings_restart_app_title">Yeniden başlatma gerekli</string>
+    <string name="dialog_settings_restart_app_question">Bu seçeneğin değiştirilmesi uygulamanın hemen yeniden başlatılmasını gerektirir. Diğer tüm değişiklikler yoksayılacaktır. Devam edilsin mi?</string>
+
+    <!-- Title for the preference to set STTRACE parameters -->
+    <string name="sttrace_title">STTRACE Seçenekleri</string>
+    <string name="sttrace_none_selected">Hata ayıklama birimi yok</string>
+
+    <string name="environment_variables">Ortam değişkenleri</string>
+
+    <!-- Toast after entering invalid STTRACE params -->
+    <string name="toast_invalid_environment_variables">Değer, geçerli bir ortam değişkeni dizgisi değil</string>
+
     <!-- Title for the preference to reset Syncthing indexes -->
     <string name="st_reset_database_title">Veritabanını Sıfırla</string>
     <!-- Syncthing was reset -->
+    <string name="st_reset_database_question">Bu eylem yalnızca destek ekibimizin önerisine dayanarak yapılmalıdır. \nSyncthing\'in veritabanını temizlemek istediğinize emin misiniz?</string>
+    <!-- Syncthing was reset -->
     <string name="st_reset_database_done">Syncthing\'in veritabanı başarılı olarak sıfırlandı</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_deltas_title">Delta İndekslerini Sıfırla</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_question">Bu eylem yalnızca destek ekibimizin önerisine dayanarak yapılmalıdır. \nSyncthing\'in delta indekslerini temizlemek istediğinize emin misiniz?</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_done">Syncthing\'in delta indeksleri başarılı olarak sıfırlandı</string>
+
+    <!-- Settings / About -->
     <string name="category_about">Hakkında</string>
+
+    <string name="verbose_log_title">Ayrıntılı günlük</string>
+    <string name="verbose_log_summary">Bu seçeneğin etkinleştirilmesi, hata ayıklama günlüklerinin çok ayrıntılı seviyede oluşturulmasına yardımcı olacak.</string>
+
+
     <!-- Settings item that opens the log activity -->
     <string name="open_log">Günlüğü Aç</string>
+
     <!-- Summary for the log activity -->
     <string name="open_log_summary">Syncthing ve Android günlük penceresini açın</string>
+
+    <!-- Menu item linking support forum -->
+    <string name="syncthing_forum_title">Syncthing Forumu</string>
+    <string name="syncthing_forum_summary">Syncthing Forumu\'na gidin ve destek alın</string>
+    <string name="syncthing_forum_url" translatable="false">https://forum.syncthing.net/</string>
+
+    <!-- Menu item for pizza -->
+
+    <!-- Menu item linking privacy policy -->
+    <string name="privacy_title">Gizlilik İlkesi</string>
+    <string name="privacy_summary">Kişisel verilerin kullanımını (varsa) kapsayan syncthing-android\'in gizlilik ilkesini açın, örn. konum.</string>
+    <string name="privacy_policy_url" translatable="false">https://syncthing.net/android-privacy-policy</string>
+
     <!-- Settings item that opens issue tracker -->
     <string name="report_issue_title">Sorun Bildir</string>
-    <!-- Menu item to donate -->
+
+    <!-- Summary for the issue tracker settings item -->
+    <string name="open_issue_tracker_summary">%1$s adresinde Syncthing-Fork sorun izleyicisini açın</string>
+
+    <!-- URL of the issue tracker -->
+    <string name="issue_tracker_url" translatable="false">https://github.com/researchxxl/syncthing-android/issues</string>
+
+    <!-- URL of the GitHub wiki -->
+    <string name="wiki_url" translatable="false">https://github.com/researchxxl/syncthing-android/tree/main/wiki</string>
+
+    <!-- URL of the Syncthing project homepage -->
+
     <!-- Title of the preference showing upstream version name -->
     <string name="syncthing_version_title">Syncthing Sürümü</string>
+
+    <!-- Title of the preference showing this app's version name -->
+    <string name="app_version_title">Syncthing-Fork Sarmalayıcı Sürümü</string>
+
+    <!-- Title of the preference showing the REST API key -->
+    <string name="syncthing_api_key">Syncthing API Anahtarı (kopyalamak için dokunun)</string>
+
+    <!-- Shown when the API key is copied to the clipboard -->
+    <string name="api_key_copied_to_clipboard">Syncthing API anahtarı panoya kopyalandı</string>
+
+    <!-- Title of the preference showing database size -->
+    <string name="syncthing_database_size">Syncthing Veritabanı Boyutu</string>
+
+    <!-- Title of the preference showing the OS open file limit -->
+    <string name="os_open_file_limit">Android Açık Dosya Sınırı</string>
+    
+    <!-- Title of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_title">Açık Kaynak Lisansları</string>
+    
+    <!-- Summary of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_summary">Kullanılan açık kaynak lisanslarını göster</string>
+
     <!-- FolderPickerAcitivity -->
+
     <!-- Activity title -->
     <string name="folder_picker_title">Klasör Seçici</string>
+
+    <!-- Storage path overview -->
+    <string name="advanced_storage_path_overview">Gelişmiş depolama yoluna genel bakış</string>
+
+    <!-- Current path -->
+    <string name="current_path">Şu Anki Yol: %1$s</string>
+
     <!-- ListView empty text -->
+
     <!-- Menu item to create folder on the file system -->
+
     <!-- Menu item to select the current folder -->
+
     <string name="create_folder_failed">Klasör oluşturma başarısız</string>
+
+    <!-- Menu item to go up to parent folder -->
+    <string name="folder_go_up">Yukarı git</string>
+
+    <!-- LogActivity -->
+
+    <string name="syncthing_log_title">Syncthing Günlüğü</string>
+    <string name="android_log_title">Android Günlüğü</string>
+
+    <string name="share_log_file_missing">Paylaşılacak günlük dosyası eksik.</string>
+
+    <string name="share_log_file">Günlük dosyasını paylaş</string>
+
     <!-- Title of the "log android" menu button -->
     <string name="view_android_log">Android Günlüğünü Görüntüle</string>
+
     <!-- Title of the "log Syncthing" menu button -->
     <string name="view_syncthing_log">Syncthing Günlüğünü Görüntüle</string>
+
     <string name="retrieving_logs">Günlükler alınıyor…</string>
+
     <!-- Title of the "share log" menu button -->
     <string name="share_title">Paylaş</string>
+
+    <!-- ShareActivity -->
+
+    <!-- Toast if user didn't complete the welcome wizard yet -->
+    <string name="complete_welcome_wizard_first">Önce, uygulamayı uygulama çekmecesinden başlatın ve dosyaları paylaşmadan önce karşılama sihirbazını tamamlayın.</string>
+
+    <!-- Title of the "share" activity -->
+    <string name="share_activity_title">Syncthing\'e Kaydet</string>
+
+    <!-- Title of the "save" button -->
+    <string name="save_title">Kaydet</string>
+
+    <!-- Title of the "cancel" button -->
+    <string name="cancel_title">İptal</string>
+
+    <!-- Title of the "save" button -->
+
+    <!-- New file name template -->
+    <string name="file_name_template">Yeni dosya %1$s</string>
+
+    <!-- Nothing to share toast -->
+    <string name="nothing_share">Paylaşacak bir şey yok</string>
+
+    <!-- Copy success toast partially -->
+    <plurals name="copy_success_partially">        <item quantity="one">%1$d dosya \"%2$s\" klasörüne kopyalandı, %3$d zaten var</item>        <item quantity="other">%1$d dosya \"%2$s\" klasörüne kopyalandı, %3$d zaten var</item></plurals>
+
+    <!-- Copy success toast -->
+    <plurals name="copy_success">        <item quantity="one">%1$d dosya \"%2$s\" klasörüne kopyalandı</item>        <item quantity="other">%1$d dosya \"%2$s\" klasörüne kopyalandı</item></plurals>
+
+    <!-- Copy exception toast -->
+    <string name="copy_exception">Paylaşım sırasında bir hata oldu, uygulama günlüklerini gözden geçirin</string>
+
+    <!-- Copy progress dialog text -->
+    <string name="copy_progress">Dosyalar paylaşılıyor…</string>
+
+    <plurals name="file_name_title">        <item quantity="one">Dosya Adı</item>        <item quantity="other">Dosya Listesi</item></plurals>
+
+    <!-- Sub Folder title -->
+
+    <!-- RunConditionMonitor -->
+
+    <string name="reason_force_start">Çalıştırma koşullarından bağımsız olarak Syncthing\'i başlamaya zorladığınızdan çalışıyor.</string>
+    <string name="reason_force_stop">Çalıştırma koşullarından bağımsız olarak Syncthing\'i durmaya zorladığınızdan çalışmıyor.</string>
+
+    <!-- Explanations why syncthing is running or not running -->
+    <string name="reason_not_within_time_frame_2">\'Zaman planına göre çalıştır\'ı etkinleştirdiniz ve son eşitleme %s önceydi.</string>
+    <string name="reason_not_within_time_frame_0_min">bir dakikadan kısa süre</string>
+    <plurals name="reason_not_within_time_frame_minutes">        <item quantity="one">%d dakika</item>        <item quantity="other">%d dakika</item></plurals>
+    <string name="reason_not_charging">Telefon şarj olmuyor.</string>
+    <string name="reason_not_on_battery_power">Telefon pil gücüyle çalışmıyor.</string>
+    <string name="reason_not_while_power_saving">Telefon şu anda güç tasarrufunda olduğundan Syncthing çalışmıyor.</string>
+    <string name="reason_not_while_auto_sync_data_disabled">Android\'de şu anda \'Verileri otomatik eşitle\' seçeneği etkisizleştirildiğinden Syncthing çalışmıyor.</string>
+
+    <!-- … Mobile data -->
+    <string name="reason_mobile_data_disallowed">Syncthing, mobil veri bağlantısında çalışacak şekilde yapılandırılmamış.</string>
+    <string name="reason_on_mobile_data">Syncthing\'in mobil veri üzerinden çalışmasına izin veriliyor.</string>
+    <string name="reason_not_on_mobile_data">Syncthing\'in mobil veri bağlantısı üzerinden çalışmasına izin veriliyor ancak mobil veri bağlı değil.</string>
+
+    <!-- … Roaming -->
+    <string name="reason_on_roaming_nonroaming_mobile_data">Syncthing\'in dolaşım ve dolaşım dışı mobil veri bağlantıları üzerinden çalışmasına izin veriliyor.</string>
+    <string name="reason_on_nonroaming_mobile_data">Syncthing\'in dolaşım dışı mobil veri bağlantıları üzerinden çalışmasına izin veriliyor. Etkin bağlantı dolaşım dışıdır.</string>
+    <string name="reason_not_nonroaming_mobile_data">Syncthing, dolaşım mobil veri bağlantıları üzerinden çalışmasına izin vermediğiniz için çalışmıyor.</string>
+
+    <string name="reason_wifi_disallowed">Syncthing\'in kablosuz (Wi-Fi) veya kablolu (ethernet) üzerinden çalışmasına izin verilmiyor.</string>
+    <string name="reason_on_wifi">Syncthing\'in kablosuz (Wi-Fi) üzerinden çalışmasına izin verildi ve kablosuz (Wi-Fi) şu anda bağlı.</string>
+    <string name="reason_not_on_wifi">Syncthing\'in kablosuz (Wi-Fi) üzerinden çalışmasına izin verildi ancak kablosuz (Wi-Fi) bağlı değil veya telefon uçuş modunda.</string>
+    <string name="reason_on_metered_nonmetered_wifi">Syncthing\'in tarifeli ve tarifesiz kablosuz (Wi-Fi) bağlantılar üzerinden çalışmasına izin veriliyor.</string>
+    <string name="reason_on_whitelisted_wifi">Syncthing\'in şu anki kablosuz (Wi-Fi) ağda çalışmasına izin veriliyor.</string>
+    <string name="reason_not_on_whitelisted_wifi">Syncthing, şu anki kablosuz (Wi-Fi) ağın adı beyaz listede olmadığından çalışmıyor.</string>
+    <string name="reason_on_nonmetered_wifi">Syncthing\'in tarifesiz kablosuz (Wi-Fi) bağlantılar üzerinden çalışmasına izin veriliyor. Etkin kablosuz (Wi-Fi) bağlantı tarifesizdir.</string>
+    <string name="reason_not_nonmetered_wifi">Syncthing, tarifeli kablosuz (Wi-Fi) bağlantılar üzerinden çalışmasına izin vermediğiniz için çalışmıyor.</string>
+    <string name="reason_location_unavailable">Ayarlarda \'Seçilen kablosuz (Wi-Fi) ağlarda çalıştır\'ı etkinleştirdiniz. Android konum hizmetleri şu anda kapalı. Android kısıtlamalarına göre Syncthing, çalıştırılıp çalıştırılmayacağına karar vermek için şu anki kablosuz (Wi-Fi) ağ adını belirleyemiyor. Çözüm: Konumu açın, konum izni verin ve kablosuzu (Wi-Fi) yeniden bağlayın.</string>
+    <string name="reason_on_flight_mode">Syncthing, uçuş modu etkinken çalışmasına izin verdiğiniz için çalışıyor.</string>
+    <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor anında başlatılamadı. Yeniden başlatmadan sonra bu hata kaybolmazsa lütfen uygulamayı yeniden başlatın ve bir hata raporu gönderin.</string>
+
+    <!-- Sync Conditions Dialog -->
+
+    <string name="custom_wifi_ssid_whitelist_empty">Beyaz listeye eklenmiş kablosuz (Wi-Fi) SSID\'si yok. Lütfen ayarlarda bazılarını belirtin.</string>
+
     <!-- SyncthingService -->
+
     <!-- Text for the exit button on the drawer -->
     <string name="exit">Çık</string>
+
     <!-- Title of the notification shown while syncthing is running and enabled -->
+    <string name="syncthing_active_details">Çalışıyor: %1$s</string>
+    <string name="no_remote_devices_connected">Bağlı uzak cihazlar yok</string>
+
+    <plurals name="device_online_up_to_date">        <item quantity="one">%1$d cihaz çevrimiçi ve güncel</item>        <item quantity="other">%1$d cihaz çevrimiçi ve güncel</item></plurals>
+
+    <plurals name="syncthing_active_syncing_device_online">        <item quantity="one">Eşitleniyor: %%%1$d tamamlandı, %2$d cihaz çevrimiçi</item>        <item quantity="other">Eşitleniyor: %%%1$d tamamlandı, %2$d cihaz çevrimiçi</item></plurals>
+
+    <string name="syncthing_disabled">Uyuyor</string>
+
+    <string name="syncthing_terminated">Sonlandırıldı</string>
+
+    <!-- Toast shown if syncthing failed to create or read the config -->
+    <string name="executable_not_found">Çalıştırılabilir çekirdek \"%s\" eksik. Yapım ve logcat çıktısını gözden geçirin.</string>
+    <string name="config_create_failed">Yapılandırmayı oluşturma başarısız. Logcat çıktısını gözden geçirin.</string>
+    <string name="config_read_failed">Yapılandırmayı okuma başarısız. Eşitleme klasörlerinizdeki verileri yedeklemeyi düşünün, ardından bu uygulamanın verilerini Android ayarlarından temizleyin ve tekrar başlatın.</string>
+
+    <!-- Toast shown if a config file crucial to operation is missing -->
+    <string name="config_file_missing">İşlem için çok önemli bir yapılandırma dosyası eksik</string>
+
+    <!-- Toast shown if a listening tcp port is unavailable -->
+    <string name="webui_tcp_port_unavailable">Web Arayüzü TCP bağlantı noktası %s meşgul. İkinci örnek mi?</string>
+
+    <!-- Label of the default folder created of first start (camera folder). -->
+
     <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
+
+    <string name="notification_crash_title">Çöktü (çıkış kodu %1$s)</string>
+    <string name="notification_crash_text">Günlükler için tıklayın (%1$s)</string>
+
+    <string name="notifications_persistent_channel">Syncthing etkin</string>
+    <string name="notification_persistent_waiting_channel">Çalıştırma koşullarını izleme</string>
+    <string name="notifications_other_channel">Diğer bildirimler</string>
+
+    <!-- EventProcessor -->
+    <string name="notification_out_of_disk_space">SD kart dolu. %1$s dosyası</string>
+
     <!-- RestApi -->
+
     <!-- Title of the notification shown when a restart is needed -->
+
     <!-- Text for positive button in restart dialog -->
     <!-- Text for the dismiss button of the restart Activity -->
     <!-- Text of the notification shown when a restart is needed -->
+
     <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">Cihaz kimliği panoya kopyalandı</string>
+
     <!-- Strings representing units for file sizes, from smallest to largest -->
     <string name="file_size_unit_B">B</string>
     <string name="file_size_unit_KiB">KB</string>
     <string name="file_size_unit_MiB">MB</string>
     <string name="file_size_unit_GiB">GB</string>
     <string name="file_size_unit_TiB">TB</string>
+
     <!-- Strings representing units for transfer rates, from smallest to largest -->
     <string name="transfer_rate_unit_B_s">B/s</string>
     <string name="transfer_rate_unit_KiB_s">KB/s</string>
     <string name="transfer_rate_unit_MiB_s">MB/s</string>
     <string name="transfer_rate_unit_GiB_s">GB/s</string>
     <string name="transfer_rate_unit_TiB_s">TB/s</string>
+
+    <!-- Possible folder states -->
+    <string name="state_failed_items">Başarısız Öğeler (%1$d)</string>
+    <string name="state_up_to_date">Güncel</string>
+    <string name="state_local_additions">Yerel İlaveler</string>
+    <string name="state_cleaning">Sürümleri Temizleme</string>
+    <string name="state_clean_waiting">Temizlemeyi bekliyor</string>
     <string name="state_scanning">Taranıyor</string>
+    <string name="state_scan_waiting">Taramayı bekliyor</string>
+    <string name="state_sync_waiting">Eşitlemeyi bekliyor</string>
+    <string name="state_sync_preparing">Eşitlemeye hazırlanıyor</string>
+    <string name="state_syncing_general">Eşitleniyor</string>
     <string name="state_syncing">Eşitleniyor (%%%1$d)</string>
     <string name="state_error">Hata</string>
+    <string name="state_error_message">Hata (%1$s)</string>
     <string name="state_unknown">Bilinmiyor</string>
+    <string name="state_paused">Duraklatıldı</string>
     <string name="status_outofsync">Eşitlenmemiş</string>
+    <string name="state_unshared">Paylaşılmadı</string>
+
+    <!-- small inline loading indicator -->
+    <string name="state_loading">Yükleniyor…</string>
+
+    <!-- small inline saving indicator -->
+
     <!-- Format string for folder size, eg "500 MiB / 1 GiB" -->
     <string name="folder_size_format">%1$s / %2$s</string>
-    <string name="file_versioning">Dosya Sürümlendirme</string>
-    <string name="qs_schedule_label">5 dakikalığına çalıştır</string>
-    <string name="photo_shoot_activity_title">Syncthing-Fork Kamera</string>
-    <string name="qs_force_label">Çalıştırmaya zorla</string>
-    <string name="custom_sync_conditions_dialog">Eşitleme koşullarını belirle</string>
-    <string name="location_permission_title">Konum İzni</string>
-    <string name="activity_main_bottom_navigation_rescan_all">Tümünü Yeniden Tara</string>
-    <string name="location_permission_desc_api_29">Android 10+ için ipucu: \"Her zaman izin ver\"</string>
-    <string name="key_generation_success">Özel veri alışverişi için güvenli anahtarlar başarılı olarak üretildi.</string>
-    <string name="welcome_text">Syncthing bir açık kaynaklı dosya eşitleme uygulamasıdır. Diğer cihazlarla veri paylaşmak için onların benzersiz cihaz kimliklerini cihaz listesine eklemeniz gerekir. Daha sonra hangi klasörlerin hangi cihazlarla paylaşılacağını seçebilirsiniz. \n \nLütfen karşılaştığınız herhangi bir sorunu GitHub aracılığıyla bildirin.</string>
-    <string name="notification_permission_desc">Yeni cihaz bağlantıları, klasör paylaşım istekleri ile ilgili bildirimleri göstermek ve hizmeti canlı ve bağlı tutmak için gereklidir.</string>
-    <string name="reason">Sebep:</string>
-    <string name="qs_schedule_disabled">Zamanlama etkisizleştirildi</string>
-    <string name="grant_permission">İzin ver</string>
-    <string name="finish">Bitti</string>
-    <string name="back">Geri</string>
-    <string name="grant_camera_permission">Kamera izni ver</string>
-    <string name="dialog_all_files_access_not_supported">Cihazınız tüm dosyalara erişimi desteklemiyor</string>
-    <string name="ignore_doze_permission_desc">Android bir süre sonra eşitlemeyi durdurabilir. Bunu önlemek için pil iyileştirmeyi kapatın. Bazı cihazlarda önceden yüklenmiş ek görev sonlandırma uygulamaları bulunur. Syncthing\'i de beyaz listeye eklemelisiniz.</string>
-    <string name="ignore">Yoksay</string>
-    <string name="photo_shoot_take_picture_success">Resim başarılı olarak Syncthing Camera klasörüne kaydedildi.</string>
-    <string name="generic_example">Örnek</string>
-    <string name="main_menu">Ana Menü</string>
-    <string name="key_generation_title">Anahtar Üretme</string>
-    <string name="qs_following_run_conditions">Aşağıdaki çalıştırma koşulları</string>
-    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">%1$d dakikalığına çalıştır</string>
-    <string name="run_on_whitelisted_wifi_summary">Eşitlemenin yalnızca belirli kablosuz (Wi-Fi) ağlarda gerçekleşmesini kısıtlamak için beyaz listeyi açın.</string>
-    <string name="photo_shoot_intro_no_camera">Üzgünüz, bu cihazın kamerası yok.</string>
-    <string name="custom_sync_conditions_description">Genel çalıştırma koşullarının istisnalarını belirtmenizi sağlar.</string>
-    <string name="custom_sync_conditions_title">Özel eşitleme koşulları</string>
-    <string name="photo_shoot_launcher_title">Sync. Kamera</string>
-    <string name="refresh">Yenile</string>
-    <string name="dialog_disable_battery_optimizations_not_supported">Cihazınız pil iyileştirmelerini etkisizleştirmeyi desteklemiyor</string>
-    <string name="location_permission_desc">Syncthing, seçilen kablosuz (Wi-Fi) ağlarda çalışacak şekilde yapılandırılabilir. Android, uygulamanın etkin kablosuz (Wi-Fi) ağ adını okuyabilmesi için konum iznine sahip olmasını gerektirir. Eğer bu özelliği kullanmak istiyorsanız, yukarıdaki düğmeye basın. Bu adımı atlayabilirsiniz. Daha fazla ayrıntı için gizlilik ilkemize bakın.</string>
-    <string name="photo_shoot_intro_welcome_title">Syncthing Kamera\'ya Hoş Geldiniz</string>
-    <string name="photo_shoot_take_picture_failure">Resim çekme başarısız oldu veya iptal ettiniz.</string>
-    <string name="storage_permission_desc">Dosya eşitlemesi yapmak için Syncthing\'in depolama alanınıza erişmesi gerekiyor.</string>
-    <string name="photo_shoot_intro_permission_desc">Syncthing Camera, resim çekmek ve bunları cihazınızda saklamak için onayınızı gerektirir. Bu özellik isteğe bağlıdır. Kullanmak için izinleri verin ve \"Devam\"a dokunun. Daha sonra diğer Syncthing cihazlarıyla paylaşabileceğiniz bir Syncthing Camera klasörü oluşturacağız.</string>
-    <string name="qs_forced_to_run">Çalıştırmaya zorlandı</string>
-    <string name="storage_permission_title">Depolama İzni</string>
-    <string name="ignore_doze_permission_os_notice">Android TV\'lerin, arka planda çalışırken uygulamayı ara sıra sonlandırdığı bilinmektedir. \'%1$s/%2$s\' adresindeki vikide bir çözüm mevcuttur.</string>
-    <string name="notification_permission_title">Bildirim İzni</string>
-    <string name="default_syncthing_camera_folder_label">Syncthing Kamera</string>
-    <string name="accept">Kabul Et</string>
-    <string name="qs_forced_to_stop">Durdurmaya zorlandı</string>
-    <string name="photo_shoot_intro_missing_permissions">Devam etmek için depolama ve kamera iznine ihtiyacımız var.</string>
-    <string name="permission_granted">İzin verildi</string>
-    <string name="grant_storage_permission">Depolama izni ver</string>
-    <string name="reason_force_stop">Çalıştırma koşullarından bağımsız olarak Syncthing\'i durmaya zorladığınızdan çalışmıyor.</string>
-    <string name="folders_list_empty">Yapılandırılmış klasörler yok. Yeni bir klasör eklemek için dokunun.</string>
-    <string name="button_follow_run_conditions">ÇALIŞTIRMA KOŞULLARINI TAKİP ET</string>
-    <string name="status_fragment_title">Durum</string>
-    <string name="enable_relaying">Geçişi etkinleştir</string>
-    <string name="state_error_message">Hata (%1$s)</string>
-    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">Android 8.1\'den başlayarak, kablosuz (Wi-Fi) adını okuyabilmek için konum erişimi gereklidir. Bu özelliği yalnızca bu izni verirseniz kullanabilirsiniz.</string>
-    <string name="webui_username_title">Web Arayüzü Kullanıcı Adı</string>
-    <string name="device_id_invalid">Cihaz kimliği doğru olarak biçimlendirilmemiş. Lütfen tekrar deneyin ve doğru kimliği girin.</string>
-    <string name="open_file_no_compatible_app">Dosyayı açmak için bulunan uygulama yok.</string>
-    <string name="folder_fileWatcher">Değişiklikleri izle</string>
-    <string name="state_clean_waiting">Temizlemeyi bekliyor</string>
-    <string name="copy_exception">Paylaşım sırasında bir hata oldu, uygulama günlüklerini gözden geçirin</string>
-    <string name="device_disconnected_not_synced">Bağlantı kesildi (%1$s beklemede)</string>
-    <string name="override_changes">Değişiklikleri geçersiz kıl</string>
-    <string name="syncthing_not_running">Syncthing çalışmıyor.</string>
-    <string name="run_on_mobile_data_title">Mobil veride çalıştır</string>
-    <string name="device_rejected">\"%1$s\" cihazı bağlanmak istiyor</string>
-    <string name="run_on_time_schedule_summary">Bu seçeneği etkinleştirmek, çalıştırma koşulları karşılanırsa ve son eşitlemeden bu yana belirli bir aralık süresi geçmişse, yapılandırılmış bir süre boyunca eşitlemeye çalışacak. Bu, büyük miktarda pil tasarrufu sağlayabilir ancak eşitleme ortaklarının çevrimiçi olmasını gerektirir. Lütfen unutmayın: Bu, bir sonraki planlı eşitleme gerçekleşene kadar tamamlanmamış geçici dosyaların geride kalmasına neden olabilir.</string>
-    <string name="os_open_file_limit">Android Açık Dosya Sınırı</string>
-    <string name="pull_order_type_alphabetic">Alfabetik</string>
-    <string name="download_support_bundle_title">Destek Paketini İndir</string>
-    <string name="clean_out_after">Şundan sonra temizle</string>
-    <string name="reason_force_start">Çalıştırma koşullarından bağımsız olarak Syncthing\'i başlamaya zorladığınızdan çalışıyor.</string>
-    <plurals name="syncthing_active_syncing_device_online">
-        <item quantity="one">Eşitleniyor: %%%1$d tamamlandı, %2$d cihaz çevrimiçi</item>
-        <item quantity="other">Eşitleniyor: %%%1$d tamamlandı, %2$d cihaz çevrimiçi</item>
-    </plurals>
-    <string name="undo_ignored_devices_folders_question">Bu, cihazları ve klasörleri yoksayan önceki kararları geri alacak. Devam edilsin mi?</string>
-    <string name="pull_order_type_newestFirst_description">Dosyaları değişiklik zamanına göre sıralanmış çekin. Sırasıyla önce en yeni olan.</string>
-    <string name="folder_pause">Klasörü Duraklat</string>
-    <string name="dialog_exit_while_running_as_service_title">Uygulamadan çıkmayı onaylayın</string>
-    <string name="pause_device">Cihazı Duraklat</string>
-    <string name="do_not_use_proxy">Yapılandırılmış proksi yok.</string>
-    <string name="reason_location_unavailable">Ayarlarda \'Seçilen kablosuz (Wi-Fi) ağlarda çalıştır\'ı etkinleştirdiniz. Android konum hizmetleri şu anda kapalı. Android kısıtlamalarına göre Syncthing, çalıştırılıp çalıştırılmayacağına karar vermek için şu anki kablosuz (Wi-Fi) ağ adını belirleyemiyor. Çözüm: Konumu açın, konum izni verin ve kablosuzu (Wi-Fi) yeniden bağlayın.</string>
-    <string name="pull_order_type_smallestFirst_description">Dosyaları dosya boyutuna göre sıralanmış çekin. Sırasıyla önce en küçük olan.</string>
-    <string name="run_in_flight_mode_title">Ağ bağlantısı olmadan çalıştır</string>
-    <string name="use_proxy">Proksi aracılığıyla bağlan</string>
-    <string name="security_notice">Güvenlik Bildirimi</string>
-    <plurals name="device_online_up_to_date">
-        <item quantity="one">%1$d cihaz çevrimiçi ve güncel</item>
-        <item quantity="other">%1$d cihaz çevrimiçi ve güncel</item>
-    </plurals>
-    <string name="category_backup">İçe ve Dışa aktar</string>
-    <string name="category_syncthing_options_summary">Bu menü yalnızca Syncthing çalışıyorsa kullanılabilir.</string>
-    <string name="save_title">Kaydet</string>
-    <string name="syncthing_log_title">Syncthing Günlüğü</string>
-    <string name="autoAcceptFolders">Otomatik Kabul Et</string>
-    <string name="folder_fileWatcherDescription">İşletim sisteminden dosyalardaki değişiklikler hakkında bildirimde bulunmasını ister. Eğer etkisizleştirilirse, düzenli saatlik taramalara geri döner.</string>
-    <string name="respect_battery_saving_title">Android pil tasarrufu ayarına uy</string>
-    <string name="run_on_roaming_summary">Syncthing\'in dolaşım sırasında mobil verileri kullanmasına izin verin.</string>
-    <string name="state_local_additions">Yerel İlaveler</string>
-    <string name="run_on_whitelisted_wifi_networks">Seçilen kablosuz (Wi-Fi) ağlar: %1$s</string>
-    <string name="reason_not_on_wifi">Syncthing\'in kablosuz (Wi-Fi) üzerinden çalışmasına izin verildi ancak kablosuz (Wi-Fi) bağlı değil veya telefon uçuş modunda.</string>
-    <string name="webui_password_title">Web Arayüzü Parolası</string>
-    <string name="api_key_copied_to_clipboard">Syncthing API anahtarı panoya kopyalandı</string>
-    <string name="folder_type_receive_encrypted_description">Yalnızca şifrelenmiş verileri depolar ve eşitler. Bağlı tüm cihazlardaki klasörlerin aynı parolayla ayarlanması veya \'Şifrelenmiş Al\' türünde olması da gerekir.</string>
-    <string name="reason_not_within_time_frame_2">\'Zaman planına göre çalıştır\'ı etkinleştirdiniz ve son eşitleme %s önceydi.</string>
-    <string name="share_activity_title">Syncthing\'e Kaydet</string>
-    <string name="notification_crash_text">Günlükler için tıklayın (%1$s)</string>
-    <string name="pull_order">Dosya Çekme Sırası</string>
-    <string name="toast_invalid_socks_proxy_address">Girdi, \'socks5://[IP/ANAMAKİNEADI]:[B.NOKTASI]\' proksi sözdizimini ihlal ediyor</string>
-    <string name="device_paused">Duraklatıldı</string>
-    <string name="folder_path_readonly">Android sürümünüz, Syncthing\'e seçilen klasöre yalnızca salt okunur erişimi verir.</string>
-    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">Giriş değeri geçerli değil. Lütfen %1$d ile %2$d arasında bir değer girin.</string>
-    <string name="device_syncing_percent_bytes">Eşitleniyor (%%%1$d, %2$s)</string>
-    <string name="preference_app_theme_follow_dark">Koyu</string>
-    <string name="syncthing_disabled">Uyuyor</string>
-    <string name="button_force_stop">DURDURMAYA ZORLA \nÇALIŞTIRMA KOŞULLARINI YOKSAY</string>
-    <string name="webui_remote_access_summary">Web kullanıcı arayüzüne başka bir cihazdan erişime izin vermeyi belirler. Eğer etkinleştirildiyse, kullanıcı \'syncthing\' ve parola olarak API anahtarıyla oturum açabilirsiniz. Varsayılan: etkisizleştirildi (en güvenli)</string>
-    <string name="type_staggered">Tür: Aşamalı</string>
-    <string name="open_file_manager">Dosya yöneticisini aç</string>
-    <string name="staggered_versioning_info">En Fazla Yaş: %1$d \nSürümlerin Yolu: %2$s</string>
-    <string name="syncthing_database_size">Syncthing Veritabanı Boyutu</string>
-    <string name="reason_not_nonroaming_mobile_data">Syncthing, dolaşım mobil veri bağlantıları üzerinden çalışmasına izin vermediğiniz için çalışmıyor.</string>
-    <string name="notification_crash_title">Çöktü (çıkış kodu %1$s)</string>
-    <string name="download_support_bundle_failed">Destek Paketini indirme başarısız. Günlükleri gözden geçirin.</string>
-    <string name="app_version_title">Syncthing-Fork Sarmalayıcı Sürümü</string>
-    <string name="folder_ignore_delete_description">Gelen indeks güncellemelerinin işlenmesini etkileyen uzman seçeneği. Ayarlandığında, silme işareti ayarlıyken gelen güncellemeler yoksayılır. Bkz. https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
-    <string name="folder_type_sendreceive_description">Klasör, değişiklikleri hem uzak cihazlara gönderecek hem de onlardan değişiklikleri alacak.</string>
-    <plurals name="file_name_title">
-        <item quantity="one">Dosya Adı</item>
-        <item quantity="other">Dosya Listesi</item>
-    </plurals>
-    <string name="download_support_bundle_succeeded">Destek Paketi başarılı olarak %s klasörüne indirildi.</string>
-    <string name="dialog_settings_restart_app_question">Bu seçeneğin değiştirilmesi uygulamanın hemen yeniden başlatılmasını gerektirir. Diğer tüm değişiklikler yoksayılacaktır. Devam edilsin mi?</string>
-    <string name="reason_not_while_power_saving">Telefon şu anda güç tasarrufunda olduğundan Syncthing çalışmıyor.</string>
-    <string name="download_support_bundle_in_progress">Destek Paketi indirmesi hazırlanıyor…</string>
-    <string name="pull_order_type_newestFirst">Önce En Yeni Olan</string>
-    <string name="webui_tcp_port_title">Web Arayüzü TCP B.Noktası</string>
-    <string name="reason_on_roaming_nonroaming_mobile_data">Syncthing\'in dolaşım ve dolaşım dışı mobil veri bağlantıları üzerinden çalışmasına izin veriliyor.</string>
-    <string name="state_sync_waiting">Eşitlemeyi bekliyor</string>
-    <string name="pull_order_type_oldestFirst">Önce En Eski Olan</string>
-    <string name="state_unshared">Paylaşılmadı</string>
-    <plurals name="copy_success">
-        <item quantity="one">%1$d dosya \"%2$s\" klasörüne kopyalandı</item>
-        <item quantity="other">%1$d dosya \"%2$s\" klasörüne kopyalandı</item>
-    </plurals>
-    <string name="none">Yok</string>
-    <string name="reason_not_on_whitelisted_wifi">Syncthing, şu anki kablosuz (Wi-Fi) ağın adı beyaz listede olmadığından çalışmıyor.</string>
-    <string name="folder_ignore_delete_caption">Silmeyi Yoksay</string>
-    <string name="run_conditions_summary">Syncthing\'in ne zaman çalışacağına karar vermek için aşağıdaki seçenekleri kullanın.</string>
-    <string name="run_on_whitelisted_wifi_title">Belirtilen kablosuz (Wi-Fi) ağlarda çalıştır</string>
-    <string name="this_device">Bu cihaz</string>
-    <string name="folder_type_receiveonly">Yalnızca Al</string>
-    <string name="run_on_roaming_title">Dolaşımdayken çalıştır</string>
-    <string name="device_state_unused">Kullanılmayan</string>
-    <string name="notifications_other_channel">Diğer bildirimler</string>
-    <string name="untrusted_device">Güvenilmeyen Cihaz</string>
-    <string name="notification_persistent_waiting_channel">Çalıştırma koşullarını izleme</string>
-    <string name="pull_order_type_random_description">Dosyaları rastgele sırayla çekin.</string>
-    <string name="toast_invalid_http_proxy_address">Girdi, \'http://[IP/ANAMAKİNEADI]:[B.NOKTASI]\' proksi sözdizimini ihlal ediyor</string>
-    <string name="respect_battery_saving_summary">Pil tasarrufu etkinse Syncthing\'i etkisizleştirir.</string>
-    <string name="ssl_cert_invalid_text">%1$s adresindeki web sitesinin SSL şifrelemesi için geçersiz bir sertifikası var gibi görünüyor. İlerlensin mi?</string>
-    <string name="reason_not_on_mobile_data">Syncthing\'in mobil veri bağlantısı üzerinden çalışmasına izin veriliyor ancak mobil veri bağlı değil.</string>
-    <string name="broadcast_service_control_title">Yayına Göre Hizmet Denetimi</string>
-    <string name="pull_order_type_oldestFirst_description">Dosyaları değişiklik zamanına göre sıralanmış çekin. Sırasıyla önce en eski olan.</string>
-    <string name="webui_tcp_port_unavailable">Web Arayüzü TCP bağlantı noktası %s meşgul. İkinci örnek mi?</string>
-    <string name="config_export_failed">Yapılandırmayı dışa aktarma başarısız oldu. Ayrıntıları görmek için Ayarlar-Sorun Giderme-Günlüğü Aç\'a gidin.</string>
-    <string name="web_page_loading">Web sayfası yükleniyor: \n%1$s …</string>
-    <string name="simple_versioning_info">Şu sürümleri tut: %1$s</string>
-    <string name="no_devices_configured">Yapılandırılmış cihazlar yok. \nŞimdi bir cihaz ekleyerek başlayın.</string>
-    <string name="advanced_storage_path_overview">Gelişmiş depolama yoluna genel bakış</string>
-    <string name="sync_duration_minutes_summary">%1$s dakika</string>
-    <string name="uptime">Çalışma Süresi</string>
-    <string name="config_read_failed">Yapılandırmayı okuma başarısız. Eşitleme klasörlerinizdeki verileri yedeklemeyi düşünün, ardından bu uygulamanın verilerini Android ayarlarından temizleyin ve tekrar başlatın.</string>
-    <string name="syncthing_running">Syncthing çalışıyor.</string>
-    <string name="reason_not_nonmetered_wifi">Syncthing, tarifeli kablosuz (Wi-Fi) bağlantılar üzerinden çalışmasına izin vermediğiniz için çalışmıyor.</string>
-    <string name="folder_type_receive_encrypted">Şifrelenmiş Al</string>
-    <string name="type_trashcan">Tür: Çöp Kutusu</string>
-    <string name="syncthing_has_crashed">Syncthing çöktü.</string>
-    <string name="run_in_flight_mode_summary">Bu seçeneğin etkinleştirilmesi, Syncthing\'in çevrimdışı olduğunuzda bile çalışmasına neden olacak. Cihazınız uçuş modu sırasında elle kablosuz (Wi-Fi) bağlantıları algılamada sorun yaşıyorsa etkinleştirin.</string>
-    <string name="device_last_seen">Son görülme: %1$s</string>
-    <string name="wifi_ssid_whitelist_empty">Belirtilen kablosuz (Wi-Fi) ağlar yok. Ağları belirtmek için tıklayın.</string>
-    <string name="dialog_exit_while_running_as_service_message">Değerlendirmeniz için: Uygulamayı açılışta otomatik olarak başlayacak şekilde yapılandırdınız. Bu nedenle, çalıştırma koşullarını izler ve koşullar eşleştiğinde arka planda herhangi bir zamanda eşitlenir. Yalnızca ciddi sorunlarla karşılaşırsanız el ile çıkmalısınız. Aksi takdirde, ayarlarda \'Açılışta otomatik başlat\' seçeneğini etkisizleştirin. Cihaz yeniden başlatılıncaya kadar şimdi çıkmak ister misiniz?</string>
-    <string name="local_discovery_disabled">\'Ayarlar\' &gt; \'Syncthing Seçenekleri\' &gt; \'Yerel Keşif\' bölümünde yerel keşfi etkisizleştirdiniz. Yerel ağdaki cihazları aramak için etkinleştirin.</string>
-    <string name="state_scan_waiting">Taramayı bekliyor</string>
-    <string name="reason_wifi_disallowed">Syncthing\'in kablosuz (Wi-Fi) veya kablolu (ethernet) üzerinden çalışmasına izin verilmiyor.</string>
-    <string name="behaviour_autostart_title">Otomatik başlat</string>
-    <string name="pull_order_type_alphabetic_description">Dosyaları alfabetik olarak dosya adına göre sıralanmış çekin.</string>
-    <string name="state_syncing_general">Eşitleniyor</string>
-    <string name="notifications_persistent_channel">Syncthing etkin</string>
-    <string name="state_up_to_date">Güncel</string>
-    <string name="folder_rejected">\"%1$s\" cihazı \"%2$s\" klasörünü paylaşmak istiyor</string>
-    <string name="open_issue_tracker_summary">%1$s adresinde Syncthing-Fork sorun izleyicisini açın</string>
-    <string name="folders">Klasörler</string>
-    <string name="preference_app_theme_follow_light">Açık</string>
-    <string name="dialog_settings_restart_app_title">Yeniden başlatma gerekli</string>
-    <string name="override_changes_question">Bu işlem, bu klasörü paylaşan diğer cihazlarda yapılan tüm değişiklikleri geri alacak. İlerlensin mi?</string>
-    <string name="state_failed_items">Başarısız Öğeler (%1$d)</string>
-    <string name="revert_local_changes_question">Bu işlem, bu cihazdaki klasörle yapılan tüm değişiklikleri geri alacak. İlerlensin mi?</string>
-    <string name="executable_not_found">Çalıştırılabilir çekirdek \"%s\" eksik. Yapım ve logcat çıktısını gözden geçirin.</string>
-    <string name="recent_changes_title">Son değişiklikler</string>
-    <string name="open_in_browser">Tarayıcıda aç</string>
-    <string name="type_external">Tür: Harici</string>
-    <string name="reason_on_metered_nonmetered_wifi">Syncthing\'in tarifeli ve tarifesiz kablosuz (Wi-Fi) bağlantılar üzerinden çalışmasına izin veriliyor.</string>
-    <string name="open_file_with">Dosyayı birlikte aç</string>
-    <string name="copy_progress">Dosyalar paylaşılıyor…</string>
-    <string name="reason_mobile_data_disallowed">Syncthing, mobil veri bağlantısında çalışacak şekilde yapılandırılmamış.</string>
-    <string name="webui_remote_access_title">Web Arayüzü uzak erişim</string>
-    <string name="respect_master_sync_title">Android \'Verileri otomatik eşitle\' ayarına uy</string>
-    <string name="invalid_port_number" tools:ignore="PluralsCandidate">Bağlantı noktası numarası geçerli değil. Lütfen %1$d ile %2$d arasında bir bağlantı noktası girin.</string>
-    <string name="sync_only_wifi_ssids_wifi_turn_on_location">Ağları seçmek için lütfen konumu açın.</string>
-    <plurals name="files">
-        <item quantity="one">%1$d / %2$d Dosya</item>
-        <item quantity="other">%1$d / %2$d Dosya</item>
-    </plurals>
-    <string name="config_file_missing">İşlem için çok önemli bir yapılandırma dosyası eksik</string>
-    <string name="complete_welcome_wizard_first">Önce, uygulamayı uygulama çekmecesinden başlatın ve dosyaları paylaşmadan önce karşılama sihirbazını tamamlayın.</string>
-    <string name="environment_variables">Ortam değişkenleri</string>
-    <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor anında başlatılamadı. Yeniden başlatmadan sonra bu hata kaybolmazsa lütfen uygulamayı yeniden başlatın ve bir hata raporu gönderin.</string>
-    <string name="delete_unexpected_items">Beklenmeyen öğeleri sil</string>
-    <string name="category_user_interface">Kullanıcı Arayüzü</string>
-    <string name="run_on_mobile_data_summary">Cihaz mobil veri ağı üzerinden bağlandığında çalıştır. Uyarı: Büyük miktarda veriyi eşitlerseniz bu, mobil operatör veri planınızdan çok fazla veri tüketebilir.</string>
-    <string name="pull_order_type_largestFirst">Önce En Büyük Olan</string>
-    <string name="http_proxy_address_title">HTTP(S) proksi</string>
-    <string name="behaviour_autostart_summary">Uygulamayı işletim sistemi başlatıldığında otomatik olarak başlatır.</string>
-    <string name="st_reset_deltas_title">Delta İndekslerini Sıfırla</string>
-    <string name="use_tor_summary">Artırılmış gizlilik için tüm trafiği Tor üzerinden zorlayın. Orbot gerektirir. Proksi seçeneklerini etkisizleştirir.</string>
-    <string name="specify_wifi_ssid_whitelist">Kablosuz (Wi-Fi) ağları seçin</string>
-    <plurals name="copy_success_partially">
-        <item quantity="one">%1$d dosya \"%2$s\" klasörüne kopyalandı, %3$d zaten var</item>
-        <item quantity="other">%1$d dosya \"%2$s\" klasörüne kopyalandı, %3$d zaten var</item>
-    </plurals>
-    <string name="button_force_start">BAŞLATMAYA ZORLA \nÇALIŞTIRMA KOŞULLARINI YOKSAY</string>
-    <string name="shared_folders_title_colon">"Klasörler: "</string>
-    <string name="folder_type_sendreceive">Gönder ve Al</string>
-    <string name="file_name_template">Yeni dosya %1$s</string>
-    <string name="pull_order_type_largestFirst_description">Dosyaları dosya boyutuna göre sıralanmış çekin. Sırasıyla önce en büyük olan.</string>
-    <string name="reason_not_charging">Telefon şarj olmuyor.</string>
-    <string name="sttrace_title">STTRACE Seçenekleri</string>
-    <string name="run_on_wifi_title">Kablosuzda (Wi-Fi) çalıştır</string>
-    <string name="suggest_file_manager_app_dialog_text">Açık kaynaklı dosya yöneticisi uygulaması \'Material Files\'ı yüklemenizi öneririz. Uygulama mağazası sayfasını açmak ister misiniz?</string>
-    <string name="versions_path">Sürümlerin Yolu</string>
-    <string name="syncthing_active_details">Çalışıyor: %1$s</string>
-    <string name="folder_type_sendonly_description">Dosyalar, diğer cihazlarda yapılan değişikliklere karşı korunur, ancak bu cihazda yapılan değişiklikler kümenin geri kalanına gönderilecektir.</string>
-    <string name="deviceEncryptionPasswordHint">Eğer güvenilmezse, şifreleme parolasını girin</string>
-    <string name="ignore_patterns">Yoksayma Şekilleri</string>
-    <string name="nothing_share">Paylaşacak bir şey yok</string>
-    <string name="toast_invalid_environment_variables">Değer, geçerli bir ortam değişkeni dizgisi değil</string>
-    <string name="run_on_time_schedule_title">Zaman planlamasına göre çalıştır</string>
-    <string name="suggest_file_manager_app_dialog_title">Bulunan uyumlu dosya yöneticisi uygulaması yok</string>
-    <string name="type_simple">Tür: Basit</string>
-    <string name="syncthing_terminated">Sonlandırıldı</string>
-    <string name="run_on_metered_wifi_summary">Cihaz tarifeli bir kablosuz (Wi-Fi) ağa bağlıyken çalıştır, örn. etkin nokta veya bağlı ağ. Dikkat: Çok fazla veri eşitlerseniz, bu işlem veri planınızın büyük bir bölümünü tüketebilir.</string>
-    <string name="expert_mode_summary">Bu seçeneğin etkinleştirilmesi gelişmiş yapılandırma seçeneklerini gösterecek. Bunları nasıl doğru kullanacağınızı bildiğinizden emin olmak için önce Syncthing Belgelerine bir göz atmalısınız. Yanlış ayarlar pilin tükenmesine, sistem kaynaklarının tükenmesine veya tamamlanmamış eşitlemeye neden olabilir.</string>
-    <string name="cancel_title">İptal</string>
-    <string name="pull_order_type_random">Rastgele</string>
-    <string name="state_cleaning">Sürümleri Temizleme</string>
-    <string name="crash_reporting">İsimsiz Çökme Bildirme</string>
-    <string name="notification_out_of_disk_space">SD kart dolu. %1$s dosyası</string>
-    <string name="maximum_age">En Fazla Yaş</string>
-    <string name="pull_order_type_smallestFirst">Önce En Küçük Olan</string>
-    <string name="verbose_log_title">Ayrıntılı günlük</string>
-    <string name="android_log_title">Android Günlüğü</string>
-    <string name="power_source_title">Cihaza şununla güç verildiğinde çalıştır</string>
-    <string name="device_last_seen_never">Yok</string>
-    <string name="sync_duration_minutes_title">Eşitleme döngüsünün süresi</string>
-    <string name="advanced_directory_selection">Gelişmiş Dizin Seçimi</string>
-    <string name="syncthing_api_key">Syncthing API Anahtarı (kopyalamak için dokunun)</string>
-    <string name="reason_on_nonroaming_mobile_data">Syncthing\'in dolaşım dışı mobil veri bağlantıları üzerinden çalışmasına izin veriliyor. Etkin bağlantı dolaşım dışıdır.</string>
-    <string name="preference_app_theme_follow_system">Sistemi takip et</string>
-    <string name="custom_wifi_ssid_whitelist_empty">Beyaz listeye eklenmiş kablosuz (Wi-Fi) SSID\'si yok. Lütfen ayarlarda bazılarını belirtin.</string>
-    <string name="run_on_metered_wifi_title">Tarifeli kablosuzda (Wi-Fi) çalıştır</string>
-    <string name="folder_label_required">Klasör etiketi boş olmamak zorundadır</string>
-    <string name="reason_not_on_battery_power">Telefon pil gücüyle çalışmıyor.</string>
-    <string name="discovered_devices_title">Keşfedilen cihazlar - Seçmek için dokunun</string>
-    <string name="toast_invalid_folder_selected">Üzgünüz. Seçilen klasör kullanılamaz. Lütfen dahili veya harici depolamada bulunan bir klasör seçin.</string>
-    <string name="st_reset_deltas_done">Syncthing\'in delta indeksleri başarılı olarak sıfırlandı</string>
-    <string name="reason_on_flight_mode">Syncthing, uçuş modu etkinken çalışmasına izin verdiğiniz için çalışıyor.</string>
-    <string name="folder_type_switch_to_receive_encrypted_not_allowed">Varolan klasörlerin \'Şifrelenmiş Al\' olarak değiştirilmesi desteklenmiyor.</string>
-    <string name="undo_ignored_devices_folders_title">Yoksayılan cihazları ve klasörleri geri al</string>
-    <string name="no_recent_changes">Son değişiklikler yok.</string>
-    <string name="verbose_log_summary">Bu seçeneğin etkinleştirilmesi, hata ayıklama günlüklerinin çok ayrıntılı seviyede oluşturulmasına yardımcı olacak.</string>
-    <string name="state_paused">Duraklatıldı</string>
-    <string name="reason_on_wifi">Syncthing\'in kablosuz (Wi-Fi) üzerinden çalışmasına izin verildi ve kablosuz (Wi-Fi) şu anda bağlı.</string>
-    <string name="reason_on_whitelisted_wifi">Syncthing\'in şu anki kablosuz (Wi-Fi) ağda çalışmasına izin veriliyor.</string>
-    <string name="undo_ignored_devices_folders_done">Kararlar başarılı olarak geri alındı.</string>
-    <string name="current_path">Şu Anki Yol: %1$s</string>
-    <string name="preference_app_theme_title">Tema</string>
-    <string name="folder_type_receiveonly_description">Dosyalar kümeden eşitlenir, ancak yerel olarak yapılan herhangi bir değişiklik diğer cihazlara gönderilmeyecektir.</string>
-    <string name="show_device_id">Cihaz kimliğini göster</string>
-    <string name="external_versioning_info">Komut: %1$s</string>
-    <string name="could_not_access_deviceid">Cihaz kimliğine erişilemedi.</string>
-    <string name="category_debug">Sorun Giderme</string>
-    <string name="reason_not_within_time_frame_0_min">bir dakikadan kısa süre</string>
-    <string name="reason_not_while_auto_sync_data_disabled">Android\'de şu anda \'Verileri otomatik eşitle\' seçeneği etkisizleştirildiğinden Syncthing çalışmıyor.</string>
-    <string name="reason_on_nonmetered_wifi">Syncthing\'in tarifesiz kablosuz (Wi-Fi) bağlantılar üzerinden çalışmasına izin veriliyor. Etkin kablosuz (Wi-Fi) bağlantı tarifesizdir.</string>
-    <string name="devices_list_empty">Yapılandırılmış cihazlar yok. Yeni bir cihaz eklemek için dokunun.</string>
-    <string name="run_on_wifi_summary">Cihaz bir kablosuz (Wi-Fi) veya kablolu (ethernet) ağa bağlandığında çalıştır.</string>
-    <string name="respect_master_sync_summary">Hızlı ayarlar kutucuğu \'Verileri otomatik eşitle\' kapatıldığında Syncthing\'i etkisizleştirir.</string>
-    <string name="command">Komut</string>
-    <string name="no_remote_devices_connected">Bağlı uzak cihazlar yok</string>
-    <string name="st_reset_database_question">Bu eylem yalnızca destek ekibimizin önerisine dayanarak yapılmalıdır. \nSyncthing\'in veritabanını temizlemek istediğinize emin misiniz?</string>
-    <string name="folder_path_readwrite">Android sürümünüz, Syncthing\'e seçilen klasöre okuma ve yazma erişimi verir.</string>
-    <string name="revert_local_changes">Yerel değişiklikleri geri al</string>
-    <string name="syncthing_starting">Syncthing başlıyor.</string>
-    <string name="expert_mode_title">Uzman modu</string>
-    <string name="share_device_id_chooser">Cihaz kimliğini şununla paylaş</string>
-    <string name="modified_by_device">Cihaz: %1$s</string>
-    <string name="reason_on_mobile_data">Syncthing\'in mobil veri üzerinden çalışmasına izin veriliyor.</string>
-    <string name="modification_time">Zaman: %1$s</string>
-    <string name="trashcan_versioning_info">Şundan sonra temizle: %1$s</string>
-    <string name="folder_go_up">Yukarı git</string>
-    <string name="socks_proxy_address_title">SOCKS5 proksi</string>
-    <string name="st_reset_deltas_question">Bu eylem yalnızca destek ekibimizin önerisine dayanarak yapılmalıdır. \nSyncthing\'in delta indekslerini temizlemek istediğinize emin misiniz?</string>
-    <string name="broadcast_service_control_summary">Varsayılan: Etkisizleştirildi. Adb veya üçüncü taraf uygulamaların, örn. otomasyon uygulamalarının Syncthing\'e çalıştırma koşullarını takip etmesi, başlatmaya zorlaması veya durdurmaya zorlaması amacıyla talimat vermesine izin vermek için etkinleştirin.</string>
-    <plurals name="reason_not_within_time_frame_minutes">
-        <item quantity="one">%d dakika</item>
-        <item quantity="other">%d dakika</item>
-    </plurals>
-    <string name="config_create_failed">Yapılandırmayı oluşturma başarısız. Logcat çıktısını gözden geçirin.</string>
-    <string name="device_addresses_invalid">Cihaz adresleri doğru olarak biçimlendirilmemiş. Lütfen tekrar deneyin. Daha fazla bilgi için Syncthing belgelerine bakın.</string>
+
+    <!-- Titles used in the folder type dialog and folder type button in the folder activity -->
     <string name="folder_type">Klasör Türü</string>
-    <string name="state_sync_preparing">Eşitlemeye hazırlanıyor</string>
+
+    <!-- Displays the current folder type in the folder activity -->
+    <string name="folder_type_sendreceive">Gönder ve Al</string>
     <string name="folder_type_sendonly">Yalnızca Gönder</string>
-    <string name="power_source_ac_and_battery_power">Priz ve pil gücü.</string>
-    <string name="power_source_ac_power">Priz gücü.</string>
-    <string name="power_source_battery_power">Pil gücü.</string>
-    <string name="dialog_confirm_skip_ignore_doze_permission">Dikkat Edin: Eğer SyncthingNative kesintiye uğrarsa ve tuhaf bir şey yaparsa suçlu siz olursunuz. Yalnızca cihazınızın izin verilmesini desteklememesi durumunda atlayın. Gerçekten atlansın mı?</string>
-    <string name="sleep_interval_minutes_title">Eşitleme duraklatma aralığının süresi</string>
-    <string name="start_into_web_gui_summary">Uygulamayı başlatırken, ana ekran yerine web Grafiksel Kullanıcı Arayüzü\'nü açar</string>
-    <string name="start_into_web_gui_title">Doğrudan web GKA içinde başlat</string>
-    <string name="open_source_licenses_summary">Kullanılan açık kaynak lisanslarını göster</string>
-    <string name="open_source_licenses_title">Açık Kaynak Lisansları</string>
-    <string name="syncthing_forum_title">Syncthing Forumu</string>
-    <string name="privacy_title">Gizlilik İlkesi</string>
-    <string name="syncthing_forum_summary">Syncthing Forumu\'na gidin ve destek alın</string>
-    <string name="privacy_summary">Kişisel verilerin kullanımını (varsa) kapsayan syncthing-android\'in gizlilik ilkesini açın, örn. konum.</string>
-    <string name="clear_stversions_question">Bu, Syncthing tarafından işlenen dosyaların önceki tüm sürümlerini silecek. Devam edilsin mi?</string>
-    <string name="clear_stversions_title">Tüm sürümlendirme klasörlerini boşalt</string>
-    <string name="clear_stversions_summary">Syncthing ile değiştirildiğinde veya silindiğinde dosyalar .stversions dizinine taşınır. Muhtemelen orada, silinen dosyaları bulabilir ve kurtarabilirsiniz, ancak dosyaların eskimiş sürümleri cihazınızda depolama alanı kaplar.</string>
-    <string name="clear_stversions_done">.stversions klasörleri başarılı olarak temizlendi.</string>
-    <string name="folder_run_script_caption">Komut Kodu Çalıştır</string>
-    <string name="folder_run_script_description">Bir klasör eşitleme durumunu değiştirdikten sonra komut kodlarını çalıştırmak için uzman seçeneği. \'.stfolder/*.sh\' konumunda olan komut kodları çalıştırılacaktır, güvenlik hususları için diğer yerler desteklenmez.\nÖrnek komut kodu çağrısı: \'.stfolder/rename-files.sh sync_complete\'</string>
-    <plurals name="conflicts">
-        <item quantity="one">%1$d çakışma</item>
-        <item quantity="other">%1$d çakışma</item>
-    </plurals>
-    <string name="share_log_file_missing">Paylaşılacak günlük dosyası eksik.</string>
-    <string name="share_log_file">Günlük dosyasını paylaş</string>
-    <string name="backup_password_title">Yapılandırma koruma parolası</string>
-    <string name="preference_category_actions">Eylemler</string>
-    <string name="preference_category_prepare">Hazırlık</string>
-    <string name="config_export_successful_no_path">Yapılandırma dışa aktarıldı. Lütfen daha sonraki bir içe aktarma için parolayı hatırladığınızdan emin olun.</string>
-    <string name="config_import_failed_no_path">Yapılandırmayı içe aktarma başarısız oldu. Ayrıntıları görmek için Ayarlar-Sorun Giderme-Günlüğü Aç\'a gidin.</string>
-    <string name="backup_password_not_set">⚠ Parola ayarlı değil.</string>
-    <string name="backup_password_set">✅ Parola şuna ayarlı: %1$s</string>
-    <string name="backup_rel_path_to_zip">Yapılandırma arşivine göreceli yol</string>
-    <string name="preference_category_explanation">Açıklama</string>
-    <string name="backup_password_summary">ℹ️ Önerilir:\nDışa aktarma sırasında yapılandırmanızı şifrelemek için kullanılacak güçlü bir parola girin ve içe aktarmada şifresini çözün. Bu parolayı kurtarma işlemi için güvenli bir yerde tutun. İçe aktarma özelliğini kullanmak için buna ihtiyacınız olacak.\n\n⚠️ Önerilmez:\nParola kullanmamak, diğer uygulamalar potansiyel olarak Syncthing yapılandırmanızı okuyabilir ve kandırabilir. Yapılandırmanın ortaya çıkması, kötü bir aktörün çalınan yapılandırma dışa aktarmalarını kullanarak dosyalarınıza yetkisiz erişim elde etme riski taşır.</string>
-    <string name="backup_password_set_masked">✅ Parola ayarlandı - Değiştirmek için dokunun</string>
-    <string name="toggle_password_visibility">Parola görünürlüğünü değiştir</string>
-    <string name="allow_overwrite_files_title">Varolan dosyaların üzerine yazılmasına izin ver</string>
-    <string name="allow_overwrite_files_summary">Başka bir uygulama, klasörlerimizden birinde dosyaları paylaştığında.</string>
+    <string name="folder_type_receiveonly">Yalnızca Al</string>
+    <string name="folder_type_receive_encrypted">Şifrelenmiş Al</string>
+
+    <!-- Folder type dialog descriptions for folder types -->
+    <string name="folder_type_sendreceive_description">Klasör, değişiklikleri hem uzak cihazlara gönderecek hem de onlardan değişiklikleri alacak.</string>
+    <string name="folder_type_sendonly_description">Dosyalar, diğer cihazlarda yapılan değişikliklere karşı korunur, ancak bu cihazda yapılan değişiklikler kümenin geri kalanına gönderilecektir.</string>
+    <string name="folder_type_receiveonly_description">Dosyalar kümeden eşitlenir, ancak yerel olarak yapılan herhangi bir değişiklik diğer cihazlara gönderilmeyecektir.</string>
+    <string name="folder_type_receive_encrypted_description">Yalnızca şifrelenmiş verileri depolar ve eşitler. Bağlı tüm cihazlardaki klasörlerin aynı parolayla ayarlanması veya \'Şifrelenmiş Al\' türünde olması da gerekir.</string>
+
+    <!-- Titles used in the pull order dialog and pull order button in the folder activity -->
+    <string name="pull_order">Dosya Çekme Sırası</string>
+
+    <!-- Displays the current pull order type in the Folder activity -->
+    <string name="pull_order_type_random">Rastgele</string>
+    <string name="pull_order_type_alphabetic">Alfabetik</string>
+    <string name="pull_order_type_smallestFirst">Önce En Küçük Olan</string>
+    <string name="pull_order_type_largestFirst">Önce En Büyük Olan</string>
+    <string name="pull_order_type_oldestFirst">Önce En Eski Olan</string>
+    <string name="pull_order_type_newestFirst">Önce En Yeni Olan</string>
+
+    <!-- Pull order dialog descriptions for pull order types -->
+    <string name="pull_order_type_random_description">Dosyaları rastgele sırayla çekin.</string>
+    <string name="pull_order_type_alphabetic_description">Dosyaları alfabetik olarak dosya adına göre sıralanmış çekin.</string>
+    <string name="pull_order_type_smallestFirst_description">Dosyaları dosya boyutuna göre sıralanmış çekin. Sırasıyla önce en küçük olan.</string>
+    <string name="pull_order_type_largestFirst_description">Dosyaları dosya boyutuna göre sıralanmış çekin. Sırasıyla önce en büyük olan.</string>
+    <string name="pull_order_type_oldestFirst_description">Dosyaları değişiklik zamanına göre sıralanmış çekin. Sırasıyla önce en eski olan.</string>
+    <string name="pull_order_type_newestFirst_description">Dosyaları değişiklik zamanına göre sıralanmış çekin. Sırasıyla önce en yeni olan.</string>
+
+    <!-- Titles used in the file versioning dialog and file versioning button in the folder activity -->
+    <string name="maximum_age">En Fazla Yaş</string>
+    <string name="clean_out_after">Şundan sonra temizle</string>
+    <string name="file_versioning">Dosya Sürümlendirme</string>
+    <string name="none">Yok</string>
+    <string name="versions_path">Sürümlerin Yolu</string>
+    <string name="command">Komut</string>
+
+    <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
+
+    <!-- Displays the current file versioning type in the Folder activity -->
+    <string name="type_simple">Tür: Basit</string>
+    <string name="type_trashcan">Tür: Çöp Kutusu</string>
+    <string name="type_staggered">Tür: Aşamalı</string>
+    <string name="type_external">Tür: Harici</string>
+
+    <!-- Information displayed about the current file versioning configuration in the folder activity -->
+    <string name="trashcan_versioning_info">Şundan sonra temizle: %1$s</string>
+    <string name="staggered_versioning_info">En Fazla Yaş: %1$d \nSürümlerin Yolu: %2$s</string>
+    <string name="external_versioning_info">Komut: %1$s</string>
+    <string name="simple_versioning_info">Şu sürümleri tut: %1$s</string>
+    <string name="show_device_id">Cihaz kimliğini göster</string>
+
+    <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
+    <string name="could_not_access_deviceid">Cihaz kimliğine erişilemedi.</string>
+    <string name="share_device_id_chooser">Cihaz kimliğini şununla paylaş</string>
+    <string name="run_on_whitelisted_wifi_summary">Eşitlemenin yalnızca belirli kablosuz (Wi-Fi) ağlarda gerçekleşmesini kısıtlamak için beyaz listeyi açın.</string>
+    <string name="custom_sync_conditions_title">Özel eşitleme koşulları</string>
+    <string name="custom_sync_conditions_description">Genel çalıştırma koşullarının istisnalarını belirtmenizi sağlar.</string>
+    <string name="custom_sync_conditions_dialog">Eşitleme koşullarını belirle</string>
+
+    <!-- Quick Setting icon names and labels -->
+    <string name="qs_force_label">Çalıştırmaya zorla</string>
+    <string name="qs_forced_to_run">Çalıştırmaya zorlandı</string>
+    <string name="qs_forced_to_stop">Durdurmaya zorlandı</string>
+    <string name="qs_following_run_conditions">Aşağıdaki çalıştırma koşulları</string>
+    <string name="qs_schedule_label">5 dakikalığına çalıştır</string>
+    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">%1$d dakikalığına çalıştır</string>
+    <string name="qs_schedule_disabled">Zamanlama etkisizleştirildi</string>
+    <string name="no_app_to_open_link">Bu bağlantıyı açacak bir uygulama yok.</string>
+
+    <!-- Custom HTTPS certificate -->
+    <string name="webui_custom_cert_title">Özel HTTPS sertifikası</string>
+    <string name="webui_custom_cert_summary">Yerel Web GKA için kendi sertifikanızı kullanın</string>
+    <string name="custom_cert_explanation">Syncthing\'in yerleşik kendi kendine imzalı sertifikasını kendi sertifikanızla değiştirin. Sertifikayı (tam zincir dahil olmak üzere PEM) ve özel anahtarını seçin, doğrulama sonuçlarını kontrol edin ve ardından uygulayın. Syncthing, yeni sertifikayı yüklemek için yeniden başlatılacak; çevrimiçi duruma geri dönemezse, önceki sertifika otomatik olarak geri yüklenir.\n\nKendi CA\'nız tarafından imzalanan bir sertifika için, önce o CA\'nın kök sertifikasını bu cihaza yükleyin (Ayarlar → Güvenlik → CA sertifikası yükle).</string>
+    <string name="custom_cert_current_title">Geçerli sertifika</string>
+    <string name="custom_cert_current_none">Sertifika bulunamadı.</string>
+    <string name="custom_cert_subject">Konu: %1$s</string>
+    <string name="custom_cert_issuer">Veren kuruluş: %1$s</string>
+    <string name="custom_cert_expires">Son kullanma tarihi: %1$s</string>
+    <string name="custom_cert_self_signed">Kendi kendine imzalı (varsayılan)</string>
+    <string name="custom_cert_ca_signed">CA imzalı</string>
+    <string name="custom_cert_select_cert">Sertifika seç (.pem)</string>
+    <string name="custom_cert_select_key">Özel anahtar seç (.pem)</string>
+    <string name="custom_cert_not_selected">Seçilmedi</string>
+    <string name="custom_cert_apply">Sertifikayı uygula</string>
+    <string name="custom_cert_reset_title">Otomatik oluşturulan sertifikaya sıfırla</string>
+    <string name="custom_cert_reset_summary">Özel sertifikayı silin ve Syncthing\'in yeni bir kendi kendine imzalı sertifika oluşturmasına izin verin</string>
+    <string name="custom_cert_reset_question">Geçerli sertifika, yeni oluşturulmuş kendi kendine imzalı bir sertifikayla değiştirilsin mi?</string>
+    <string name="custom_cert_applying">Uygulanıyor — Syncthing yeniden başlatılıyor…</string>
+    <string name="custom_cert_applied">Sertifika uygulandı.</string>
+    <string name="custom_cert_applied_pending">Kaydedildi. Bir sonraki Syncthing başlatılışında geçerli olacak.</string>
+    <string name="custom_cert_failed">Sertifika uygulanamadı: %1$s</string>
+    <string name="custom_cert_reset_done">Yeni bir kendi kendine imzalı sertifikaya sıfırlandı.</string>
+    <string name="custom_cert_file_too_large">Bu dosya, sertifika veya anahtar olmak için çok büyük.</string>
+    <string name="custom_cert_read_failed">Seçilen dosya okunamadı.</string>
+    <string name="cert_check_chain">Sertifika zinciri</string>
+    <string name="cert_check_trust">Bu cihaz tarafından güvenilir</string>
+    <string name="cert_check_validity">Geçerlilik süresi</string>
+    <string name="cert_check_key">Özel anahtar</string>
 </resources>

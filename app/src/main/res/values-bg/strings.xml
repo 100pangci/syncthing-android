@@ -1,507 +1,1012 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <string name="app_name">Syncthing-Fork</string>
+
     <string name="app_description">Отворено, надеждно и нецентрализирано приложение за синхронизиране на файлове.</string>
+
     <!-- FirstStartActivity -->
+
     <!-- Title for dialog displayed on first start -->
     <string name="welcome_title">Добре дошли при Syncthing за Андроид</string>
+
+    <!-- Welcome wizard -->
+    <!-- Slide "Introduction" -->
+    <string name="welcome_text">Syncthing е приложение за синхронизиране на файлове с отворен код. За да споделите информация с друго устройство е необходимо да добавите уникалния му идентификатор към списъка с устройствата. След това ще можете да изберете кои папки с кои устройства да споделите.\n\nАко срещнете проблем го докладвайте в GitHub.</string>
+
+    <!-- Slide "Storage Permission" -->
+    <string name="storage_permission_title">Разрешение за хранилище</string>
+    <string name="storage_permission_desc">За да извършва синхронизация Syngthing има нужда от достъп до хранилището.</string>
+    <string name="dialog_all_files_access_not_supported">Устройството не поддържа достъп до всички файлове</string>
+
     <!-- Slide "Ignore battery optimizations" -->
     <string name="ignore_doze_permission_title">Пестене на батерия</string>
+    <string name="ignore_doze_permission_os_notice">Известен проблем на телевизорите с Android, е че понякога затварят приложения във фонов режим. Решението е налично на адрес „%1$s/%2$s“.</string>
+    <string name="ignore_doze_permission_desc">Android може да спре синхронизацията след известно време. За да предотвратите това, изключете оптимизацията на батерията. Някои устройства имат инсталирани допълнителни приложения, които затварят процеси. Трябва да добавите Syncthing и в техния списък с изключения.</string>
+    <string name="dialog_disable_battery_optimizations_not_supported">Устройството не поддържа изключване на оптимизирането на батерията</string>
+    <string name="dialog_confirm_skip_ignore_doze_permission">Внимателно: Ако SyncthingNative бъде прекъснат и направи нещо странно, вие сте си виновни. Прескочете само в случай, че устройството ви не поддържа даване на разрешение. Желаете ли да прескочите стъпката?</string>
+
+    <!-- Slide "Location Permission" -->
+    <string name="location_permission_title">Достъп до местоположението</string>
+    <string name="location_permission_desc">Syncthing може да бъде настроен да работи само в избрани безжични мрежи. Android изисква приложението да има разрешение за местоположение, за да веземе името на използваната безжична мрежа. Ако искате да използвате тази възможност, натиснете бутона по-горе. Можете да пропуснете стъпката. За повече подробности вижте политиката за поверителност.</string>
+    <string name="location_permission_desc_api_29">Съвет за Андрод 10+: „Разрешаване винаги“</string>
+
+    <!-- Slide "Notification Permission" -->
+    <string name="notification_permission_title">Разрешение за известия</string>
+    <string name="notification_permission_desc">Необходимо е за показване на известия за добавяне на нови устройства, заявки за споделяне на папки и за поддържане на услугата работеща.</string>
+
+    <!-- Slide "Key Generation" -->
+    <string name="key_generation_title">Създаване на ключове</string>
+    <string name="key_generation_success">Криптографските ключове за поверителен обмен на информацията са създадени.</string>
+
+    <!-- Generic texts used everywhere -->
+    <string name="back">Назад</string>
     <string name="cont">Напред</string>
+    <string name="finish">Готово</string>
+    <string name="generic_example">Пример</string>
+    <string name="grant_permission">Разрешаване</string>
+    <string name="permission_granted">Разрешението е получено</string>
+    <string name="reason">Причина:</string>
+
+    <string name="accept">Приемане</string>
+
     <string name="ignore">Пренебрегване</string>
+
+
+    <string name="main_menu">Главно меню</string>
+
+    <string name="refresh">Презареждане</string>
+
+    <!-- PhotoShootActivity -->
+
+    <string name="photo_shoot_launcher_title">Sync. Камера</string>
+    <string name="photo_shoot_activity_title">Syncthing-Fork Камера</string>
+    <string name="photo_shoot_intro_welcome_title">Добре дошли в Syncthing Camera</string>
+    <string name="photo_shoot_intro_no_camera">Съжаляваме, но устройството няма камера.</string>
+    <string name="photo_shoot_intro_missing_permissions">Приложението изисква разрешение за камерата и достъп до файлове.</string>
+    <string name="grant_storage_permission">Разрешаване на достъп до файловете</string>
+    <string name="grant_camera_permission">Разрешаване на достъп до камерата</string>
+    <string name="photo_shoot_intro_permission_desc">Syncthing Камера изисква съгласието ви, за да прави снимки и да ги запазва на устройството. Това е по ваш избор. За да се възползвате, дайте разрешенията и докоснете „Напред“. Ще бъде настроена папка Syncthing Камера, която по-късно можете да споделяте с други устройства с инсталиран Syncthing.</string>
+    <string name="photo_shoot_take_picture_success">Изображението е запазено в папката Syncthing Камера.</string>
+    <string name="photo_shoot_take_picture_failure">Грешка при снимане или отказахте.</string>
+
+    <!-- Label of the folder created by the Syncthing Camera feature. -->
+    <string name="default_syncthing_camera_folder_label">Syncthing Камера</string>
+
+    <!-- MainActivity -->
+
+    <!-- Main bottom navigation view -->
+    <string name="activity_main_bottom_navigation_rescan_all">Сканиране всички</string>
+
+    <!-- Main menu button -->
+
+    <!-- Exception dialog message -->
+
+    <!-- Title of the exit app when running as a service confirmation dialog -->
+    <string name="dialog_exit_while_running_as_service_title">Потвърдете за изход от приложението</string>
+    <string name="dialog_exit_while_running_as_service_message">Забележка: Настроили сте приложението да се изпълнява автоматично при зареждане. Следователно то следи условията за работа и синхронизира по всяко време във фонов режим, когато условията позволяват. Ако се сблъскате със сериозни проблеми приложението може да бъде спряно само ръчно. В противен случай изключете „Автоматично стартиране“ в настройките. Жеаете ли да спрете приложението сега, докато устройството не рестартира?</string>
+
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">Добавяне папка</string>
+
     <!-- Title of the "share device id" menu action -->
+
     <!-- Shown in the chooser dialog when sharing a Device ID -->
+
     <string name="usage_reporting_dialog_title">Разрешавате ли анонимно отчитане на употребата?</string>
+
     <string name="yes">Да</string>
+
     <string name="no">Не</string>
+
+
+    <!-- URL to open when user chose to open website in usage reporting dialog -->
+
     <string name="toast_write_storage_permission_required">Приложението изисква права за запис</string>
+
+    <string name="device_rejected">Устройството „%1$s“ желае да се свърже</string>
+
+    <string name="folder_rejected">Устройството „%1$s“ желае да сподели папката „%2$s“</string>
+
     <!-- StateDialogActivity -->
+
     <!-- Text for FoldersFragment and DevicesFragment loading view -->
     <!-- Shown instead of web_gui_loading if the key does not exist and has to be created -->
     <string name="web_gui_creating_key">Създаване на ключове. Може да отнеме време…</string>
+
     <!-- FolderListFragment -->
+
     <string name="folders_fragment_title">Папки</string>
+
     <!-- Shown if no folders exist -->
     <string name="folder_list_empty">Не са открити папки</string>
+
+    <!-- Format string for folder file count -->
+    <plurals name="files">        <item quantity="one">%1$d / %2$d файл</item>        <item quantity="other">%1$d / %2$d файла</item></plurals>
+
+    <!-- Format string for conflict file count -->
+    <plurals name="conflicts">        <item quantity="one">%1$d конфликт</item>        <item quantity="other">%1$d конфликта</item></plurals>
+
+    <string name="override_changes">Налагане на местни промени</string>
+
+    <!-- Override Changes Confirmation Dialog -->
+    <string name="override_changes_question">По този начин ще отмените промените от другите устройства, споделящи папката. Желаете ли да продължите?</string>
+
+    <string name="revert_local_changes">Отказ от местни промени</string>
+
+    <string name="delete_unexpected_items">Премахване на неочаквани елементи</string>
+
+    <!-- Revert Local Changes Confirmation Dialog -->
+    <string name="revert_local_changes_question">По този начин ще отмените промените от устройството. Желаете ли да продължите?</string>
+
+    <string name="open_file_manager">Управление на файлове</string>
+    <string name="open_file_with">Отваряне от</string>
+    <string name="open_file_no_compatible_app">Не е намерено приложение, което да отвори файла.</string>
+
+    <!-- Suggest File Manager App Dialog -->
+    <string name="suggest_file_manager_app_dialog_title">Не е намерено съвместимо приложение за управление на файлове</string>
+    <string name="suggest_file_manager_app_dialog_text">Препоръчваме ви да инсталирате приложението за управление на файлове с отворен код „Material Files“. Желаети ли да видите страницата му в магазина за приложения?</string>
+
     <!-- DeviceListFragment -->
+
     <!-- Devices tab title -->
     <string name="devices_fragment_title">Устройства</string>
+
+    <!-- Shown if no devices are configured in add folder dialog -->
+    <string name="devices_list_empty">Не са добавени устройства. Докоснете, за да добавите устройство.</string>
+
+    <!-- Shown in ListView if no devices are configured -->
+    <string name="no_devices_configured">Не са добавени устройства.\nЗапочнете като добавите.</string>
+
+    <string name="deviceEncryptionPasswordHint">При недоверено задайте парола за шифроване</string>
+
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">Синхронизирано</string>
+
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
+    <string name="device_syncing_percent_bytes">Синхронизиране (%1$d %%, %2$s)</string>
+
     <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">Няма връзка</string>
+    <string name="device_disconnected_not_synced">Изключено (%1$s на изчакване)</string>
+
+    <!-- Indicates that the device is paused and does not sync -->
+    <string name="device_paused">На пауза</string>
+
+    <!-- Indicates that devices does not share any folders -->
+    <string name="device_state_unused">Неизползвано</string>
+
     <!-- Indicates that the device connection is unknown -->
+
+    <!-- Last seen title -->
+    <string name="device_last_seen">Последно видяно: %1$s</string>
+    <string name="device_last_seen_never">Никога</string>
+
+    <!-- Title for the listing of shared folders with a colon and space appended -->
+    <string name="shared_folders_title_colon">"Папки: "</string>
+
+    <!-- Expand the collapsed shared folders list on a device card; parameter is the hidden folder count -->
+    <string name="device_folders_show_more">+%1$d</string>
+
+    <!-- Collapse an expanded shared folders list on a device card -->
+    <string name="device_folders_show_less">Показване на по-малко</string>
+
+    <!-- Title of the dialog listing the conflict files of a folder -->
+    <string name="conflict_files_title">Конфликтни файлове</string>
+
+    <!-- Header of the grouped status card showing transfer and resource stats -->
+    <string name="status_transfer_resources">Пренос и ресурси</string>
+
     <!-- Title for current download rate -->
     <string name="download_title">Изтегляне</string>
+
     <!-- Title for current upload rate -->
     <string name="upload_title">Изпращане</string>
+
+    <!-- StatusFragment -->
+
+    <string name="status_fragment_title">Състояние</string>
+
+    <string name="button_follow_run_conditions">Спазване на\nусловията за работа</string>
+    <string name="button_force_start">Принудителна работа\nпренебрегва\nусловията за работа</string>
+    <string name="button_force_stop">Принудително спране\nпренебрегва\nусловията за работа</string>
+
+    <string name="syncthing_starting">Syncthing стартира.</string>
+    <string name="syncthing_running">Syncthing работи.</string>
+    <string name="syncthing_not_running">Syncthing не работи.</string>
+    <string name="syncthing_has_crashed">Syncthing се срина.</string>
+
     <!-- DrawerFragment -->
+
     <!-- Same as download_title with a colon and space appended -->
     <!-- Same as upload_title with a colon and space appended -->
     <!-- Title for current RAM usage -->
     <string name="ram_usage">Използвана памет</string>
     <!-- Title for announce server status -->
     <string name="announce_server">Сървър за откриване на устройства</string>
+    <!-- Title for uptime status -->
+    <string name="uptime">Работи от</string>
     <string name="restart">Рестартиране</string>
+
     <string name="dialog_confirm_restart">Желаете ли Syncthing да бъде рестартиран?</string>
+
     <!-- FolderActivity -->
+
     <!-- Setting title -->
     <string name="folder_id">Идентификатор на папката</string>
+
     <!-- Setting title -->
     <string name="folder_label">Етикет на папката</string>
+
     <!-- Setting title -->
     <string name="directory">Папка</string>
+    <string name="advanced_directory_selection">Разширен избор на папки</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_fileWatcher">Наблюдаване за промени</string>
+    <string name="folder_fileWatcherDescription">Операционната система известява при промяна на файловете. Ако е изключено използва ежечасно обхождане.</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_ignore_delete_caption">Пренебрегване на изтриванията</string>
+    <string name="folder_ignore_delete_description">Разширена настройка, която влияе върху обработката на входящите промени на индекса. Когато е отметната, входящите промени със вдигнат флаг за изтриване биват пренебрегнати. Вижте https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_run_script_caption">Изпълняване на скрипт</string>
+    <string name="folder_run_script_description">Разширена настройка за изпълняване на скриптове, след като дадена папка промени състоянието си на синхронизираност. Ще бъдат изпълнявани скриптове само от папката „.stfolder“, други местоположения не се поддържат от съображения за сигурност.\nПример за изпълняване на скрипт: „.stfolder/rename-files.sh sync_complete</string>
+
+    <!-- Setting title -->
+    <string name="folder_pause">Пауза на папката</string>
+
     <!-- Setting title -->
     <string name="devices">Устройства</string>
+
     <!-- Setting title -->
     <string name="keep_versions">Пазени версии</string>
+
     <!-- Setting title -->
     <string name="delete_folder">Изтриване на папката</string>
+
     <!-- Title for FolderSettingsFragment in create mode -->
     <string name="create_folder">Създаване на папка</string>
+
     <!-- Title for FolderSettingsFragment in edit mode -->
     <string name="edit_folder">Промяна на папка</string>
+
     <!-- Menu item to confirm folder creation -->
     <string name="create">Създаване</string>
+
     <!-- Dialog shown when attempting to remove a folder -->
     <string name="remove_folder_confirm">Желаете ли папката да бъде премахната от Syncthing?</string>
+
     <!-- Toast shown when trying to create a folder with an empty ID -->
     <string name="folder_id_required">Идентификаторът на папката не може да бъде празен</string>
+
+    <!-- Toast shown when trying to create a folder with an empty label -->
+    <string name="folder_label_required">Етикетът на папката не може да бъде празен</string>
+
     <!-- Toast shown when trying to create a folder with an empty path -->
     <string name="folder_path_required">Пътят до папката не може да бъде празен</string>
+
     <string name="dialog_discard_changes">Отказвате ли се от направените промени?</string>
+
+    <!-- Summary shown if we only have readonly access to the folder path -->
+    <string name="folder_path_readonly">Това издание на Андроид дава на Syncthing само права за четене на избраната папка.</string>
+
+    <!-- Summary shown if we only have readwrite access to the folder path -->
+    <string name="folder_path_readwrite">Това издние на Андроид дава на Syncthing права за четене и писане на избраната папка.</string>
+
+    <!-- Toast shown if the user selected an invalid location for a new syncthing folder -->
+    <string name="toast_invalid_folder_selected">Избраната папка не може да бъде използвана. Изберете папка, разположена във вътрешното или външното хранилище.</string>
+
+    <string name="folder_type_switch_to_receive_encrypted_not_allowed">Промяната на съществуваща папка на „Получава шифровани данни“ не се поддържа.</string>
+
+    <string name="ignore_patterns">Шаблони за пренебрегване</string>
+
     <!-- DeviceActivity -->
+
     <!-- Setting title -->
     <string name="device_id">Идентификатор на устройството</string>
+
+    <!-- Status title -->
+    <string name="discovered_devices_title">Открити са устройства – докоснете за избор</string>
+
+    <!-- Status text -->
+
+    <!-- Status text -->
+    <string name="local_discovery_disabled">Изключили сте местното откриване в Настройки → Настройки на Syncthing → Местно откриване. Включете настройката, за да бъдат търсени устройства в местната мрежа.</string>
+
     <!-- Setting title -->
+
+    <!-- Setting title -->
+    <string name="folders">Папки</string>
+
     <!-- Setting title -->
     <string name="addresses">Адреси</string>
+
     <!-- Setting title -->
+
     <!-- Setting title -->
     <string name="compression">Компресиране</string>
+
     <!-- Strings representing compression options -->
     <string name="compress_never">Изключено</string>
     <string name="compress_metadata">Само описателните данни</string>
     <string name="compress_always">Всички данни</string>
     <!-- Setting title -->
     <string name="introducer">Поръчител</string>
+
+    <!-- Setting title -->
+    <string name="autoAcceptFolders">Автоматично приемане</string>
+
+    <!-- Setting title -->
+    <string name="pause_device">Пауза на устройството</string>
+
+    <!-- Setting title -->
+    <string name="untrusted_device">Недоверено устройство</string>
+
     <!-- ActionBar item -->
     <string name="delete_device">Премахване на устройство</string>
+
     <string name="add_device">Добавяне у-во</string>
+
     <!-- Menu item to confirm adding a device -->
+
     <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">Промяна на устройство</string>
+
     <!-- Dialog shown when attempting to remove a device -->
     <string name="remove_device_confirm">Желаете ли устройството да бъде премахнато?</string>
+
     <!-- Toast shown when trying to create a device with an empty ID -->
     <string name="device_id_required">Въведете идентификатор на устройството</string>
+
+    <!-- Toast shown when trying to create a device with an empty ID -->
+    <string name="device_id_invalid">Идентификаторът на устройството не отговаря на формата. Въведете го отново.</string>
+
+    <!-- Toast shown when trying to create a device with an empty name -->
+
+    <!-- Toast shown when trying to create a device with invalid addresses -->
+    <string name="device_addresses_invalid">Адресът на устройството не отговаря на формата. Въведете го отново. За подробности вижте документацията на Syncthing.</string>
+
+    <!-- Content description (alt text) for device ID qr code in show device id dialog -->
+    <string name="device_id_qr_code">Идентификатор на устройството (QR код)</string>
+
+    <string name="close_device_id">Затваряне на диалоговия прозорец с идентификатора на устройството</string>
+
+    <string name="copy">Копиране</string>
+
     <!-- Content description for device ID qr code icon -->
     <string name="scan_qr_code_description">Сканиране на QR</string>
+
+    <!-- Dialog message if no compatible barcode scanner app is installed -->
+
+    <!-- Shown if no folders are configured -->
+    <string name="folders_list_empty">Няма настроени папки. Докоснете, за да добавите папка.</string>
+
+    <!-- RecentChangesActivity -->
+
+    <string name="no_recent_changes">Няма скорошни промени.</string>
+    <string name="recent_changes_title">Скорошни промени</string>
+    <string name="modified_by_device">Устройство: %1$s</string>
+    <string name="modification_time">Време: %1$s</string>
+    <string name="more_options">Още опции</string>
+    <string name="show_exact_times">Показване на точния час</string>
+
+    <string name="this_device">Това устройство</string>
+
     <!-- WebGuiActivity -->
+
     <!-- Title of the web gui activity -->
     <string name="web_gui_title">Уеб интерфейс</string>
+
     <!-- Text for WebGuiActivity loading view -->
     <string name="web_gui_loading">Изчакване на потребителския интерфейс</string>
+
+    <!-- Shown in WebGuiActivity when the web gui could not be loaded. The technical cause is shown
+         below it and written to the log. -->
+    <string name="web_gui_load_failed">Интерфейсът за уеб не може да бъде зареден. Запишете дневник и докладвайте проблема.</string>
+
+    <!-- WebViewActivity -->
+
+    <!-- Dialog title displayed when an invalid ssl certificate was found -->
+    <string name="security_notice">Известие за сигурността</string>
+
+    <!-- Dialog message if an invalid ssl certificate was detected -->
+    <string name="ssl_cert_invalid_text">Страницата на адрес %1$s има неприемлив сертификат за шифроване със SSL. Желаете ли да продължите?</string>
+
+    <!-- Text for WebViewActivity loading page -->
+    <string name="web_page_loading">Зареждане на страница:\n%1$s…</string>
+
+    <!-- Text for WebViewActivity openBrowser action button -->
+    <string name="open_in_browser">Отваряне в мрежов четец</string>
+
     <!-- SettingsFragment -->
+
     <string name="settings_title">Настройки</string>
+
+    <string name="category_wifi">Wi-Fi</string>
+    <string name="category_mobile_data">Мобилни данни</string>
+    <string name="category_battery">Акумулатор</string>
+    <string name="category_schedule">График</string>
+    <string name="category_general">Общи</string>
+    <string name="category_connections">Връзки</string>
+    <string name="category_advanced">Разширени</string>
+
+    <string name="category_user_interface">Интерфейс</string>
+
+    <string name="preference_app_theme_title">Тема</string>
+    <string name="preference_app_theme_follow_system">Системна</string>
+    <string name="preference_app_theme_follow_light">Светла</string>
+    <string name="preference_app_theme_follow_dark">Тъмна</string>
+    <string name="preference_app_theme_amoled" translatable="false">AMOLED</string>
+
     <string name="category_behaviour">Поведение</string>
     <string name="category_syncthing_options">Настройки на Syncthing</string>
+    <string name="category_syncthing_options_summary">Това меню е достъпно само докато Syncthing работи.</string>
+
+    <string name="category_backup">Внасяне и изнасяне</string>
+    <string name="category_debug">Отстраняване на дефекти</string>
     <string name="category_experimental">Експериментални</string>
+
     <!-- Preference screen - Run conditions -->
     <string name="run_conditions_title">Условия за работа</string>
+    <string name="run_conditions_summary">Изберете режимите на работа на Syncthing.</string>
+
+    <string name="run_on_mobile_data_title">Работи на мобилни данни</string>
+    <string name="run_on_mobile_data_summary">Синхронизира, когато устройството е свързано към мобилни данни. Внимание: ако синхронизирате голямо количество данни е възможно изразходването на много от предоставения от оператора трафик.</string>
+
+    <string name="run_on_roaming_title">Работи в чужбина</string>
+    <string name="run_on_roaming_summary">Разрешаване на Syncthing да използва мобилни данни в чужбина.</string>
+
+    <string name="run_on_wifi_title">Работи на безжични мрежи</string>
+    <string name="run_on_wifi_summary">Работи ако устройството е свързано с безжична мрежа или по кабел.</string>
+
+    <string name="run_on_metered_wifi_title">Работи на безжични мрежи с таксуване на трафика</string>
+    <string name="run_on_metered_wifi_summary">Синхронизира, когато устройството е свързано към безжична мрежа с отчитане на трафика, напр. безжична точка за достъп или споделена мрежа от друг телефон. Внимание: Ако синхронизирате голямо количество данни е възможно изразходването на много от предоставения по тарифен план трафик.</string>
+
+    <string name="run_on_whitelisted_wifi_title">Работи на избрани безжични мрежи</string>
+    <string name="specify_wifi_ssid_whitelist">Избиране на безжични мрежи</string>
+    <string name="run_on_whitelisted_wifi_networks">Избрани мрежи: %1$s</string>
+    <string name="wifi_ssid_whitelist_empty">Не са избрани безжични мрежи. Докоснете, за да изберете.</string>
+
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">За да изберете мрежи, включете безжичната връзка.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_location">Включете местоположението, за да можете да избирате мрежи.</string>
+
+
+    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">Андроид 8.1 и по-нов изисква достъп до местоположението, за да може да бъде прочетено името на безжичната мрежа. Можете да използвате тази настройка само ако сте предоставили това разрешение.</string>
+
+    <string name="power_source_title">Работи при захранване от</string>
+
+    <string name="power_source_ac_and_battery_power">Батерия или зарядно.</string>
+    <string name="power_source_ac_power">Зарядно.</string>
+    <string name="power_source_battery_power">Батерия.</string>
+
+    <string name="respect_battery_saving_title">Спазване на пестенето на батерия от Андроид</string>
+    <string name="respect_battery_saving_summary">Спиране на Syncthing в режим за пестене на батерия.</string>
+
+    <string name="respect_master_sync_title">Спазване на синхронизиране на данни от Андроид</string>
+    <string name="respect_master_sync_summary">Спиране на Syncthing при изключена настройка за автом. синхр. на данни от Андроид.</string>
+
+    <string name="run_in_flight_mode_title">Работи без мрежа</string>
+    <string name="run_in_flight_mode_summary">Когато е отметнато Syncthing ще работи дори и когато няма връзка. Отметнете и ако в самолетен режим не се открива ръчно включената безжична връзка.</string>
+
+    <string name="run_on_time_schedule_title">Работи по график</string>
+    <string name="run_on_time_schedule_summary">Когато е отметнато синхронизирането ще работи за определено време, ако са изпълнени условията за работа и ако е изминал определен период след последната синхронизация. По този начин може да бъде спестена много батерия, но участващите в синхронизацията устройства трябва да бъдат на линия. Забележка: Може да останат непълни временни файлове до следващата насрочена синхронизация.</string>
+
+    <string name="sync_duration_minutes_title">Продължителност на цикъла на синхронизация</string>
+    <string name="sync_duration_minutes_summary">%1$s минути</string>
+    <string name="sleep_interval_minutes_title">Продължителност на интервала без синхронизация</string>
+
+    <!-- Preferences - Behaviour -->
+
+    <string name="behaviour_autostart_title">Автоматично стартиране</string>
+    <string name="behaviour_autostart_summary">Автоматично стартиране на приложението при стартиране на операционната система.</string>
+
+
+    <string name="allow_overwrite_files_title">Презаписване на съществуващи файлове</string>
+    <string name="allow_overwrite_files_summary">Когато друго приложение споделя файлове в някоя от управляваните папки.</string>
+
+    <string name="expert_mode_title">Режим за експерти</string>
+
+    <string name="expert_mode_summary">Когато е отметнато ще бъдат показани разширени настройки. Първо трябва да прочетете документацията на Syncthing, за да сте сигурни, че знаете как да ги използвате. Неправилните настройки могат да доведат до изтощаване на батерията, разхищение на системни ресурси или частично синхронизиране.</string>
+
+
+    <string name="start_into_web_gui_title">Стартиране в интерфейса за интернет</string>
+ 
+    <string name="start_into_web_gui_summary">При стартиране да се отваря интерфейсът за отделечен достъп</string>
+
+
+
+
+
     <string name="device_name">Име на устройството</string>
+
     <string name="listen_address">Адрес, на който слуша синхронизиращия протокол</string>
+
     <string name="max_recv_kbps">Ограничение при изтегляне (КиБ/с)</string>
+
     <string name="max_send_kbps">Ограничение при качване (КиБ/с)</string>
+
     <string name="global_announce_enabled">Глобално откриване</string>
+
     <string name="local_announce_enabled">Месно откриване</string>
+
     <string name="enable_nat_traversal">Обхождане на NAT</string>
+
     <string name="global_announce_server">Сървъри за глобално откриване</string>
+
     <string name="enable_relaying">Разрешаване на ретранслатори</string>
+
     <string name="usage_reporting">Анонимно отчитане на употреба</string>
+
+    <string name="crash_reporting">Анонимно докладване на срив</string>
+
+    <string name="webui_tcp_port_title">TCP порт на интерфейса за уеб</string>
+
+    <string name="webui_remote_access_title">Отдалепен достъп до интерфейса за уеб</string>
+
+    <string name="webui_username_title">Потребителско име за интерфейса за уеб</string>
+
+    <string name="webui_password_title">Парола за интерфейса за уеб</string>
+
+    <string name="webui_remote_access_summary">Когато е отметнато е разрешен достъпа до уеб интерфейса от друго устройство. Тогава можете да влезете с потребител „syncthing“ и ключа за ППИ като парола. По подразбиране: изключено (най-сигурно)</string>
+
+
+
+    <string name="clear_stversions_title">Изпразване на всички папки с версии на файлове</string>
+    <string name="clear_stversions_summary">Когато Syncthing замени или премахне файлове те биват премествани в папката .stversions. Можете да намерите и възстановите случайно премахнати файлове там, но остарелите им версии заемат място за съхранение на устройството ви.</string>
+    <string name="clear_stversions_question">Ще бъдат премахнати предишните версии на файлове, управлявани от Syncthing. Продължаване?</string>
+    <string name="clear_stversions_done">Папката .stversions е почистена.</string>
+
+    <string name="download_support_bundle_title">Изтегляне на пакет за поддръжка</string>
+
+    <!-- Summary shown when the user clicked the download support bundle button -->
+    <string name="download_support_bundle_in_progress">Подготовка на пакет за поддръжка…</string>
+
+    <!-- Toast after successful download of the support bundle -->
+    <string name="download_support_bundle_succeeded">Пакетът за поддръжка е изтеглен в %s.</string>
+
+    <!-- Toast after failed support bundle download -->
+    <string name="download_support_bundle_failed">Грешка при изтегляне на пакет за поддръжка. Проверете дневника.</string>
+
+    <!-- Titles for the preference to undo ignored devices and folders -->
+    <string name="undo_ignored_devices_folders_title">Отмяна на пренебрегнатите устройства и папки</string>
+    <string name="undo_ignored_devices_folders_question">По този начин ще отмените предишнитете си решения да пренебрегнете устройства и папки. Желаете ли да продължите?</string>
+    <string name="undo_ignored_devices_folders_done">Пренебрегванията са отменени.</string>
+
+    <string name="backup_rel_path_to_zip">Относителен път до архива с настройки</string>
+
+    <string name="backup_password_title">Парола за защита на настройките</string>
+    <string name="backup_password_summary">ℹ️ Препоръчително:\nВъведете силна парола, която ще бъде използвана за шифроване на настройките при изнасяне и разшифроване при внасяне. Пазете паролата на сигурно място, в случай на необходимост от внасяне на настройките. Трябва да използвате възможността за внасяне.\n\n⚠️ Непрепоръчително:\nДа не използвате парола. В този случай е възможно други приложения да получат достъп и да променят настройките на Syncthing. Достъпът до настройките носи риска от несанкциониран достъп до вашите файлове, използвайки откраднатите настройки.</string>
+
+    <string name="backup_password_set">✅ Зададена парола: %1$s</string>
+    <string name="backup_password_set_masked">✅ Паролата е зададена - докоснете за промяна</string>
+    <string name="backup_password_not_set">⚠ Парола не е зададена.</string>
+    <string name="toggle_password_visibility">Превключване видимостта на паролата</string>
+
     <string name="export_config">Изнасяне на настройките</string>
+
+    <!-- Toast after entering an invalid tcp port -->
+    <string name="invalid_port_number" tools:ignore="PluralsCandidate">Номерът на порта е неприемлив. Въведете порт между %1$d и %2$d.</string>
+
+    <!-- Toast after entering invalid integer value -->
+    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">Въведената стойност е неприемлива. Въведете стойност между %1$d и %2$d.</string>
+
+    <!-- Experimental options -->
+    <string name="use_proxy">Свързване през мрежов посредник</string>
+    <string name="do_not_use_proxy">Няма настроен мрежов посредник.</string>
+
+
     <string name="use_tor_title">Използване на Tor</string>
+    <string name="use_tor_summary">Пренасочва целия трафик през мрежата на Tor с цел поверителност. Изисква Orbot. Изключва настройките за мрежов посредник.</string>
+
+    <string name="socks_proxy_address_title">Мрежов посредник SOCKS5</string>
+    <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>
+
+    <!-- Toast after entering invalid socks proxy address -->
+    <string name="toast_invalid_socks_proxy_address">Неприемлив синтаксис за мрежов посредник \'socks5://[IP/HOSTNAME]:[PORT]\'</string>
+
+    <string name="http_proxy_address_title">Мрежов посредник за HTTP(S)</string>
+    <string name="http_proxy_address_example" translatable="false">http://192.168.0.1:8080</string>
+
+    <!-- Toast after entering invalid http proxy address -->
+    <string name="toast_invalid_http_proxy_address">Неприемлив синтаксис за мрежов посредник \'http://[IP/HOSTNAME]:[PORT]\'</string>
+
+    <string name="broadcast_service_control_title">Управление на услугата чрез външни сигнали</string>
+    <string name="broadcast_service_control_summary">Подразбирано: Изключено. Когато е отметнато дава възможност на adb или други приложения напр. приложения за автоматизиране да дават инструкции на Syncthing да спазва условията за работа, насилствено да спира или работи.</string>
+
     <!-- Dialog shown before config export -->
     <string name="dialog_confirm_export">Желаете ли настройките да бъдат изнесени? Съществуващият архив ще бъде презаписан.</string>
+
     <!-- Dialog shown before config import -->
     <string name="dialog_confirm_import">Желаете ли да внесете настройки? Съществуващите настройки, включително споделените папки и устройства ще бъдат заменени.</string>
+
+    <!-- PreferenceCategories -->
+    <string name="preference_category_actions">Действия</string>
+    <string name="preference_category_explanation">Обяснение</string>
+    <string name="preference_category_prepare">Подготовка</string>
+
     <!-- Toast shown after config was exported -->
+    <string name="config_export_successful_no_path">Настройките са изнесени. Запомнете паролата при последващо внасяне.</string>
+    <string name="config_export_failed">Грешка при изнасяне на настройките. За подробности посетете Настройки → Отстраняване на дефекти → Отваряне на дневника.</string>
+
     <string name="import_config">Внасяне на настройки</string>
+
     <!-- Toast shown after config was imported -->
     <string name="config_imported_successful">Настройките са внесени</string>
+
+    <string name="config_import_failed_no_path">Грешка при внасяне на настройките. За подробности посетете Настройки → Отстраняване на дефекти → Отваряне на дневника.</string>
+
+    <string name="dialog_settings_restart_app_title">Необходим е рестарт</string>
+    <string name="dialog_settings_restart_app_question">Когато е отметнато приложението рестартира незабавно. Всички останали промени ще бъдат отменени. Желаете ли да продължите?</string>
+
+    <!-- Title for the preference to set STTRACE parameters -->
+    <string name="sttrace_title">Настройки на STTRACE</string>
+    <string name="sttrace_none_selected">Без средство за отстраняване на дефекти</string>
+
+    <string name="environment_variables">Променливи на средата</string>
+
+    <!-- Toast after entering invalid STTRACE params -->
+    <string name="toast_invalid_environment_variables">Стойността е недействително наименование на променлива на средата.</string>
+
     <!-- Title for the preference to reset Syncthing indexes -->
     <string name="st_reset_database_title">Нулиране на хранилището</string>
     <!-- Syncthing was reset -->
+    <string name="st_reset_database_question">Това действие трябва да бъде извършвано само след препоръка от екип по поддръжка.\nЖелаете ли хранилището на Syncthing да бъде нулирано?</string>
+    <!-- Syncthing was reset -->
     <string name="st_reset_database_done">Хранилището на Syncthing е нулирано</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_deltas_title">Нулиране на промените на индексите</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_question">Това действие трябва да бъде извършвано само след препоръка от екип по поддръжка.\nЖелаете ли промените на индексите да бъдат нулирани?</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_done">Промените на индексите на Syncthing са нулирани</string>
+
+    <!-- Settings / About -->
     <string name="category_about">Относно</string>
+
+    <string name="verbose_log_title">Подробен дневник</string>
+    <string name="verbose_log_summary">Когато е отментато, записите в дневника ще съдържат подробности.</string>
+
+
     <!-- Settings item that opens the log activity -->
     <string name="open_log">Отваряне на дневника</string>
+
     <!-- Summary for the log activity -->
     <string name="open_log_summary">Отваряне на дневника на Syncthing и Андроид</string>
+
+    <!-- Menu item linking support forum -->
+    <string name="syncthing_forum_title">Форум на Syncthing</string>
+    <string name="syncthing_forum_summary">Посетете форума на Syncthing и получете поддръжка</string>
+    <string name="syncthing_forum_url" translatable="false">https://forum.syncthing.net/</string>
+
+    <!-- Menu item for pizza -->
+
+    <!-- Menu item linking privacy policy -->
+    <string name="privacy_title">Политика за поверителност</string>
+    <string name="privacy_summary">Отворете политиката за поверителност на syncthing-android, която обхваща използването (ако има такова) на лични данни, например местоположение.</string>
+    <string name="privacy_policy_url" translatable="false">https://syncthing.net/android-privacy-policy</string>
+
     <!-- Settings item that opens issue tracker -->
     <string name="report_issue_title">Докладване на дефект</string>
-    <!-- Menu item to donate -->
+
+    <!-- Summary for the issue tracker settings item -->
+    <string name="open_issue_tracker_summary">Отваряне на системата за проследяване на дефекти в %1$s</string>
+
+    <!-- URL of the issue tracker -->
+    <string name="issue_tracker_url" translatable="false">https://github.com/researchxxl/syncthing-android/issues</string>
+
+    <!-- URL of the GitHub wiki -->
+    <string name="wiki_url" translatable="false">https://github.com/researchxxl/syncthing-android/tree/main/wiki</string>
+
+    <!-- URL of the Syncthing project homepage -->
+
     <!-- Title of the preference showing upstream version name -->
     <string name="syncthing_version_title">Издание на Syncthing</string>
+
+    <!-- Title of the preference showing this app's version name -->
+    <string name="app_version_title">Издание на Syncthing-Fork</string>
+
+    <!-- Title of the preference showing the REST API key -->
+    <string name="syncthing_api_key">Ключ за ППИ на Syncthing (докоснете за копиране)</string>
+
+    <!-- Shown when the API key is copied to the clipboard -->
+    <string name="api_key_copied_to_clipboard">Ключът за ППИ на Syncthing е копиран</string>
+
+    <!-- Title of the preference showing database size -->
+    <string name="syncthing_database_size">Размер на хранилището на Syncthing</string>
+
+    <!-- Title of the preference showing the OS open file limit -->
+    <string name="os_open_file_limit">Ограничение на Андроид за отворени файлове</string>
+    
+    <!-- Title of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_title">Лицензи на отворен код</string>
+    
+    <!-- Summary of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_summary">Показва използваните лицензи на отворен код</string>
+
     <!-- FolderPickerAcitivity -->
+
     <!-- Activity title -->
     <string name="folder_picker_title">Избор на папка</string>
+
+    <!-- Storage path overview -->
+    <string name="advanced_storage_path_overview">Разширен преглед на пътя на хранилището</string>
+
+    <!-- Current path -->
+    <string name="current_path">Текущ път: %1$s</string>
+
     <!-- ListView empty text -->
+
     <!-- Menu item to create folder on the file system -->
+
     <!-- Menu item to select the current folder -->
+
     <string name="create_folder_failed">Грешка при създаване на папка</string>
+
+    <!-- Menu item to go up to parent folder -->
+    <string name="folder_go_up">Нагоре</string>
+
+    <!-- LogActivity -->
+
+    <string name="syncthing_log_title">Дневник на Syncthing</string>
+    <string name="android_log_title">Дневник на Андроид</string>
+
+    <string name="share_log_file_missing">Дневникът, който ще споделяте липсва.</string>
+
+    <string name="share_log_file">Споделяне на дневник</string>
+
     <!-- Title of the "log android" menu button -->
     <string name="view_android_log">Преглед на дневника на Андроид</string>
+
     <!-- Title of the "log Syncthing" menu button -->
     <string name="view_syncthing_log">Преглед на дневника на Syncthing</string>
+
     <string name="retrieving_logs">Получаване на дневниците…</string>
+
     <!-- Title of the "share log" menu button -->
     <string name="share_title">Споделяне</string>
+
+    <!-- ShareActivity -->
+
+    <!-- Toast if user didn't complete the welcome wizard yet -->
+    <string name="complete_welcome_wizard_first">Първо отворете приложението от менюто с приложения и завършете съветника, преди да споделяте файлове.</string>
+
+    <!-- Title of the "share" activity -->
+    <string name="share_activity_title">Запазване в Syncthing</string>
+
+    <!-- Title of the "save" button -->
+    <string name="save_title">Запазване</string>
+
+    <!-- Title of the "cancel" button -->
+    <string name="cancel_title">Отказ</string>
+
+    <!-- Title of the "save" button -->
+
+    <!-- New file name template -->
+    <string name="file_name_template">Нов файл %1$s</string>
+
+    <!-- Nothing to share toast -->
+    <string name="nothing_share">Няма какво да бъде споделено</string>
+
+    <!-- Copy success toast partially -->
+    <plurals name="copy_success_partially">        <item quantity="one">%1$d файл, копиран в папка „%2$s“, %3$d вече съшествува</item>        <item quantity="other">%1$d файла, копирани в папка „%2$s“, %3$d вече съшествуват</item></plurals>
+
+    <!-- Copy success toast -->
+    <plurals name="copy_success">        <item quantity="one">%1$d файл е копиран в папка „%2$s“</item>        <item quantity="other">%1$d файла са копирани в папка „%2$s“</item></plurals>
+
+    <!-- Copy exception toast -->
+    <string name="copy_exception">Грешка при споделяне, проверете дневника на приложението</string>
+
+    <!-- Copy progress dialog text -->
+    <string name="copy_progress">Споделяне на файлове…</string>
+
+    <plurals name="file_name_title">        <item quantity="one">Име на файла</item>        <item quantity="other">Списък с файлове</item></plurals>
+
+    <!-- Sub Folder title -->
+
+    <!-- RunConditionMonitor -->
+
+    <string name="reason_force_start">Syncthing работи, защото сте избрали принудително да работи без да следва условията.</string>
+    <string name="reason_force_stop">Syncthing не работи, защото сте избрали принудително да спре без да следва условията.</string>
+
+    <!-- Explanations why syncthing is running or not running -->
+    <string name="reason_not_within_time_frame_2">Настройката „Работи по график“ е включена, а последната синхронизация е била преди %s.</string>
+    <string name="reason_not_within_time_frame_0_min">по-малко от минута</string>
+    <plurals name="reason_not_within_time_frame_minutes">        <item quantity="one">%d минута</item>        <item quantity="other">%d минути</item></plurals>
+    <string name="reason_not_charging">Устройството не се зарежда.</string>
+    <string name="reason_not_on_battery_power">Устройството не работи на батерии.</string>
+    <string name="reason_not_while_power_saving">Syncthing не работи, защото устройството е в режим на пестене на енергия.</string>
+    <string name="reason_not_while_auto_sync_data_disabled">Syncthing не работи, защото настройката за синхронизиране на данни на Андроид е изключена.</string>
+
+    <!-- … Mobile data -->
+    <string name="reason_mobile_data_disallowed">Syncthing не е настроен да работи на мобилни данни.</string>
+    <string name="reason_on_mobile_data">Syncthing може да работи на мобилни данни.</string>
+    <string name="reason_not_on_mobile_data">Syncthing може да работи на мобилни данни, но няма връзка с мобилни данни.</string>
+
+    <!-- … Roaming -->
+    <string name="reason_on_roaming_nonroaming_mobile_data">Syncthing може да работи в чуждестранни и домашни мобилни мрежи.</string>
+    <string name="reason_on_nonroaming_mobile_data">Syncthing може да работи в домашни мрежи за мобилни данни. Текущата мрежа е такава.</string>
+    <string name="reason_not_nonroaming_mobile_data">Syncthing не работи, защото сте забранили работа в чуждестранни мобилни мрежи.</string>
+
+    <string name="reason_wifi_disallowed">Syncthing не може да работи в безжични и кабелни мрежи.</string>
+    <string name="reason_on_wifi">Syncthing може да работи в безжични мрежи. Текущата мрежа е такава.</string>
+    <string name="reason_not_on_wifi">Syncthing може да работи в безжична мрежа, няма връзка или е включен самолетен режим.</string>
+    <string name="reason_on_metered_nonmetered_wifi">Syncthing работи в безжични мрежи с и без отчитане на трафика.</string>
+    <string name="reason_on_whitelisted_wifi">Syncthing може да работи в текущата безжична мрежа.</string>
+    <string name="reason_not_on_whitelisted_wifi">Syncthing не работи, защото името на текущата безжична мрежа липсва в списъка с разрешените.</string>
+    <string name="reason_on_nonmetered_wifi">Syncthing може да работи в безжични мрежи без отчитане на трафика. Текущата мрежа е такава.</string>
+    <string name="reason_not_nonmetered_wifi">Syncthing не работи, защото сте забранили работа в безжични мрежи с отчитане на графика.</string>
+    <string name="reason_location_unavailable">Включили сте „Работи на избрани безжични мрежи“ в настройките, но местоположението е изключено. Според ограниченията на Андроид, Syncthing няма достъп до името на мрежата, за да определи дали да работи. Решение: включете местоположението, дайте разрешение за достъп и отново включете безжичната мрежа.</string>
+    <string name="reason_on_flight_mode">Syncthing работи, защото сте разрешили работа по време на самолетен режим.</string>
+    <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor не е подготвен. Рестартирайте приложението и ако грешката не изчезне след рестарта докладвайте за нея.</string>
+
+    <!-- Sync Conditions Dialog -->
+
+    <string name="custom_wifi_ssid_whitelist_empty">Списъкът с имена на разрешени безжични мрежи е празен. Добавете от настройките.</string>
+
     <!-- SyncthingService -->
+
     <!-- Text for the exit button on the drawer -->
     <string name="exit">Изход</string>
+
     <!-- Title of the notification shown while syncthing is running and enabled -->
+    <string name="syncthing_active_details">Работи: %1$s</string>
+    <string name="no_remote_devices_connected">Няма свързани отдалечени устройства</string>
+
+    <plurals name="device_online_up_to_date">        <item quantity="one">%1$d свързано у-во, всичко обновено</item>        <item quantity="other">%1$d свързани у-ва, всичко обновено</item></plurals>
+
+    <plurals name="syncthing_active_syncing_device_online">        <item quantity="one">Syncing: %1$d %% готови, %2$d свързано у-во</item>        <item quantity="other">Syncing: %1$d %% готови, %2$d свързани у-ва</item></plurals>
+
+    <string name="syncthing_disabled">Почива</string>
+
+    <string name="syncthing_terminated">Насилствено спряно</string>
+
+    <!-- Toast shown if syncthing failed to create or read the config -->
+    <string name="executable_not_found">Основният изпълним файл „%s“ липсва. Проверете изведеното при компилацията и системния дневник.</string>
+    <string name="config_create_failed">Грешка при създаване на файла с настройки. Проверете дневника.</string>
+    <string name="config_read_failed">Грешка при четене на настройките. Препоръчително е да създадете резервно копие на данните от синхронизираните папки, след това да изчистите данните на приложението от настройките на Андроид и го стартирайте отново.</string>
+
+    <!-- Toast shown if a config file crucial to operation is missing -->
+    <string name="config_file_missing">Липсва основен за работата на приложението файл с настройки</string>
+
+    <!-- Toast shown if a listening tcp port is unavailable -->
+    <string name="webui_tcp_port_unavailable">Портът за интерфейса за уеб %s е зает. Дали няма друг работещ екземпляр?</string>
+
+    <!-- Label of the default folder created of first start (camera folder). -->
+
     <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
+
+    <string name="notification_crash_title">Срив (код на грешката %1$s)</string>
+    <string name="notification_crash_text">Докоснете за преглед на дневника (%1$s)</string>
+
+    <string name="notifications_persistent_channel">Syncthing работи</string>
+    <string name="notification_persistent_waiting_channel">Наблюдение на условията за работа</string>
+    <string name="notifications_other_channel">Други известия</string>
+
+    <!-- EventProcessor -->
+    <string name="notification_out_of_disk_space">Картата SD е пълна. Файл %1$s</string>
+
     <!-- RestApi -->
+
     <!-- Title of the notification shown when a restart is needed -->
+
     <!-- Text for positive button in restart dialog -->
     <!-- Text for the dismiss button of the restart Activity -->
     <!-- Text of the notification shown when a restart is needed -->
+
     <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">Идентификаторът на устройството е копиран</string>
+
     <!-- Strings representing units for file sizes, from smallest to largest -->
     <string name="file_size_unit_B">б</string>
     <string name="file_size_unit_KiB">КБ</string>
     <string name="file_size_unit_MiB">МБ</string>
     <string name="file_size_unit_GiB">ГБ</string>
     <string name="file_size_unit_TiB">ТБ</string>
+
     <!-- Strings representing units for transfer rates, from smallest to largest -->
     <string name="transfer_rate_unit_B_s">б/с</string>
     <string name="transfer_rate_unit_KiB_s">КБ/с</string>
     <string name="transfer_rate_unit_MiB_s">МБ/с</string>
     <string name="transfer_rate_unit_GiB_s">ГБ/с</string>
     <string name="transfer_rate_unit_TiB_s">ТБ/с</string>
+
+    <!-- Possible folder states -->
+    <string name="state_failed_items">Елементи с грешка: (%1$d)</string>
+    <string name="state_up_to_date">Синхронизирано</string>
+    <string name="state_local_additions">Местно добавени</string>
+    <string name="state_cleaning">Почистване на версии</string>
+    <string name="state_clean_waiting">Изчаква за почистване</string>
     <string name="state_scanning">Обхождане</string>
+    <string name="state_scan_waiting">Изчаква за обхождане</string>
+    <string name="state_sync_waiting">Изчаква за синхронизиране</string>
+    <string name="state_sync_preparing">Подготовка за синхронизация</string>
+    <string name="state_syncing_general">Синхронизиране</string>
     <string name="state_syncing">Синхронизиране (%1$d %%)</string>
     <string name="state_error">Грешка</string>
+    <string name="state_error_message">Грешка (%1$s)</string>
     <string name="state_unknown">Неизвестно</string>
+    <string name="state_paused">На пауза</string>
     <string name="status_outofsync">Несинхронизирано</string>
+    <string name="state_unshared">Несподелена</string>
+
+    <!-- small inline loading indicator -->
+    <string name="state_loading">Зареждане…</string>
+
+    <!-- small inline saving indicator -->
+
     <!-- Format string for folder size, eg "500 MiB / 1 GiB" -->
     <string name="folder_size_format">%1$s / %2$s</string>
-    <string name="file_versioning">Версии на файловете</string>
-    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">Андроид 8.1 и по-нов изисква достъп до местоположението, за да може да бъде прочетено името на безжичната мрежа. Можете да използвате тази настройка само ако сте предоставили това разрешение.</string>
-    <string name="dialog_all_files_access_not_supported">Устройството не поддържа достъп до всички файлове</string>
-    <string name="override_changes">Налагане на местни промени</string>
-    <string name="status_fragment_title">Състояние</string>
-    <string name="folder_fileWatcher">Наблюдаване за промени</string>
-    <string name="respect_battery_saving_title">Спазване на пестенето на батерия от Андроид</string>
-    <string name="respect_master_sync_title">Спазване на синхронизиране на данни от Андроид</string>
-    <string name="respect_master_sync_summary">Спиране на Syncthing при изключена настройка за автом. синхр. на данни от Андроид.</string>
-    <string name="use_proxy">Свързване през мрежов посредник</string>
-    <string name="do_not_use_proxy">Няма настроен мрежов посредник.</string>
-    <string name="use_tor_summary">Пренасочва целия трафик през мрежата на Tor с цел поверителност. Изисква Orbot. Изключва настройките за мрежов посредник.</string>
-    <string name="toast_invalid_socks_proxy_address">Неприемлив синтаксис за мрежов посредник \'socks5://[IP/HOSTNAME]:[PORT]\'</string>
-    <string name="http_proxy_address_title">Мрежов посредник за HTTP(S)</string>
-    <string name="toast_invalid_http_proxy_address">Неприемлив синтаксис за мрежов посредник \'http://[IP/HOSTNAME]:[PORT]\'</string>
-    <string name="power_source_ac_and_battery_power">Батерия или зарядно.</string>
-    <string name="power_source_ac_power">Зарядно.</string>
-    <string name="power_source_battery_power">Батерия.</string>
-    <string name="toast_invalid_environment_variables">Стойността е недействително наименование на променлива на средата.</string>
-    <string name="copy_exception">Грешка при споделяне, проверете дневника на приложението</string>
-    <string name="device_rejected">Устройството „%1$s“ желае да се свърже</string>
-    <string name="run_on_mobile_data_title">Работи на мобилни данни</string>
-    <string name="notification_permission_title">Разрешение за известия</string>
-    <string name="welcome_text">Syncthing е приложение за синхронизиране на файлове с отворен код. За да споделите информация с друго устройство е необходимо да добавите уникалния му идентификатор към списъка с устройствата. След това ще можете да изберете кои папки с кои устройства да споделите.\n\nАко срещнете проблем го докладвайте в GitHub.</string>
-    <string name="ignore_doze_permission_os_notice">Известен проблем на телевизорите с Android, е че понякога затварят приложения във фонов режим. Решението е налично на адрес „%1$s/%2$s“.</string>
-    <string name="ignore_doze_permission_desc">Android може да спре синхронизацията след известно време. За да предотвратите това, изключете оптимизацията на батерията. Някои устройства имат инсталирани допълнителни приложения, които затварят процеси. Трябва да добавите Syncthing и в техния списък с изключения.</string>
-    <string name="location_permission_desc">Syncthing може да бъде настроен да работи само в избрани безжични мрежи. Android изисква приложението да има разрешение за местоположение, за да веземе името на използваната безжична мрежа. Ако искате да използвате тази възможност, натиснете бутона по-горе. Можете да пропуснете стъпката. За повече подробности вижте политиката за поверителност.</string>
-    <string name="location_permission_desc_api_29">Съвет за Андрод 10+: „Разрешаване винаги“</string>
-    <string name="storage_permission_title">Разрешение за хранилище</string>
-    <string name="storage_permission_desc">За да извършва синхронизация Syngthing има нужда от достъп до хранилището.</string>
-    <string name="dialog_disable_battery_optimizations_not_supported">Устройството не поддържа изключване на оптимизирането на батерията</string>
-    <string name="location_permission_title">Достъп до местоположението</string>
-    <string name="back">Назад</string>
-    <string name="finish">Готово</string>
-    <string name="photo_shoot_intro_missing_permissions">Приложението изисква разрешение за камерата и достъп до файлове.</string>
-    <string name="photo_shoot_take_picture_failure">Грешка при снимане или отказахте.</string>
-    <string name="activity_main_bottom_navigation_rescan_all">Сканиране всички</string>
-    <string name="revert_local_changes">Отказ от местни промени</string>
-    <string name="suggest_file_manager_app_dialog_title">Не е намерено съвместимо приложение за управление на файлове</string>
-    <string name="deviceEncryptionPasswordHint">При недоверено задайте парола за шифроване</string>
-    <string name="shared_folders_title_colon">"Папки: "</string>
-    <string name="button_follow_run_conditions">Спазване на\nусловията за работа</string>
-    <string name="syncthing_not_running">Syncthing не работи.</string>
-    <string name="syncthing_has_crashed">Syncthing се срина.</string>
-    <string name="uptime">Работи от</string>
-    <string name="folder_fileWatcherDescription">Операционната система известява при промяна на файловете. Ако е изключено използва ежечасно обхождане.</string>
-    <string name="folder_pause">Пауза на папката</string>
-    <string name="state_paused">На пауза</string>
+
+    <!-- Titles used in the folder type dialog and folder type button in the folder activity -->
+    <string name="folder_type">Вид на папката</string>
+
+    <!-- Displays the current folder type in the folder activity -->
     <string name="folder_type_sendreceive">Изпраща и получава</string>
     <string name="folder_type_sendonly">Само изпраща</string>
-    <string name="folder_type_receive_encrypted">Получава шифровани данни</string>
-    <string name="pull_order_type_alphabetic">Азбучен ред</string>
-    <string name="none">Изключено</string>
-    <string name="devices_list_empty">Не са добавени устройства. Докоснете, за да добавите устройство.</string>
-    <string name="notification_permission_desc">Необходимо е за показване на известия за добавяне на нови устройства, заявки за споделяне на папки и за поддържане на услугата работеща.</string>
-    <string name="key_generation_success">Криптографските ключове за поверителен обмен на информацията са създадени.</string>
-    <string name="photo_shoot_intro_welcome_title">Добре дошли в Syncthing Camera</string>
-    <string name="photo_shoot_intro_no_camera">Съжаляваме, но устройството няма камера.</string>
-    <string name="grant_camera_permission">Разрешаване на достъп до камерата</string>
-    <plurals name="device_online_up_to_date">
-        <item quantity="one">%1$d свързано у-во, всичко обновено</item>
-        <item quantity="other">%1$d свързани у-ва, всичко обновено</item>
-    </plurals>
-    <string name="photo_shoot_intro_permission_desc">Syncthing Камера изисква съгласието ви, за да прави снимки и да ги запазва на устройството. Това е по ваш избор. За да се възползвате, дайте разрешенията и докоснете „Напред“. Ще бъде настроена папка Syncthing Камера, която по-късно можете да споделяте с други устройства с инсталиран Syncthing.</string>
-    <string name="state_unshared">Несподелена</string>
-    <string name="folder_type">Вид на папката</string>
-    <string name="button_force_stop">Принудително спране\nпренебрегва\nусловията за работа</string>
-    <string name="advanced_directory_selection">Разширен избор на папки</string>
-    <string name="folder_ignore_delete_caption">Пренебрегване на изтриванията</string>
-    <string name="folder_ignore_delete_description">Разширена настройка, която влияе върху обработката на входящите промени на индекса. Когато е отметната, входящите промени със вдигнат флаг за изтриване биват пренебрегнати. Вижте https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
-    <string name="photo_shoot_take_picture_success">Изображението е запазено в папката Syncthing Камера.</string>
-    <string name="default_syncthing_camera_folder_label">Syncthing Камера</string>
-    <string name="dialog_exit_while_running_as_service_title">Потвърдете за изход от приложението</string>
-    <string name="revert_local_changes_question">По този начин ще отмените промените от устройството. Желаете ли да продължите?</string>
-    <string name="open_file_manager">Управление на файлове</string>
-    <string name="open_file_no_compatible_app">Не е намерено приложение, което да отвори файла.</string>
-    <string name="suggest_file_manager_app_dialog_text">Препоръчваме ви да инсталирате приложението за управление на файлове с отворен код „Material Files“. Желаети ли да видите страницата му в магазина за приложения?</string>
-    <string name="dialog_confirm_skip_ignore_doze_permission">Внимателно: Ако SyncthingNative бъде прекъснат и направи нещо странно, вие сте си виновни. Прескочете само в случай, че устройството ви не поддържа даване на разрешение. Желаете ли да прескочите стъпката?</string>
-    <string name="key_generation_title">Създаване на ключове</string>
-    <string name="photo_shoot_activity_title">Syncthing-Fork Камера</string>
-    <string name="grant_storage_permission">Разрешаване на достъп до файловете</string>
-    <string name="override_changes_question">По този начин ще отмените промените от другите устройства, споделящи папката. Желаете ли да продължите?</string>
-    <string name="folder_rejected">Устройството „%1$s“ желае да сподели папката „%2$s“</string>
-    <plurals name="files">
-        <item quantity="one">%1$d / %2$d файл</item>
-        <item quantity="other">%1$d / %2$d файла</item>
-    </plurals>
-    <string name="delete_unexpected_items">Премахване на неочаквани елементи</string>
-    <string name="open_file_with">Отваряне от</string>
-    <string name="device_syncing_percent_bytes">Синхронизиране (%1$d %%, %2$s)</string>
-    <string name="device_disconnected_not_synced">Изключено (%1$s на изчакване)</string>
-    <string name="device_paused">На пауза</string>
-    <string name="device_state_unused">Неизползвано</string>
-    <string name="device_last_seen">Последно видяно: %1$s</string>
-    <string name="button_force_start">Принудителна работа\nпренебрегва\nусловията за работа</string>
-    <string name="syncthing_starting">Syncthing стартира.</string>
-    <string name="syncthing_running">Syncthing работи.</string>
-    <string name="folder_label_required">Етикетът на папката не може да бъде празен</string>
-    <plurals name="syncthing_active_syncing_device_online">
-        <item quantity="one">Syncing: %1$d %% готови, %2$d свързано у-во</item>
-        <item quantity="other">Syncing: %1$d %% готови, %2$d свързани у-ва</item>
-    </plurals>
-    <string name="syncthing_disabled">Почива</string>
     <string name="folder_type_receiveonly">Само получава</string>
-    <string name="generic_example">Пример</string>
-    <string name="grant_permission">Разрешаване</string>
-    <string name="permission_granted">Разрешението е получено</string>
-    <string name="reason">Причина:</string>
-    <string name="accept">Приемане</string>
-    <string name="photo_shoot_launcher_title">Sync. Камера</string>
-    <string name="main_menu">Главно меню</string>
-    <string name="refresh">Презареждане</string>
-    <string name="no_devices_configured">Не са добавени устройства.\nЗапочнете като добавите.</string>
-    <string name="device_last_seen_never">Никога</string>
-    <string name="save_title">Запазване</string>
-    <string name="share_activity_title">Запазване в Syncthing</string>
-    <string name="folder_type_switch_to_receive_encrypted_not_allowed">Промяната на съществуваща папка на „Получава шифровани данни“ не се поддържа.</string>
-    <string name="folders">Папки</string>
-    <string name="modification_time">Време: %1$s</string>
-    <string name="this_device">Това устройство</string>
-    <string name="preference_app_theme_follow_system">Системна</string>
-    <string name="preference_app_theme_follow_light">Светла</string>
-    <string name="category_debug">Отстраняване на дефекти</string>
-    <string name="run_conditions_summary">Изберете режимите на работа на Syncthing.</string>
-    <string name="run_on_wifi_title">Работи на безжични мрежи</string>
-    <string name="run_on_roaming_title">Работи в чужбина</string>
-    <string name="run_on_whitelisted_wifi_title">Работи на избрани безжични мрежи</string>
-    <string name="wifi_ssid_whitelist_empty">Не са избрани безжични мрежи. Докоснете, за да изберете.</string>
-    <string name="sync_only_wifi_ssids_wifi_turn_on_location">Включете местоположението, за да можете да избирате мрежи.</string>
-    <string name="power_source_title">Работи при захранване от</string>
-    <string name="run_in_flight_mode_title">Работи без мрежа</string>
-    <string name="run_on_time_schedule_title">Работи по график</string>
-    <string name="sync_duration_minutes_title">Продължителност на цикъла на синхронизация</string>
-    <string name="sync_duration_minutes_summary">%1$s минути</string>
-    <string name="behaviour_autostart_title">Автоматично стартиране</string>
-    <string name="behaviour_autostart_summary">Автоматично стартиране на приложението при стартиране на операционната система.</string>
-    <string name="expert_mode_title">Режим за експерти</string>
-    <string name="download_support_bundle_failed">Грешка при изтегляне на пакет за поддръжка. Проверете дневника.</string>
-    <string name="undo_ignored_devices_folders_title">Отмяна на пренебрегнатите устройства и папки</string>
-    <string name="undo_ignored_devices_folders_done">Пренебрегванията са отменени.</string>
-    <string name="socks_proxy_address_title">Мрежов посредник SOCKS5</string>
-    <string name="broadcast_service_control_title">Управление на услугата чрез външни сигнали</string>
-    <string name="dialog_settings_restart_app_question">Когато е отметнато приложението рестартира незабавно. Всички останали промени ще бъдат отменени. Желаете ли да продължите?</string>
-    <string name="sttrace_title">Настройки на STTRACE</string>
-    <string name="environment_variables">Променливи на средата</string>
-    <string name="st_reset_database_question">Това действие трябва да бъде извършвано само след препоръка от екип по поддръжка.\nЖелаете ли хранилището на Syncthing да бъде нулирано?</string>
-    <string name="verbose_log_summary">Когато е отментато, записите в дневника ще съдържат подробности.</string>
-    <string name="app_version_title">Издание на Syncthing-Fork</string>
-    <string name="syncthing_api_key">Ключ за ППИ на Syncthing (докоснете за копиране)</string>
-    <string name="current_path">Текущ път: %1$s</string>
-    <string name="folder_path_readonly">Това издание на Андроид дава на Syncthing само права за четене на избраната папка.</string>
-    <string name="toast_invalid_folder_selected">Избраната папка не може да бъде използвана. Изберете папка, разположена във вътрешното или външното хранилище.</string>
-    <string name="local_discovery_disabled">Изключили сте местното откриване в Настройки → Настройки на Syncthing → Местно откриване. Включете настройката, за да бъдат търсени устройства в местната мрежа.</string>
-    <string name="device_addresses_invalid">Адресът на устройството не отговаря на формата. Въведете го отново. За подробности вижте документацията на Syncthing.</string>
-    <string name="category_syncthing_options_summary">Това меню е достъпно само докато Syncthing работи.</string>
-    <string name="respect_battery_saving_summary">Спиране на Syncthing в режим за пестене на батерия.</string>
-    <string name="expert_mode_summary">Когато е отметнато ще бъдат показани разширени настройки. Първо трябва да прочетете документацията на Syncthing, за да сте сигурни, че знаете как да ги използвате. Неправилните настройки могат да доведат до изтощаване на батерията, разхищение на системни ресурси или частично синхронизиране.</string>
-    <string name="webui_remote_access_summary">Когато е отметнато е разрешен достъпа до уеб интерфейса от друго устройство. Тогава можете да влезете с потребител „syncthing“ и ключа за ППИ като парола. По подразбиране: изключено (най-сигурно)</string>
-    <string name="download_support_bundle_title">Изтегляне на пакет за поддръжка</string>
-    <string name="download_support_bundle_succeeded">Пакетът за поддръжка е изтеглен в %s.</string>
-    <string name="broadcast_service_control_summary">Подразбирано: Изключено. Когато е отметнато дава възможност на adb или други приложения напр. приложения за автоматизиране да дават инструкции на Syncthing да спазва условията за работа, насилствено да спира или работи.</string>
-    <string name="open_issue_tracker_summary">Отваряне на системата за проследяване на дефекти в %1$s</string>
-    <string name="advanced_storage_path_overview">Разширен преглед на пътя на хранилището</string>
-    <string name="untrusted_device">Недоверено устройство</string>
-    <string name="specify_wifi_ssid_whitelist">Избиране на безжични мрежи</string>
-    <string name="webui_password_title">Парола за интерфейса за уеб</string>
-    <string name="verbose_log_title">Подробен дневник</string>
-    <string name="os_open_file_limit">Ограничение на Андроид за отворени файлове</string>
-    <string name="folder_path_readwrite">Това издние на Андроид дава на Syncthing права за четене и писане на избраната папка.</string>
-    <string name="discovered_devices_title">Открити са устройства – докоснете за избор</string>
-    <string name="autoAcceptFolders">Автоматично приемане</string>
-    <string name="pause_device">Пауза на устройството</string>
-    <string name="folders_list_empty">Няма настроени папки. Докоснете, за да добавите папка.</string>
-    <string name="no_recent_changes">Няма скорошни промени.</string>
-    <string name="recent_changes_title">Скорошни промени</string>
-    <string name="modified_by_device">Устройство: %1$s</string>
-    <string name="preference_app_theme_follow_dark">Тъмна</string>
-    <string name="category_backup">Внасяне и изнасяне</string>
-    <string name="run_on_whitelisted_wifi_networks">Избрани мрежи: %1$s</string>
-    <string name="download_support_bundle_in_progress">Подготовка на пакет за поддръжка…</string>
-    <string name="undo_ignored_devices_folders_question">По този начин ще отмените предишнитете си решения да пренебрегнете устройства и папки. Желаете ли да продължите?</string>
-    <string name="config_export_failed">Грешка при изнасяне на настройките. За подробности посетете Настройки → Отстраняване на дефекти → Отваряне на дневника.</string>
-    <string name="dialog_settings_restart_app_title">Необходим е рестарт</string>
-    <string name="st_reset_deltas_title">Нулиране на промените на индексите</string>
-    <string name="api_key_copied_to_clipboard">Ключът за ППИ на Syncthing е копиран</string>
-    <string name="syncthing_database_size">Размер на хранилището на Syncthing</string>
-    <string name="pull_order_type_random">В случаен ред</string>
-    <string name="ignore_patterns">Шаблони за пренебрегване</string>
-    <string name="device_id_invalid">Идентификаторът на устройството не отговаря на формата. Въведете го отново.</string>
-    <string name="security_notice">Известие за сигурността</string>
-    <string name="web_page_loading">Зареждане на страница:\n%1$s…</string>
-    <string name="open_in_browser">Отваряне в мрежов четец</string>
-    <string name="category_user_interface">Интерфейс</string>
-    <string name="preference_app_theme_title">Тема</string>
-    <string name="ssl_cert_invalid_text">Страницата на адрес %1$s има неприемлив сертификат за шифроване със SSL. Желаете ли да продължите?</string>
-    <string name="run_on_wifi_summary">Работи ако устройството е свързано с безжична мрежа или по кабел.</string>
-    <string name="run_on_metered_wifi_title">Работи на безжични мрежи с таксуване на трафика</string>
-    <string name="crash_reporting">Анонимно докладване на срив</string>
-    <string name="webui_tcp_port_title">TCP порт на интерфейса за уеб</string>
-    <string name="webui_remote_access_title">Отдалепен достъп до интерфейса за уеб</string>
-    <string name="webui_username_title">Потребителско име за интерфейса за уеб</string>
-    <string name="st_reset_deltas_done">Промените на индексите на Syncthing са нулирани</string>
-    <string name="st_reset_deltas_question">Това действие трябва да бъде извършвано само след препоръка от екип по поддръжка.\nЖелаете ли промените на индексите да бъдат нулирани?</string>
-    <string name="folder_go_up">Нагоре</string>
-    <string name="syncthing_log_title">Дневник на Syncthing</string>
-    <string name="android_log_title">Дневник на Андроид</string>
-    <string name="reason_force_stop">Syncthing не работи, защото сте избрали принудително да спре без да следва условията.</string>
-    <string name="reason_not_within_time_frame_2">Настройката „Работи по график“ е включена, а последната синхронизация е била преди %s.</string>
-    <plurals name="reason_not_within_time_frame_minutes">
-        <item quantity="one">%d минута</item>
-        <item quantity="other">%d минути</item>
-    </plurals>
-    <string name="reason_not_charging">Устройството не се зарежда.</string>
-    <string name="reason_not_on_battery_power">Устройството не работи на батерии.</string>
-    <string name="reason_not_while_power_saving">Syncthing не работи, защото устройството е в режим на пестене на енергия.</string>
-    <string name="reason_not_while_auto_sync_data_disabled">Syncthing не работи, защото настройката за синхронизиране на данни на Андроид е изключена.</string>
-    <string name="reason_mobile_data_disallowed">Syncthing не е настроен да работи на мобилни данни.</string>
-    <string name="reason_on_mobile_data">Syncthing може да работи на мобилни данни.</string>
-    <string name="reason_on_roaming_nonroaming_mobile_data">Syncthing може да работи в чуждестранни и домашни мобилни мрежи.</string>
-    <string name="reason_not_nonroaming_mobile_data">Syncthing не работи, защото сте забранили работа в чуждестранни мобилни мрежи.</string>
-    <string name="notifications_other_channel">Други известия</string>
-    <string name="notification_out_of_disk_space">Картата SD е пълна. Файл %1$s</string>
-    <string name="notification_crash_text">Докоснете за преглед на дневника (%1$s)</string>
-    <string name="notifications_persistent_channel">Syncthing работи</string>
-    <string name="notification_persistent_waiting_channel">Наблюдение на условията за работа</string>
-    <string name="state_error_message">Грешка (%1$s)</string>
+    <string name="folder_type_receive_encrypted">Получава шифровани данни</string>
+
+    <!-- Folder type dialog descriptions for folder types -->
     <string name="folder_type_sendreceive_description">Папката и ще изпраща, и ще получава промени от отдалечени устройства.</string>
     <string name="folder_type_sendonly_description">Предпазва местните файлове от промени, идващи от другите устройства, но местните промени се изпращат.</string>
-    <string name="reason_not_within_time_frame_0_min">по-малко от минута</string>
-    <string name="reason_not_on_mobile_data">Syncthing може да работи на мобилни данни, но няма връзка с мобилни данни.</string>
-    <string name="complete_welcome_wizard_first">Първо отворете приложението от менюто с приложения и завършете съветника, преди да споделяте файлове.</string>
-    <string name="reason_location_unavailable">Включили сте „Работи на избрани безжични мрежи“ в настройките, но местоположението е изключено. Според ограниченията на Андроид, Syncthing няма достъп до името на мрежата, за да определи дали да работи. Решение: включете местоположението, дайте разрешение за достъп и отново включете безжичната мрежа.</string>
-    <string name="reason_wifi_disallowed">Syncthing не може да работи в безжични и кабелни мрежи.</string>
-    <string name="reason_on_nonroaming_mobile_data">Syncthing може да работи в домашни мрежи за мобилни данни. Текущата мрежа е такава.</string>
-    <string name="config_read_failed">Грешка при четене на настройките. Препоръчително е да създадете резервно копие на данните от синхронизираните папки, след това да изчистите данните на приложението от настройките на Андроид и го стартирайте отново.</string>
-    <plurals name="file_name_title">
-        <item quantity="one">Име на файла</item>
-        <item quantity="other">Списък с файлове</item>
-    </plurals>
-    <string name="reason_not_on_whitelisted_wifi">Syncthing не работи, защото името на текущата безжична мрежа липсва в списъка с разрешените.</string>
-    <string name="reason_on_nonmetered_wifi">Syncthing може да работи в безжични мрежи без отчитане на трафика. Текущата мрежа е такава.</string>
-    <string name="copy_progress">Споделяне на файлове…</string>
-    <string name="reason_force_start">Syncthing работи, защото сте избрали принудително да работи без да следва условията.</string>
-    <string name="reason_on_wifi">Syncthing може да работи в безжични мрежи. Текущата мрежа е такава.</string>
-    <string name="reason_not_nonmetered_wifi">Syncthing не работи, защото сте забранили работа в безжични мрежи с отчитане на графика.</string>
-    <string name="reason_not_on_wifi">Syncthing може да работи в безжична мрежа, няма връзка или е включен самолетен режим.</string>
-    <string name="reason_on_flight_mode">Syncthing работи, защото сте разрешили работа по време на самолетен режим.</string>
-    <string name="custom_wifi_ssid_whitelist_empty">Списъкът с имена на разрешени безжични мрежи е празен. Добавете от настройките.</string>
-    <string name="syncthing_active_details">Работи: %1$s</string>
-    <string name="no_remote_devices_connected">Няма свързани отдалечени устройства</string>
-    <string name="syncthing_terminated">Насилствено спряно</string>
-    <string name="config_create_failed">Грешка при създаване на файла с настройки. Проверете дневника.</string>
-    <string name="config_file_missing">Липсва основен за работата на приложението файл с настройки</string>
-    <string name="webui_tcp_port_unavailable">Портът за интерфейса за уеб %s е зает. Дали няма друг работещ екземпляр?</string>
-    <string name="notification_crash_title">Срив (код на грешката %1$s)</string>
     <string name="folder_type_receiveonly_description">Файловете се синхронизират от другите устройства, но местните промени не се изпращат.</string>
-    <string name="cancel_title">Отказ</string>
-    <string name="file_name_template">Нов файл %1$s</string>
-    <string name="nothing_share">Няма какво да бъде споделено</string>
-    <plurals name="copy_success_partially">
-        <item quantity="one">%1$d файл, копиран в папка „%2$s“, %3$d вече съшествува</item>
-        <item quantity="other">%1$d файла, копирани в папка „%2$s“, %3$d вече съшествуват</item>
-    </plurals>
-    <plurals name="copy_success">
-        <item quantity="one">%1$d файл е копиран в папка „%2$s“</item>
-        <item quantity="other">%1$d файла са копирани в папка „%2$s“</item>
-    </plurals>
-    <string name="reason_on_metered_nonmetered_wifi">Syncthing работи в безжични мрежи с и без отчитане на трафика.</string>
-    <string name="reason_on_whitelisted_wifi">Syncthing може да работи в текущата безжична мрежа.</string>
-    <string name="state_failed_items">Елементи с грешка: (%1$d)</string>
-    <string name="state_local_additions">Местно добавени</string>
-    <string name="state_up_to_date">Синхронизирано</string>
-    <string name="state_scan_waiting">Изчаква за обхождане</string>
-    <string name="state_clean_waiting">Изчаква за почистване</string>
-    <string name="state_sync_waiting">Изчаква за синхронизиране</string>
-    <string name="state_syncing_general">Синхронизиране</string>
-    <string name="state_cleaning">Почистване на версии</string>
-    <string name="state_sync_preparing">Подготовка за синхронизация</string>
-    <string name="invalid_port_number" tools:ignore="PluralsCandidate">Номерът на порта е неприемлив. Въведете порт между %1$d и %2$d.</string>
+    <string name="folder_type_receive_encrypted_description">Съдържа и синхронизира само шифровани данни. Папките на всички свързани устройства трабва да бъдат защитени с една и съща парола или да бъдат от вида „Получава шифровани данни“.</string>
+
+    <!-- Titles used in the pull order dialog and pull order button in the folder activity -->
+    <string name="pull_order">Ред на изтегляне</string>
+
+    <!-- Displays the current pull order type in the Folder activity -->
+    <string name="pull_order_type_random">В случаен ред</string>
+    <string name="pull_order_type_alphabetic">Азбучен ред</string>
     <string name="pull_order_type_smallestFirst">Първо най-малките</string>
     <string name="pull_order_type_largestFirst">Първо най-големите</string>
     <string name="pull_order_type_oldestFirst">Първо най-старите</string>
     <string name="pull_order_type_newestFirst">Първо най-новите</string>
+
+    <!-- Pull order dialog descriptions for pull order types -->
     <string name="pull_order_type_random_description">Файловете ще бъдат изтегляни в произволен ред.</string>
     <string name="pull_order_type_alphabetic_description">Файловете ще бъдат изтегляни по азбучен ред.</string>
+    <string name="pull_order_type_smallestFirst_description">Файловете ще бъдат изтегляни според размера им. Първо най-малките.</string>
+    <string name="pull_order_type_largestFirst_description">Файловете ще бъдат изтегляни според размера им. Първо най-големите.</string>
+    <string name="pull_order_type_oldestFirst_description">Файловете ще бъдат изтегляни според датата на промяна. Първо най-старите.</string>
+    <string name="pull_order_type_newestFirst_description">Файловете ще бъдат изтегляни според датата на промяна. Първо най-новите.</string>
+
+    <!-- Titles used in the file versioning dialog and file versioning button in the folder activity -->
+    <string name="maximum_age">Максимална възраст</string>
+    <string name="clean_out_after">Почистване след</string>
+    <string name="file_versioning">Версии на файловете</string>
+    <string name="none">Изключено</string>
+    <string name="versions_path">Папка с версиите</string>
+    <string name="command">Команда</string>
+
+    <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
+
+    <!-- Displays the current file versioning type in the Folder activity -->
     <string name="type_simple">Вид: Обикновени</string>
     <string name="type_trashcan">Вид: Кошче за отпадъци</string>
     <string name="type_staggered">Вид: Разпределени</string>
     <string name="type_external">Вид: С външно управление</string>
+
+    <!-- Information displayed about the current file versioning configuration in the folder activity -->
     <string name="trashcan_versioning_info">Почистване след: %1$s</string>
     <string name="staggered_versioning_info">Максимална възраст: %1$d\nПапка с версиите: %2$s</string>
     <string name="external_versioning_info">Команда: %1$s</string>
     <string name="simple_versioning_info">Количество пазени вресии: %1$s</string>
     <string name="show_device_id">Идентификатор на устройството</string>
+
+    <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
     <string name="could_not_access_deviceid">Идентификаторът на устройството е недостъпен.</string>
-    <string name="run_on_roaming_summary">Разрешаване на Syncthing да използва мобилни данни в чужбина.</string>
-    <string name="run_in_flight_mode_summary">Когато е отметнато Syncthing ще работи дори и когато няма връзка. Отметнете и ако в самолетен режим не се открива ръчно включената безжична връзка.</string>
-    <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor не е подготвен. Рестартирайте приложението и ако грешката не изчезне след рестарта докладвайте за нея.</string>
-    <string name="executable_not_found">Основният изпълним файл „%s“ липсва. Проверете изведеното при компилацията и системния дневник.</string>
-    <string name="pull_order">Ред на изтегляне</string>
-    <string name="pull_order_type_smallestFirst_description">Файловете ще бъдат изтегляни според размера им. Първо най-малките.</string>
-    <string name="pull_order_type_largestFirst_description">Файловете ще бъдат изтегляни според размера им. Първо най-големите.</string>
-    <string name="pull_order_type_oldestFirst_description">Файловете ще бъдат изтегляни според датата на промяна. Първо най-старите.</string>
-    <string name="folder_type_receive_encrypted_description">Съдържа и синхронизира само шифровани данни. Папките на всички свързани устройства трабва да бъдат защитени с една и съща парола или да бъдат от вида „Получава шифровани данни“.</string>
-    <string name="pull_order_type_newestFirst_description">Файловете ще бъдат изтегляни според датата на промяна. Първо най-новите.</string>
-    <string name="maximum_age">Максимална възраст</string>
-    <string name="clean_out_after">Почистване след</string>
-    <string name="versions_path">Папка с версиите</string>
-    <string name="command">Команда</string>
+    <string name="share_device_id_chooser">Споделяне идентификатора на устройството чрез</string>
+    <string name="run_on_whitelisted_wifi_summary">Включете списъка с разрешените безжични мрежи, за да ограничите синхронизирането само до тях.</string>
+    <string name="custom_sync_conditions_title">Потребителски условия за синхронизиране</string>
+    <string name="custom_sync_conditions_description">Дава възможност да посочите изключения от общите условия за работа.</string>
     <string name="custom_sync_conditions_dialog">Указване на условия за сихронизиране</string>
+
+    <!-- Quick Setting icon names and labels -->
     <string name="qs_force_label">Принудителна работа</string>
     <string name="qs_forced_to_run">Принуждаване към работа</string>
     <string name="qs_forced_to_stop">Принудително спиране</string>
@@ -509,48 +1014,35 @@
     <string name="qs_schedule_label">Работи 5 минути</string>
     <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">Работи %1$d минути</string>
     <string name="qs_schedule_disabled">Графикът е изключен</string>
-    <string name="custom_sync_conditions_description">Дава възможност да посочите изключения от общите условия за работа.</string>
-    <string name="share_device_id_chooser">Споделяне идентификатора на устройството чрез</string>
-    <string name="run_on_whitelisted_wifi_summary">Включете списъка с разрешените безжични мрежи, за да ограничите синхронизирането само до тях.</string>
-    <string name="custom_sync_conditions_title">Потребителски условия за синхронизиране</string>
-    <string name="dialog_exit_while_running_as_service_message">Забележка: Настроили сте приложението да се изпълнява автоматично при зареждане. Следователно то следи условията за работа и синхронизира по всяко време във фонов режим, когато условията позволяват. Ако се сблъскате със сериозни проблеми приложението може да бъде спряно само ръчно. В противен случай изключете „Автоматично стартиране“ в настройките. Жеаете ли да спрете приложението сега, докато устройството не рестартира?</string>
-    <string name="run_on_mobile_data_summary">Синхронизира, когато устройството е свързано към мобилни данни. Внимание: ако синхронизирате голямо количество данни е възможно изразходването на много от предоставения от оператора трафик.</string>
-    <string name="run_on_time_schedule_summary">Когато е отметнато синхронизирането ще работи за определено време, ако са изпълнени условията за работа и ако е изминал определен период след последната синхронизация. По този начин може да бъде спестена много батерия, но участващите в синхронизацията устройства трябва да бъдат на линия. Забележка: Може да останат непълни временни файлове до следващата насрочена синхронизация.</string>
-    <string name="run_on_metered_wifi_summary">Синхронизира, когато устройството е свързано към безжична мрежа с отчитане на трафика, напр. безжична точка за достъп или споделена мрежа от друг телефон. Внимание: Ако синхронизирате голямо количество данни е възможно изразходването на много от предоставения по тарифен план трафик.</string>
-    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">Въведената стойност е неприемлива. Въведете стойност между %1$d и %2$d.</string>
-    <string name="sleep_interval_minutes_title">Продължителност на интервала без синхронизация</string>
-    <string name="start_into_web_gui_title">Стартиране в интерфейса за интернет</string>
-    <string name="start_into_web_gui_summary">При стартиране да се отваря интерфейсът за отделечен достъп</string>
-    <string name="open_source_licenses_title">Лицензи на отворен код</string>
-    <string name="folder_run_script_caption">Изпълняване на скрипт</string>
-    <string name="clear_stversions_question">Ще бъдат премахнати предишните версии на файлове, управлявани от Syncthing. Продължаване?</string>
-    <string name="clear_stversions_done">Папката .stversions е почистена.</string>
-    <string name="privacy_title">Политика за поверителност</string>
-    <string name="clear_stversions_summary">Когато Syncthing замени или премахне файлове те биват премествани в папката .stversions. Можете да намерите и възстановите случайно премахнати файлове там, но остарелите им версии заемат място за съхранение на устройството ви.</string>
-    <string name="syncthing_forum_summary">Посетете форума на Syncthing и получете поддръжка</string>
-    <string name="privacy_summary">Отворете политиката за поверителност на syncthing-android, която обхваща използването (ако има такова) на лични данни, например местоположение.</string>
-    <string name="open_source_licenses_summary">Показва използваните лицензи на отворен код</string>
-    <string name="clear_stversions_title">Изпразване на всички папки с версии на файлове</string>
-    <string name="folder_run_script_description">Разширена настройка за изпълняване на скриптове, след като дадена папка промени състоянието си на синхронизираност. Ще бъдат изпълнявани скриптове само от папката „.stfolder“, други местоположения не се поддържат от съображения за сигурност.\nПример за изпълняване на скрипт: „.stfolder/rename-files.sh sync_complete</string>
-    <string name="syncthing_forum_title">Форум на Syncthing</string>
-    <plurals name="conflicts">
-        <item quantity="one">%1$d конфликт</item>
-        <item quantity="other">%1$d конфликта</item>
-    </plurals>
-    <string name="backup_password_not_set">⚠ Парола не е зададена.</string>
-    <string name="backup_rel_path_to_zip">Относителен път до архива с настройки</string>
-    <string name="backup_password_title">Парола за защита на настройките</string>
-    <string name="preference_category_explanation">Обяснение</string>
-    <string name="preference_category_actions">Действия</string>
-    <string name="preference_category_prepare">Подготовка</string>
-    <string name="config_import_failed_no_path">Грешка при внасяне на настройките. За подробности посетете Настройки → Отстраняване на дефекти → Отваряне на дневника.</string>
-    <string name="backup_password_set">✅ Зададена парола: %1$s</string>
-    <string name="share_log_file">Споделяне на дневник</string>
-    <string name="config_export_successful_no_path">Настройките са изнесени. Запомнете паролата при последващо внасяне.</string>
-    <string name="share_log_file_missing">Дневникът, който ще споделяте липсва.</string>
-    <string name="backup_password_summary">ℹ️ Препоръчително:\nВъведете силна парола, която ще бъде използвана за шифроване на настройките при изнасяне и разшифроване при внасяне. Пазете паролата на сигурно място, в случай на необходимост от внасяне на настройките. Трябва да използвате възможността за внасяне.\n\n⚠️ Непрепоръчително:\nДа не използвате парола. В този случай е възможно други приложения да получат достъп и да променят настройките на Syncthing. Достъпът до настройките носи риска от несанкциониран достъп до вашите файлове, използвайки откраднатите настройки.</string>
-    <string name="backup_password_set_masked">✅ Паролата е зададена - докоснете за промяна</string>
-    <string name="toggle_password_visibility">Превключване видимостта на паролата</string>
-    <string name="allow_overwrite_files_title">Презаписване на съществуващи файлове</string>
-    <string name="allow_overwrite_files_summary">Когато друго приложение споделя файлове в някоя от управляваните папки.</string>
+    <string name="no_app_to_open_link">Няма приложение за отваряне на тази връзка.</string>
+
+    <!-- Custom HTTPS certificate -->
+    <string name="webui_custom_cert_title">Персонализиран HTTPS сертификат</string>
+    <string name="webui_custom_cert_summary">Използване на собствен сертификат за локалния интерфейс за уеб</string>
+    <string name="custom_cert_explanation">Заменете присъщия за Syncthing самоподписан сертификат с ваш собствен. Изберете сертификата (PEM, включително пълната верига) и неговия личен ключ, проверете резултатите от проверката, след което го приложете. Syncthing ще бъде рестартиран, за да зареди новия сертификат; ако той не успее да се върне на линия, предишният сертификат се възстановява автоматично.\n\nЗа сертификат, подписан от собствената ви удостоверяваща служба (CA), първо инсталирайте основния сертификат на тази CA на устройството (Настройки → Сигурност → Инсталиране на сертификат на CA).</string>
+    <string name="custom_cert_current_title">Текущ сертификат</string>
+    <string name="custom_cert_current_none">Не е открит сертификат.</string>
+    <string name="custom_cert_subject">Притежател: %1$s</string>
+    <string name="custom_cert_issuer">Издател: %1$s</string>
+    <string name="custom_cert_expires">Изтича: %1$s</string>
+    <string name="custom_cert_self_signed">Самоподписан (по подразбиране)</string>
+    <string name="custom_cert_ca_signed">Подписан от CA</string>
+    <string name="custom_cert_select_cert">Избор на сертификат (.pem)</string>
+    <string name="custom_cert_select_key">Избор на личен ключ (.pem)</string>
+    <string name="custom_cert_not_selected">Не е избран</string>
+    <string name="custom_cert_apply">Прилагане на сертификата</string>
+    <string name="custom_cert_reset_title">Възстановяване на автоматично генериран сертификат</string>
+    <string name="custom_cert_reset_summary">Изтрива персонализирания сертификат и позволява на Syncthing да създаде нов самоподписан</string>
+    <string name="custom_cert_reset_question">Да бъде ли текущият сертификат заменен с нов самоподписан такъв?</string>
+    <string name="custom_cert_applying">Прилагане — рестартиране на Syncthing…</string>
+    <string name="custom_cert_applied">Сертификатът е приложен.</string>
+    <string name="custom_cert_applied_pending">Запазено. Ще влезе в сила при следващото стартиране на Syncthing.</string>
+    <string name="custom_cert_failed">Сертификатът не може да бъде приложен: %1$s</string>
+    <string name="custom_cert_reset_done">Възстановен е нов самоподписан сертификат.</string>
+    <string name="custom_cert_file_too_large">Файлът е твърде голям, за да бъде сертификат или ключ.</string>
+    <string name="custom_cert_read_failed">Избраният файл не може да бъде прочетен.</string>
+    <string name="cert_check_chain">Верига на сертификата</string>
+    <string name="cert_check_trust">Посочен като надежден от това устройство</string>
+    <string name="cert_check_validity">Период на валидност</string>
+    <string name="cert_check_key">Личен ключ</string>
 </resources>

@@ -21,6 +21,7 @@ An intensive rewrite on top of [researchxxl/Syncthing-Fork](https://github.com/r
 
 ### New Features
 - **AMOLED black theme**: follow system / light / dark / AMOLED, switching instantly, with the embedded Web GUI synced to its black theme
+- **Full i18n coverage**: all 38 language packs completed to 100% (496 keys + 8 plurals each, including az / be / ckb / gl built from scratch), with every file's key order aligned to the master `values/strings.xml` for easy maintenance
 - Application ID changed to `com.github.ywpc05.syncthingfork`, so it installs alongside the upstream app
 
 ### Stability & Fixes

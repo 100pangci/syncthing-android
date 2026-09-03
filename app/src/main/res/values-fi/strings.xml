@@ -1,29 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <string name="app_name">Syncthing-Fork</string>
+
     <string name="app_description">Avoin, luotettava ja hajautettu tiedostojensynkronointisovellus.</string>
+
     <!-- FirstStartActivity -->
+
     <!-- Title for dialog displayed on first start -->
     <string name="welcome_title">Tervetuloa Syncthingiin Androidille</string>
+
     <!-- Welcome wizard -->
     <!-- Slide "Introduction" -->
     <string name="welcome_text">Syncthing on avoimen lähdekoodin tiedostojensynkronointisovellus. Jakaaksesi tiedostoja muiden laitteiden kanssa tarvitset niiden uniikit laitetunnukset laitelistaasi. Myöhemmin voit valita, mitä kansioita jaat millekin laitteille. \n \n</string>
+
     <!-- Slide "Storage Permission" -->
     <string name="storage_permission_title">Tallennustilan lupa</string>
     <string name="storage_permission_desc">Syncthing on käytettävä tallennustilaa tiedostojen synkronointia varten.</string>
     <string name="dialog_all_files_access_not_supported">Laitteesi ei tue kaikkien tiedostojen käyttöä</string>
+
     <!-- Slide "Ignore battery optimizations" -->
     <string name="ignore_doze_permission_title">Akun käytön optimointi</string>
     <string name="ignore_doze_permission_os_notice">Android TV:t tiedettävästi sulkevat toisinaan sovelluksen, kun se on käynnissä taustalla. Ratkaisu on saatavilla wikissä kohdassa \'%1$s/%2$s.</string>
     <string name="ignore_doze_permission_desc">Android voi lopettaa synkronoinnin jonkin ajan kuluttua. Poista akun käytön optimointi käytöstä estääksesi tämän. Joissakin laitteissa voi olla ylimääräisiä tehtävienlopetussovelluksia esiasennettuna. Syncthing lopettaminen tulisi estää näiden sovellusten asetuksissa.</string>
     <string name="dialog_disable_battery_optimizations_not_supported">Laitteesi ei tue akun käytön optimoinnin poistamista käytöstä</string>
+    <string name="dialog_confirm_skip_ignore_doze_permission">Varoitus: Jos SyncthingNative keskeytyy ja tekee jotain outoa, se on sinun syytäsi. Ohita tämä vaihe vain, jos laitteesi ei tue luvan myöntämistä. Ohitetaanko varmasti?</string>
+
     <!-- Slide "Location Permission" -->
     <string name="location_permission_title">Sijainnin käyttöoikeus</string>
     <string name="location_permission_desc">Syncthing voidaan asettaa toimimaan vain valituissa Wi-Fi-verkoissa. Android vaatii sijainnin käyttöoikeuden aktiivisen Wi-Fi-verkon nimen lukemiseksi. Paina yllä olevaa painiketta, jos haluat käyttää tätä ominaisuutta. Voit ohittaa tämän vaiheen. Katso lisätietoja tietosuojakäytännöstämme.</string>
     <string name="location_permission_desc_api_29">Vinkki Android-versioille 10+: \"Salli aina\"</string>
+
+    <!-- Slide "Notification Permission" -->
+    <string name="notification_permission_title">Ilmoitusten käyttöoikeus</string>
+    <string name="notification_permission_desc">Vaaditaan ilmoitusten näyttämiseen uusista laiteyhteyksistä ja kansioiden jakopyynnöistä sekä palvelun pitämiseen käynnissä ja yhteydessä.</string>
+
     <!-- Slide "Key Generation" -->
     <string name="key_generation_title">Avainten luonti</string>
     <string name="key_generation_success">Turvalliset avaimet yksityiseen datan jakamiseen on onnistuneesti luotu.</string>
+
     <!-- Generic texts used everywhere -->
     <string name="back">Takaisin</string>
     <string name="cont">Jatka</string>
@@ -32,11 +47,18 @@
     <string name="grant_permission">Myönnä käyttöoikeus</string>
     <string name="permission_granted">Lupa myönnetty</string>
     <string name="reason">Syy:</string>
+
     <string name="accept">Hyväksy</string>
+
     <string name="ignore">Ohita</string>
+
+
     <string name="main_menu">Päävalikko</string>
+
     <string name="refresh">Virkistä</string>
+
     <!-- PhotoShootActivity -->
+
     <string name="photo_shoot_launcher_title">Sync. Kamera</string>
     <string name="photo_shoot_activity_title">Syncthing-Fork Kamera</string>
     <string name="photo_shoot_intro_welcome_title">Tervetuloa Syncthing Kameraan</string>
@@ -45,86 +67,157 @@
     <string name="grant_storage_permission">Myönnä tallennustilan käyttöoikeus</string>
     <string name="grant_camera_permission">Myönnä kameran käyttöoikeus</string>
     <string name="photo_shoot_intro_permission_desc">Syncthing Kamera vaatii lupasi kuvien ottamiseen ja tallentamiseen laitteeseen. Tämä ominaisuus on valinnainen. Käyttääksesi sitä, myönnä käyttöoikeudet ja napauta \"Jatka\". Asetamme sinulle Syncthing Kamera -kansion, jonka voit myöhemmin jakaa muiden Syncthing-laitteiden kanssa.</string>
+    <string name="photo_shoot_take_picture_success">Kuva tallennettu onnistuneesti Syncthing Camera -kansioon.</string>
+    <string name="photo_shoot_take_picture_failure">Kuvan ottaminen epäonnistui tai peruit sen.</string>
+
     <!-- Label of the folder created by the Syncthing Camera feature. -->
     <string name="default_syncthing_camera_folder_label">Syncthing Kamera</string>
+
     <!-- MainActivity -->
+
     <!-- Main bottom navigation view -->
     <string name="activity_main_bottom_navigation_rescan_all">Skannaa kaikki uudelleen</string>
+
     <!-- Main menu button -->
+
     <!-- Exception dialog message -->
+
     <!-- Title of the exit app when running as a service confirmation dialog -->
     <string name="dialog_exit_while_running_as_service_title">Vahvista sovelluksen sulkeminen</string>
     <string name="dialog_exit_while_running_as_service_message">Tiedoksesi: Asetit sovelluksen käynnistymään automaattisesti käynnistyksen yhteydessä. Tästä johtuen se tarkkailee käyntiehtoja ja synkronoi taustalla, kun ehdot täyttyvät. Sovellus tulisi sulkea manuaalisesti vain, jos kohtaat vakavia ongelmia. Muussa tapauksessa ota \'Käynnisty automaattisesti käynnistyksen yhteydessä\' pois käytöstä asetuksissa. Haluaisitko lopettaa nyt, kunnes laite uudelleenkäynnistetään?</string>
+
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">Lisää kansio</string>
+
     <!-- Title of the "share device id" menu action -->
+
     <!-- Shown in the chooser dialog when sharing a Device ID -->
+
     <string name="usage_reporting_dialog_title">Salli anonyymi käytön seuranta?</string>
+
     <string name="yes">Kyllä</string>
+
     <string name="no">Ei</string>
+
+
+    <!-- URL to open when user chose to open website in usage reporting dialog -->
+
     <string name="toast_write_storage_permission_required">Tämä sovellus vaatii tallennustilan kirjoitusoikeuden</string>
+
     <string name="device_rejected">Laite \"%1$s\" haluaa muodostaa yhteyden</string>
+
     <string name="folder_rejected">Laite \"%1$s\" haluaa jakaa kansion \"%2$s\"</string>
+
     <!-- StateDialogActivity -->
+
     <!-- Text for FoldersFragment and DevicesFragment loading view -->
     <!-- Shown instead of web_gui_loading if the key does not exist and has to be created -->
     <string name="web_gui_creating_key">Luodaan salausavaimia. Tämä voi kestää muutaman minuutin.</string>
+
     <!-- FolderListFragment -->
+
     <string name="folders_fragment_title">Kansiot</string>
+
     <!-- Shown if no folders exist -->
     <string name="folder_list_empty">Kansioita ei löydy</string>
+
     <!-- Format string for folder file count -->
-    <plurals name="files">
-        <item quantity="one">%1$d / %2$d tiedosto</item>
-        <item quantity="other">%1$d / %2$d tiedostoa</item>
-    </plurals>
+    <plurals name="files">        <item quantity="one">%1$d / %2$d tiedosto</item>        <item quantity="other">%1$d / %2$d tiedostoa</item></plurals>
+
+    <!-- Format string for conflict file count -->
+    <plurals name="conflicts">        <item quantity="one">%1$d ristiriita</item>        <item quantity="other">%1$d ristiriitaa</item></plurals>
+
     <string name="override_changes">Ohita muutokset</string>
+
     <!-- Override Changes Confirmation Dialog -->
     <string name="override_changes_question">Tämä peruu kaikki muutokset muista laitteista tähän kansioon. Jatketaanko?</string>
+
     <string name="revert_local_changes">Peru paikalliset muutokset</string>
+
+    <string name="delete_unexpected_items">Poista odottamattomat kohteet</string>
+
     <!-- Revert Local Changes Confirmation Dialog -->
     <string name="revert_local_changes_question">Tämä peruu kaikki tällä laitteella kansioon tehdyt muutokset. Jatketaanko?</string>
+
     <string name="open_file_manager">Avaa tiedostonhallinta</string>
     <string name="open_file_with">Avaa tiedosto sovelluksessa</string>
     <string name="open_file_no_compatible_app">Ei löytynyt sovellusta tiedoston avaamiseksi.</string>
+
     <!-- Suggest File Manager App Dialog -->
     <string name="suggest_file_manager_app_dialog_title">Yhteensopivaa tiedostonhallintasovellusta ei löytynyt</string>
+    <string name="suggest_file_manager_app_dialog_text">Suosittelemme avoimen lähdekoodin tiedostonhallintasovelluksen \'Material Files\' asentamista. Haluaisitko avata sen sovelluskaupan sivun?</string>
+
     <!-- DeviceListFragment -->
+
     <!-- Devices tab title -->
     <string name="devices_fragment_title">Laitteet</string>
+
     <!-- Shown if no devices are configured in add folder dialog -->
     <string name="devices_list_empty">Ei asetettuja laitteita. Napauta lisätäksesi uuden laitteen.</string>
+
     <!-- Shown in ListView if no devices are configured -->
     <string name="no_devices_configured">Ei laitteita asetettuna. \nAloita lisäämällä laite.</string>
+
+    <string name="deviceEncryptionPasswordHint">Jos laite ei ole luotettu, syötä salauksen salasana</string>
+
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">Ajan tasalla</string>
+
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
+    <string name="device_syncing_percent_bytes">Synkronoidaan (%1$d %%, %2$s)</string>
+
     <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">Ei yhteyttä</string>
+    <string name="device_disconnected_not_synced">Ei yhteyttä (%1$s odottaa)</string>
+
     <!-- Indicates that the device is paused and does not sync -->
     <string name="device_paused">Tauolla</string>
+
     <!-- Indicates that devices does not share any folders -->
     <string name="device_state_unused">Ei käytössä</string>
+
     <!-- Indicates that the device connection is unknown -->
+
     <!-- Last seen title -->
     <string name="device_last_seen">Viimeksi nähty: %1$s</string>
     <string name="device_last_seen_never">Ei koskaan</string>
+
     <!-- Title for the listing of shared folders with a colon and space appended -->
     <string name="shared_folders_title_colon">"Kansiot: "</string>
+
+    <!-- Expand the collapsed shared folders list on a device card; parameter is the hidden folder count -->
+    <string name="device_folders_show_more">+%1$d</string>
+
+    <!-- Collapse an expanded shared folders list on a device card -->
+    <string name="device_folders_show_less">Näytä vähemmän</string>
+
+    <!-- Title of the dialog listing the conflict files of a folder -->
+    <string name="conflict_files_title">Ristiriidatiedostot</string>
+
+    <!-- Header of the grouped status card showing transfer and resource stats -->
+    <string name="status_transfer_resources">Siirto &amp; resurssit</string>
+
     <!-- Title for current download rate -->
     <string name="download_title">Lataus</string>
+
     <!-- Title for current upload rate -->
     <string name="upload_title">Lähetys</string>
+
     <!-- StatusFragment -->
+
     <string name="status_fragment_title">Tila</string>
+
     <string name="button_follow_run_conditions">NOUDATA KÄYNTIEHTOJA</string>
     <string name="button_force_start">PAKOTA KÄYNNISTYMINEN \nOHITA KÄYNTIEHDOT</string>
     <string name="button_force_stop">PAKOTA PYSÄYTTÄMINEN \nOHITA KÄYNTIEHDOT</string>
+
     <string name="syncthing_starting">Syncthing on käynnistymässä.</string>
     <string name="syncthing_running">Syncthing on käynnissä.</string>
     <string name="syncthing_not_running">Syncthing ei ole käynnissä.</string>
     <string name="syncthing_has_crashed">Syncthing on kaatunut.</string>
+
     <!-- DrawerFragment -->
+
     <!-- Same as download_title with a colon and space appended -->
     <!-- Same as upload_title with a colon and space appended -->
     <!-- Title for current RAM usage -->
@@ -134,186 +227,613 @@
     <!-- Title for uptime status -->
     <string name="uptime">Päälläoloaika</string>
     <string name="restart">Käynnistä uudelleen</string>
+
     <string name="dialog_confirm_restart">Haluatko käynnistää Syncthingin uudelleen?</string>
+
     <!-- FolderActivity -->
+
     <!-- Setting title -->
     <string name="folder_id">Kansion tunnus</string>
+
     <!-- Setting title -->
     <string name="folder_label">Kansion tunnus</string>
+
     <!-- Setting title -->
     <string name="directory">Hakemisto</string>
+    <string name="advanced_directory_selection">Edistynyt hakemiston valinta</string>
+
     <!-- Setting title and description -->
     <string name="folder_fileWatcher">Tarkkaile muutoksia</string>
     <string name="folder_fileWatcherDescription">Pyytää käyttöjärjestelmää ilmoittamaan muutoksista tiedostoihin. Kerran tunnissa skannaus otetaan käyttöön, jos tämä on pois päältä.</string>
+
     <!-- Setting title and description -->
     <string name="folder_ignore_delete_caption">Ohita poistot</string>
     <string name="folder_ignore_delete_description">Edistynyt asetus, joka vaikuttaa saapuviin indeksin päivityksiin. Käytössä ollessaan saapuvat päivitykset, joissa on poistomerkintä, jätetään huomioimatta. Katso See https://docs.syncthing.net/advanced/folder-ignoredelete.html</string>
+
+    <!-- Setting title and description -->
+    <string name="folder_run_script_caption">Suorita skripti</string>
+    <string name="folder_run_script_description">Edistynyt vaihtoehto skriptien suorittamiseen kansion synkronointitilan muuttuessa. Skriptit polussa \'.stfolder/*.sh\' suoritetaan; muita sijainteja ei tueta tietoturvasyistä.\nEsimerkki skriptin kutsusta: \'.stfolder/rename-files.sh sync_complete\'</string>
+
     <!-- Setting title -->
     <string name="folder_pause">Keskeytä kansio</string>
+
     <!-- Setting title -->
     <string name="devices">Laitteet</string>
+
     <!-- Setting title -->
     <string name="keep_versions">Pidä versiot</string>
+
     <!-- Setting title -->
     <string name="delete_folder">Poista kansio</string>
+
     <!-- Title for FolderSettingsFragment in create mode -->
     <string name="create_folder">Luo kansio</string>
+
     <!-- Title for FolderSettingsFragment in edit mode -->
     <string name="edit_folder">Muokkaa kansiota</string>
+
     <!-- Menu item to confirm folder creation -->
     <string name="create">Luo</string>
+
     <!-- Dialog shown when attempting to remove a folder -->
     <string name="remove_folder_confirm">Haluatko varmasti poistaa tämän kansion Synthingistä?</string>
+
     <!-- Toast shown when trying to create a folder with an empty ID -->
     <string name="folder_id_required">Kansion tunnus ei voi olla tyhjä</string>
+
     <!-- Toast shown when trying to create a folder with an empty label -->
     <string name="folder_label_required">Kansion nimi ei voi olla tyhjä</string>
+
     <!-- Toast shown when trying to create a folder with an empty path -->
     <string name="folder_path_required">Kansion polku ei voi olla tyhjä</string>
+
     <string name="dialog_discard_changes">Hylkää muutokset?</string>
+
+    <!-- Summary shown if we only have readonly access to the folder path -->
+    <string name="folder_path_readonly">Android-versiosi antaa Syncthingille vain luku -oikeuden valittuun kansioon.</string>
+
+    <!-- Summary shown if we only have readwrite access to the folder path -->
+    <string name="folder_path_readwrite">Android-versiosi antaa Syncthingille luku- ja kirjoitusoikeuden valittuun kansioon.</string>
+
+    <!-- Toast shown if the user selected an invalid location for a new syncthing folder -->
+    <string name="toast_invalid_folder_selected">Pahoittelut. Valittua kansiota ei voi käyttää. Valitse kansio, joka sijaitsee sisäisessä tai ulkoisessa tallennustilassa.</string>
+
+    <string name="folder_type_switch_to_receive_encrypted_not_allowed">Olemassa olevan kansion muuttaminen \'Vastaanota salattuna\' -tyypiksi ei ole tuettua.</string>
+
+    <string name="ignore_patterns">Ohituskuviot</string>
+
     <!-- DeviceActivity -->
+
     <!-- Setting title -->
     <string name="device_id">Laitetunnus</string>
+
+    <!-- Status title -->
+    <string name="discovered_devices_title">Löydetyt laitteet – Napauta valitaksesi</string>
+
     <!-- Status text -->
+
+    <!-- Status text -->
+    <string name="local_discovery_disabled">Poistit paikallisen etsinnän käytöstä kohdassa \'Asetukset\' &gt; \'Syncthing-asetukset\' &gt; \'Paikallinen etsintä\'. Ota se käyttöön etsiäksesi laitteita paikallisesta verkosta.</string>
+
     <!-- Setting title -->
+
+    <!-- Setting title -->
+    <string name="folders">Kansiot</string>
+
     <!-- Setting title -->
     <string name="addresses">Osoitteet</string>
+
     <!-- Setting title -->
+
     <!-- Setting title -->
     <string name="compression">Pakkaus</string>
+
     <!-- Strings representing compression options -->
     <string name="compress_never">Ei koskaan</string>
     <string name="compress_metadata">Metatiedot</string>
     <string name="compress_always">Aina</string>
     <!-- Setting title -->
     <string name="introducer">Esittelijä</string>
+
+    <!-- Setting title -->
+    <string name="autoAcceptFolders">Hyväksy automaattisesti</string>
+
+    <!-- Setting title -->
+    <string name="pause_device">Keskeytä laite</string>
+
+    <!-- Setting title -->
+    <string name="untrusted_device">Ei-luotettu laite</string>
+
     <!-- ActionBar item -->
     <string name="delete_device">Poista laite</string>
+
     <string name="add_device">Lisää laite</string>
+
     <!-- Menu item to confirm adding a device -->
+
     <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">Muokkaa laitetta</string>
+
     <!-- Dialog shown when attempting to remove a device -->
     <string name="remove_device_confirm">Haluatko varmasti poistaa tämän laitteen?</string>
+
     <!-- Toast shown when trying to create a device with an empty ID -->
     <string name="device_id_required">Laitetunnus ei voi olla tyhjä</string>
+
     <!-- Toast shown when trying to create a device with an empty ID -->
     <string name="device_id_invalid">Laitteen ID on väärin muotoiltu. Ole hyvä ja yritä uudelleen.</string>
+
+    <!-- Toast shown when trying to create a device with an empty name -->
+
+    <!-- Toast shown when trying to create a device with invalid addresses -->
+    <string name="device_addresses_invalid">Laitteen osoitteet on muotoiltu väärin. Yritä uudelleen. Katso lisätietoja Syncthingin dokumentaatiosta.</string>
+
+    <!-- Content description (alt text) for device ID qr code in show device id dialog -->
+    <string name="device_id_qr_code">Laitetunnuksen QR-koodi</string>
+
+    <string name="close_device_id">Sulje laitetunnus</string>
+
+    <string name="copy">Kopioi</string>
+
     <!-- Content description for device ID qr code icon -->
     <string name="scan_qr_code_description">Lue QR-koodi</string>
+
+    <!-- Dialog message if no compatible barcode scanner app is installed -->
+
+    <!-- Shown if no folders are configured -->
+    <string name="folders_list_empty">Ei asetettuja kansioita. Napauta lisätäksesi uuden kansion.</string>
+
+    <!-- RecentChangesActivity -->
+
+    <string name="no_recent_changes">Viimeaikaisia muutoksia ei ole.</string>
+    <string name="recent_changes_title">Viimeaikaiset muutokset</string>
+    <string name="modified_by_device">Laite: %1$s</string>
+    <string name="modification_time">Aika: %1$s</string>
+    <string name="more_options">Lisää vaihtoehtoja</string>
+    <string name="show_exact_times">Näytä tarkat ajat</string>
+
+    <string name="this_device">Tämä laite</string>
+
     <!-- WebGuiActivity -->
+
     <!-- Title of the web gui activity -->
     <string name="web_gui_title">Web käyttöliittymä</string>
+
     <!-- Text for WebGuiActivity loading view -->
     <string name="web_gui_loading">Käyttöliittymä käynnistyy</string>
+
+    <!-- Shown in WebGuiActivity when the web gui could not be loaded. The technical cause is shown
+         below it and written to the log. -->
+    <string name="web_gui_load_failed">Web-käyttöliittymää ei voitu ladata. Ota loki talteen ja raportoi tämä.</string>
+
+    <!-- WebViewActivity -->
+
+    <!-- Dialog title displayed when an invalid ssl certificate was found -->
+    <string name="security_notice">Tietoturvahuomautus</string>
+
+    <!-- Dialog message if an invalid ssl certificate was detected -->
+    <string name="ssl_cert_invalid_text">Sivustolla %1$s näyttää olevan virheellinen SSL-salauksen sertifikaatti. Jatketaanko?</string>
+
+    <!-- Text for WebViewActivity loading page -->
+    <string name="web_page_loading">Ladataan verkkosivua:
+\n%1$s …</string>
+
+    <!-- Text for WebViewActivity openBrowser action button -->
+    <string name="open_in_browser">Avaa selaimessa</string>
+
     <!-- SettingsFragment -->
+
     <string name="settings_title">Asetukset</string>
+
+    <string name="category_wifi">WiFi</string>
+    <string name="category_mobile_data">Mobiilidata</string>
+    <string name="category_battery">Akku</string>
+    <string name="category_schedule">Aikataulu</string>
+    <string name="category_general">Yleiset</string>
+    <string name="category_connections">Yhteydet</string>
+    <string name="category_advanced">Lisäasetukset</string>
+
+    <string name="category_user_interface">Käyttöliittymä</string>
+
+    <string name="preference_app_theme_title">Teema</string>
+    <string name="preference_app_theme_follow_system">Seuraa järjestelmää</string>
+    <string name="preference_app_theme_follow_light">Vaalea</string>
+    <string name="preference_app_theme_follow_dark">Tumma</string>
+    <string name="preference_app_theme_amoled" translatable="false">AMOLED</string>
+
     <string name="category_behaviour">Käyttäytyminen</string>
     <string name="category_syncthing_options">Syncthing asetukset</string>
     <string name="category_syncthing_options_summary">Tämä valikko on käytettävissä vain, jos Syncthing on käynnissä.</string>
+
+    <string name="category_backup">Tuo ja vie</string>
+    <string name="category_debug">Vianmääritys</string>
     <string name="category_experimental">Kokeellinen</string>
+
     <!-- Preference screen - Run conditions -->
     <string name="run_conditions_title">Käyntiehdot</string>
     <string name="run_conditions_summary">Käytä seuraavia valintoja päättääksesi, koska Syncthing on käynnissä.</string>
+
     <string name="run_on_mobile_data_title">Käytä mobiilidatalla</string>
     <string name="run_on_mobile_data_summary">Käytä laitteen ollessa yhteydessä mobiiliverkkoon. Varoitus: Tämä voi käyttää paljon dataa operaattorisi datansiirtomäärästä, jos synkronoit suuria määriä dataa.</string>
+
     <string name="run_on_roaming_title">Käytä verkkovierailun aikana</string>
+    <string name="run_on_roaming_summary">Salli Syncthingin mobiilidatan käyttö verkkovierailun aikana.</string>
+
     <string name="run_on_wifi_title">Käytä WiFi-verkossa</string>
     <string name="run_on_wifi_summary">Käytä laitteen ollessa yhteydessä WiFi- tai ethernet-verkkoon.</string>
+
     <string name="run_on_metered_wifi_title">Käytä käytön mukaan laskutettavassa WiFi-verkossa</string>
     <string name="run_on_metered_wifi_summary">Käytä laitteen ollessa yhteydessä käytön mukaan laskutettavaan WiFi-verkkoon, kuten maksulliseen verkkoon tai mobiiliyhteyteen sidottuun verkkoon. Huomio: Tämä voi käyttää suuren osan datansiirtomäärästä, jos synkronoit paljon dataa.</string>
+
     <string name="run_on_whitelisted_wifi_title">Käytä valituissa WiFi-verkoissa</string>
+    <string name="specify_wifi_ssid_whitelist">Valitse WiFi-verkot</string>
+    <string name="run_on_whitelisted_wifi_networks">Valitut WiFi-verkot: %1$s</string>
+    <string name="wifi_ssid_whitelist_empty">Ei valittuja WiFi-verkkoja. Napauta määrittääksesi verkot.</string>
+
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">Laita Wifi päälle valitaksesi verkkoja.</string>
+
+    <string name="sync_only_wifi_ssids_wifi_turn_on_location">Kytke sijainti päälle valitaksesi verkkoja.</string>
+
+
     <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">Alkaen Android-versiosta 8.1 sijainnin käyttöoikeus vaaditaan Wi-Fin nimen lukemiseksi. Voit käyttää tätä ominaisuutta vain, jos myönnät tämän käyttöoikeuden.</string>
+
     <string name="power_source_title">Käytä, kun virtalähteenä on</string>
+
+    <string name="power_source_ac_and_battery_power">Verkkovirralla ja akkuvirralla.</string>
+    <string name="power_source_ac_power">Verkkovirralla.</string>
+    <string name="power_source_battery_power">Akkuvirralla.</string>
+
     <string name="respect_battery_saving_title">Noudata Androidin virransäästöasetusta</string>
+    <string name="respect_battery_saving_summary">Poista Syncthing käytöstä, jos virransäästö on käytössä.</string>
+
+    <string name="respect_master_sync_title">Noudata Androidin \'Synkronoi tiedot automaattisesti\' -asetusta</string>
+    <string name="respect_master_sync_summary">Poista Syncthing käytöstä, kun pikavalintojen \'Synkronoi tiedot automaattisesti\' -kytkin on pois päältä.</string>
+
     <string name="run_in_flight_mode_title">Käytä ilman verkkoyhteyttä</string>
     <string name="run_in_flight_mode_summary">Tämän valitseminen ottaa Synthingin käyttöön ollessasi offline-tilassa. Valitse, jos laitteellasi on ongelmia havaita manuaalinen WiFi-yhteys lentotilassa.</string>
+
     <string name="run_on_time_schedule_title">Käytä aikataulun mukaisesti</string>
+    <string name="run_on_time_schedule_summary">Tämän vaihtoehdon käyttöönotto yrittää synkronoida määritetyn ajan, jos käyntiehdot täyttyvät ja edellisestä synkronoinnista on kulunut määritetty aikaväli. Tämä voi säästää paljon akkua, mutta edellyttää, että synkronointikumppanit ovat verkossa. Huomaa: Tämä voi jättää keskeneräisiä väliaikaistiedostoja, kunnes seuraava ajoitettu synkronointi tapahtuu.</string>
+
+    <string name="sync_duration_minutes_title">Synkronointijakson kesto</string>
+    <string name="sync_duration_minutes_summary">%1$s minuuttia</string>
+    <string name="sleep_interval_minutes_title">Synkronointitauon välin kesto</string>
+
+    <!-- Preferences - Behaviour -->
+
+    <string name="behaviour_autostart_title">Automaattinen käynnistys</string>
     <string name="behaviour_autostart_summary">Käynnistä sovellus automaattisesti käyttöjärjestelmän käynnistyessä.</string>
+
+
+    <string name="allow_overwrite_files_title">Salli olemassa olevien tiedostojen ylikirjoitus</string>
+    <string name="allow_overwrite_files_summary">Kun toinen sovellus jakaa tiedostoja johonkin kansioistamme.</string>
+
+    <string name="expert_mode_title">Asiantuntijatila</string>
+
+    <string name="expert_mode_summary">Tämän vaihtoehdon käyttöönotto näyttää edistyneet asetusvaihtoehdot. Sinun tulisi ensin tutustua Syncthingin dokumentaatioon varmistaaksesi, että osaat käyttää niitä oikein. Virheelliset asetukset voivat aiheuttaa akun tyhjenemisen, järjestelmäresurssien loppumisen tai epätäydellisen synkronoinnin.</string>
+
+
+    <string name="start_into_web_gui_title">Käynnistä suoraan web-käyttöliittymään</string>
+ 
+    <string name="start_into_web_gui_summary">Avaa sovelluksen käynnistyessä web-käyttöliittymä päävalikon sijaan</string>
+
+
+
+
+
     <string name="device_name">Laitteen nimi</string>
+
     <string name="listen_address">Synkronointiprotokollan kuunteluosoite</string>
+
     <string name="max_recv_kbps">Sisääntulevan liikenteen rajoitus (KiB/s)</string>
+
     <string name="max_send_kbps">Uloslähtevän liikenteen rajoitus (KiB/s)</string>
+
     <string name="global_announce_enabled">Globaali etsintä</string>
+
     <string name="local_announce_enabled">Paikallinen etsintä</string>
+
     <string name="enable_nat_traversal">Aktivoi osoitteenmuunnoksen kierto</string>
+
     <string name="global_announce_server">Globaalit etsintäpalvelimet</string>
+
     <string name="enable_relaying">Aktivoi yhteyden välitys</string>
+
     <string name="usage_reporting">Anonyymi käytönseuranta</string>
+
+    <string name="crash_reporting">Anonyymi kaatumisraportointi</string>
+
+    <string name="webui_tcp_port_title">Web-käyttöliittymän TCP-portti</string>
+
+    <string name="webui_remote_access_title">Web-käyttöliittymän etäkäyttö</string>
+
+    <string name="webui_username_title">Web-käyttöliittymän käyttäjänimi</string>
+
+    <string name="webui_password_title">Web-käyttöliittymän salasana</string>
+
+    <string name="webui_remote_access_summary">Määritä salliaksesi Web-käyttöliittymän käytön toiselta laitteelta. Käytössä ollessaan voit kirjautua käyttäjällä \'syncthing\' ja API-avaimella salasanana. Oletus: pois käytöstä (turvallisin)</string>
+
+
+
+    <string name="clear_stversions_title">Tyhjennä kaikki versiointikansiot</string>
+    <string name="clear_stversions_summary">Tiedostot siirretään .stversions-hakemistoon, kun Syncthing korvaa tai poistaa ne. Voit todennäköisesti löytää ja palauttaa vahingossa poistettuja tiedostoja sieltä, mutta vanhentuneet tiedostoversiot vievät tallennustilaa laitteeltasi.</string>
+    <string name="clear_stversions_question">Tämä poistaa kaikki Syncthingin käsittelemien tiedostojen aiemmat versiot. Jatketaanko?</string>
+    <string name="clear_stversions_done">.stversions-kansioiden tyhjentäminen onnistui.</string>
+
+    <string name="download_support_bundle_title">Lataa tukipaketti</string>
+
+    <!-- Summary shown when the user clicked the download support bundle button -->
+    <string name="download_support_bundle_in_progress">Valmistellaan tukipaketin latausta …</string>
+
+    <!-- Toast after successful download of the support bundle -->
+    <string name="download_support_bundle_succeeded">Tukipaketti ladattu onnistuneesti kohteeseen %s.</string>
+
+    <!-- Toast after failed support bundle download -->
+    <string name="download_support_bundle_failed">Tukipaketin lataaminen epäonnistui. Tarkista lokit.</string>
+
+    <!-- Titles for the preference to undo ignored devices and folders -->
+    <string name="undo_ignored_devices_folders_title">Peru laitteiden ja kansioiden ohittaminen</string>
+    <string name="undo_ignored_devices_folders_question">Tämä peruu aiemmat päätökset ohittaa laitteita ja kansioita. Jatketaanko?</string>
+    <string name="undo_ignored_devices_folders_done">Päätösten peruminen onnistui.</string>
+
+    <string name="backup_rel_path_to_zip">Asetusarkiston suhteellinen polku</string>
+
+    <string name="backup_password_title">Asetussuojauksen salasana</string>
+    <string name="backup_password_summary">Suositeltavaa:\nSyötä vahva salasana, jolla asetuksesi salataan viennin aikana ja puretaan tuonnin yhteydessä. Säilytä tämä salasana turvallisessa paikassa palautusprosessia varten. Tarvitset sitä tuontiominaisuuden käyttämiseen.\n\nEi suositeltavaa:\nJos et käytä salasanaa, muut sovellukset voivat mahdollisesti lukea ja muokata Syncthing-asetuksiasi. Asetusten paljastuminen sisältää riskin, että pahantahtoinen toimija voi saada luvattoman pääsyn tiedostoihisi varastettujen asetusvientien avulla.</string>
+
+    <string name="backup_password_set">Salasana asetettu: %1$s</string>
+    <string name="backup_password_set_masked">Salasana asetettu – Napauta vaihtaaksesi</string>
+    <string name="backup_password_not_set">Salasanaa ei ole asetettu.</string>
+    <string name="toggle_password_visibility">Näytä/piilota salasana</string>
+
     <string name="export_config">Vie asetukset</string>
+
+    <!-- Toast after entering an invalid tcp port -->
+    <string name="invalid_port_number" tools:ignore="PluralsCandidate">Portin numero ei kelpaa. Anna portti väliltä %1$d–%2$d.</string>
+
+    <!-- Toast after entering invalid integer value -->
+    <string name="invalid_integer_value" tools:ignore="PluralsCandidate">Annettu arvo ei kelpaa. Anna arvo väliltä %1$d–%2$d.</string>
+
+    <!-- Experimental options -->
+    <string name="use_proxy">Muodosta yhteys välityspalvelimen kautta</string>
+    <string name="do_not_use_proxy">Välityspalvelinta ei ole asetettu.</string>
+
+
     <string name="use_tor_title">Käytä Tor-verkkoa</string>
+    <string name="use_tor_summary">Pakota kaikki liikenne Tor-verkon kautta parantaaksesi yksityisyyttä. Vaatii Orbotin. Poistaa välityspalvelinvaihtoehdot käytöstä.</string>
+
+    <string name="socks_proxy_address_title">SOCKS5-välityspalvelin</string>
+    <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>
+
+    <!-- Toast after entering invalid socks proxy address -->
+    <string name="toast_invalid_socks_proxy_address">Syöte rikkoo välityspalvelimen syntaksin \'socks5://[IP/HOSTNAME]:[PORT]\'</string>
+
+    <string name="http_proxy_address_title">HTTP(S)-välityspalvelin</string>
+    <string name="http_proxy_address_example" translatable="false">http://192.168.0.1:8080</string>
+
+    <!-- Toast after entering invalid http proxy address -->
+    <string name="toast_invalid_http_proxy_address">Syöte rikkoo välityspalvelimen syntaksin \'http://[IP/HOSTNAME]:[PORT]\'</string>
+
     <string name="broadcast_service_control_title">Palvelun hallinta lähetetyillä komennoilla (Broadcasts)</string>
+    <string name="broadcast_service_control_summary">Oletus: pois käytöstä. Ota käyttöön, jotta adb tai kolmannen osapuolen sovellukset, kuten automaatiosovellukset, voivat ohjata Syncthingiä noudattamaan käyntiehtoja, pakottamaan käynnistyksen tai pysäytyksen.</string>
+
     <!-- Dialog shown before config export -->
     <string name="dialog_confirm_export">Haluatko varmasti viedä asetuksesi? Vanhat tiedostot ylikirjoitetaan. \n \nVAROITUS! Muut sovellukset saattavat voida lukea yksityisen avaimen varmuuskopiosta ja käyttää sitä synkronoitujan tiedostojen lataamiseen tai muokkaamiseen.</string>
+
     <!-- Dialog shown before config import -->
     <string name="dialog_confirm_import">Haluatko varmasti tuoda uudet asetukset? Vanhat tiedostot ylikirjoitetaan.</string>
+
+    <!-- PreferenceCategories -->
+    <string name="preference_category_actions">Toiminnot</string>
+    <string name="preference_category_explanation">Selitys</string>
+    <string name="preference_category_prepare">Valmistelu</string>
+
     <!-- Toast shown after config was exported -->
+    <string name="config_export_successful_no_path">Asetukset on viety. Muista tallentaa salasana myöhempää tuontia varten.</string>
+    <string name="config_export_failed">Asetusten vienti epäonnistui. Katso lisätietoja Asetukset-Vianmääritys-Avaa loki -valikosta.</string>
+
     <string name="import_config">Tuo asetukset</string>
+
     <!-- Toast shown after config was imported -->
     <string name="config_imported_successful">Asetukset tuotiin</string>
+
+    <string name="config_import_failed_no_path">Asetusten tuonti epäonnistui. Katso lisätietoja Asetukset-Vianmääritys-Avaa loki -valikosta.</string>
+
+    <string name="dialog_settings_restart_app_title">Uudelleenkäynnistys vaaditaan</string>
+    <string name="dialog_settings_restart_app_question">Tämän asetuksen muuttaminen vaatii sovelluksen välittömän uudelleenkäynnistyksen. Kaikki muut muutokset hylätään. Jatketaanko?</string>
+
+    <!-- Title for the preference to set STTRACE parameters -->
+    <string name="sttrace_title">STTRACE-vaihtoehdot</string>
+    <string name="sttrace_none_selected">Ei virheenjäljitystoimintoa</string>
+
+    <string name="environment_variables">Ympäristömuuttujat</string>
+
+    <!-- Toast after entering invalid STTRACE params -->
+    <string name="toast_invalid_environment_variables">Arvo ei ole kelvollinen ympäristömuuttuja</string>
+
     <!-- Title for the preference to reset Syncthing indexes -->
     <string name="st_reset_database_title">Nollaa tietokanta</string>
     <!-- Syncthing was reset -->
+    <string name="st_reset_database_question">Tämä toimenpide tulisi suorittaa vain tukitiimimme suosituksesta.
+\nHaluatko varmasti tyhjentää Syncthingin tietokannan?</string>
+    <!-- Syncthing was reset -->
     <string name="st_reset_database_done">Syncthingin tietokannan tyhjentäminen onnistui</string>
+
+    <!-- Title for the preference to reset Syncthing indexes -->
+    <string name="st_reset_deltas_title">Nollaa delta-indeksit</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_question">Tämä toimenpide tulisi suorittaa vain tukitiimimme suosituksesta.
+\nHaluatko varmasti tyhjentää Syncthingin delta-indeksit?</string>
+    <!-- Syncthing was reset -->
+    <string name="st_reset_deltas_done">Syncthingin delta-indeksien nollaus onnistui</string>
+
+    <!-- Settings / About -->
     <string name="category_about">Tietoja</string>
+
+    <string name="verbose_log_title">Yksityiskohtainen loki</string>
+    <string name="verbose_log_summary">Tämän vaihtoehdon käyttöönotto auttaa tuottamaan erittäin yksityiskohtaisia virheenjäljityslokeja.</string>
+
+
     <!-- Settings item that opens the log activity -->
     <string name="open_log">Avaa loki</string>
+
     <!-- Summary for the log activity -->
     <string name="open_log_summary">Avaa Syncthingin ja Androidin loki-ikkuna</string>
+
+    <!-- Menu item linking support forum -->
+    <string name="syncthing_forum_title">Syncthing-foorumi</string>
+    <string name="syncthing_forum_summary">Siirry Syncthing-foorumille ja saa tukea</string>
+    <string name="syncthing_forum_url" translatable="false">https://forum.syncthing.net/</string>
+
+    <!-- Menu item for pizza -->
+
+    <!-- Menu item linking privacy policy -->
+    <string name="privacy_title">Tietosuojakäytäntö</string>
+    <string name="privacy_summary">Avaa syncthing-androidin tietosuojakäytäntö, joka käsittelee henkilötietojen (esim. sijainnin) käyttöä.</string>
+    <string name="privacy_policy_url" translatable="false">https://syncthing.net/android-privacy-policy</string>
+
     <!-- Settings item that opens issue tracker -->
     <string name="report_issue_title">Ilmoita ongelmasta</string>
-    <!-- Menu item to donate -->
+
+    <!-- Summary for the issue tracker settings item -->
+    <string name="open_issue_tracker_summary">Avaa Syncthing-Forkin ongelmaseuranta osoitteessa %1$s</string>
+
+    <!-- URL of the issue tracker -->
+    <string name="issue_tracker_url" translatable="false">https://github.com/researchxxl/syncthing-android/issues</string>
+
+    <!-- URL of the GitHub wiki -->
+    <string name="wiki_url" translatable="false">https://github.com/researchxxl/syncthing-android/tree/main/wiki</string>
+
+    <!-- URL of the Syncthing project homepage -->
+
     <!-- Title of the preference showing upstream version name -->
     <string name="syncthing_version_title">Syncthingin versio</string>
+
+    <!-- Title of the preference showing this app's version name -->
+    <string name="app_version_title">Syncthing-Fork-wrapperin versio</string>
+
+    <!-- Title of the preference showing the REST API key -->
+    <string name="syncthing_api_key">Syncthingin API-avain (napauta kopioidaksesi)</string>
+
+    <!-- Shown when the API key is copied to the clipboard -->
+    <string name="api_key_copied_to_clipboard">Syncthingin API-avain kopioitu leikepöydälle</string>
+
+    <!-- Title of the preference showing database size -->
+    <string name="syncthing_database_size">Syncthingin tietokannan koko</string>
+
+    <!-- Title of the preference showing the OS open file limit -->
+    <string name="os_open_file_limit">Androidin avoimien tiedostojen raja</string>
+    
+    <!-- Title of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_title">Avoimen lähdekoodin lisenssit</string>
+    
+    <!-- Summary of the preference showing the Open Source Licenses -->
+    <string name="open_source_licenses_summary">Näytä käytetyt avoimen lähdekoodin lisenssit</string>
+
     <!-- FolderPickerAcitivity -->
+
     <!-- Activity title -->
     <string name="folder_picker_title">Kansionvalitsin</string>
+
+    <!-- Storage path overview -->
+    <string name="advanced_storage_path_overview">Edistynyt tallennuspolun yleiskatsaus</string>
+
+    <!-- Current path -->
+    <string name="current_path">Nykyinen polku: %1$s</string>
+
     <!-- ListView empty text -->
+
     <!-- Menu item to create folder on the file system -->
+
     <!-- Menu item to select the current folder -->
+
     <string name="create_folder_failed">Kansion luominen epäonnistui</string>
+
+    <!-- Menu item to go up to parent folder -->
+    <string name="folder_go_up">Siirry ylös</string>
+
     <!-- LogActivity -->
+
     <string name="syncthing_log_title">Syncthingin loki</string>
     <string name="android_log_title">Androidin loki</string>
+
+    <string name="share_log_file_missing">Jaettava lokitiedosto puuttuu.</string>
+
+    <string name="share_log_file">Jaa lokitiedosto</string>
+
     <!-- Title of the "log android" menu button -->
     <string name="view_android_log">Näytä Android loki</string>
+
     <!-- Title of the "log Syncthing" menu button -->
     <string name="view_syncthing_log">Näytä Synching loki</string>
+
     <string name="retrieving_logs">Noudetaan lokeja…</string>
+
     <!-- Title of the "share log" menu button -->
     <string name="share_title">Jaa</string>
+
+    <!-- ShareActivity -->
+
+    <!-- Toast if user didn't complete the welcome wizard yet -->
+    <string name="complete_welcome_wizard_first">Käynnistä ensin sovellus sovelluslaatikosta ja suorita tervetuloa-ohjattu toiminto loppuun ennen tiedostojen jakamista.</string>
+
     <!-- Title of the "share" activity -->
     <string name="share_activity_title">Tallenna Syncthingiin</string>
+
     <!-- Title of the "save" button -->
     <string name="save_title">Tallenna</string>
+
     <!-- Title of the "cancel" button -->
     <string name="cancel_title">Peruuta</string>
+
     <!-- Title of the "save" button -->
+
     <!-- New file name template -->
     <string name="file_name_template">Uusi tiedosto %1$s</string>
+
     <!-- Nothing to share toast -->
     <string name="nothing_share">Ei mitään jaettavaa</string>
+
+    <!-- Copy success toast partially -->
+    <plurals name="copy_success_partially">        <item quantity="one">%1$d tiedosto kopioitu kansioon \"%2$s\", %3$d niistä on jo olemassa</item>        <item quantity="other">%1$d tiedostoa kopioitu kansioon \"%2$s\", %3$d niistä on jo olemassa</item></plurals>
+
+    <!-- Copy success toast -->
+    <plurals name="copy_success">        <item quantity="one">%1$d tiedosto kopioitu kansioon \"%2$s\"</item>        <item quantity="other">%1$d tiedostoa kopioitu kansioon \"%2$s\"</item></plurals>
+
     <!-- Copy exception toast -->
     <string name="copy_exception">Jakamisessa tapahtui virhe. Tarkista sovelluksen logit.</string>
+
     <!-- Copy progress dialog text -->
     <string name="copy_progress">Jaetaan tiedostoja…</string>
+
+    <plurals name="file_name_title">        <item quantity="one">Tiedostonimi</item>        <item quantity="other">Tiedostoluettelo</item></plurals>
+
     <!-- Sub Folder title -->
+
     <!-- RunConditionMonitor -->
+
     <string name="reason_force_start">Syncthing on käynnissä, koska pakotit sen käynnistymään käyntiehdoista riippumatta.</string>
     <string name="reason_force_stop">Syncthing ei ole käynnissä, koska pakotit sen pysähtymään käyntiehdoista riippumatta.</string>
+
     <!-- Explanations why syncthing is running or not running -->
+    <string name="reason_not_within_time_frame_2">Otit käyttöön \'Käytä aikataulun mukaisesti\' -vaihtoehdon, ja viimeisestä synkronoinnista on kulunut %s.</string>
+    <string name="reason_not_within_time_frame_0_min">alle minuutti</string>
+    <plurals name="reason_not_within_time_frame_minutes">        <item quantity="one">%d minuutti</item>        <item quantity="other">%d minuuttia</item></plurals>
+    <string name="reason_not_charging">Puhelin ei lataudu.</string>
     <string name="reason_not_on_battery_power">Puhelin ei ole käynnissä akkuvirralla.</string>
     <string name="reason_not_while_power_saving">Syncthing ei ole käynnissä, koska puhelin on virransäästötilassa.</string>
     <string name="reason_not_while_auto_sync_data_disabled">Syncthing ei ole käynnissä, koska Androidin asetus \'Synkronoi tiedot automaattisesti\' on pois päältä.</string>
+
     <!-- … Mobile data -->
     <string name="reason_mobile_data_disallowed">Syncthing ei ole asetettu käytettäväksi mobiilidatayhteydellä.</string>
     <string name="reason_on_mobile_data">Syncthingin käyttö mobiilidatalla on sallittu.</string>
     <string name="reason_not_on_mobile_data">Syncthingin käyttö on sallittu mobiilidatayhteydellä, mutta mobiilidatayhteyttä ei ole.</string>
+
     <!-- … Roaming -->
     <string name="reason_on_roaming_nonroaming_mobile_data">Syncthingin käyttö on sallittu mobiiliverkossa sekä verkkovierailun aikana että kotiverkossa.</string>
     <string name="reason_on_nonroaming_mobile_data">Syncthingin käyttö on sallittu mobiiliverkossa muutoin kuin verkkovierailun aikana. Aktiivinen yhteys on kotiverkkoon.</string>
     <string name="reason_not_nonroaming_mobile_data">Syncthing ei ole käynnissä, koska kielsit sen käytön verkkovierailun aikana.</string>
+
     <string name="reason_wifi_disallowed">Synthingin käyttöä ei ole sallittu WiFi- tai ethernet-verkoissa.</string>
     <string name="reason_on_wifi">Syncthingin käyttö on sallittu WiFi-verkoissa ja WiFi on tällä hetkellä yhdistettynä.</string>
     <string name="reason_not_on_wifi">Syncthingin käyttö on sallittu WiFi-verkoissa mutta WiFi ei ole tällä hetkellä yhdistettynä tai puhelin on lentotilassa.</string>
@@ -325,65 +845,208 @@
     <string name="reason_location_unavailable">Valitsit \'Käytä valituissa WiFi-verkoissa\' asetuksissa. Androidin sijaintipalvelut ovat pois päältä. Androidin rajotteiden mukaisesti Syncthing ei voi selvittää nykyisen WiFi-verkon nimeä päätelläkseen pitäisikö sen olla käytössä. Ratkaisu: Laita sijainti päälle, salli sijainnin käyttöoikeus ja yhdistä uudelleen WiFi-verkkoon.</string>
     <string name="reason_on_flight_mode">Syncthing on käynnissä, koska sallit sen käytön lentotilassa.</string>
     <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor ei ole alustettu. Ole hyvä ja käynnistä sovellus uudelleen ja tee bugiraportti, jos tämä virhe ei katoa uudelleenkäynnistyksen jälkeen.</string>
+
+    <!-- Sync Conditions Dialog -->
+
+    <string name="custom_wifi_ssid_whitelist_empty">WiFi-SSID-tunnuksia ei ole sallittu. Määritä niitä asetuksissa.</string>
+
     <!-- SyncthingService -->
+
     <!-- Text for the exit button on the drawer -->
     <string name="exit">Poistu</string>
+
     <!-- Title of the notification shown while syncthing is running and enabled -->
     <string name="syncthing_active_details">Syncthing on käynnissä: %1$s</string>
+    <string name="no_remote_devices_connected">Etälaitteita ei ole yhdistetty</string>
+
+    <plurals name="device_online_up_to_date">        <item quantity="one">%1$d laite verkossa ja ajan tasalla</item>        <item quantity="other">%1$d laitetta verkossa ja ajan tasalla</item></plurals>
+
+    <plurals name="syncthing_active_syncing_device_online">        <item quantity="one">Synkronointi: %1$d %% valmis, %2$d laite verkossa</item>        <item quantity="other">Synkronointi: %1$d %% valmis, %2$d laitetta verkossa</item></plurals>
+
+    <string name="syncthing_disabled">Lepotilassa</string>
+
+    <string name="syncthing_terminated">Lopetettu</string>
+
+    <!-- Toast shown if syncthing failed to create or read the config -->
+    <string name="executable_not_found">Ydinohjelma \"%s\" puuttuu. Tarkista build ja logcat-tuloste.</string>
+    <string name="config_create_failed">Asetusten luominen epäonnistui. Tarkista logcat-tuloste.</string>
+    <string name="config_read_failed">Asetusten lukeminen epäonnistui. Harkitse synkronointikansioidesi tietojen varmuuskopiointia, tyhjennä sitten tämän sovelluksen tiedot Androidin asetuksista ja käynnistä se uudelleen.</string>
+
+    <!-- Toast shown if a config file crucial to operation is missing -->
+    <string name="config_file_missing">Toiminnan kannalta kriittinen asetustiedosto puuttuu</string>
+
+    <!-- Toast shown if a listening tcp port is unavailable -->
+    <string name="webui_tcp_port_unavailable">Web-käyttöliittymän TCP-portti %s on varattu. Toinen instanssi?</string>
+
     <!-- Label of the default folder created of first start (camera folder). -->
+
     <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
+
     <string name="notification_crash_title">Syncthing kaatui %1$s</string>
+    <string name="notification_crash_text">Napsauta nähdäksesi lokit (%1$s)</string>
+
+    <string name="notifications_persistent_channel">Syncthing käynnissä</string>
     <string name="notification_persistent_waiting_channel">Tarkkaillaan käyntiehtoja</string>
+    <string name="notifications_other_channel">Muut ilmoitukset</string>
+
+    <!-- EventProcessor -->
+    <string name="notification_out_of_disk_space">SD-kortti on täynnä. Tiedosto %1$s</string>
+
     <!-- RestApi -->
+
     <!-- Title of the notification shown when a restart is needed -->
+
     <!-- Text for positive button in restart dialog -->
     <!-- Text for the dismiss button of the restart Activity -->
     <!-- Text of the notification shown when a restart is needed -->
+
     <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">Laitetunnus kopioitu leikepöydälle</string>
+
     <!-- Strings representing units for file sizes, from smallest to largest -->
     <string name="file_size_unit_B">B</string>
     <string name="file_size_unit_KiB">KiB</string>
     <string name="file_size_unit_MiB">MiB</string>
     <string name="file_size_unit_GiB">GiB</string>
     <string name="file_size_unit_TiB">TiB</string>
+
     <!-- Strings representing units for transfer rates, from smallest to largest -->
     <string name="transfer_rate_unit_B_s">B/s</string>
     <string name="transfer_rate_unit_KiB_s">KiB/s</string>
     <string name="transfer_rate_unit_MiB_s">MiB/s</string>
     <string name="transfer_rate_unit_GiB_s">GiB/s</string>
     <string name="transfer_rate_unit_TiB_s">TiB/s</string>
+
+    <!-- Possible folder states -->
+    <string name="state_failed_items">Epäonnistuneet kohteet (%1$d)</string>
+    <string name="state_up_to_date">Ajan tasalla</string>
+    <string name="state_local_additions">Paikalliset lisäykset</string>
+    <string name="state_cleaning">Puhdistetaan versioita</string>
+    <string name="state_clean_waiting">Odotetaan puhdistusta</string>
     <string name="state_scanning">Skannataan</string>
+    <string name="state_scan_waiting">Odotetaan skannausta</string>
+    <string name="state_sync_waiting">Odotetaan synkronointia</string>
+    <string name="state_sync_preparing">Valmistellaan synkronointia</string>
+    <string name="state_syncing_general">Synkronoidaan</string>
     <string name="state_syncing">Synkronoidaan (%1$d %%)</string>
     <string name="state_error">Virhe</string>
+    <string name="state_error_message">Virhe (%1$s)</string>
     <string name="state_unknown">Tuntematon</string>
     <string name="state_paused">Tauolla</string>
     <string name="status_outofsync">Ei ajan tasalla</string>
+    <string name="state_unshared">Ei jaettu</string>
+
+    <!-- small inline loading indicator -->
+    <string name="state_loading">Ladataan...</string>
+
+    <!-- small inline saving indicator -->
+
     <!-- Format string for folder size, eg "500 MiB / 1 GiB" -->
     <string name="folder_size_format">%1$s / %2$s</string>
+
+    <!-- Titles used in the folder type dialog and folder type button in the folder activity -->
+    <string name="folder_type">Kansion tyyppi</string>
+
+    <!-- Displays the current folder type in the folder activity -->
+    <string name="folder_type_sendreceive">Lähetä &amp; vastaanota</string>
     <string name="folder_type_sendonly">Vain lähetys</string>
+    <string name="folder_type_receiveonly">Vain vastaanotto</string>
+    <string name="folder_type_receive_encrypted">Vastaanota salattuna</string>
+
+    <!-- Folder type dialog descriptions for folder types -->
+    <string name="folder_type_sendreceive_description">Kansio sekä lähettää muutoksia etälaitteille että vastaanottaa muutoksia niiltä.</string>
+    <string name="folder_type_sendonly_description">Tiedostot on suojattu muilla laitteilla tehdyiltä muutoksilta, mutta tällä laitteella tehdyt muutokset lähetetään muulle klusterille.</string>
+    <string name="folder_type_receiveonly_description">Tiedostot synkronoidaan klusterista, mutta paikallisesti tehdyt muutokset eivät päädy muille laitteille.</string>
+    <string name="folder_type_receive_encrypted_description">Tallentaa ja synkronoi vain salattua dataa. Kaikkien yhdistettyjen laitteiden kansiot on asetettava samalla salasanalla tai niiden on oltava myös tyyppiä \'Vastaanota salattuna\'.</string>
+
+    <!-- Titles used in the pull order dialog and pull order button in the folder activity -->
+    <string name="pull_order">Tiedostojen noutojärjestys</string>
+
+    <!-- Displays the current pull order type in the Folder activity -->
+    <string name="pull_order_type_random">Satunnainen</string>
+    <string name="pull_order_type_alphabetic">Aakkosellinen</string>
+    <string name="pull_order_type_smallestFirst">Pienimmät ensin</string>
+    <string name="pull_order_type_largestFirst">Suurimmat ensin</string>
+    <string name="pull_order_type_oldestFirst">Vanhimmat ensin</string>
+    <string name="pull_order_type_newestFirst">Uusimmat ensin</string>
+
+    <!-- Pull order dialog descriptions for pull order types -->
+    <string name="pull_order_type_random_description">Nouda tiedostoja satunnaisessa järjestyksessä.</string>
+    <string name="pull_order_type_alphabetic_description">Nouda tiedostot aakkosjärjestyksessä tiedostonimen mukaan.</string>
+    <string name="pull_order_type_smallestFirst_description">Nouda tiedostot koon mukaan. Pienimmät ensin.</string>
+    <string name="pull_order_type_largestFirst_description">Nouda tiedostot koon mukaan. Suurimmat ensin.</string>
+    <string name="pull_order_type_oldestFirst_description">Nouda tiedostot muokkausajan mukaan. Vanhimmat ensin.</string>
+    <string name="pull_order_type_newestFirst_description">Nouda tiedostot muokkausajan mukaan. Uusimmat ensin.</string>
+
     <!-- Titles used in the file versioning dialog and file versioning button in the folder activity -->
     <string name="maximum_age">Maksimi ikä</string>
+    <string name="clean_out_after">Tyhjennä tämän ajan kuluttua</string>
     <string name="file_versioning">Tiedostoversiointi</string>
     <string name="none">Ei mitään</string>
+    <string name="versions_path">Versioiden polku</string>
     <string name="command">Komento</string>
+
+    <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
+
     <!-- Displays the current file versioning type in the Folder activity -->
     <string name="type_simple">Tyyppi: Yksinkertainen</string>
+    <string name="type_trashcan">Tyyppi: Roskakori</string>
     <string name="type_staggered">Tyyppi: Porrastettu</string>
     <string name="type_external">Tyyppi: Ulkoinen</string>
+
+    <!-- Information displayed about the current file versioning configuration in the folder activity -->
+    <string name="trashcan_versioning_info">Tyhjennetään %1$s kuluttua</string>
+    <string name="staggered_versioning_info">Maksimi ikä: %1$d
+\nVersioiden polku: %2$s</string>
     <string name="external_versioning_info">Komento: %1$s</string>
+    <string name="simple_versioning_info">Pidä versiot: %1$s</string>
     <string name="show_device_id">Näytä laitteen tunnus</string>
+
     <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
     <string name="could_not_access_deviceid">Ei pääsyä laitteen ID:hen</string>
     <string name="share_device_id_chooser">Jaa laitteen ID</string>
+    <string name="run_on_whitelisted_wifi_summary">Ota sallittujen verkkojen luettelo käyttöön rajoittaaksesi synkronoinnin vain määritettyihin WiFi-verkkoihin.</string>
+    <string name="custom_sync_conditions_title">Muokatut synkronointiehdot</string>
     <string name="custom_sync_conditions_description">Antaa sinun valita poikkeukset globaaleihin käyntiehtoihin</string>
-    <string name="pause_device">Keskeytä laite</string>
-    <string name="autoAcceptFolders">Hyväksy automaattisesti</string>
-    <string name="untrusted_device">Ei-luotettu laite</string>
-    <string name="folders">Kansiot</string>
-    <plurals name="syncthing_active_syncing_device_online">
-        <item quantity="one">Synkronointi: %1$d %% valmis, %2$d laite verkossa</item>
-        <item quantity="other">Synkronointi: %1$d %% valmis, %2$d laitetta verkossa</item>
-    </plurals>
-    <string name="device_syncing_percent_bytes">Synkronoidaan (%1$d %%, %2$s)</string>
+    <string name="custom_sync_conditions_dialog">Määritä synkronointiehdot</string>
+
+    <!-- Quick Setting icon names and labels -->
+    <string name="qs_force_label">Pakota käynnistys</string>
+    <string name="qs_forced_to_run">Pakotettu käynnistymään</string>
+    <string name="qs_forced_to_stop">Pakotettu pysähtymään</string>
+    <string name="qs_following_run_conditions">Noudattaa käyntiehtoja</string>
+    <string name="qs_schedule_label">Käynnissä 5 minuuttia</string>
+    <string name="qs_schedule_label_minutes" tools:ignore="PluralsCandidate">Käynnissä %1$d minuuttia</string>
+    <string name="qs_schedule_disabled">Aikataulu pois käytöstä</string>
+    <string name="no_app_to_open_link">Sovellusta ei ole saatavilla tämän linkin avaamiseen.</string>
+
+    <!-- Custom HTTPS certificate -->
+    <string name="webui_custom_cert_title">Mukautettu HTTPS-sertifikaatti</string>
+    <string name="webui_custom_cert_summary">Käytä omaa sertifikaattiasi paikallisessa web-käyttöliittymässä</string>
+    <string name="custom_cert_explanation">Korvaa Syncthingin sisäänrakennettu itseallekirjoitettu sertifikaatti omallasi. Valitse sertifikaatti (PEM-muodossa, mukaan lukien koko ketju) ja sen yksityinen avain, tarkista vahvistustulokset ja ota sitten käyttöön. Syncthing käynnistyy uudelleen ladatakseen uuden sertifikaatin; jos se ei palaa verkkoon, edellinen sertifikaatti palautetaan automaattisesti.\n\nJos sertifikaatin on allekirjoittanut oma CA:si, asenna ensin kyseisen CA:n juurivarmenne tähän laitteeseen (Asetukset → Turvallisuus → Asenna CA-varmenne).</string>
+    <string name="custom_cert_current_title">Nykyinen sertifikaatti</string>
+    <string name="custom_cert_current_none">Sertifikaattia ei löytynyt.</string>
+    <string name="custom_cert_subject">Kohde: %1$s</string>
+    <string name="custom_cert_issuer">Myöntäjä: %1$s</string>
+    <string name="custom_cert_expires">Vanhenee: %1$s</string>
+    <string name="custom_cert_self_signed">Itseallekirjoitettu (oletus)</string>
+    <string name="custom_cert_ca_signed">CA:n allekirjoittama</string>
+    <string name="custom_cert_select_cert">Valitse sertifikaatti (.pem)</string>
+    <string name="custom_cert_select_key">Valitse yksityinen avain (.pem)</string>
+    <string name="custom_cert_not_selected">Ei valittu</string>
+    <string name="custom_cert_apply">Ota sertifikaatti käyttöön</string>
+    <string name="custom_cert_reset_title">Palauta automaattisesti luotuun sertifikaattiin</string>
+    <string name="custom_cert_reset_summary">Poista mukautettu sertifikaatti ja anna Syncthingin luoda uusi itseallekirjoitettu</string>
+    <string name="custom_cert_reset_question">Korvataanko nykyinen sertifikaatti vasta luodulla itseallekirjoitetulla sertifikaatilla?</string>
+    <string name="custom_cert_applying">Otetaan käyttöön — käynnistetään Syncthing uudelleen…</string>
+    <string name="custom_cert_applied">Sertifikaatti otettu käyttöön.</string>
+    <string name="custom_cert_applied_pending">Tallennettu. Se tulee voimaan seuraavan Syncthingin käynnistyksen yhteydessä.</string>
+    <string name="custom_cert_failed">Sertifikaattia ei voitu ottaa käyttöön: %1$s</string>
+    <string name="custom_cert_reset_done">Palautettu uuteen itseallekirjoitettuun sertifikaattiin.</string>
+    <string name="custom_cert_file_too_large">Tämä tiedosto on liian suuri sertifikaatiksi tai avaimeksi.</string>
+    <string name="custom_cert_read_failed">Valittua tiedostoa ei voitu lukea.</string>
+    <string name="cert_check_chain">Sertifikaattiketju</string>
+    <string name="cert_check_trust">Tämän laitteen luottama</string>
+    <string name="cert_check_validity">Voimassaoloaika</string>
+    <string name="cert_check_key">Yksityinen avain</string>
 </resources>
