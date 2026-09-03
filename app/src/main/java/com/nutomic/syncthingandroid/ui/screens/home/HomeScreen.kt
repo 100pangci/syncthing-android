@@ -35,12 +35,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -48,18 +44,11 @@ import androidx.compose.ui.unit.dp
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.model.Device
 import com.nutomic.syncthingandroid.model.Folder
-import com.nutomic.syncthingandroid.service.Constants
-import com.nutomic.syncthingandroid.service.RestApi
 import com.nutomic.syncthingandroid.service.SyncthingService
 import com.nutomic.syncthingandroid.ui.LocalServiceState
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
-import com.nutomic.syncthingandroid.ui.appPreferences
 import com.nutomic.syncthingandroid.ui.components.EmptyListHint
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
-import com.nutomic.syncthingandroid.util.ConfigRouter
-import com.nutomic.syncthingandroid.util.ConfigXml
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 private const val TAB_FOLDERS = 0
@@ -93,82 +82,20 @@ private val TAB_ICONS = listOf(
 fun HomeScreen(
     onExitApp: () -> Unit,
 ) {
-    val context = LocalContext.current
     val navigator = LocalAppNavigator.current
     val service = LocalSyncthingService.current
     val serviceState = LocalServiceState.current
     val api = service?.getApi()
     val apiConfigLoaded = api?.isConfigLoaded() ?: false
 
-    val configRouter = remember { ConfigRouter(context) }
+    // Folder/device lists are polled and owned by HomeDataHost (above the
+    // NavDisplay), so they survive entry transitions; see HomeDataHost.
+    val folders = LocalHomeFolderModels.current
+    val devices = LocalHomeDeviceModels.current
+
     val drawerState = rememberDrawerState(androidx.compose.material3.DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = TAB_FOLDERS, pageCount = { 3 })
-
-    var folders by remember { mutableStateOf<List<FolderUiModel>?>(null) }
-    var devices by remember { mutableStateOf<List<DeviceUiModel>?>(null) }
-    var sharedFoldersByDevice by remember { mutableStateOf<Map<String, List<Folder>>>(emptyMap()) }
-
-    // Folders poll at the legacy GUI_UPDATE_INTERVAL cadence. The card data is
-    // precomputed on the polling dispatcher; data class equality ensures rows
-    // whose visible content did not change are skipped by composition.
-    LaunchedEffect(serviceState, apiConfigLoaded) {
-        while (isActive) {
-            try {
-                val newModels = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                    // distinctBy guards the LazyColumn keys against duplicate
-                    // folder ids that may exist in stale config.xml files.
-                    buildFolderUiModels(context, api, apiConfigLoaded, configRouter.getFolders(api).distinctBy { it.id })
-                }
-                if (newModels != folders) {
-                    folders = newModels
-                }
-            } catch (e: ConfigXml.OpenConfigException) {
-                folders = null
-            }
-            delay(Constants.GUI_UPDATE_INTERVAL)
-        }
-    }
-
-    // Devices poll at the legacy REST_UPDATE_INTERVAL cadence (3s on O+),
-    // including the forced remote status refresh. Shared folder lists are
-    // derived here in memory; the legacy ConfigRouter.getSharedFolders would
-    // re-parse config.xml per call.
-    LaunchedEffect(serviceState, apiConfigLoaded) {
-        while (isActive) {
-            try {
-                val (rawDevices, newSharedFolders) = kotlinx.coroutines.withContext(
-                    kotlinx.coroutines.Dispatchers.IO
-                ) {
-                    if (serviceState == SyncthingService.State.ACTIVE && api != null && apiConfigLoaded) {
-                        api.getRemoteDeviceStatus("")
-                    }
-                    val d = configRouter.getDevices(api, false).distinctBy { it.deviceID }
-                    // Derive sharing in memory; the legacy ConfigRouter helper
-                    // re-parses config.xml on every call.
-                    val map = HashMap<String, MutableList<Folder>>()
-                    for (folder in configRouter.getFolders(api).distinctBy { it.id }) {
-                        for (shared in folder.getSharedWithDevices()) {
-                            map.getOrPut(shared.deviceID) { mutableListOf() }.add(folder)
-                        }
-                    }
-                    d to map
-                }
-                val newModels = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                    buildDeviceUiModels(context, api, apiConfigLoaded, rawDevices, newSharedFolders)
-                }
-                if (newModels != devices) {
-                    devices = newModels
-                    sharedFoldersByDevice = newSharedFolders
-                }
-            } catch (e: ConfigXml.OpenConfigException) {
-                devices = null
-            }
-            delay(Constants.REST_UPDATE_INTERVAL)
-        }
-    }
-
-
 
     ModalNavigationDrawer(
         drawerState = drawerState,
