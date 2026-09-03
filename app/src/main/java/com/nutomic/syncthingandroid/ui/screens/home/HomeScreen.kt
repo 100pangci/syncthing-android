@@ -116,7 +116,9 @@ fun HomeScreen(
         while (isActive) {
             try {
                 val newModels = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                    buildFolderUiModels(context, api, apiConfigLoaded, configRouter.getFolders(api))
+                    // distinctBy guards the LazyColumn keys against duplicate
+                    // folder ids that may exist in stale config.xml files.
+                    buildFolderUiModels(context, api, apiConfigLoaded, configRouter.getFolders(api).distinctBy { it.id })
                 }
                 if (newModels != folders) {
                     folders = newModels
@@ -141,11 +143,11 @@ fun HomeScreen(
                     if (serviceState == SyncthingService.State.ACTIVE && api != null && apiConfigLoaded) {
                         api.getRemoteDeviceStatus("")
                     }
-                    val d = configRouter.getDevices(api, false)
+                    val d = configRouter.getDevices(api, false).distinctBy { it.deviceID }
                     // Derive sharing in memory; the legacy ConfigRouter helper
                     // re-parses config.xml on every call.
                     val map = HashMap<String, MutableList<Folder>>()
-                    for (folder in configRouter.getFolders(api)) {
+                    for (folder in configRouter.getFolders(api).distinctBy { it.id }) {
                         for (shared in folder.getSharedWithDevices()) {
                             map.getOrPut(shared.deviceID) { mutableListOf() }.add(folder)
                         }

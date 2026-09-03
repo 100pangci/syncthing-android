@@ -32,17 +32,34 @@ fun CompositionLocalsHost(
     resultBus: ResultBus,
     content: @Composable () -> Unit,
 ) {
+    // Track the service as observable state. The service binding completes
+    // asynchronously after the first composition, so getService() is null on
+    // the first frame; without state-driven recomposition the locals would
+    // stay null forever, making every config save silently fall back to the
+    // config.xml path.
+    var service by remember { mutableStateOf(activity.getService()) }
     var serviceState by remember {
-        mutableStateOf(activity.getService()?.getCurrentState() ?: SyncthingService.State.INIT)
+        mutableStateOf(service?.getCurrentState() ?: SyncthingService.State.INIT)
     }
 
     DisposableEffect(activity) {
-        val listener = SyncthingService.OnServiceStateChangeListener { currentState ->
+        val stateListener = SyncthingService.OnServiceStateChangeListener { currentState ->
             serviceState = currentState ?: SyncthingService.State.INIT
         }
-        activity.getService()?.registerOnServiceStateChangeListener(listener)
+        val connectionListener = SyncthingActivity.OnServiceConnectionChangedListener { s ->
+            service = s
+            // Registering re-delivers the current state immediately.
+            s?.registerOnServiceStateChangeListener(stateListener)
+        }
+        activity.addOnServiceConnectionChangedListener(connectionListener)
+        // The service may have connected before we registered.
+        activity.getService()?.let { s ->
+            service = s
+            s.registerOnServiceStateChangeListener(stateListener)
+        }
         onDispose {
-            activity.getService()?.unregisterOnServiceStateChangeListener(listener)
+            activity.getService()?.unregisterOnServiceStateChangeListener(stateListener)
+            activity.removeOnServiceConnectionChangedListener(connectionListener)
         }
     }
 
@@ -100,7 +117,7 @@ fun CompositionLocalsHost(
     }
 
     CompositionLocalProvider(
-        LocalSyncthingService provides activity.getService(),
+        LocalSyncthingService provides service,
         LocalServiceState provides serviceState,
         LocalAppNavigator provides navigator,
         LocalResultBus provides resultBus,

@@ -661,6 +661,9 @@ public class RestApi {
      */
     public void addFolder(Folder folder) {
         synchronized (mConfigLock) {
+            // Replace an existing folder with the same id instead of adding a
+            // duplicate (e.g. when the user saves twice).
+            removeFolderInternal(folder.id);
             // Add the new folder to the model.
             mConfig.folders.add(folder);
             // Send model changes to syncthing, does not require a restart.

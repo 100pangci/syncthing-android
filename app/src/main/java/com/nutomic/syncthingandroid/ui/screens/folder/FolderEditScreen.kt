@@ -89,8 +89,15 @@ fun FolderEditScreen(
     LaunchedEffect(Unit) {
         initFolderEditState(
             context, holder, isCreate, folderId, folderLabel, receiveEncrypted,
-            deviceId, notificationId, configRouter, navigator, preferences, service,
+            deviceId, notificationId, configRouter, navigator, preferences,
         )
+    }
+    // Cancel the consent notification once the service is connected. On a
+    // cold start from the notification tap the service is not yet bound while
+    // the init effect runs, so cancellation has to react to the service
+    // becoming available instead.
+    LaunchedEffect(service) {
+        service?.getNotificationHandler()?.cancelConsentNotification(notificationId)
     }
     // Refresh device share states when the api becomes available or folder changes.
     LaunchedEffect(apiConfigLoaded, holder.folder?.id) {
@@ -409,7 +416,6 @@ private suspend fun initFolderEditState(
     configRouter: ConfigRouter,
     navigator: AppNavigator,
     preferences: SharedPreferences,
-    service: SyncthingService?,
 ) {
     if (holder.folder != null) return
     if (isCreate) {
@@ -450,7 +456,6 @@ private suspend fun initFolderEditState(
         })
         holder.needsUpdate = true
     }
-    service?.getNotificationHandler()?.cancelConsentNotification(notificationId)
 }
 
 private suspend fun refreshDeviceShareStates(

@@ -582,6 +582,10 @@ public class ConfigXml {
 
     public void addFolder(final Folder folder) {
         Log.d(TAG, "addFolder: folder.id=" + folder.id);
+        // Replace an existing folder with the same id instead of adding a
+        // duplicate (e.g. when the user saves twice while Syncthing is not
+        // running and the config.xml fallback applies).
+        removeFolder(folder.id);
         Node nodeConfig = mConfig.getDocumentElement();
         Node nodeFolder = mConfig.createElement("folder");
         nodeConfig.appendChild(nodeFolder);
@@ -704,10 +708,10 @@ public class ConfigXml {
         for (int i = nodeFolders.getLength() - 1; i >= 0; i--) {
             Element r = (Element) nodeFolders.item(i);
             if (folderId.equals(getAttributeOrDefault(r, "id", ""))) {
-                // Found folder node to remove.
+                // Found folder node to remove. Remove every node with this id,
+                // stale duplicates may exist from earlier double saves.
                 Log.d(TAG, "removeFolder: Removing folder node, folderId=" + folderId);
                 removeChildElementFromTextNode((Element) r.getParentNode(), r);
-                break;
             }
         }
     }
