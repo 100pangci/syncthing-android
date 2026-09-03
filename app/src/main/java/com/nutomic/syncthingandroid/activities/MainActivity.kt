@@ -35,6 +35,7 @@ import com.nutomic.syncthingandroid.ui.nav.IntentAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.LocalResultBus
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
+import com.nutomic.syncthingandroid.ui.screens.home.HomeDataHost
 import com.nutomic.syncthingandroid.ui.screens.home.HomeScreen
 import com.nutomic.syncthingandroid.ui.screens.log.LogScreen
 import com.nutomic.syncthingandroid.ui.screens.syncconditions.SyncConditionsScreen
@@ -119,13 +120,16 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
                     LocalAppNavigator provides navigator,
                     LocalResultBus provides resultBus,
                 ) {
-                    AppNavDisplay(
-                        backStack = backStack,
-                        onBack = { navigator.navigateBack() },
-                        entryProvider = {
-                            entry<AppRoute.Home> {
-                                HomeScreen(onExitApp = { doExit() })
-                            }
+                    // Hoists the home list polling above the NavDisplay so the lists
+                    // survive entry transitions (see HomeDataHost).
+                    HomeDataHost {
+                        AppNavDisplay(
+                            backStack = backStack,
+                            onBack = { navigator.navigateBack() },
+                            entryProvider = {
+                                entry<AppRoute.Home> {
+                                    HomeScreen(onExitApp = { doExit() })
+                                }
                             entry<AppRoute.Log> {
                                 LogScreen(onBack = { navigator.navigateBack() })
                             }
@@ -171,6 +175,7 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
                             }
                         },
                     )
+                    }
                     com.nutomic.syncthingandroid.ui.dialogs.MainActivityDialogsHost()
                 }
             }
