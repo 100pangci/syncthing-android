@@ -450,6 +450,7 @@
     <string name="preference_app_theme_follow_system">Follow system</string>
     <string name="preference_app_theme_follow_light">Light</string>
     <string name="preference_app_theme_follow_dark">Dark</string>
+    <string name="preference_app_theme_amoled" translatable="false">AMOLED</string>
 
     <string name="category_behaviour">Behaviour</string>
     <string name="category_syncthing_options">Syncthing Options</string>

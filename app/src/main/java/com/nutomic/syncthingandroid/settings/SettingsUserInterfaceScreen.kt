@@ -59,7 +59,13 @@ fun SettingsUserInterfaceScreen() {
                     val newThemeInt = newTheme.toIntOrNull()
                     if (newTheme != theme && newThemeInt != null) {
                         theme = newTheme
-                        AppCompatDelegate.setDefaultNightMode(newThemeInt)
+                        // 3 is the custom "AMOLED black" mode; night-wise it is dark.
+                        AppCompatDelegate.setDefaultNightMode(
+                            if (newThemeInt == com.nutomic.syncthingandroid.ui.theme.APP_THEME_AMOLED)
+                                AppCompatDelegate.MODE_NIGHT_YES
+                            else
+                                newThemeInt
+                        )
                         scope.launch(Dispatchers.IO) {
                             withContext(NonCancellable) {
                                 try {
@@ -69,6 +75,7 @@ fun SettingsUserInterfaceScreen() {
                                     gui.theme = when (newTheme) {
                                         AppCompatDelegate.MODE_NIGHT_YES.toString() -> "dark"
                                         AppCompatDelegate.MODE_NIGHT_NO.toString() -> "light"
+                                        com.nutomic.syncthingandroid.ui.theme.APP_THEME_AMOLED.toString() -> "black"
                                         else -> "default"
                                     }
                                     config.updateGui(restApi, gui)
