@@ -133,10 +133,12 @@ internal fun FolderEditTopSection(
             )
         }
 
-        // Folder type row.
+        // Folder type row. A saved receive-encrypted folder is locked
+        // (Syncthing forbids leaving that type); during creation the type
+        // stays freely changeable.
         val typeEnabled = holder.canWriteToPath &&
                 !folder.path.isNullOrEmpty() &&
-                folder.type != Constants.FOLDER_TYPE_RECEIVE_ENCRYPTED
+                !(folder.type == Constants.FOLDER_TYPE_RECEIVE_ENCRYPTED && !isCreate)
         androidx.compose.runtime.key(configVersion) {
             FolderTypeRow(
                 folderType = folder.type,

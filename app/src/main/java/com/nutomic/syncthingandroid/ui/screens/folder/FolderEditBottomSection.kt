@@ -4,7 +4,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.History
@@ -32,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -116,18 +119,14 @@ private fun FolderDevicesCard(
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = shareState.device.displayName,
-                            style = MaterialTheme.typography.bodyLarge,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickable {
-                                    val newShared = !shareState.shared
-                                    if (newShared) {
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 48.dp)
+                            .toggleable(
+                                value = shareState.shared,
+                                role = Role.Switch,
+                                onValueChange = { checked ->
+                                    if (checked) {
                                         folder.addDevice(
                                             com.nutomic.syncthingandroid.model.SharedWithDevice().apply {
                                                 deviceID = shareState.device.deviceID
@@ -139,11 +138,19 @@ private fun FolderDevicesCard(
                                     }
                                     holder.deviceStates = holder.deviceStates.map {
                                         if (it.device.deviceID == shareState.device.deviceID)
-                                            it.copy(shared = newShared)
+                                            it.copy(shared = checked)
                                         else it
                                     }
                                     onMarkDirty()
                                 }
+                            )
+                    ) {
+                        Text(
+                            text = shareState.device.displayName,
+                            style = MaterialTheme.typography.bodyLarge,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f)
                         )
                         if (shareState.shared) {
                             // Key icon toggles the encryption password field;
@@ -166,27 +173,9 @@ private fun FolderDevicesCard(
                                 )
                             }
                         }
-                        Switch(
-                            checked = shareState.shared,
-                            onCheckedChange = { checked ->
-                                if (checked) {
-                                    folder.addDevice(
-                                        com.nutomic.syncthingandroid.model.SharedWithDevice().apply {
-                                            deviceID = shareState.device.deviceID
-                                            introducedBy = shareState.device.introducedBy
-                                        }
-                                    )
-                                } else {
-                                    folder.removeDevice(shareState.device.deviceID)
-                                }
-                                holder.deviceStates = holder.deviceStates.map {
-                                    if (it.device.deviceID == shareState.device.deviceID)
-                                        it.copy(shared = checked)
-                                    else it
-                                }
-                                onMarkDirty()
-                            }
-                        )
+                        // Display-only switch: interaction is owned by the
+                        // row's toggleable so hover/ripple bounds match the row.
+                        Switch(checked = shareState.shared, onCheckedChange = null)
                     }
                     if (shareState.shared && shareState.device.deviceID in expandedPasswordDevices) {
                         OutlinedTextField(

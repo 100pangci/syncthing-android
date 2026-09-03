@@ -10,12 +10,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -29,7 +31,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -51,7 +52,6 @@ import com.nutomic.syncthingandroid.ui.nav.LocalResultBus
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
 import com.nutomic.syncthingandroid.util.ConfigRouter
 import com.nutomic.syncthingandroid.util.FileUtils
-import kotlinx.coroutines.CoroutineScope
 
 /**
  * Folder add/edit screen, ported from the legacy FolderActivity.
@@ -118,14 +118,51 @@ fun FolderEditScreen(
         }
     }
     val f = holder.folder
+    fun saveFolder() {
+        val folder = holder.folder ?: return
+        FolderEditActions.save(
+            scope = scope,
+            context = context,
+            navigator = navigator,
+            configRouter = configRouter,
+            api = api,
+            preferences = preferences,
+            folder = folder,
+            folderUri = holder.folderUri,
+            needsUpdate = holder.needsUpdate,
+            ignoreListNeedsUpdate = holder.ignoreListNeedsUpdate,
+            ignoreListText = holder.ignoreListText,
+            deviceStates = holder.deviceStates,
+            customSyncConditions = holder.customSyncConditions,
+            runScript = holder.runScript,
+            isCreate = isCreate,
+            isSaving = holder.isSaving,
+            setSaving = { holder.isSaving = it },
+            onValidationError = { res ->
+                Toast.makeText(context, res, Toast.LENGTH_LONG).show()
+            },
+        )
+    }
     Scaffold(
         topBar = {
             FolderEditTopBar(
-                holder = holder, isCreate = isCreate, scope = scope,
-                configRouter = configRouter, api = api, preferences = preferences,
+                holder = holder, isCreate = isCreate,
                 onDiscardChanges = { showDiscardDialog = true },
                 onDelete = { showDeleteDialog = true },
             )
+        },
+        floatingActionButton = {
+            if (f != null) {
+                FloatingActionButton(
+                    onClick = { saveFolder() },
+                    modifier = Modifier.imePadding()
+                ) {
+                    Icon(
+                        Icons.Outlined.Save,
+                        stringResource(if (isCreate) R.string.create else R.string.save_title)
+                    )
+                }
+            }
         }
     ) { innerPadding ->
         FolderEditBody(
@@ -163,14 +200,9 @@ fun FolderEditScreen(
 private fun FolderEditTopBar(
     holder: FolderEditStateHolder,
     isCreate: Boolean,
-    scope: CoroutineScope,
-    configRouter: ConfigRouter,
-    api: RestApi?,
-    preferences: SharedPreferences,
     onDiscardChanges: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    val context = LocalContext.current
     val navigator = LocalAppNavigator.current
     TopAppBar(
         title = {
@@ -186,36 +218,6 @@ private fun FolderEditTopBar(
             }
         },
         actions = {
-            IconButton(onClick = {
-                val folder = holder.folder ?: return@IconButton
-                FolderEditActions.save(
-                    scope = scope,
-                    context = context,
-                    navigator = navigator,
-                    configRouter = configRouter,
-                    api = api,
-                    preferences = preferences,
-                    folder = folder,
-                    folderUri = holder.folderUri,
-                    needsUpdate = holder.needsUpdate,
-                    ignoreListNeedsUpdate = holder.ignoreListNeedsUpdate,
-                    ignoreListText = holder.ignoreListText,
-                    deviceStates = holder.deviceStates,
-                    customSyncConditions = holder.customSyncConditions,
-                    runScript = holder.runScript,
-                    isCreate = isCreate,
-                    isSaving = holder.isSaving,
-                    setSaving = { holder.isSaving = it },
-                    onValidationError = { res ->
-                        Toast.makeText(context, res, Toast.LENGTH_LONG).show()
-                    },
-                )
-            }) {
-                Icon(
-                    Icons.Outlined.Save,
-                    stringResource(if (isCreate) R.string.create else R.string.save_title)
-                )
-            }
             if (!isCreate) {
                 IconButton(onClick = onDelete) {
                     Icon(Icons.Outlined.Delete, stringResource(R.string.delete_folder))

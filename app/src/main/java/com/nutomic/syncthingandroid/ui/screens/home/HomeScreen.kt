@@ -14,14 +14,14 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 
-import androidx.compose.material.icons.filled.DataUsage
-import androidx.compose.material.icons.filled.Devices
+import androidx.compose.material.icons.filled.DeviceHub
 import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.DataUsage
-import androidx.compose.material.icons.outlined.Devices
+import androidx.compose.material.icons.outlined.DeviceHub
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.PieChart
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -74,10 +74,13 @@ private val TAB_TITLES = intArrayOf(
 
 // MD3 bottom navigation: filled icon marks the selected destination, outlined
 // icon the unselected ones (see "icon" guidance in the M3 NavigationBar spec).
+// Devices/Status must use glyph pairs whose filled variant is visually solid;
+// "Devices" and "DataUsage" are outline-style glyphs whose filled/outlined
+// variants look identical, so the selected state would be invisible.
 private val TAB_ICONS = listOf(
     Icons.Filled.Folder to Icons.Outlined.Folder,
-    Icons.Filled.Devices to Icons.Outlined.Devices,
-    Icons.Filled.DataUsage to Icons.Outlined.DataUsage,
+    Icons.Filled.DeviceHub to Icons.Outlined.DeviceHub,
+    Icons.Filled.PieChart to Icons.Outlined.PieChart,
 )
 
 /**

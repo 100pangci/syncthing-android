@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Compress
@@ -42,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -395,24 +398,28 @@ private fun DeviceFoldersCard(
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 48.dp)
+                            .toggleable(
+                                value = shareState.shared,
+                                role = Role.Switch,
+                                onValueChange = { checked ->
+                                    holder.folderStates = holder.folderStates.map {
+                                        if (it.folder.id == shareState.folder.id)
+                                            it.copy(shared = checked)
+                                        else it
+                                    }
+                                    holder.needsUpdate = true
+                                }
+                            )
                     ) {
                         Text(
                             text = shareState.folder.toString(),
                             style = MaterialTheme.typography.bodyLarge,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickable {
-                                    val newShared = !shareState.shared
-                                    holder.folderStates = holder.folderStates.map {
-                                        if (it.folder.id == shareState.folder.id)
-                                            it.copy(shared = newShared)
-                                        else it
-                                    }
-                                    holder.needsUpdate = true
-                                }
+                            modifier = Modifier.weight(1f)
                         )
                         if (shareState.shared) {
                             // Key icon toggles the encryption password field;
@@ -435,17 +442,9 @@ private fun DeviceFoldersCard(
                                 )
                             }
                         }
-                        Switch(
-                            checked = shareState.shared,
-                            onCheckedChange = { checked ->
-                                holder.folderStates = holder.folderStates.map {
-                                    if (it.folder.id == shareState.folder.id)
-                                        it.copy(shared = checked)
-                                    else it
-                                }
-                                holder.needsUpdate = true
-                            }
-                        )
+                        // Display-only switch: interaction is owned by the
+                        // row's toggleable so hover/ripple bounds match the row.
+                        Switch(checked = shareState.shared, onCheckedChange = null)
                     }
                     if (shareState.shared && shareState.folder.id in expandedPasswordFolders) {
                         OutlinedTextField(

@@ -6,12 +6,14 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -243,12 +245,6 @@ fun DeviceEditScreen(
                         }
                     },
                     actions = {
-                        IconButton(onClick = { save() }) {
-                            Icon(
-                                Icons.Outlined.Save,
-                                stringResource(if (isCreate) R.string.create else R.string.save_title)
-                            )
-                        }
                         if (!isCreate) {
                             IconButton(onClick = { showDeleteDialog = true }) {
                                 Icon(Icons.Outlined.Delete, stringResource(R.string.delete_device))
@@ -256,6 +252,19 @@ fun DeviceEditScreen(
                         }
                     }
                 )
+            },
+            floatingActionButton = {
+                if (device != null) {
+                    FloatingActionButton(
+                        onClick = { save() },
+                        modifier = Modifier.imePadding()
+                    ) {
+                        Icon(
+                            Icons.Outlined.Save,
+                            stringResource(if (isCreate) R.string.create else R.string.save_title)
+                        )
+                    }
+                }
             }
         ) { innerPadding ->
             Box(
