@@ -1,6 +1,4 @@
-package com.nutomic.syncthingandroid.model;
-
-import java.util.Map;
+package com.nutomic.syncthingandroid.model
 
 /**
  * This receives the deserialization result of the URI_SYSTEM_DISCOVERY query.
@@ -15,8 +13,8 @@ import java.util.Map;
  *                  ]
  *          }
  *    }
- *
  */
-public class DiscoveredDevice {
-    public String[] addresses;
+class DiscoveredDevice {
+    @JvmField
+    var addresses: Array<String>? = null
 }

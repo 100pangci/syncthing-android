@@ -35,7 +35,7 @@ internal fun onPickedPath(context: Context, holder: FolderEditStateHolder, rawPa
         Toast.makeText(context, R.string.toast_invalid_folder_selected, Toast.LENGTH_LONG).show()
         return
     }
-    folder.path = com.nutomic.syncthingandroid.util.FileUtils.cutTrailingSlash(targetPath)
+    folder.path = com.nutomic.syncthingandroid.util.FileUtils.cutTrailingSlash(targetPath) ?: ""
     checkWriteAndUpdateUI(context, holder)
     holder.needsUpdate = true
 }
@@ -69,11 +69,13 @@ internal fun applyVersioning(folder: Folder, type: String, params: Map<String, S
         folder.versioning = Folder.Versioning()
     }
     if (type == "none") {
-        folder.versioning = Folder.Versioning()
-        folder.versioning.type = ""
+        val newVersioning = Folder.Versioning()
+        newVersioning.type = ""
+        folder.versioning = newVersioning
     } else {
-        folder.versioning.params.clear()
-        folder.versioning.params.putAll(params)
-        folder.versioning.type = type
+        val versioning = folder.versioning ?: Folder.Versioning().also { folder.versioning = it }
+        versioning.params.clear()
+        versioning.params.putAll(params)
+        versioning.type = type
     }
 }

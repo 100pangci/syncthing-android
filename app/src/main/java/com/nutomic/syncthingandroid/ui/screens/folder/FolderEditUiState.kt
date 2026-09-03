@@ -33,12 +33,13 @@ internal fun initNewFolder(folderId: String?, folderLabel: String?, receiveEncry
         else
             Constants_FOLDER_TYPE_SEND_RECEIVE
         minDiskFree = Folder.MinDiskFree()
-        versioning = Folder.Versioning()
-        versioning.type = "trashcan"
-        versioning.params["cleanoutDays"] = "14"
-        versioning.cleanupIntervalS = 0
-        versioning.fsPath = ""
-        versioning.fsType = "basic"
+        val newVersioning = Folder.Versioning()
+        newVersioning.type = "trashcan"
+        newVersioning.params["cleanoutDays"] = "14"
+        newVersioning.cleanupIntervalS = 0
+        newVersioning.fsPath = ""
+        newVersioning.fsType = "basic"
+        versioning = newVersioning
     }
 
 internal const val Constants_FOLDER_TYPE_RECEIVE_ENCRYPTED =
