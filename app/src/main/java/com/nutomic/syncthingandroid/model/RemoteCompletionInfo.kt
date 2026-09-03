@@ -1,11 +1,13 @@
-package com.nutomic.syncthingandroid.model;
+package com.nutomic.syncthingandroid.model
 
 /**
  * Caches information frequently needed by the wrapper
  * to save expensive calls to Syncthing's REST API.
  * Vars in class do not correspond to JSON results.
  */
-public class RemoteCompletionInfo {
-    public double completion = 100;
-    public double needBytes = 0;
+class RemoteCompletionInfo {
+    @JvmField
+    var completion: Double = 100.0
+    @JvmField
+    var needBytes: Double = 0.0
 }

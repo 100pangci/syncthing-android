@@ -162,7 +162,11 @@ fun DeviceEditScreen(
         }
     }
 
-    LaunchedEffect(apiConfigLoaded, notificationId) {
+    // Cancel the consent notification once the service is connected. On a
+    // cold start from the notification tap the service is not yet bound while
+    // the init effect runs, so cancellation has to react to the service
+    // becoming available instead.
+    LaunchedEffect(service) {
         service?.getNotificationHandler()?.cancelConsentNotification(notificationId)
     }
 
