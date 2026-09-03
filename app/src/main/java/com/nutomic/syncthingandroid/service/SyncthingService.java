@@ -202,7 +202,7 @@ public class SyncthingService extends Service {
     RestApi mRestApi = null;
 
     private @Nullable
-    EventProcessor mEventProcessor = null;
+    EventPoller mEventPoller = null;
 
     private @Nullable
     RunConditionMonitor mRunConditionMonitor = null;
@@ -628,9 +628,9 @@ public class SyncthingService extends Service {
             onServiceStateChange(State.ACTIVE);
         }
 
-        if (mEventProcessor == null) {
-            mEventProcessor = new EventProcessor(SyncthingService.this, mRestApi);
-            mEventProcessor.start();
+        if (mEventPoller == null) {
+            mEventPoller = new EventPoller(SyncthingService.this, mRestApi);
+            mEventPoller.start();
         }
     }
 
@@ -686,9 +686,9 @@ public class SyncthingService extends Service {
             mPollWebGuiAvailableTask = null;
         }
 
-        if (mEventProcessor != null) {
-            mEventProcessor.stop();
-            mEventProcessor = null;
+        if (mEventPoller != null) {
+            mEventPoller.stop();
+            mEventPoller = null;
         }
 
         if (mNotificationHandler != null) {

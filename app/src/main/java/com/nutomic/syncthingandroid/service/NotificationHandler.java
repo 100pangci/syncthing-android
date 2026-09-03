@@ -256,14 +256,14 @@ public class NotificationHandler {
     }
 
     // Consent notification ids are deterministic within this range to avoid
-    // duplicates for different device, folder consent popups triggered by {@link EventProcessor}.
+    // duplicates for different device, folder consent popups triggered by {@link EventPoller}.
     private static final int CONSENT_NOTIFICATION_ID_BASE = 1000;
     private static final int CONSENT_NOTIFICATION_ID_RANGE = 1000;
 
     /**
      * Calculate a deterministic ID between 1000 and 2000 to avoid duplicate
      * notification ids for different device, folder consent popups triggered
-     * by {@link EventProcessor}.
+     * by {@link EventPoller}.
      */
     public int getNotificationIdFromText(String text) {
         return CONSENT_NOTIFICATION_ID_BASE + Math.floorMod(text.hashCode(), CONSENT_NOTIFICATION_ID_RANGE);
@@ -281,7 +281,7 @@ public class NotificationHandler {
     }
 
     /**
-     * Used by {@link EventProcessor}
+     * Used by {@link EventPoller}
      */
     public void showConsentNotification(int notificationId,
                                         String text,
