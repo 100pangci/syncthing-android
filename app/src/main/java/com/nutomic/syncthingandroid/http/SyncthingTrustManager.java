@@ -102,7 +102,12 @@ class SyncthingTrustManager implements X509TrustManager {
         }
     }
 
+    /**
+     * Returns an empty array: no CA issuers are pre-trusted by this manager, which verifies the
+     * local instance's certificate against a pinned public key instead. Must not return null:
+     * OkHttp rejects trust managers with null acceptedIssuers when building its trust root index.
+     */
     public X509Certificate[] getAcceptedIssuers() {
-        return null;
+        return new X509Certificate[0];
     }
 }

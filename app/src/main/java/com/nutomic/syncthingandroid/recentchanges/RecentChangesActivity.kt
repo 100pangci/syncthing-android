@@ -20,24 +20,26 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.PreferenceManager
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.activities.SyncthingActivity
+import com.nutomic.syncthingandroid.http.ApiClient
+import com.nutomic.syncthingandroid.http.GetRequest
 import com.nutomic.syncthingandroid.model.Device
 import com.nutomic.syncthingandroid.model.DiskEvent
+import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.Constants.PREF_SHOW_EXACT_TIMES
 import com.nutomic.syncthingandroid.service.RestApi
 import com.nutomic.syncthingandroid.service.SyncthingService
 import com.nutomic.syncthingandroid.service.SyncthingServiceBinder
 import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.util.FileUtils
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.concurrent.atomic.AtomicReference
-import kotlin.coroutines.resume
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Shows the list of recent changes to files and folders reported by the local Syncthing instance.
@@ -139,7 +141,7 @@ class RecentChangesActivity : SyncthingActivity(), SyncthingService.OnServiceSta
                 val devices = api.getDevices(true)
                 val localDeviceId = api.localDevice.deviceID
                 Log.v(TAG, "Querying disk events")
-                api.awaitDiskEvents(DISK_EVENT_LIMIT)?.let { diskEvents ->
+                fetchDiskEvents(api, DISK_EVENT_LIMIT)?.let { diskEvents ->
                     changes = diskEvents
                         .toRecentChanges(devices, localDeviceId, getString(R.string.this_device))
                 }
@@ -147,6 +149,45 @@ class RecentChangesActivity : SyncthingActivity(), SyncthingService.OnServiceSta
                 refreshInFlight = false
                 isRefreshing = false
             }
+        }
+    }
+
+    /**
+     * Fetches the most recent disk events over the new OkHttp-based [ApiClient] (phase2 of the
+     * Java-to-Kotlin migration). [RestApi.getDiskEvents] stays on Volley for the remaining Java
+     * callers and will be retired in phase6.
+     *
+     * A fresh [ApiClient] is built per fetch because the GUI address and API key can change on
+     * config reload; this screen only performs one request every few seconds, so the cost is
+     * negligible. Phase6 will move to a single long-lived client inside RestApi.
+     *
+     * Error handling mirrors the observable behaviour of the old Volley-based wrapper: any
+     * failure (transport, HTTP error, parse) leaves the current list untouched and returns null.
+     * Unlike the old wrapper there is no outer 30 s timeout guard — every failure mode now
+     * surfaces promptly (connection failures and HTTP errors fail immediately; socket timeouts
+     * are bounded by ApiClient's own 6 x 5 s retry loop), so the request can no longer hang
+     * forever and silently rely on a timeout to unblock the coroutine.
+     */
+    private suspend fun fetchDiskEvents(api: RestApi, limit: Int): List<DiskEvent>? {
+        return try {
+            val client = ApiClient(
+                httpsCertFile = Constants.getHttpsCertFile(this),
+                url = api.webGuiUrl,
+                apiKey = api.apiKey,
+            )
+            val result = client.get(
+                GetRequest.URI_EVENTS_DISK,
+                params = mapOf("limit" to limit.toString(), "timeout" to "1"),
+            )
+            // Same parse as RestApi.getDiskEvents: the API returns events oldest-first, so walk
+            // the array backwards to get newest-first for display.
+            val array = JsonParser.parseString(result).getAsJsonArray()
+            (array.size() - 1 downTo 0).map { gson.fromJson(array[it], DiskEvent::class.java) }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Log.e(TAG, "fetchDiskEvents: request failed", e)
+            null
         }
     }
 
@@ -184,51 +225,11 @@ class RecentChangesActivity : SyncthingActivity(), SyncthingService.OnServiceSta
     }
 }
 
-private val REQUEST_TIMEOUT = 30.seconds
-
 /**
- * Suspending wrapper around [RestApi.getDiskEvents].
- *
- * Returns null if the request does not finish within [REQUEST_TIMEOUT]. The timeout is not optional:
- * `ApiRequest.connect` passes an error listener that swallows failures (`error -> {}`), so a failed
- * request never invokes the success callback and would otherwise leave this coroutine suspended
- * forever.
- *
- * ### Why the continuation is held behind an [AtomicReference]
- *
- * Cancelling this coroutine (e.g. the user presses back, destroying the Activity and its
- * `lifecycleScope`) does **not** cancel the underlying HTTP request. `ApiRequest.connect` adds the
- * request to a `static` Volley queue and keeps no handle to it, and `getDiskEvents` returns nothing
- * we could cancel with. The request therefore runs to completion and its result is discarded.
- *
- * That matters because Volley keeps the success listener alive until the request finishes, and a
- * listener capturing the continuation directly would retain this chain:
- *
- * ```
- * static sVolleyQueue -> StringRequest -> listener -> continuation -> coroutine
- *     -> lifecycleScope -> Activity (and its whole Compose tree)
- * ```
- *
- * With `DefaultRetryPolicy(5000, 5, DEFAULT_BACKOFF_MULT)` that is up to ~30s (5s × 6 attempts) of a
- * destroyed Activity being unreachable-but-retained. Clearing the reference on cancellation breaks
- * the chain immediately, so the Activity is collectable as soon as it is destroyed. The `getAndSet`
- * also guarantees the continuation is resumed at most once, whichever thread delivers first.
- *
- * **This only fixes the retention, not the wasted work.** Genuinely aborting the request would mean
- * plumbing a Volley request tag through `ApiRequest`/`GetRequest`/`RestApi` so the queue could
- * `cancelAll(tag)` — shared code used by every screen — and even then Volley's cancel only suppresses
- * *delivery*, it does not abort an in-flight socket. Since this is a loopback call to the local
- * Syncthing process it normally returns in milliseconds, so that was judged not worth the blast
- * radius. Revisit if these requests ever go off-device.
+ * Plain Gson instance, same role as RestApi's mGson for parsing disk events into
+ * [DiskEvent] (all model classes are Kotlin data holders since phase1).
  */
-private suspend fun RestApi.awaitDiskEvents(limit: Int): List<DiskEvent>? =
-    withTimeoutOrNull(REQUEST_TIMEOUT) {
-        suspendCancellableCoroutine { continuation ->
-            val pending = AtomicReference(continuation)
-            continuation.invokeOnCancellation { pending.set(null) }
-            getDiskEvents(limit) { diskEvents -> pending.getAndSet(null)?.resume(diskEvents) }
-        }
-    }
+private val gson = Gson()
 
 enum class ChangeType {
     FILE, DIR, UNKNOWN;
