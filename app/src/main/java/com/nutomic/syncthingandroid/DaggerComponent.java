@@ -1,11 +1,6 @@
 package com.nutomic.syncthingandroid;
 
-import com.nutomic.syncthingandroid.activities.DeviceActivity;
-import com.nutomic.syncthingandroid.activities.FolderActivity;
 import com.nutomic.syncthingandroid.activities.MainActivity;
-import com.nutomic.syncthingandroid.activities.PhotoShootActivity;
-import com.nutomic.syncthingandroid.activities.ShareActivity;
-import com.nutomic.syncthingandroid.activities.SyncConditionsActivity;
 import com.nutomic.syncthingandroid.onboarding.OnboardingActivity;
 import com.nutomic.syncthingandroid.receiver.AppConfigReceiver;
 import com.nutomic.syncthingandroid.service.RunConditionMonitor;
@@ -23,17 +18,12 @@ import dagger.Component;
 @Component(modules = {SyncthingModule.class})
 public interface DaggerComponent {
     void inject(AppConfigReceiver appConfigReceiver);
-    void inject(DeviceActivity activity);
     void inject(EventProcessor eventProcessor);
-    void inject(FolderActivity activity);
     void inject(MainActivity activity);
     void inject(OnboardingActivity onboardingActivity);
-    void inject(PhotoShootActivity photoShootActivity);
     void inject(RestApi restApi);
     void inject(RunConditionMonitor runConditionMonitor);
     void inject(SettingsActivity settingsActivity);
-    void inject(ShareActivity activity);
-    void inject(SyncConditionsActivity activity);
     void inject(SyncthingApp app);
     void inject(SyncthingRunnable syncthingRunnable);
     void inject(SyncthingService service);

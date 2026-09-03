@@ -7,7 +7,6 @@
     <string name="welcome_title">Velkommen til Syncthing til Android</string>
     <!-- Welcome wizard -->
     <!-- Slide "Introduction" -->
-    <string name="introduction">Introduktion</string>
     <string name="welcome_text">Syncthing er en open-source filsynkroniserings-applikation. For at dele data med andre enheder, skal du tilføje deres unikke enheds-ID til enhedslisten. Derefter kan du vælge, hvilke mapper der skal deles med hvilke enheder. \n \nRapporter eventuelle problemer, du støder på, via GitHub.</string>
     <!-- Slide "Storage Permission" -->
     <string name="storage_permission_title">Lagertilladelser</string>
@@ -15,7 +14,6 @@
     <!-- Slide "Ignore battery optimizations" -->
     <string name="ignore_doze_permission_title">Batterioptimering</string>
     <string name="ignore_doze_permission_desc">Android vil måske stoppe synkroniseringen efter noget tid. For at forhindre dette, slå batterioptimering fra. Nogle enheder har yderligere task-killing applikationer preinstallierede. Du burde også tilføje Syncthing til deres whitelist.</string>
-    <string name="toast_ignore_doze_permission_required">Denne app virker kun pålideligt hvis den er fritaget fra \"doze\" strømbesparelses tilstand.</string>
     <string name="dialog_disable_battery_optimizations_not_supported">Din enhed understøtter ikke at slå batterioptimeringer fra</string>
     <!-- Slide "Location Permission" -->
     <string name="location_permission_title">Placeringstilladelse</string>
@@ -28,29 +26,22 @@
     <string name="cont">Fortsæt</string>
     <string name="finish">Færdiggør</string>
     <string name="generic_example">Eksempel</string>
-    <string name="generic_error">Fejl</string>
-    <string name="generic_help">Hjælp</string>
     <string name="grant_permission">Giv tilladelse</string>
     <string name="permission_granted">Tilladelse givet</string>
     <string name="reason">Begrundelse:</string>
     <string name="accept">Accepter</string>
     <string name="ignore">Ignorer</string>
     <!-- Exception dialog message -->
-    <string name="exception_known_bug_notice">En kendt fejl der ikke er blevet løst endnu er blevet mødt. Se %1$s/%2$s for flere informationer. Giv os en præcis forklaring af hvad der skete før.</string>
     <!-- Title of the exit app when running as a service confirmation dialog -->
     <string name="dialog_exit_while_running_as_service_title">Bekræft for at lukke appen</string>
     <string name="dialog_exit_while_running_as_service_message">Til dine overvejelser: Du konfigurerede appen til at starte automatisk ved start. Derfor kontrollere den kørebetingelser og synkronisering hele tiden i baggrunden når betingelserne er mødt. Du bør kun lukke manuelt hvis du løber ikke alvorlige problemer. Ellers slå \'Start automatically on boot\' fra i indstillingerne. Vil du gerne lukke nu indtil enheden er genstartet?</string>
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">Tilføj mappe</string>
     <!-- Title of the "share device id" menu action -->
-    <string name="share_device_id">Del Enheds-ID</string>
     <!-- Shown in the chooser dialog when sharing a Device ID -->
-    <string name="send_device_id_to">Send Enheds-ID til</string>
     <string name="usage_reporting_dialog_title">Tillad Anonym Forbrugsrapportering</string>
-    <string name="usage_reporting_dialog_description">Den krypterede forbrugsrapport bliver send dagligt. Det bliver brugt til at undersøge mest burgte platforme, mappestørrelser og app versioner. Hvis det rapporterede dataset bliver ændret, vil du blive informeret med denne dialog igen. \n \nDe aggregerede statistikker er offentligt tilgængelige her https://data.syncthing.net.</string>
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
-    <string name="open_website">Åben Hjemmeside</string>
     <string name="toast_write_storage_permission_required">Denne app kræver tilladelse til at skrive på lagerplads</string>
     <string name="device_rejected">Enheden \"%1$s\" ønsker at oprette forbindelse</string>
     <string name="folder_rejected">Enhed \"%1$s\" vil gerne dele mappen \"%2$s\"</string>
@@ -81,13 +72,11 @@
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">Seneste version installeret</string>
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
-    <string name="device_syncing">Synkroniserer (%1$d%%)</string>
     <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">Forbindelse afbrudt</string>
     <!-- Indicates that the device is paused and does not sync -->
     <string name="device_paused">På pause</string>
     <!-- Indicates that the device connection is unknown -->
-    <string name="device_state_unknown">Ukendt</string>
     <!-- Title for current download rate -->
     <string name="download_title">Download</string>
     <!-- Title for current upload rate -->
@@ -100,9 +89,7 @@
     <string name="syncthing_has_crashed">Syncthing crashede</string>
     <!-- DrawerFragment -->
     <!-- Same as download_title with a colon and space appended -->
-    <string name="download_title_colon">"Download: "</string>
     <!-- Same as upload_title with a colon and space appended -->
-    <string name="upload_title_colon">"Upload: "</string>
     <!-- Title for current RAM usage -->
     <string name="ram_usage">RAM forbrug</string>
     <!-- Title for announce server status -->
@@ -153,11 +140,9 @@
     <!-- Setting title -->
     <string name="device_id">Enheds-ID</string>
     <!-- Setting title -->
-    <string name="name">Navn</string>
     <!-- Setting title -->
     <string name="addresses">Addresser</string>
     <!-- Setting title -->
-    <string name="current_address">Nuværende Addresse</string>
     <!-- Setting title -->
     <string name="compression">Kompression</string>
     <!-- Strings representing compression options -->
@@ -172,7 +157,6 @@
     <string name="delete_device">Slet Enhed</string>
     <string name="add_device">Tilføj Enhed</string>
     <!-- Menu item to confirm adding a device -->
-    <string name="add">Tilføj</string>
     <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">Rediger Enhed</string>
     <!-- Dialog shown when attempting to remove a device -->
@@ -191,7 +175,6 @@
     <string name="web_gui_loading">Venter på GUI</string>
     <!-- SettingsFragment -->
     <string name="settings_title">Indstillinger</string>
-    <string name="category_run_conditions">Kør betingelser</string>
     <string name="category_behaviour">Adfærd</string>
     <string name="category_syncthing_options">Syncthing Muligheder</string>
     <string name="category_backup">Importer og Eksporter</string>
@@ -211,8 +194,6 @@
     <string name="run_on_whitelisted_wifi_networks">Valgt Wi-Fi netværk: %1$s</string>
     <string name="wifi_ssid_whitelist_empty">Intet Wi-Fi netværk specificerede. Klik for at specificere netværk.</string>
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">Vær venlig at slukke WiFi for at vælge netværk.</string>
-    <string name="sync_only_wifi_ssids_need_to_grant_location_permission">Du nødt til at tillade PLACERING for at kunne bruge denne funktion.</string>
-    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_title">Tilladelse påkrævet</string>
     <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">Fra og med Android 8.1 er det nødvendigt med placeringsadgang for at kunne læse Wi-Fi-navnet. Du kan kun bruge denne funktion, hvis du giver denne tilladelse.</string>
     <string name="power_source_title">Kør når enheden er tilsluttet til</string>
     <string name="power_source_ac_and_battery_power">Vekselstrøm og batteri.</string>
@@ -227,23 +208,6 @@
     <!-- Preferences - Behaviour -->
     <string name="behaviour_autostart_title">Autostart</string>
     <string name="behaviour_autostart_summary">Start app automatisk ved operativsystem start.</string>
-    <string name="preference_language_title">Sprog</string>
-    <string name="preference_language_summary">Ændr app sproget</string>
-    <string name="pref_language_default">Default Sprog</string>
-    <string name="folder_type_send_receive">Send &amp; Modtag</string>
-    <string name="folder_type_send_only">Send Kun</string>
-    <string name="folder_type_receive_only">Modtag Kun</string>
-    <string name="pull_order_random">Tilfældig</string>
-    <string name="pull_order_alphabetic">Alfabetisk</string>
-    <string name="pull_order_smallest_first">Mindste Først</string>
-    <string name="pull_order_largest_first">Størst Først</string>
-    <string name="pull_order_oldest_first">Ældste Først</string>
-    <string name="pull_order_newest_first">Nyeste Først</string>
-    <string name="versioning_type_none">Ingen</string>
-    <string name="versioning_type_trashcan">Skraldespand</string>
-    <string name="versioning_type_simple">Simpel</string>
-    <string name="versioning_type_staggered">Forskudt</string>
-    <string name="versioning_type_external">Ekstern</string>
     <string name="device_name">Enhedens navn</string>
     <string name="listen_address">Sync Protocol Listen Addresser</string>
     <string name="max_recv_kbps">Indgående Rate Limit (KiB/s)</string>
@@ -314,11 +278,8 @@
     <!-- Activity title -->
     <string name="folder_picker_title">Mappe Vælger</string>
     <!-- ListView empty text -->
-    <string name="directory_empty">Katalog er Tomt</string>
     <!-- Menu item to create folder on the file system -->
-    <string name="create_fs_folder">Opret ny Mappe</string>
     <!-- Menu item to select the current folder -->
-    <string name="select_folder">Vælg Mappe</string>
     <string name="create_folder_failed">Det lykkedes ikke at oprette en ny mappe</string>
     <!-- LogActivity -->
     <string name="syncthing_log_title">Syncthing Log</string>
@@ -337,7 +298,6 @@
     <!-- Title of the "cancel" button -->
     <string name="cancel_title">Afbryd</string>
     <!-- Title of the "save" button -->
-    <string name="folder_title">Mappe</string>
     <!-- New file name template -->
     <string name="file_name_template">Ny fil %1$s</string>
     <!-- Nothing to share toast -->
@@ -361,7 +321,6 @@
         <item quantity="other">Filliste</item>
     </plurals>
     <!-- Sub Folder title -->
-    <string name="sub_folder">Undermappe</string>
     <string name="reason_not_charging">Telefonen oplader ikke.</string>
     <string name="reason_not_on_battery_power">Telefon kører ikke på batteri.</string>
     <string name="reason_not_while_power_saving">Syncthing kører ikke da telefonen er sat til batteribesparelse.</string>
@@ -386,7 +345,6 @@
     <!-- Text for the exit button on the drawer -->
     <string name="exit">Afslut</string>
     <!-- Title of the notification shown while syncthing is running and enabled -->
-    <string name="syncthing_active">Syncthing kører</string>
     <string name="syncthing_disabled">Syncthing sover</string>
     <string name="syncthing_terminated">Syncthing blev afbrudt</string>
     <!-- Toast shown if syncthing failed to create or read the config -->
@@ -396,7 +354,6 @@
     <!-- Toast shown if a config file crucial to operation is missing -->
     <string name="config_file_missing">En konfigureringsfil, afgørende for at kunne virke, mangler</string>
     <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
-    <string name="default_folder_id">%1$s-fotos</string>
     <string name="notification_crash_title">Syncthing crashede %1$s</string>
     <string name="notification_crash_text">Klik for at se logbog(%1$s)</string>
     <string name="notifications_persistent_channel">Syncthing aktiv</string>
@@ -404,11 +361,9 @@
     <string name="notifications_other_channel">Andre notifikationer</string>
     <!-- RestApi -->
     <!-- Title of the notification shown when a restart is needed -->
-    <string name="restart_title">Genstart nødvendig</string>
     <!-- Text for positive button in restart dialog -->
     <!-- Text for the dismiss button of the restart Activity -->
     <!-- Text of the notification shown when a restart is needed -->
-    <string name="restart_notification_text">Klik her for at genstarte Syncthing nu</string>
     <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">Enheds-ID kopieret til clipboard</string>
     <!-- Strings representing units for file sizes, from smallest to largest -->
@@ -465,15 +420,6 @@
     <string name="versions_path">Versions Sti</string>
     <string name="command">Kommando</string>
     <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
-    <string name="keep_versions_description">Antal af gamle versioner at beholde, pr fil.</string>
-    <string name="simple_file_versioning_description">Filer bliver flyttet til dato-markeret versioner i et .stversions directory når de erstattes er bliver slettet af Syncthing.</string>
-    <string name="trashcan_versioning_description">Filer bliver flyttet til .stversions directory når de erstattes er bliver slettet af Syncthing.</string>
-    <string name="staggered_versioning_description">Filer bliver flyttet til markeret versioner i et .stversions directory når de bliver erstattet eller slettet af Syncthing. Versioner bliver automatisk slettet hvis de er ældre end den maksimale alder eller overskrider det tilladte antal filer i et interval. \n \nFølgende intervaller bliver brugt: i løbet af den første time, beholdes en version hver 30 sekund, i løbet af den første dag en version bliver beholdt hver time, i løbet af de første 30 dage bliver en version beholdt hver dag indtil den maksimale alder overskrides gemmes en version hver uge.</string>
-    <string name="maximum_age_description">Den maksimale tid for at beholde en version(i dage, sæt til 0 for at beholde for altid).</string>
-    <string name="versions_path_description">Sti hvor versioner skal gemmes (lad være tomt for at burge det normale .stversions directory i den delte mappe).</string>
-    <string name="cleanout_after_description">Antallet af dage til at beholde filer i skraldespanden. Nul betyder for altid</string>
-    <string name="external_versioning_description">Det første kommandolinjeparameter er mappe-stien og det andet parameter er den relative sti i mappen.</string>
-    <string name="no_versioning_description">Vælg en versioneringstype for at aktivere versionering.</string>
     <!-- Displays the current file versioning type in the Folder activity -->
     <string name="type_simple">Type: Simpel</string>
     <string name="type_trashcan">Type: Skraldespand</string>
@@ -487,8 +433,6 @@
     <string name="show_device_id">Vis endheds-ID</string>
     <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
     <string name="could_not_access_deviceid">Kunne ikke tilgå enheds-ID.</string>
-    <string name="browse">Udforsk</string>
-    <string name="no_sub_folder_is_selected">Ingen undermapper er valgt</string>
     <string name="share_device_id_chooser">Del enhedsid med</string>
     <string name="run_on_whitelisted_wifi_summary">Slå whitelist til for at begrænse synkronisering kun sker på specificerede WiFi netværk.</string>
     <string name="custom_sync_conditions_title">Brugerdefineret synkroniseringsbetingelser</string>

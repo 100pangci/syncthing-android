@@ -48,7 +48,6 @@ public class SyncthingRunnable implements Runnable {
 
     private static final String TAG = "SyncthingRunnable";
     private static final String TAG_NATIVE = "SyncthingNativeCode";
-    private static final String TAG_NICE = "SyncthingRunnableIoNice";
 
     private boolean ENABLE_VERBOSE_LOG = false;
     private static final int LOG_FILE_MAX_LINES = 200000;

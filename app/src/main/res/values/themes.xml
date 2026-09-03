@@ -9,8 +9,6 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
 
-        <item name="textAppearanceListItemPrimary">@style/TextAppearance.Syncthing.ListItemPrimary</item>
-        <item name="textAppearanceListItemSecondary">@style/TextAppearance.Syncthing.ListItemSecondary</item>
         <item name="textAppearanceListItemSmall">@style/TextAppearance.Syncthing.ListItemSmall</item>
 
         <item name="windowActionModeOverlay">true</item>
@@ -32,23 +30,10 @@
         <item name="alertDialogTheme">@style/Theme.Syncthing.Dialog</item>
     </style>
 
-    <!-- Button themes -->
-    <style name="Theme.Syncthing.GreyButton" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:textColor">@color/btn_welcome_slide_color</item>
-    </style>
-
     <!-- Dialog themes -->
     <eat-comment/>
 
     <style name="Theme.Syncthing.Dialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
         <item name="colorAccent">@color/primary_dark</item>
-    </style>
-
-    <!-- Toolbar themes -->
-    <eat-comment/>
-
-    <style name="ThemeOverlay.Syncthing.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:windowBackground">@null</item>
-        <item name="colorAccent">@android:color/white</item>
     </style>
 </resources>

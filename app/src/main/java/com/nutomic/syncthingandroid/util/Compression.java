@@ -6,8 +6,7 @@ import com.nutomic.syncthingandroid.R;
 
 /**
  * Device compression attribute helper. This unifies operations between string values as expected by
- * Syncthing with string values as displayed to the user and int ordinals as expected by the dialog
- * click interface.
+ * Syncthing with string values as displayed to the user.
  */
 public enum Compression {
     NONE(0),
@@ -26,10 +25,6 @@ public enum Compression {
 
     public String getValue(Context context) {
         return context.getResources().getStringArray(R.array.compress_values)[index];
-    }
-
-    public String getTitle(Context context) {
-        return context.getResources().getStringArray(R.array.compress_entries)[index];
     }
 
     public static Compression fromIndex(int index) {

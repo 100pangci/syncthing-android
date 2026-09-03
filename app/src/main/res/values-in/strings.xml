@@ -12,14 +12,10 @@
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">Tambah Folder</string>
     <!-- Title of the "share device id" menu action -->
-    <string name="share_device_id">Bagikan ID Perangkat</string>
     <!-- Shown in the chooser dialog when sharing a Device ID -->
-    <string name="send_device_id_to">Kirim ID Perangkat ke</string>
     <string name="usage_reporting_dialog_title">Perbolehkan Pelaporan Penggunaan Anonim?</string>
-    <string name="usage_reporting_dialog_description">Laporan penggunaan terenkripsi dikirim secara harian. Pelaporan ini digunakan untuk melacak jenis platform, ukuran folder dan versi aplikasi. Jika data yang terkirim berubah, jendela dialog ini akan terbuka kembali. \n \nStatistika teragregat secara terbuka tersedia di https://data.syncthing.net</string>
     <string name="yes">Ya</string>
     <string name="no">Tidak</string>
-    <string name="open_website">Buka Situs Web</string>
     <string name="toast_write_storage_permission_required">Aplikasi ini memerlukan kewenangan penulisan penyimpanan</string>
     <!-- StateDialogActivity -->
     <!-- Text for FoldersFragment and DevicesFragment loading view -->
@@ -39,7 +35,6 @@
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">Termutakhir</string>
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
-    <string name="device_syncing">Menyinkronkan (%1$d%%)</string>
     <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">Terputus</string>
     <!-- Title for current download rate -->
@@ -48,9 +43,7 @@
     <string name="upload_title">Unggahan</string>
     <!-- DrawerFragment -->
     <!-- Same as download_title with a colon and space appended -->
-    <string name="download_title_colon">"Unduhan: "</string>
     <!-- Same as upload_title with a colon and space appended -->
-    <string name="upload_title_colon">"Unggah: "</string>
     <!-- Title for current RAM usage -->
     <string name="ram_usage">Penggunaan RAM</string>
     <!-- Title for announce server status -->
@@ -88,11 +81,9 @@
     <!-- Setting title -->
     <string name="device_id">ID Perangkat</string>
     <!-- Setting title -->
-    <string name="name">Nama</string>
     <!-- Setting title -->
     <string name="addresses">Alamat-alamat</string>
     <!-- Setting title -->
-    <string name="current_address">Alamat Sekarang</string>
     <!-- Setting title -->
     <string name="compression">Kompresi</string>
     <!-- Strings representing compression options -->
@@ -105,7 +96,6 @@
     <string name="delete_device">Hapus Perangkat</string>
     <string name="add_device">Tambah Perangkat</string>
     <!-- Menu item to confirm adding a device -->
-    <string name="add">Tambah</string>
     <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">Edit Perangkat</string>
     <!-- Dialog shown when attempting to remove a device -->
@@ -121,7 +111,6 @@
     <string name="web_gui_loading">Memuat GUI</string>
     <!-- SettingsFragment -->
     <string name="settings_title">Pengaturan</string>
-    <string name="category_run_conditions">Syarat Operasi</string>
     <string name="category_behaviour">Perilaku</string>
     <string name="category_syncthing_options">Opsi Syncthing</string>
     <string name="category_experimental">Ujicoba</string>
@@ -129,9 +118,6 @@
     <string name="run_conditions_title">Syarat Operasi</string>
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">Mohon aktifkan WiFi untuk memilih jaringan.</string>
     <string name="respect_battery_saving_title">Ikuti pengaturan penghematan baterai Android</string>
-    <string name="preference_language_title">Bahasa</string>
-    <string name="preference_language_summary">Ganti bahasa dalam aplikasi</string>
-    <string name="pref_language_default">Bahasa Standar</string>
     <string name="device_name">Nama Perangkat</string>
     <string name="listen_address">Alamat Listen Protokol Penyelarasan</string>
     <string name="max_recv_kbps">Batasan Incoming (KiB/s)</string>
@@ -172,11 +158,8 @@
     <!-- Activity title -->
     <string name="folder_picker_title">Pemilih Folder</string>
     <!-- ListView empty text -->
-    <string name="directory_empty">Direktori ini Kosong</string>
     <!-- Menu item to create folder on the file system -->
-    <string name="create_fs_folder">Buat Folder baru</string>
     <!-- Menu item to select the current folder -->
-    <string name="select_folder">Pilih Folder</string>
     <string name="create_folder_failed">Gagal membuat folder</string>
     <!-- Title of the "log android" menu button -->
     <string name="view_android_log">Lihat Log Android</string>
@@ -192,7 +175,6 @@
     <!-- Title of the "cancel" button -->
     <string name="cancel_title">Batalkan</string>
     <!-- Title of the "save" button -->
-    <string name="folder_title">Folder</string>
     <!-- New file name template -->
     <string name="file_name_template">Berkas baru %1$s</string>
     <!-- Nothing to share toast -->
@@ -216,10 +198,8 @@
     <!-- Text for the exit button on the drawer -->
     <string name="exit">Keluar</string>
     <!-- Title of the notification shown while syncthing is running and enabled -->
-    <string name="syncthing_active">Syncthing dinyalakan</string>
     <string name="state_syncing">Sinkronisasi (%1$d%%)</string>
     <string name="folder_type_sendonly">Kirim Saja</string>
-    <string name="introduction">Pendahuluan</string>
     <string name="welcome_text">Syncthing adalah aplikasi penyinkron berkas yang bersumber terbuka. Agar dapat berbagi data dengan perangkat lain, pertama-tama tambahkan ID unik khusus pada masing-masing perangkat ke dalam daftar perangkat. Setelah itu, pilih folder yang akan dibagikan dengan perangkat lain. \n \nJika ada masalah, silakan laporkan masalah tersebut melalui GitHub.</string>
     <string name="storage_permission_title">Izin Penyimpanan</string>
     <string name="storage_permission_desc">Syncthing perlu mengakses penyimpanan Anda untuk melakukan penyinkronan berkas.</string>
@@ -228,15 +208,12 @@
     <string name="ignore_doze_permission_desc">Android dapat menghentikan penyinkronan setelah beberapa waktu. Agar hal ini tidak terjadi, matikan Pengoptimalan Baterai. Selain itu, beberapa perangkat memiliki aplikasi task-killer bawaan, sehingga Anda harus menambahkan Syncthing ke daftar putih (whitelist) aplikasi task-killer ini.</string>
     <string name="notification_permission_title">Izin Notifikasi</string>
     <string name="notification_permission_desc">Izin ini diperlukan untuk menampilkan notifikasi terkait koneksi terhadap perangkat baru, permohonan pembagian folder, dan agar apl. dapat terus menyala dan terhubung.</string>
-    <string name="toast_notification_permission_required">Syncthing memerlukan izin notifikasi agar dapat terus menyala dan terhubung.</string>
     <string name="ignore">Abaikan</string>
-    <string name="page_x_of_y">Laman %1$s dari %2$s</string>
     <string name="main_menu">Menu Utama</string>
     <string name="refresh">Muat ulang</string>
     <string name="photo_shoot_launcher_title">Sink. Kamera</string>
     <string name="photo_shoot_activity_title">Kamera Fork-Syncthing</string>
     <string name="photo_shoot_intro_welcome_title">Selamat datang di Kamera Syncthing</string>
-    <string name="photo_shoot_intro_permission_title">Izin yang diperlukan</string>
     <string name="photo_shoot_intro_no_camera">Mohon maaf, perangkat ini tidak memiliki kamera.</string>
     <string name="photo_shoot_intro_missing_permissions">Aplikasi ini memerlukan izin penyimpanan dan izin kamera agar dapat digunakan.</string>
     <string name="photo_shoot_take_picture_success">Foto hasil pemotretan berhasil disimpan di folder Kamera Syncthing.</string>
@@ -256,7 +233,6 @@
     <string name="device_syncing_percent_bytes">Menyinkronkan (%1$d%%, %2$s)</string>
     <string name="device_disconnected_not_synced">Terputus (%1$s tertunda)</string>
     <string name="device_paused">Dijeda</string>
-    <string name="device_state_unknown">Tak diketahui</string>
     <string name="device_last_seen">Terakhir dilihat:%1$s</string>
     <string name="device_last_seen_never">Takpernah</string>
     <string name="shared_folders_title_colon">"Folder: "</string>
@@ -267,12 +243,8 @@
     <string name="back">Kembali</string>
     <string name="finish">Selesaikan</string>
     <string name="generic_example">Contoh</string>
-    <string name="generic_error">Galat</string>
-    <string name="generic_help">Bantuan</string>
     <string name="grant_permission">Berikan izin</string>
     <string name="permission_granted">Izin diberikan</string>
-    <string name="open_main_menu">Buka Menu Utama</string>
-    <string name="close_main_menu">Tutup Menu Utama</string>
     <string name="folder_rejected">Perangkat\"%1$s\" ingin membagikan folder \"%2$s\"</string>
     <string name="override_changes">Timpa perubahan</string>
     <string name="suggest_file_manager_app_dialog_title">Aplikasi pengelola berkas yang cocok tidak ditemukan</string>
@@ -285,7 +257,6 @@
     <string name="location_permission_desc_api_29">Kiat untuk Android 10+: \"Izinkan sepanjang waktu\"</string>
     <string name="reason">Alasan:</string>
     <string name="accept">Setujui</string>
-    <string name="exception_known_bug_notice">Ada kutu (bug) yang sudah diketahui ada, belum terselesaikan, tetapi Anda temukan. Silakan buka%1$s/%2$suntuk melihat info lebih lanjut. Mohon tulis deskripsi dengan jelas dan tepat apa yang terjadi sebelum Anda menemukan kutu.</string>
     <string name="photo_shoot_intro_permission_desc">Kamera Syncthing memerlukan izin dari Anda agar dapat mengambil dan memotret foto di perangkat ini. Fitur ini bersifat opsional. Untuk menggunakan fitur ini, berikan izin dan klik \"Lanjutkan\". Foder penyimpanan hasil pemotretan akan dibuat dan dapat Anda bagikan dengan perangkat Syncthing yang lain.</string>
     <string name="dialog_exit_while_running_as_service_message">Demi pertimbangan Anda: Anda telah mengonfigurasikan apl. agar menyala secara otomatis saat perangkat dinyalakan, sehingga apl. dapat memonitor kondisi dan melakukan penyinkronan di latar ketika kondisi memungkinkan. Keluarlah dari aplikasi secara manual hanya jika Anda menemui masalah berat. Jika tidak, nonaktifkan \'Nyalakan apl. secara otomatis saat perangkat dinyalakan\' di Pengaturan. Anda ingin keluar dari apl. hingga perangkat dinyalakan kembali?</string>
     <string name="override_changes_question">Pilihan ini akan mengembalikan semua perubahan yang ditetapkan pada perangkat lain yang saling berbagi folder ini. Lanjutkan?</string>

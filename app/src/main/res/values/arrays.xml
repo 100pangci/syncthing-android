@@ -27,37 +27,6 @@
         <item>@string/power_source_battery_power</item>
     </string-array>
 
-    <!--
-    <string-array name="notification_type_entries">
-        <item>@string/notification_type_normal</item>
-        <item>@string/notification_type_low_priority</item>
-        <item>@string/notification_type_none</item>
-    </string-array>
-    -->
-
-    <string-array name="folder_types">
-        <item>@string/folder_type_send_receive</item>
-        <item>@string/folder_type_send_only</item>
-        <item>@string/folder_type_receive_only</item>
-    </string-array>
-
-    <string-array name="pull_order_types">
-        <item>@string/pull_order_random</item>
-        <item>@string/pull_order_alphabetic</item>
-        <item>@string/pull_order_smallest_first</item>
-        <item>@string/pull_order_largest_first</item>
-        <item>@string/pull_order_oldest_first</item>
-        <item>@string/pull_order_newest_first</item>
-    </string-array>
-
-    <string-array name="versioning_types">
-        <item>@string/versioning_type_none</item>
-        <item>@string/versioning_type_trashcan</item>
-        <item>@string/versioning_type_simple</item>
-        <item>@string/versioning_type_staggered</item>
-        <item>@string/versioning_type_external</item>
-    </string-array>
-
     <string-array name="file_size_units">
         <item>@string/file_size_unit_B</item>
         <item>@string/file_size_unit_KiB</item>

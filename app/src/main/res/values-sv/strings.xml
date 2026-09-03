@@ -7,13 +7,11 @@
     <string name="welcome_title">Välkommen till Syncthing för Android</string>
     <!-- Welcome wizard -->
     <!-- Slide "Introduction" -->
-    <string name="introduction">Introduktion</string>
     <!-- Slide "Storage Permission" -->
     <string name="storage_permission_title">Lagringsbehörighet</string>
     <string name="storage_permission_desc">Syncthing behöver komma åt din lagring för att göra filsynkronisering.</string>
     <!-- Slide "Ignore battery optimizations" -->
     <string name="ignore_doze_permission_title">Batterioptimering</string>
-    <string name="toast_ignore_doze_permission_required">Den här appen fungerar bara tillförlitligt om den är undantagen från\" doze\"-energisparläge.</string>
     <string name="dialog_disable_battery_optimizations_not_supported">Din enhet har inte stöd för att inaktivera batterioptimeringar</string>
     <!-- Slide "Location Permission" -->
     <string name="location_permission_title">Plats tillstånd</string>
@@ -25,14 +23,11 @@
     <string name="cont">Fortsätt</string>
     <string name="finish">Färdig</string>
     <string name="generic_example">Exempel</string>
-    <string name="generic_error">Fel</string>
-    <string name="generic_help">Hjälp</string>
     <string name="grant_permission">Bevilja tillstånd</string>
     <string name="permission_granted">Beviljat tillstånd</string>
     <string name="reason">Orsak:</string>
     <string name="accept">Acceptera</string>
     <string name="ignore">Ignorera</string>
-    <string name="page_x_of_y">Sida %1$s av %2$s</string>
     <string name="main_menu">Huvudmeny</string>
     <string name="refresh">Uppdatera</string>
     <!-- Title of the exit app when running as a service confirmation dialog -->
@@ -40,14 +35,10 @@
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">Lägg till mapp</string>
     <!-- Title of the "share device id" menu action -->
-    <string name="share_device_id">Dela enhets-ID</string>
     <!-- Shown in the chooser dialog when sharing a Device ID -->
-    <string name="send_device_id_to">Skicka enhets-ID till</string>
     <string name="usage_reporting_dialog_title">Tillåt anonym användningsrapportering?</string>
-    <string name="usage_reporting_dialog_description">Den krypterade användningsrapporten skickas dagligen. Den används för att spåra vanliga plattformar, mappstorlekar och appversioner. Om uppsättningen av de rapporterade uppgifterna ändras kommer du att bli tillfrågad med den här dialogrutan igen. \n \nDen aggregerade statistiken är offentligt tillgänglig på https://data.syncthing.net.</string>
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
-    <string name="open_website">Öppna hemsida</string>
     <string name="toast_write_storage_permission_required">Skrivlagringstillstånd krävs för denna applikation</string>
     <string name="device_rejected">Enhet \"%1$s\" vill ansluta</string>
     <string name="folder_rejected">Enhet \"%1$s\" vill dela mapp \"%2$s\"</string>
@@ -78,13 +69,11 @@
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">Uppdaterad</string>
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
-    <string name="device_syncing">Synkroniserar (%1$d%%)</string>
     <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">Frånkopplad</string>
     <!-- Indicates that the device is paused and does not sync -->
     <string name="device_paused">Pausad</string>
     <!-- Indicates that the device connection is unknown -->
-    <string name="device_state_unknown">Okänd</string>
     <string name="device_last_seen_never">Aldrig</string>
     <!-- Title for current download rate -->
     <string name="download_title">Hämtar</string>
@@ -98,9 +87,7 @@
     <string name="syncthing_has_crashed">Syncthing har kraschat.</string>
     <!-- DrawerFragment -->
     <!-- Same as download_title with a colon and space appended -->
-    <string name="download_title_colon">"Hämtar: "</string>
     <!-- Same as upload_title with a colon and space appended -->
-    <string name="upload_title_colon">"Skickar: "</string>
     <!-- Title for current RAM usage -->
     <string name="ram_usage">RAM användning</string>
     <!-- Title for announce server status -->
@@ -153,13 +140,11 @@
     <!-- Setting title -->
     <string name="device_id">Enhets-ID</string>
     <!-- Setting title -->
-    <string name="name">Namn</string>
     <!-- Setting title -->
     <string name="folders">Mappar</string>
     <!-- Setting title -->
     <string name="addresses">Adresser</string>
     <!-- Setting title -->
-    <string name="current_address">Aktuell adress</string>
     <!-- Setting title -->
     <string name="compression">Komprimering</string>
     <!-- Strings representing compression options -->
@@ -174,7 +159,6 @@
     <string name="delete_device">Ta bort enhet</string>
     <string name="add_device">Lägg till enhet</string>
     <!-- Menu item to confirm adding a device -->
-    <string name="add">Lägg till</string>
     <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">Redigera enhet</string>
     <!-- Dialog shown when attempting to remove a device -->
@@ -182,7 +166,6 @@
     <!-- Toast shown when trying to create a device with an empty ID -->
     <string name="device_id_required">Enhetens ID får inte vara tom</string>
     <!-- Toast shown when trying to create a device with an empty name -->
-    <string name="device_name_required">Enhetsnamn får inte vara tomt</string>
     <!-- Content description for device ID qr code icon -->
     <string name="scan_qr_code_description">Skanna QR-kod</string>
     <!-- RecentChangesActivity -->
@@ -202,7 +185,6 @@
     <string name="web_page_loading">Läser in webbplats: \n%1$s …</string>
     <!-- SettingsFragment -->
     <string name="settings_title">Inställningar</string>
-    <string name="category_run_conditions">Körvillkor</string>
     <string name="category_user_interface">Användargränssnitt</string>
     <string name="preference_app_theme_title">Tema</string>
     <string name="category_behaviour">Beteende</string>
@@ -222,8 +204,6 @@
     <string name="run_on_whitelisted_wifi_networks">Valda Wi-Fi-nätverk: %1$s</string>
     <string name="wifi_ssid_whitelist_empty">Inga Wi-Fi-nätverk specificerade. Klicka för att ange nätverk.</string>
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">Slå på wifi för att välja nätverk.</string>
-    <string name="sync_only_wifi_ssids_need_to_grant_location_permission">Du måste ge tillstånd för PLATS för att använda den här funktionen.</string>
-    <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_title">Behörighet krävs</string>
     <string name="sync_only_wifi_ssids_location_permission_rejected_dialog_content">Från och med Android 8.1 krävs platsåtkomst för att kunna läsa Wi-Fi-namnet. Du kan bara använda denna funktion om du beviljar denna behörighet.</string>
     <string name="power_source_title">Kör när enheten drivs av</string>
     <string name="power_source_ac_and_battery_power">Växelström och batterikraft.</string>
@@ -237,23 +217,6 @@
     <!-- Preferences - Behaviour -->
     <string name="behaviour_autostart_title">Starta automatiskt</string>
     <string name="behaviour_autostart_summary">Starta appen automatiskt med operativsystemet.</string>
-    <string name="preference_language_title">Språk</string>
-    <string name="preference_language_summary">Ändra appens språk</string>
-    <string name="pref_language_default">Standardspråk</string>
-    <string name="folder_type_send_receive">Skicka &amp; ta emot</string>
-    <string name="folder_type_send_only">Skicka endast</string>
-    <string name="folder_type_receive_only">Ta emot endast</string>
-    <string name="pull_order_random">Slumpmässig</string>
-    <string name="pull_order_alphabetic">Alfabetisk</string>
-    <string name="pull_order_smallest_first">Minsta först</string>
-    <string name="pull_order_largest_first">Största först</string>
-    <string name="pull_order_oldest_first">Äldsta först</string>
-    <string name="pull_order_newest_first">Nyaste först</string>
-    <string name="versioning_type_none">Ingen</string>
-    <string name="versioning_type_trashcan">Papperskorg</string>
-    <string name="versioning_type_simple">Enkel</string>
-    <string name="versioning_type_staggered">Förskutna</string>
-    <string name="versioning_type_external">Extern</string>
     <string name="device_name">Enhetens namn</string>
     <string name="listen_address">Synkroniseringsprotokollets lyssnaradresser</string>
     <string name="max_recv_kbps">Inkommande hastighetsgräns (KiB/s)</string>
@@ -322,11 +285,8 @@
     <!-- Activity title -->
     <string name="folder_picker_title">Mappväljare</string>
     <!-- ListView empty text -->
-    <string name="directory_empty">Katalogen är tom</string>
     <!-- Menu item to create folder on the file system -->
-    <string name="create_fs_folder">Skapa ny mapp</string>
     <!-- Menu item to select the current folder -->
-    <string name="select_folder">Välj mapp</string>
     <string name="create_folder_failed">Det gick inte att skapa mapp</string>
     <!-- LogActivity -->
     <string name="syncthing_log_title">Syncthing-logg</string>
@@ -345,7 +305,6 @@
     <!-- Title of the "cancel" button -->
     <string name="cancel_title">Avbryt</string>
     <!-- Title of the "save" button -->
-    <string name="folder_title">Mapp</string>
     <!-- New file name template -->
     <string name="file_name_template">Ny fil %1$s</string>
     <!-- Nothing to share toast -->
@@ -369,7 +328,6 @@
         <item quantity="other">Fillista</item>
     </plurals>
     <!-- Sub Folder title -->
-    <string name="sub_folder">Undermapp</string>
     <string name="reason_not_charging">Telefonen laddas inte.</string>
     <string name="reason_not_on_battery_power">Telefonen körs inte på batteriet.</string>
     <string name="reason_not_while_power_saving">Syncthing körs inte eftersom telefonen för närvarande sparar energi.</string>
@@ -392,14 +350,12 @@
     <!-- Text for the exit button on the drawer -->
     <string name="exit">Avsluta</string>
     <!-- Title of the notification shown while syncthing is running and enabled -->
-    <string name="syncthing_active">Körs</string>
     <string name="syncthing_disabled">Sover</string>
     <string name="syncthing_terminated">Avslutades</string>
     <string name="config_create_failed">Det gick inte att skapa konfigurationen. Kontrollera logcat-utmatningen.</string>
     <!-- Toast shown if a config file crucial to operation is missing -->
     <string name="config_file_missing">En konfigurationsfil avgörande för drift saknas</string>
     <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
-    <string name="default_folder_id">%1$s foton</string>
     <string name="notification_crash_title">Kraschade (avslutningskod %1$s)</string>
     <string name="notification_crash_text">Klicka för att visa loggar (%1$s)</string>
     <string name="notifications_persistent_channel">Syncthing är aktiv</string>
@@ -407,11 +363,9 @@
     <string name="notifications_other_channel">Andra aviseringar</string>
     <!-- RestApi -->
     <!-- Title of the notification shown when a restart is needed -->
-    <string name="restart_title">Omstart behövs</string>
     <!-- Text for positive button in restart dialog -->
     <!-- Text for the dismiss button of the restart Activity -->
     <!-- Text of the notification shown when a restart is needed -->
-    <string name="restart_notification_text">Klicka här för att starta om Syncthing nu</string>
     <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">Enhets-ID kopierad till urklipp</string>
     <!-- Strings representing units for file sizes, from smallest to largest -->
@@ -460,15 +414,6 @@
     <string name="versions_path">Versioner sökväg</string>
     <string name="command">Kommando</string>
     <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
-    <string name="keep_versions_description">Antalet gamla versioner som ska behållas, per fil.</string>
-    <string name="simple_file_versioning_description">Filer flyttas till datumstämplade versioner i en .stversions-katalog när de ersätts eller tas bort av Syncthing.</string>
-    <string name="trashcan_versioning_description">Filer flyttas till .stversions-katalogen när de ersätts eller tas bort av Syncthing.</string>
-    <string name="staggered_versioning_description">Filer flyttas till datumstämplade versioner i en .stversions-katalog när de ersätts eller tas bort av Syncthing. Versioner tas bort automatiskt om de är äldre än den maximala åldern eller överstiger antalet tillåtna filer i ett intervall. \n \nFör följande intervall används: För den första timmen hålls en version var 30: e sekund, för första dagen hålls en version varje timme, för de första 30 dagarna hålls en version varje dag, tills den maximala åldern hålls en version varje vecka.</string>
-    <string name="maximum_age_description">Den maximala tiden för att hålla en version (i dagar, sätt till 0 för att hålla versioner för evigt).</string>
-    <string name="versions_path_description">Sökväg där versioner ska lagras (lämna tom för standard .stversions-katalogen i den delade mappen).</string>
-    <string name="cleanout_after_description">Antalet dagar att behålla filer i papperskorgen. Noll betyder för evigt</string>
-    <string name="external_versioning_description">Den första kommandoradsparametern är mappsökvägen och den andra parametern är den relativa sökvägen i mappen.</string>
-    <string name="no_versioning_description">Välj en versioner-typ för att aktivera versionshantering.</string>
     <!-- Displays the current file versioning type in the Folder activity -->
     <string name="type_simple">Typ: Enkel</string>
     <string name="type_trashcan">Typ: Papperskorg</string>
@@ -482,8 +427,6 @@
     <string name="show_device_id">Visa enhetens ID</string>
     <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
     <string name="could_not_access_deviceid">Det gick inte att komma åt enhetens ID.</string>
-    <string name="browse">Bläddra</string>
-    <string name="no_sub_folder_is_selected">Ingen undermapp är vald</string>
     <string name="share_device_id_chooser">Dela enhetens ID med</string>
     <string name="run_on_whitelisted_wifi_summary">Slå på vitlistan för att begränsa att synkronisering sker endast på angivna Wi-Fi-nätverk.</string>
     <string name="dialog_all_files_access_not_supported">Din enhet stöder inte all filåtkomst</string>
@@ -493,7 +436,6 @@
     <string name="notification_permission_title">Aviseringstillstånd</string>
     <string name="photo_shoot_intro_welcome_title">Välkommen till Syncthing Camera</string>
     <string name="photo_shoot_activity_title">Syncthing-Fork Camera</string>
-    <string name="toast_notification_permission_required">Syncthing kräver aviseringstillstånd för att hålla tjänsten vid liv och ansluten.</string>
     <string name="default_syncthing_camera_folder_label">Syncthing Camera</string>
     <string name="device_addresses_invalid">Enhetsadresserna är inte korrekt formaterade. Försök igen. Titta på Syncthing-dokumenten för mer information.</string>
     <string name="notification_permission_desc">Krävs för att visa aviseringar om nya enhetsanslutningar, förfrågningar om mappdelning och för att hålla tjänsten vid liv och ansluten.</string>
@@ -504,10 +446,8 @@
     <string name="notification_out_of_disk_space">SD-kortet är fullt. Fil %1$s</string>
     <string name="location_permission_desc_api_29">Tips för Android 10+: \"Tillåt hela tiden\"</string>
     <string name="location_permission_desc">Syncthing kan konfigureras för att fungera på utvalda Wi-Fi-nätverk. Android kräver att appen har platsbehörighet för att läsa det aktiva Wi-Fi-nätverkets namn. Om du vill använda den här funktionen, tryck på knappen ovan. Du kan hoppa över detta steg. Se vår integritetspolicy för mer information.</string>
-    <string name="photo_shoot_intro_permission_title">Nödvändiga behörigheter</string>
     <string name="photo_shoot_intro_no_camera">Den här enheten har tyvärr ingen kamera.</string>
     <string name="activity_main_bottom_navigation_rescan_all">Skanna om alla</string>
-    <string name="close_main_menu">Stäng huvudmenyn</string>
     <string name="no_devices_configured">Inga enheter har konfigurerats.\nBörja med att lägga till en enhet nu.</string>
     <string name="autoAcceptFolders">Acceptera automatiskt</string>
     <string name="untrusted_device">Otillförlitlig enhet</string>
@@ -531,7 +471,6 @@
     <string name="grant_storage_permission">Bevilja lagringstillstånd</string>
     <string name="grant_camera_permission">Bevilja kameratillstånd</string>
     <string name="photo_shoot_take_picture_failure">Det gick inte att ta en bild eller så har du avbrutit.</string>
-    <string name="open_main_menu">Öppna huvudmenyn</string>
     <string name="override_changes_question">Detta kommer att ångra alla ändringar som gjorts på de andra enheterna som delar den här mappen. Fortsätta?</string>
     <string name="revert_local_changes">Återställ lokala ändringar</string>
     <string name="delete_unexpected_items">Ta bort oväntade objekt</string>
@@ -571,14 +510,11 @@
     <string name="webui_remote_access_title">Fjärråtkomst för webbgränssnittet</string>
     <string name="broadcast_service_control_title">Tjänstekontroll genom sändning</string>
     <string name="verbose_log_summary">Om du aktiverar detta alternativ kommer du att skapa felsökningsloggar på en mycket detaljerad nivå.</string>
-    <string name="log_to_file_title">Logga till fil</string>
-    <string name="log_to_file_summary">Utmatning från SyncthingNative kommer att skrivas till filen.</string>
     <string name="open_issue_tracker_summary">Öppna Syncthing-Fork-problemspåraren på %1$s</string>
     <string name="app_version_title">Syncthing-Fork Wrapper version</string>
     <string name="advanced_storage_path_overview">Översikt över avancerad lagringsväg</string>
     <string name="folder_go_up">Gå upp</string>
     <string name="complete_welcome_wizard_first">Starta först appen från applådan och slutför välkomstguiden innan du delar filer.</string>
-    <string name="reason_not_within_time_frame">Du aktiverade \"Kör enligt tidschema\" och den senaste synkroniseringen var inte mer än en timme sedan.</string>
     <string name="reason_not_within_time_frame_2">Du aktiverade \"Kör enligt tidsschema\" och den senaste synkroniseringen var för %s sedan.</string>
     <string name="reason_not_within_time_frame_0_min">mindre än en minut</string>
     <plurals name="reason_not_within_time_frame_minutes">
@@ -605,12 +541,10 @@
     <string name="pull_order_type_alphabetic_description">Dra filer ordnade efter filnamn alfabetiskt.</string>
     <string name="pull_order_type_smallestFirst_description">Dra filer sorterade efter filstorlek. Minsta först respektive.</string>
     <string name="pull_order_type_largestFirst_description">Dra filer sorterade efter filstorlek. Störst först respektive.</string>
-    <string name="file_versioning_generic_description">Syncthing stöder arkivering av den gamla versionen av en fil när den raderas eller ersätts med en nyare version från klustret. Klicka för att se tillgängliga versionsstrategier. Filversionshantering konfigureras per mapp, per enhet. Vald strategi:</string>
     <string name="custom_sync_conditions_description">Låter dig ange undantag från de globala körvillkoren.</string>
     <string name="discovered_devices_title">Upptäckta enheter - Tryck för att välja</string>
     <string name="preference_app_theme_follow_light">Ljust</string>
     <string name="dialog_exit_while_running_as_service_message">För ditt övervägande: Du konfigurerade appen att starta automatiskt vid uppstart. Därför övervakar den körförhållanden och synkroniserar när som helst i bakgrunden när förhållandena matchar. Du bör bara avsluta manuellt om du stöter på allvarliga problem. Annars inaktiverar du \"Starta automatiskt vid start\" i inställningarna. Vill du avsluta nu tills enheten har startat om?</string>
-    <string name="install_barcode_scanner_app_message">Detta kräver en streckkodsläsare-app. Vill du installera appen \"Binary Eye\" från F-Droid?</string>
     <string name="expert_mode_summary">Om du aktiverar det här alternativet visas avancerade konfigurationsalternativ. Du bör ta en titt på Syncthings dokumentation först för att se till att du vet hur du använder dem korrekt. Felaktiga inställningar kan orsaka batteriladdning, utmattning av systemresurser eller ofullständig synkronisering.</string>
     <string name="webui_tcp_port_title">TCP-port för webbgränssnittet</string>
     <string name="dialog_settings_restart_app_question">För att ändra det här alternativet krävs en omedelbar omstart av appen. Alla andra ändringar kommer att ignoreras. Fortsätta?</string>
@@ -620,13 +554,10 @@
     <string name="preference_app_theme_follow_dark">Mörkt</string>
     <string name="category_syncthing_options_summary">Denna meny är endast tillgänglig om Syncthing körs.</string>
     <string name="run_on_mobile_data_summary">Kör när enheten är ansluten via det mobila datanätverket. Varning: Detta kan förbruka mycket data från din mobiloperatörs dataplan om du synkroniserar stora mängder data.</string>
-    <string name="untrusted_device_explanation">Alla mappar som delas med den här enheten måste skyddas med ett lösenord, så att all skickad data är oläsbar utan det angivna lösenordet.</string>
-    <string name="discovered_device_list_empty">Lokal upptäckt hittade inga enheter i det lokala nätverket. Kör den här appen på en andra telefon. Installationsfiler för datorer finns på: %1$s</string>
     <string name="this_device">Denna enhet</string>
     <string name="reason_run_condition_monitor_not_instantiated">RunConditionMonitor instansieras inte. Starta om appen och skicka en felrapport om detta fel inte försvinner efter omstarten.</string>
     <string name="open_in_browser">Öppna i webbläsaren</string>
     <string name="advanced_directory_selection">Avancerat katalogval</string>
-    <string name="exception_known_bug_notice">En känr fel som inte har lösts ännu har påträffats. Se %1$s/%2$s för mer information. Lämna gärna en exakt beskrivning av vad som hände i förväg.</string>
     <string name="suggest_file_manager_app_dialog_text">Vi rekommenderar att du installerar filhanterarappen \"Material Files\" med öppen källkod. Vill du öppna dess appbutikssida?</string>
     <string name="device_syncing_percent_bytes">Synkroniserar (%1$d%%, %2$s)</string>
     <string name="local_discovery_disabled">Du har inaktiverat lokal upptäckt i \"Inställningar\" &gt; \"Synkroniseringsalternativ\" &gt; \"Lokal upptäckt\". Aktivera den för att söka efter enheter i det lokala nätverket.</string>
@@ -647,7 +578,6 @@
         <item quantity="other">Synkronisering: %1$d%% klar, %2$d enheter uppkopplade</item>
     </plurals>
     <string name="config_read_failed">Det gick inte att läsa konfigurationen. Överväg att säkerhetskopiera data från dina synkroniseringsmappar, rensa sedan appens data från Android-inställningarna och starta den igen.</string>
-    <string name="default_android_camera_folder_label">Android kamera</string>
     <string name="webui_tcp_port_unavailable">WebUI tcp-port %s upptagen. Andra instans?</string>
     <string name="state_failed_items">Misslyckade objekt (%1$d)</string>
     <string name="photo_shoot_launcher_title">Synkronisera. Kamera</string>
@@ -678,8 +608,6 @@
     <string name="config_import_failed_no_path">Konfigurationsimporten misslyckades. Gå till Inställningar-Felsökning-Öppna logg för att se detaljer.</string>
     <string name="syncthing_forum_title">Syncthing-forum</string>
     <string name="syncthing_forum_summary">Gå till Syncthing-forumet och få support</string>
-    <string name="pizza_url_title">» Katter älskar pizza « 😺🍕</string>
-    <string name="pizza_url_summary">Med bara ett tryck kan du lämna en varm känsla av vänlighet - toppad med extra goda vibbar som får katterna att spinna glatt.</string>
     <string name="privacy_summary">Öppna syncthing-androids integritetspolicy, som täcker användning (om någon) av personuppgifter, t.ex. plats.</string>
     <string name="share_log_file_missing">Loggfilen som ska delas saknas.</string>
     <string name="share_log_file">Dela loggfil</string>

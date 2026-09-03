@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Button themes -->
-    <style name="Theme.Syncthing.GreyButton" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="android:textColor">@color/btn_welcome_slide_color</item>
-    </style>
-
     <!-- Dialog themes -->
     <eat-comment/>
 

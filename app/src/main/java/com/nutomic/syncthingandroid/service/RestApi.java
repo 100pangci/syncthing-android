@@ -1324,10 +1324,6 @@ public class RestApi {
         return mApiKey;
     }
 
-    public URL getUrl() {
-        return mUrl;
-    }
-
     public Boolean isUsageReportingAccepted() {
         Options options = getOptions();
         if (options == null) {
@@ -1489,12 +1485,6 @@ public class RestApi {
         Gson gson = new GsonBuilder()
                 .create();
         return gson;
-    }
-
-    private String jsonToPrettyFormat(String jsonString) {
-        JsonObject json = (new JsonParser()).parse(jsonString).getAsJsonObject();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(json);
     }
 
     private void LogV(String logMessage) {

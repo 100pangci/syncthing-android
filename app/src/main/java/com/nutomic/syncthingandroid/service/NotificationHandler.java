@@ -29,7 +29,6 @@ public class NotificationHandler {
     private static final int ID_PERSISTENT = 1;
     private static final int ID_PERSISTENT_WAITING = 4;
     private static final int ID_RESTART = 2;
-    private static final int ID_STOP_BACKGROUND_WARNING = 3;
     private static final int ID_CRASH = 9;
     private static final int ID_MISSING_PERM = 10;
     private static final String CHANNEL_PERSISTENT = "01_syncthing_persistent";

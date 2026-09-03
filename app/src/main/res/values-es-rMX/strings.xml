@@ -5,19 +5,14 @@
     <!-- FirstStartActivity -->
     <!-- Title for dialog displayed on first start -->
     <string name="welcome_title">Bienvenido a Syncthing para Android</string>
-    <string name="generic_error">Error</string>
     <string name="ignore">Ignorar</string>
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">Añadir carpeta</string>
     <!-- Title of the "share device id" menu action -->
-    <string name="share_device_id">Compartir ID del dispositivo</string>
     <!-- Shown in the chooser dialog when sharing a Device ID -->
-    <string name="send_device_id_to">Enviar ID del dispositivo</string>
     <string name="usage_reporting_dialog_title">¿Permitir reportes de uso anónimos?</string>
-    <string name="usage_reporting_dialog_description">El reporte de uso encriptado es enviado diariamente. Es usado para rastrear plataformas comunes, tamaño de carpetas y versiones de la aplicación. Si se cambia el conjunto de datos reportados, se le presentará este diálogo de nuevo. \n \nLas estadísticas agregadas se encuentran disponibles públicamente en https://data.syncthing.net.</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
-    <string name="open_website">Abrir Sitio web</string>
     <string name="toast_write_storage_permission_required">Esta aplicación requiere permiso para escribir en el almacenamiento</string>
     <!-- StateDialogActivity -->
     <!-- Text for FoldersFragment and DevicesFragment loading view -->
@@ -33,20 +28,16 @@
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">Actualizado</string>
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
-    <string name="device_syncing">Sincronizando (%1$d%%)</string>
     <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">Desconectado</string>
     <!-- Indicates that the device connection is unknown -->
-    <string name="device_state_unknown">Desconocido</string>
     <!-- Title for current download rate -->
     <string name="download_title">Descarga</string>
     <!-- Title for current upload rate -->
     <string name="upload_title">Subida</string>
     <!-- DrawerFragment -->
     <!-- Same as download_title with a colon and space appended -->
-    <string name="download_title_colon">"Descarga: "</string>
     <!-- Same as upload_title with a colon and space appended -->
-    <string name="upload_title_colon">"Subida: "</string>
     <!-- Title for current RAM usage -->
     <string name="ram_usage">Uso de RAM</string>
     <!-- Title for announce server status -->
@@ -79,11 +70,9 @@
     <!-- Setting title -->
     <string name="device_id">ID del dispositivo</string>
     <!-- Setting title -->
-    <string name="name">Nombre</string>
     <!-- Setting title -->
     <string name="addresses">Direcciones</string>
     <!-- Setting title -->
-    <string name="current_address">Dirección actual</string>
     <!-- Setting title -->
     <string name="compression">Compresión</string>
     <!-- Strings representing compression options -->
@@ -96,7 +85,6 @@
     <string name="delete_device">Eliminar dispositivo</string>
     <string name="add_device">Añadir dispositivo</string>
     <!-- Menu item to confirm adding a device -->
-    <string name="add">Añadir</string>
     <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">Editar dispositivo</string>
     <!-- Dialog shown when attempting to remove a device -->
@@ -149,11 +137,8 @@
     <!-- Activity title -->
     <string name="folder_picker_title">Seleccionador de Carpetas</string>
     <!-- ListView empty text -->
-    <string name="directory_empty">El directorio está vacío</string>
     <!-- Menu item to create folder on the file system -->
-    <string name="create_fs_folder">Crear nueva Carpeta</string>
     <!-- Menu item to select the current folder -->
-    <string name="select_folder">Seleccionar Carpeta</string>
     <string name="create_folder_failed">Fallo al crear carpeta</string>
     <!-- Title of the "log android" menu button -->
     <string name="view_android_log">Ver registro de Android</string>
@@ -165,16 +150,12 @@
     <!-- Text for the exit button on the drawer -->
     <string name="exit">Salir</string>
     <!-- Title of the notification shown while syncthing is running and enabled -->
-    <string name="syncthing_active">Syncthing está en ejecución</string>
     <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
-    <string name="default_folder_id">%1$s-photos</string>
     <!-- RestApi -->
     <!-- Title of the notification shown when a restart is needed -->
-    <string name="restart_title">Reinicio requerido</string>
     <!-- Text for positive button in restart dialog -->
     <!-- Text for the dismiss button of the restart Activity -->
     <!-- Text of the notification shown when a restart is needed -->
-    <string name="restart_notification_text">Clic aquí para reiniciar syncthing ahora</string>
     <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">ID del dispositivo copiada al portapapeles</string>
     <!-- Strings representing units for file sizes, from smallest to largest -->

@@ -7,7 +7,6 @@
     <string name="welcome_title">歡迎使用專為 Android 打造的 Syncthing 應用程式</string>
     <!-- Welcome wizard -->
     <!-- Slide "Introduction" -->
-    <string name="introduction">介紹</string>
     <!-- Slide "Storage Permission" -->
     <string name="storage_permission_title">儲存空間權限</string>
     <string name="storage_permission_desc">Syncthing 需要取得您的裝置上「管理所有檔案的權限」以進行檔案同步。</string>
@@ -21,8 +20,6 @@
     <string name="cont">下一步</string>
     <string name="finish">完成</string>
     <string name="generic_example">例子</string>
-    <string name="generic_error">錯誤</string>
-    <string name="generic_help">幫助</string>
     <string name="grant_permission">請求權限</string>
     <string name="permission_granted">已授權</string>
     <string name="accept">接受</string>
@@ -31,25 +28,18 @@
     <string name="refresh">更新</string>
     <string name="photo_shoot_activity_title">Syncthing-Fork 相機</string>
     <string name="photo_shoot_intro_welcome_title">歡迎使用 Syncthing 相機</string>
-    <string name="photo_shoot_intro_permission_title">所需要的權限</string>
     <string name="photo_shoot_intro_no_camera">抱歉，這台設備並無相機。</string>
     <string name="photo_shoot_intro_missing_permissions">我們需要儲存與相機權限才能前往下一步。</string>
     <string name="grant_storage_permission">允許儲存權限</string>
     <string name="grant_camera_permission">允許相機權限</string>
     <!-- Main menu button -->
-    <string name="open_main_menu">開啟主選單</string>
-    <string name="close_main_menu">關閉主選單</string>
     <!-- Title of the "add folder" menu action -->
     <string name="add_folder">增加資料夾</string>
     <!-- Title of the "share device id" menu action -->
-    <string name="share_device_id">分享裝置識別碼</string>
     <!-- Shown in the chooser dialog when sharing a Device ID -->
-    <string name="send_device_id_to">傳送裝置識別碼給</string>
     <string name="usage_reporting_dialog_title">允許匿名使用報告？</string>
-    <string name="usage_reporting_dialog_description">每天會傳送被加密的使用報告。它被來用在追蹤常用的平台、資料夾大小及應用程式版本。如果回報的資料集被修改，你將會再收到這個提示。 \n \n匯集的統計資料會公開在 https://data.syncthing.net。</string>
     <string name="yes">是</string>
     <string name="no">否</string>
-    <string name="open_website">打開網站</string>
     <string name="toast_write_storage_permission_required">應用程式需要寫入儲存空間的權限</string>
     <string name="device_rejected">裝置 %1$s 想要建立連線</string>
     <string name="folder_rejected">裝置%1$s 想要共享資料夾%2$s</string>
@@ -71,20 +61,16 @@
     <!-- Indicates that a folder is fully synced to the local device -->
     <string name="device_up_to_date">最新</string>
     <!-- Indicates that the device is currently syncing. Parameter is sync percentage -->
-    <string name="device_syncing">正在同步 (%1$d%%)</string>
     <!-- Indicates that there is no connection to the device -->
     <string name="device_disconnected">斷線</string>
     <!-- Indicates that the device connection is unknown -->
-    <string name="device_state_unknown">未知</string>
     <!-- Title for current download rate -->
     <string name="download_title">下載</string>
     <!-- Title for current upload rate -->
     <string name="upload_title">上載</string>
     <!-- DrawerFragment -->
     <!-- Same as download_title with a colon and space appended -->
-    <string name="download_title_colon">"下載: "</string>
     <!-- Same as upload_title with a colon and space appended -->
-    <string name="upload_title_colon">"上載: "</string>
     <!-- Title for current RAM usage -->
     <string name="ram_usage">記憶體使用率</string>
     <!-- Title for announce server status -->
@@ -122,11 +108,9 @@
     <!-- Setting title -->
     <string name="device_id">裝置識別碼</string>
     <!-- Setting title -->
-    <string name="name">名稱</string>
     <!-- Setting title -->
     <string name="addresses">位址</string>
     <!-- Setting title -->
-    <string name="current_address">目前位址</string>
     <!-- Setting title -->
     <string name="compression">壓縮</string>
     <!-- Strings representing compression options -->
@@ -139,7 +123,6 @@
     <string name="delete_device">刪除裝置</string>
     <string name="add_device">增加裝置</string>
     <!-- Menu item to confirm adding a device -->
-    <string name="add">增加</string>
     <!-- Title for DeviceSettingsFragment in edit mode -->
     <string name="edit_device">編輯裝置</string>
     <!-- Dialog shown when attempting to remove a device -->
@@ -155,7 +138,6 @@
     <string name="web_gui_loading">正在等待 GUI</string>
     <!-- SettingsFragment -->
     <string name="settings_title">設定</string>
-    <string name="category_run_conditions">執行條件</string>
     <string name="category_behaviour">行為</string>
     <string name="category_syncthing_options">Syncthing 選項</string>
     <string name="category_debug">除錯</string>
@@ -164,14 +146,6 @@
     <string name="run_conditions_title">執行條件</string>
     <string name="sync_only_wifi_ssids_wifi_turn_on_wifi">請開啟 Wi-Fi 來選擇網路</string>
     <string name="respect_battery_saving_title">遵守 Android 節省電池設定</string>
-    <string name="preference_language_title">語言</string>
-    <string name="preference_language_summary">選擇應用程式語言</string>
-    <string name="pref_language_default">預設語言</string>
-    <string name="versioning_type_none">無</string>
-    <string name="versioning_type_trashcan">垃圾筒式</string>
-    <string name="versioning_type_simple">簡單</string>
-    <string name="versioning_type_staggered">變動式</string>
-    <string name="versioning_type_external">外部的</string>
     <string name="device_name">裝置名稱</string>
     <string name="listen_address">同步通訊協定監聽位址</string>
     <string name="max_recv_kbps">下載速率限制(KiB/s)</string>
@@ -215,11 +189,8 @@
     <!-- Activity title -->
     <string name="folder_picker_title">資料夾選擇器</string>
     <!-- ListView empty text -->
-    <string name="directory_empty">資料夾為空</string>
     <!-- Menu item to create folder on the file system -->
-    <string name="create_fs_folder">建立新資料夾</string>
     <!-- Menu item to select the current folder -->
-    <string name="select_folder">選擇資料夾</string>
     <string name="create_folder_failed">建立資料夾時失敗</string>
     <!-- LogActivity -->
     <string name="syncthing_log_title">Syncthing 日誌</string>
@@ -238,7 +209,6 @@
     <!-- Title of the "cancel" button -->
     <string name="cancel_title">取消</string>
     <!-- Title of the "save" button -->
-    <string name="folder_title">資料夾</string>
     <!-- New file name template -->
     <string name="file_name_template">新檔案 %1$s</string>
     <!-- Nothing to share toast -->
@@ -259,27 +229,21 @@
         <item quantity="other">檔案列表</item>
     </plurals>
     <!-- Sub Folder title -->
-    <string name="sub_folder">子資料夾</string>
     <!-- SyncthingService -->
     <!-- Text for the exit button on the drawer -->
     <string name="exit">離開</string>
     <!-- Title of the notification shown while syncthing is running and enabled -->
-    <string name="syncthing_active">Syncthing 正在執行</string>
     <string name="config_create_failed">無法建立設定檔</string>
     <!-- Label of the default folder created of first start (camera folder). -->
-    <string name="default_android_camera_folder_label">Android 相機</string>
     <!-- ID of the default folder created on first start (camera folder). Must only contain 'a-z0-9_-'. Parameter is the device name-->
-    <string name="default_folder_id">%1$s-photos</string>
     <string name="notification_crash_title">Syncthing 已經當機 %1$s</string>
     <string name="notification_crash_text">觸碰檢視日誌 (%1$s)</string>
     <string name="notifications_other_channel">其他通知</string>
     <!-- RestApi -->
     <!-- Title of the notification shown when a restart is needed -->
-    <string name="restart_title">需要重新啟動</string>
     <!-- Text for positive button in restart dialog -->
     <!-- Text for the dismiss button of the restart Activity -->
     <!-- Text of the notification shown when a restart is needed -->
-    <string name="restart_notification_text">按此以重新啟動 syncthing</string>
     <!-- Shown when a device ID is copied to the clipboard -->
     <string name="device_id_copied_to_clipboard">裝置識別碼已複製至剪貼版</string>
     <!-- Strings representing units for file sizes, from smallest to largest -->
@@ -311,15 +275,6 @@
     <string name="versions_path">版本路徑</string>
     <string name="command">指令</string>
     <!-- File versioning dialog descriptions for file versioning types and file versioning configuration options. -->
-    <string name="keep_versions_description">每個檔案要保留的舊版本數量。</string>
-    <string name="simple_file_versioning_description">當檔案被 Syncthing 取代或刪除時，它們將被移至 .stversions 資料夾並加上日期戳記。</string>
-    <string name="trashcan_versioning_description">當檔案被 Syncthing 取代或刪除時，檔案將被移至 .stversions 資料夾。</string>
-    <string name="staggered_versioning_description">當檔案被 Syncthing 取代或刪除時，它們將被移至 .stversions 資料夾並添加日期戳記。當檔案歷史版本的存留時間大於設定的最大值，或是其數量在一段時間內超出允許值時，則會被刪除。 \n \n使用下列的間隔：在第一個小時內每 30 秒保留一個版本，在第一天內每小時保留一個版本，在第 30 天內每一天保留一個版本，在達到最長保留時間前每一星期保留一個版本。</string>
-    <string name="maximum_age_description">一個版本被保留的最長時間 (單位為天，若設定為 0 則表示永遠保留)。</string>
-    <string name="versions_path_description">儲存歷史版本的路徑（若為空，則預設使用資料夾中的 .stversions 資料夾）。</string>
-    <string name="cleanout_after_description">檔案在垃圾筒中保留的天數。零表示永遠地保留。</string>
-    <string name="external_versioning_description">第一個命令列參數是資料夾路徑，第二個參數是在資料夾中的相對路徑。</string>
-    <string name="no_versioning_description">選擇一個版本控制類型來啟用版本控制</string>
     <!-- Displays the current file versioning type in the Folder activity -->
     <string name="type_simple">類型：簡單</string>
     <string name="type_trashcan">類型：垃圾筒</string>
@@ -333,13 +288,10 @@
     <string name="show_device_id">顯示裝置識別碼</string>
     <!-- error message if the deviceID/QRCode dialog for some reason cannot be displayed.-->
     <string name="could_not_access_deviceid">無法存取裝置識別碼</string>
-    <string name="browse">瀏覽</string>
-    <string name="no_sub_folder_is_selected">無子資料夾被選擇</string>
     <string name="share_device_id_chooser">分享裝置識別碼給</string>
     <string name="custom_sync_conditions_title">自訂同步條件</string>
     <string name="notification_permission_title">通知權限</string>
     <string name="notification_permission_desc">顯示「新裝置連線請求」、「資料夾共享通知」等通知訊息，以及確保背景服務維持啟動且與其他裝置保持連線。</string>
-    <string name="page_x_of_y">第%1$s 頁，共%2$s頁</string>
     <string name="photo_shoot_launcher_title">同步相機</string>
     <string name="welcome_text">Syncthing 是一款開源的檔案同步應用程式。如欲與其他裝置分享檔案，您將需要將它們的唯一裝置識別字串加入裝置列表。此後您將能選擇要對哪些裝置分享哪個資料夾。 \n \n若有任何疑問，請至本專案的 Github 頁面分享您在使用上遇到的任何問題。</string>
     <string name="undo_ignored_devices_folders_question">這將還原方才「忽略裝置與資料夾」的操作，請問要繼續嗎？</string>
@@ -355,19 +307,16 @@
     <string name="activity_main_bottom_navigation_rescan_all">重新掃描全部</string>
     <string name="dialog_settings_restart_app_question">改變本選項將會強制重新啟動應用程式，方才的其他改變將被放棄，確定要繼續嗎？</string>
     <string name="app_version_title">Syncthing 衍生版封装版本</string>
-    <string name="toast_ignore_doze_permission_required">唯有將本應用程式排除在自動休眠的省電模式外，方能使本程式功能正常運作。</string>
     <string name="dialog_all_files_access_not_supported">您的裝置不支援「管理所有檔案」的特殊權限</string>
     <string name="ignore_doze_permission_os_notice">目前已知部分 Android TV 裝置會時不時關閉背景執行的應用程式。我們有在「%1$s/%2$s」提供一個可能的解決方案。</string>
     <string name="back">上一步</string>
     <string name="ignore_doze_permission_desc">Android 系統可能會在裝置閒置一段時間後停止自動同步。為了避免這個現象，我們建議停用電池最佳化。在一些裝置上還會有預安裝的程序清除軟體，您也需要將 Syncthing 加入到它們的白名單中。</string>
-    <string name="toast_notification_permission_required">Syncthing 需要通知權限來維持背景服務以及保持連線。</string>
     <string name="syncthing_starting">Syncthing 正在啟動。</string>
     <string name="syncthing_running">Syncthing 執行中。</string>
     <string name="dialog_exit_while_running_as_service_title">確認退出應用程式</string>
     <string name="privacy_title">隱私權政策</string>
     <string name="open_source_licenses_title">開放原始碼授權</string>
     <string name="open_source_licenses_summary">顯示被使用的開放原始碼授權</string>
-    <string name="exception_known_bug_notice">遇到了尚未解決的已知錯誤。查看 %1$s/%2$s 以獲得更多資訊。請精準描述錯誤發生前的情況。</string>
     <string name="conflict_files_title">衝突檔案</string>
     <string name="status_transfer_resources">傳輸與資源</string>
 </resources>
