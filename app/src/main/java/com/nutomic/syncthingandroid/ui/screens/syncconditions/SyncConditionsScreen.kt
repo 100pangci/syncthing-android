@@ -213,7 +213,9 @@ fun SyncConditionsScreen(
                         ) {
                             Text(
                                 label,
-                                style = androidx.compose.material3.MaterialTheme.typography.labelMedium
+                                style = androidx.compose.material3.MaterialTheme.typography.labelMedium,
+                                maxLines = 1,
+                                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                             )
                         }
                     }
