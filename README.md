@@ -1,44 +1,86 @@
-# Syncthing-Fork - A Syncthing Wrapper for Android
+# Syncthing-Fork (Compose Edition)
+
+English | [简体中文](README_zh-CN.md)
 
 [![License: MPLv2](https://img.shields.io/badge/License-MPLv2-blue.svg)](https://opensource.org/licenses/MPL-2.0)
-<a href="https://github.com/researchxxl/syncthing-android/releases/latest" alt="GitHub release"><img src="https://img.shields.io/github/v/release/researchxxl/syncthing-android" /></a>
-<a href="https://tooomm.github.io/github-release-stats/?username=researchxxl&repository=syncthing-android" alt="GitHub Stats"><img src="https://img.shields.io/github/downloads/researchxxl/syncthing-android/total.svg" /></a>
-<a href="https://f-droid.org/packages/com.github.catfriend1.syncthingfork" alt="F-Droid release"><img src="https://img.shields.io/f-droid/v/com.github.catfriend1.syncthingfork.svg" /></a>
-<a href="https://fdroid-metrics.streamlit.app/package_details?package=com.github.catfriend1.syncthingfork"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2Fkitswas%2Ffdroid-metrics-dashboard%2Fraw%2Frefs%2Fheads%2Fmain%2Fprocessed%2Fmonthly%2Fcom.github.catfriend1.syncthingfork.json&query=%24.total_downloads&style=for-the-badge&logo=fdroid&label=F-Droid%20%F0%9F%93%A5%20last%20month" height="22" /></a>
-<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.github.catfriend1.syncthingfork%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fresearchxxl%2Fsyncthing-android%22%2C%22author%22%3A%22researchxxl%22%2C%22name%22%3A%22Syncthing-Fork%22%2C%22preferredApkIndex%22%3A0%2C%22additionalSettings%22%3A%22%7B%5C%22verifyLatestTag%5C%22%3Atrue%2C%5C%22apkFilterRegEx%5C%22%3A%5C%22com.github.catfriend1.syncthingfork%5C%22%7D%22%2C%22overrideSource%22%3Anull%7D"><img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="22"></a>
-<a href="https://hosted.weblate.org/projects/syncthing-fork/app/"><img src="https://hosted.weblate.org/widget/syncthing-fork/app/svg-badge.svg" alt="Translation status" /></a>
-[![Build App](https://github.com/researchxxl/syncthing-android/actions/workflows/build-app.yaml/badge.svg)](https://github.com/researchxxl/syncthing-android/actions/workflows/build-app.yaml)
+[![Build App](https://github.com/100pangci/syncthing-android/actions/workflows/build-app.yaml/badge.svg)](https://github.com/100pangci/syncthing-android/actions/workflows/build-app.yaml)
+[![Release](https://img.shields.io/github/v/release/100pangci/syncthing-android)](https://github.com/100pangci/syncthing-android/releases/latest)
 
-A wrapper of [Syncthing](https://github.com/syncthing/syncthing) for Android. Head to the "releases" section or F-Droid for builds. Please seek help on the forum and/or social media apps first before creating issues on the tracker.
+An Android wrapper for [Syncthing](https://github.com/syncthing/syncthing). The Syncthing core, written in Go, is cross-compiled into a native library (`libsyncthingnative.so`) hosted by a foreground service, with a native Android UI on top — private, decentralized file syncing across devices, no root required.
 
-<img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/1.jpg" alt="screenshot 1" width="200" /> · <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/2.jpg" alt="screenshot 2" width="200" /> · <img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/3.jpg" alt="screenshot 3" width="200" />
+<img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/1.jpg" alt="Screenshot 1" width="150" /><img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/2.jpg" alt="Screenshot 2" width="150" /><img src="app/src/main/play/listings/en-US/graphics/phone-screenshots/3.jpg" alt="Screenshot 3" width="150" />
 
-## Switching from the deprecated official version
+## Changes in this Fork
 
-Switching is easier than you may think! See our [wiki article](wiki/migration/Switching-from-the-deprecated-official-version.md) for detailed instructions.
+An intensive rewrite on top of [researchxxl/Syncthing-Fork](https://github.com/researchxxl/syncthing-android):
 
-## Wiki and Useful Articles
+### Full UI Rewrite
+- The legacy Java/View UI has been completely rewritten with **Jetpack Compose + Material 3**, using a single-Activity **Navigation 3** architecture
+- The folders / devices / status pages moved to a bottom navigation bar
+- All legacy View code and resources removed
 
-Our knowledge base is published [here](wiki#readme).
+### New Features
+- **AMOLED black theme**: follow system / light / dark / AMOLED, switching instantly, with the embedded Web GUI synced to its black theme
+- Application ID changed to `com.github.ywpc05.syncthingfork`, so it installs alongside the upstream app
 
-## Building and Development Notes
+### Stability & Fixes
+- Core stability refactor: migrated to NetworkCallback, split service responsibilities, fixed real defects in config / event handling
 
-See [detailed info](wiki/developers/Building-and-Development.md).
+### Engineering
+- Added Robolectric unit tests for core sync paths (event processing, run conditions, config parsing)
+- CI fully takes over: automated debug / release builds with signing
+
+### Goal
+
+- **Fully rewrite the service layer**: the service layer (`SyncthingService` / `RestApi` / `EventProcessor` / `RunConditionMonitor` / `ConfigXml`, etc.) is still Java; the plan is to migrate it step by step to a modern Kotlin implementation with coroutines / Flow, unifying the stack with the Compose UI and eventually removing all Java code and Dagger dependency injection.
+
+## Download
+
+Grab an APK from [Releases](https://github.com/100pangci/syncthing-android/releases/latest), or subscribe via [Obtainium](https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%7B%22id%22%3A%22com.github.ywpc05.syncthingfork%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2F100pangci%2Fsyncthing-android%22%2C%22author%22%3A%22100pangci%22%2C%22name%22%3A%22Syncthing-Fork%22%2C%22preferredApkIndex%22%3A0%2C%22additionalSettings%22%3A%22%7B%5C%22verifyLatestTag%5C%22%3Atrue%7D%22%2C%22overrideSource%22%3Anull%7D).
+
+> The application ID is `com.github.ywpc05.syncthingfork` (debug builds get a `.debug` suffix). It does not conflict with the upstream `com.github.catfriend1.syncthingfork` and both can be installed side by side. For migrating data from an older version, see the [migration guide](wiki/migration/Switching-from-the-deprecated-official-version.md).
+
+## Building
+
+```bash
+# 1. Install prerequisites (SDK / NDK / Go)
+python3 scripts/install_minimum_android_sdk_prerequisites.py
+
+# 2. Cross-compile the Syncthing native library
+./gradlew buildNative
+
+# 3. Build the app
+./gradlew assembleDebug     # or assembleRelease
+```
+
+See [Building and Development](wiki/developers/Building-and-Development.md) for details. CI automatically builds and signs debug / release APKs.
+
+## Docs / Wiki
+
+The knowledge base (FAQ, battery optimization, vendor-specific background restrictions, troubleshooting, etc.) lives in the [wiki](wiki#readme).
+
+## Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| UI | Kotlin, Jetpack Compose, Material 3, Navigation 3 |
+| Service layer | Java (foreground service / REST API / event processing / run condition monitoring) |
+| Sync core | Syncthing (Go, git submodule) → NDK cross-compile, run as child process |
+| DI / data | Dagger 2 (KSP), Gson, Volley, SharedPreferences |
+| Build | Gradle (Kotlin DSL) + Version Catalog, JDK 21, AGP 9.x |
+
+- minSdk 23 (Android 6.0) / targetSdk 36 / compileSdk 37
 
 ## Acknowledgments
 
-This project was forked from [syncthing/syncthing-android](https://github.com/syncthing/syncthing-android).
-
-Special thanks to the former maintainers:
-
-- [Catfriend1](https://github.com/Catfriend1)
-- [imsodin](https://github.com/imsodin)
-- [nutomic](https://github.com/nutomic)
+- Upstream fork source: [researchxxl/syncthing-android](https://github.com/researchxxl/syncthing-android)
+- Former maintainers: [Catfriend1](https://github.com/Catfriend1), [imsodin](https://github.com/imsodin), [nutomic](https://github.com/nutomic)
+- The [Syncthing](https://github.com/syncthing/syncthing) core team
 
 ## Privacy Policy
 
-See our document on privacy: [privacy-policy.md](privacy-policy.md).
+See [privacy-policy.md](privacy-policy.md).
 
 ## License
 
-The project is licensed under [MPLv2](LICENSE).
+[MPLv2](LICENSE)
