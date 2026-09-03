@@ -44,6 +44,7 @@ dependencies {
     ksp(libs.dagger.compiler)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockwebserver)
     testImplementation(libs.robolectric)
     testImplementation(libs.mockito.core)

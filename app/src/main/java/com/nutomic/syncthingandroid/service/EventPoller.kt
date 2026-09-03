@@ -1,0 +1,511 @@
+package com.nutomic.syncthingandroid.service
+
+import android.content.AsyncQueryHandler
+import android.content.ContentResolver
+import android.content.Context
+import android.content.SharedPreferences
+import android.media.MediaScannerConnection
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import android.provider.MediaStore
+import android.util.Log
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.nutomic.syncthingandroid.R
+import com.nutomic.syncthingandroid.SyncthingApp
+import com.nutomic.syncthingandroid.model.Device
+import com.nutomic.syncthingandroid.model.Event
+import com.nutomic.syncthingandroid.model.FolderStatus
+import java.io.File
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+
+/**
+ * Kotlin/coroutines replacement for the former Java [EventProcessor] (phase3).
+ *
+ * Run by the syncthing service to convert syncthing events into local state updates and
+ * notifications. It polls [RestApi.getEvents] and waits for new events, preserving the old
+ * polling semantics:
+ *
+ *  - The first poll happens one [EVENT_UPDATE_INTERVAL] after [start]; every afterwards poll
+ *    is scheduled from the previous round's completion, so overlapping polls are impossible.
+ *  - Each round first probes `getEvents(0, 1)`: if the reported id ran backwards, syncthing
+ *    was restarted and polling resumes from zero.
+ *  - The main fetch uses `getEvents(lastId, 0)`; its `onDone` id is persisted as
+ *    [Constants.PREF_EVENT_PROCESSOR_LAST_SYNC_ID] (unchanged key, survives process death).
+ *  - Errors back off by [EVENT_UPDATE_INTERVAL] and retry, like the old `onError`.
+ *
+ * Threading: the default scope runs on `Dispatchers.Main.immediate`. RestApi/Volley deliver
+ * responses on the main thread, so the bridging continuation resumes on the main thread and
+ * all event handling stays on the main thread - exactly like the old Handler-based code.
+ *
+ * Divergence from the old implementation: calling [stop] discards an in-flight poll response
+ * instead of processing the remaining batch afterwards. The old behaviour could invoke event
+ * handling after shutdown had begun; dropping it is safer and simpler.
+ */
+class EventPoller @JvmOverloads constructor(
+    private val context: Context,
+    private val restApi: RestApi,
+    private val pollerScope: CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
+) {
+
+    @Inject
+    lateinit var preferences: SharedPreferences
+
+    @Inject
+    lateinit var notificationHandler: NotificationHandler
+
+    private val verboseLog: Boolean
+
+    private var lastEventId: Long = 0
+
+    private var pollJob: Job? = null
+
+    init {
+        (context.applicationContext as SyncthingApp).component().inject(this)
+        verboseLog = AppPrefs.getPrefVerboseLog(preferences)
+    }
+
+    /**
+     * Starts (or restarts) the polling loop. Only one loop runs at any given time, like the
+     * old removeCallbacks + postDelayed pattern.
+     */
+    fun start() {
+        Log.d(TAG, "Starting event poller.")
+        pollJob?.cancel()
+        pollJob = pollerScope.launch { pollLoop() }
+    }
+
+    fun stop() {
+        Log.d(TAG, "Stopping event poller.")
+        pollJob?.cancel()
+        pollJob = null
+    }
+
+    private suspend fun pollLoop() {
+        // Restore the last event id if the poller may have been restarted.
+        if (lastEventId == 0L) {
+            lastEventId = preferences.getLong(Constants.PREF_EVENT_PROCESSOR_LAST_SYNC_ID, 0)
+        }
+        while (coroutineContext.isActive) {
+            delay(EVENT_UPDATE_INTERVAL)
+            try {
+                // First check if the event number ran backwards.
+                // If that's the case we've to start at zero because syncthing was restarted.
+                val probeId = fetchEvents(0, 1) { _, _ -> }
+                if (probeId < lastEventId) {
+                    lastEventId = 0
+                }
+                logV("Reading events starting with id $lastEventId")
+                val newLastId = fetchEvents(lastEventId, 0, ::onEvent)
+                if (newLastId > lastEventId) {
+                    lastEventId = newLastId
+                    // Store the last EventId in case we get killed.
+                    preferences.edit()
+                            .putLong(Constants.PREF_EVENT_PROCESSOR_LAST_SYNC_ID, lastEventId)
+                            .apply()
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: EventFetchAbortedException) {
+                Log.d(TAG, "Event sink aborted, will retry in $EVENT_UPDATE_INTERVAL ms")
+            }
+        }
+    }
+
+    /**
+     * Bridges the callback-based [RestApi.getEvents] into a suspending call that returns the
+     * id of the last processed event. Resumes are guarded with [CancellableContinuation]
+     * style isActive checks because the old Volley transport has no request cancellation:
+     * a late callback after [stop] must be ignored instead of crashing the continuation.
+     */
+    private suspend fun fetchEvents(
+        sinceId: Long,
+        limit: Long,
+        onEvent: (Event, JsonElement) -> Unit,
+    ): Long = suspendCancellableCoroutine { continuation ->
+        restApi.getEvents(sinceId, limit, object : RestApi.OnReceiveEventListener {
+            override fun onError() {
+                if (continuation.isActive) {
+                    continuation.resumeWithException(EventFetchAbortedException())
+                }
+            }
+
+            override fun onEvent(event: Event, json: JsonElement) {
+                onEvent(event, json)
+            }
+
+            override fun onDone(lastId: Long) {
+                if (continuation.isActive) {
+                    continuation.resume(lastId)
+                }
+            }
+        })
+    }
+
+    private class EventFetchAbortedException : Exception()
+
+    /**
+     * Performs the actual event handling.
+     */
+    fun onEvent(event: Event, json: JsonElement) {
+        when (event.type) {
+            "ConfigSaved" -> {
+                logV("Forwarding ConfigSaved event to RestApi to get the updated config.")
+                restApi.reloadConfig()
+            }
+            "DeviceConnected" -> restApi.updateRemoteDeviceConnected(
+                    event.data?.get("id") as String?,          // deviceId
+                    true
+            )
+            "DeviceDisconnected" -> restApi.updateRemoteDeviceConnected(
+                    event.data?.get("id") as String?,          // deviceId
+                    false
+            )
+            "DevicePaused" -> restApi.updateRemoteDevicePaused(
+                    event.data?.get("device") as String?,      // deviceId
+                    true
+            )
+            "DeviceResumed" -> restApi.updateRemoteDevicePaused(
+                    event.data?.get("device") as String?,      // deviceId
+                    false
+            )
+            "FolderCompletion" -> onFolderCompletion(event.data)
+            "FolderErrors" -> {
+                logV("Event ${event.type}, data ${event.data}")
+                onFolderErrors(json)
+            }
+            "FolderPaused" -> onFolderPaused(
+                    event.data?.get("id") as String?           // folderId
+            )
+            "FolderResumed" -> onFolderResumed(
+                    event.data?.get("id") as String?           // folderId
+            )
+            "FolderSummary" -> onFolderSummary(
+                    json,
+                    event.data?.get("folder") as String?       // folderId
+            )
+            "ItemFinished" -> onItemFinishedEvent(event)
+            "LocalIndexUpdated" -> {
+                logV("Event ${event.type}, data ${event.data}")
+                onLocalIndexUpdated(
+                        json,
+                        event.data?.get("folder") as String?,  // folderId
+                        event.time
+                )
+            }
+            "PendingDevicesChanged" -> {
+                @Suppress("UNCHECKED_CAST")
+                val added = event.data?.get("added") as? List<Map<String, String>>
+                added?.forEach { onPendingDevicesChanged(it) }
+            }
+            "PendingFoldersChanged" -> {
+                @Suppress("UNCHECKED_CAST")
+                val added = event.data?.get("added") as? List<Map<String, Any>>
+                added?.forEach { onPendingFoldersChanged(it) }
+            }
+            "Ping" -> {
+                // Ignored.
+            }
+            "StateChanged" -> onStateChanged(
+                    event.data?.get("folder") as String?,      // folderId
+                    event.data?.get("to") as String?
+            )
+            "DeviceDiscovered",
+            "DownloadProgress",
+            "FolderScanProgress",
+            "FolderWatchStateChanged",
+            "ItemStarted",
+            "ListenAddressesChanged",
+            "LoginAttempt",
+            "RemoteDownloadProgress" -> logV("Ignored event ${event.type}, data ${event.data}")
+            "RemoteIndexUpdated" -> onRemoteIndexUpdated(
+                    event.data?.get("device") as String?,      // deviceId
+                    event.data?.get("folder") as String?,      // folderId
+                    event.data?.get("items") as? Double ?: 0.0
+            )
+            "Starting",
+            "StartupComplete" -> logV("Ignored event ${event.type}, data ${event.data}")
+            else -> Log.d(TAG, "Unhandled event ${event.type}")
+        }
+    }
+
+    private fun onItemFinishedEvent(event: Event) {
+        val action = event.data?.get("action") as String?
+        val error = event.data?.get("error") as String?
+        val folderId = event.data?.get("folder") as String?
+        val relativeFilePath = event.data?.get("item") as String?
+
+        // Lookup folder.path for the given folder.id if all fields were contained in the event data.
+        var folderPath: String? = null
+        var folderType: String? = null
+        if (!action.isNullOrEmpty() &&
+                !folderId.isNullOrEmpty() &&
+                !relativeFilePath.isNullOrEmpty()) {
+            for (folder in restApi.folders) {
+                if (folder.id == folderId) {
+                    folderPath = folder.path
+                    folderType = folder.type
+                    break
+                }
+            }
+        }
+        if (!folderPath.isNullOrEmpty() ||
+                !folderType.isNullOrEmpty()) {
+            if (error.isNullOrEmpty()) {
+                // We don't intend to show errors as the last synced item on the UI.
+                restApi.setLocalFolderLastItemFinished(folderId, action, relativeFilePath, event.time)
+            }
+            onItemFinished(action, error, folderType, folderPath + File.separator + relativeFilePath)
+        } else {
+            Log.w(TAG, "ItemFinished: Failed to determine folder.path for folder.id=\"${folderId ?: ""}\"")
+        }
+    }
+
+    private fun onPendingDevicesChanged(added: Map<String, String>) {
+        val deviceId = added["deviceID"]
+        val deviceName = added["name"]
+        val deviceAddress = added["address"]
+        if (deviceId == null) {
+            return
+        }
+        Log.d(TAG, "Unknown device '$deviceName' ($deviceId) wants to connect")
+        // Show device approve/ignore notification.
+        notificationHandler.showDeviceConnectNotification(deviceId, deviceName, deviceAddress)
+    }
+
+    private fun onPendingFoldersChanged(added: Map<String, Any>) {
+        val deviceIdObj = added["deviceID"]
+        val folderIdObj = added["folderID"]
+        val folderLabelObj = added["folderLabel"]
+        val receiveEncrypted = added["receiveEncrypted"] as? Boolean
+        if (deviceIdObj == null || folderIdObj == null) {
+            return
+        }
+        val deviceId = deviceIdObj.toString()
+        val folderId = folderIdObj.toString()
+        val folderLabel = folderLabelObj?.toString() ?: ""
+        Log.d(TAG, "Device '$deviceId' wants to share folder '$folderLabel' ($folderId)")
+        // Find the deviceName corresponding to the deviceId.
+        val deviceName = restApi.getDevices(false)
+                .firstOrNull { it.deviceID == deviceId }?.displayName
+        val isNewFolder = restApi.folders.none { it.id == folderId }
+        // Show folder approve/ignore notification.
+        notificationHandler.showFolderShareNotification(
+                deviceId,
+                deviceName,
+                folderId,
+                folderLabel,
+                receiveEncrypted,
+                isNewFolder
+        )
+    }
+
+    private fun onFolderCompletion(eventData: java.util.Map<String, Any>?) {
+        restApi.setRemoteCompletionInfo(
+                eventData?.get("device") as String?,       // deviceId
+                eventData?.get("folder") as String?,       // folderId
+                eventData?.get("needBytes") as? Double,
+                eventData?.get("completion") as? Double
+        )
+    }
+
+    private fun onFolderErrors(json: JsonElement) {
+        val data = (json as JsonObject).get("data")
+        if (data == null) {
+            Log.e(TAG, "onFolderErrors: data == null")
+            return
+        }
+        val errors = (data as JsonObject).get("errors") as? JsonArray
+        if (errors == null) {
+            Log.e(TAG, "onFolderErrors: errors == null")
+            return
+        }
+        for (i in 0 until errors.size()) {
+            val error = errors.get(i)
+            if (error != null) {
+                val strError = (error as JsonObject).get("error").toString()
+                val strPath = (error as JsonObject).get("path").toString()
+                if (strError.isNotEmpty() &&
+                        strPath.isNotEmpty() &&
+                        strError.contains("insufficient space in basic")) {
+                    notificationHandler.showCrashedNotification(
+                            R.string.notification_out_of_disk_space,
+                            shortenedFileAndFolder(strPath)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun onFolderPaused(folderId: String?) {
+        restApi.updateLocalFolderPause(folderId, true)
+    }
+
+    private fun onFolderResumed(folderId: String?) {
+        restApi.updateLocalFolderPause(folderId, false)
+    }
+
+    private fun onFolderSummary(json: JsonElement, folderId: String?) {
+        val data = (json as JsonObject).get("data")
+        if (data == null) {
+            Log.e(TAG, "onFolderSummary: data == null")
+            return
+        }
+        val summary = (data as JsonObject).get("summary")
+        if (summary == null) {
+            Log.e(TAG, "onFolderSummary: summary == null")
+            return
+        }
+        val folderStatus: FolderStatus = try {
+            GsonBuilder().create().fromJson(summary, FolderStatus::class.java)
+        } catch (e: Exception) {
+            Log.e(TAG, "onFolderSummary: gson.fromJson failed", e)
+            return
+        }
+        restApi.setLocalFolderStatus(folderId, folderStatus)
+    }
+
+    /**
+     * Precondition: action != null
+     */
+    private fun onItemFinished(action: String?, error: String?, folderType: String?, fullFilePath: String) {
+        if (!error.isNullOrEmpty()) {
+            Log.e(TAG, "onItemFinished: Error \"$error\" reported on file: $fullFilePath")
+            if (error.contains("no space left on device")) {
+                notificationHandler.showCrashedNotification(
+                        R.string.notification_out_of_disk_space,
+                        shortenedFileAndFolder(fullFilePath)
+                )
+            }
+            return
+        }
+
+        if (folderType == Constants.FOLDER_TYPE_RECEIVE_ENCRYPTED) {
+            // Skip notifying Android's MediaStore, MediaScanner.
+            return
+        }
+
+        when (action) {
+            "delete" -> {                       // file deleted
+                if (File(fullFilePath).exists()) {
+                    Log.i(TAG, "onItemFinished: MediaStore, Skip file deletion because file exists: $fullFilePath")
+                    return
+                }
+                Log.i(TAG, "onItemFinished: MediaStore, Deleting file: $fullFilePath")
+                val contentUri = MediaStore.Files.getContentUri("external")
+                val resolver = context.contentResolver
+                LoggingAsyncQueryHandler(resolver).startDelete(
+                        0,                          // this will be passed to "onDeleteComplete#token"
+                        fullFilePath,               // this will be passed to "onDeleteComplete#cookie"
+                        contentUri,
+                        MediaStore.Images.ImageColumns.DATA + " = ?",
+                        arrayOf(fullFilePath)
+                )
+            }
+            "update" -> {                       // file contents changed
+                Log.i(TAG, "onItemFinished: MediaScanner, Rescanning file: $fullFilePath")
+                MediaScannerConnection.scanFile(context, arrayOf(fullFilePath), null, null)
+            }
+            "metadata" ->                       // file metadata changed but not contents
+                Log.i(TAG, "onItemFinished: MediaScanner, Skipping file: $fullFilePath")
+            else ->
+                Log.w(TAG, "onItemFinished: Unhandled action \"$action\"")
+        }
+    }
+
+    private fun onLocalIndexUpdated(json: JsonElement, folderId: String?, dateTimeStamp: String?) {
+        val data = (json as JsonObject).get("data")
+        if (data == null) {
+            Log.e(TAG, "onLocalIndexUpdated: data == null")
+            return
+        }
+        val filenames = (data as JsonObject).get("filenames") as? JsonArray
+        if (filenames == null) {
+            Log.e(TAG, "onLocalIndexUpdated: filenames == null")
+            return
+        }
+        for (i in 0 until filenames.size()) {
+            var filename = filenames.get(i).toString()
+            if (filename.isNotEmpty()) {
+                filename = filename.replace(Regex("^\"|\"$"), "")
+                logV("onLocalIndexUpdated: filename=[$filename], time=[$dateTimeStamp]")
+                if (i == filenames.size() - 1) {
+                    // Send the last (latest) local change to the UI.
+                    restApi.setLocalFolderLastItemFinished(
+                            folderId,
+                            "update",
+                            filename,
+                            dateTimeStamp
+                    )
+                }
+            }
+        }
+    }
+
+    private fun onRemoteIndexUpdated(deviceId: String?, folderId: String?, items: Double) {
+        if (deviceId == null || folderId == null || items == null) {
+            return
+        }
+        // logV("onRemoteIndexUpdated: deviceId=[$deviceId], folder=[$folderId], items=$items")
+        if (items > 0) {
+            restApi.setRemoteIndexUpdated(deviceId, folderId, true)
+        }
+    }
+
+    /**
+     * Emitted when a folder changes state.
+     */
+    private fun onStateChanged(folderId: String?, newState: String?) {
+        restApi.updateLocalFolderState(folderId, newState)
+        // logV("onStateChanged: folder=[$folderId], newState=[$newState]")
+    }
+
+    private class LoggingAsyncQueryHandler(contentResolver: ContentResolver) :
+            AsyncQueryHandler(contentResolver) {
+        override fun onDeleteComplete(token: Int, cookie: Any?, result: Int) {
+            super.onUpdateComplete(token, cookie, result)
+        }
+    }
+
+    private fun shortenedFileAndFolder(path: String): String {
+        val segments = path.split(File.separator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        return if (segments.size < 2) {
+            path
+        } else {
+            segments[segments.size - 2] + File.separator + segments[segments.size - 1]
+        }
+    }
+
+    private fun logV(logMessage: String) {
+        if (verboseLog) {
+            Log.v(TAG, logMessage)
+        }
+    }
+
+    companion object {
+        private const val TAG = "EventPoller"
+
+        /**
+         * Minimum interval at which the events are polled from syncthing and processed.
+         * This interval will not wake up the device to save battery power.
+         */
+        val EVENT_UPDATE_INTERVAL: Long = TimeUnit.SECONDS.toMillis(5)
+    }
+}

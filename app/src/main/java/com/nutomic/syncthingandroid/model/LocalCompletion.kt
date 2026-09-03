@@ -151,7 +151,7 @@ class LocalCompletion(enableVerboseLog: Boolean) {
 
     /**
      * Setters of additionally stored information
-     * e.g. "ItemFinished" event details arriving through {@link EventProcessor} > {@link RestApi}
+     * e.g. "ItemFinished" event details arriving through {@link EventPoller} > {@link RestApi}
      */
     fun setLastItemFinished(
         folderId: String,

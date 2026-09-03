@@ -464,7 +464,7 @@ public class RestApi {
     /**
      * Permanently ignore a device when it tries to connect.
      * Ignored devices will not trigger the "DeviceRejected" event
-     * in {@link EventProcessor#onEvent}.
+     * in {@link EventPoller#onEvent}.
      */
     public void ignoreDevice(String deviceId,
                                     String deviceName,
@@ -497,7 +497,7 @@ public class RestApi {
     /**
      * Permanently ignore a folder share request.
      * Ignored folders will not trigger the "FolderRejected" event
-     * in {@link EventProcessor#onEvent}.
+     * in {@link EventPoller#onEvent}.
      */
     public void ignoreFolder(String deviceId,
                                     String folderId,
@@ -591,7 +591,7 @@ public class RestApi {
     /**
      * Sends current config to Syncthing.
      * Will result in a "ConfigSaved" event.
-     * EventProcessor will trigger this.reloadConfig().
+     * EventPoller will trigger this.reloadConfig().
      */
     public void sendConfig() {
         String jsonConfig;
@@ -1184,7 +1184,7 @@ public class RestApi {
             /**
              * Fixes issue where device sync percentage is displayed 50% on wrapper UI
              * and 100% on Web UI if there are at least two folders syncing with the same device and
-             * at least one of them is paused. This is caused by EventProcessor telling us a paused
+             * at least one of them is paused. This is caused by EventPoller telling us a paused
              * to be 0% complete. To get consistent UI output, we assume 100% completion for paused
              * folders.
             **/

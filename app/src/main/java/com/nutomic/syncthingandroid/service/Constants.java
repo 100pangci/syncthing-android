@@ -141,7 +141,7 @@ public class Constants {
     public static final int BTNSTATE_FORCE_STOP                 = 2;
 
     /**
-     * {@link EventProcessor}
+     * {@link EventPoller}
      */
     public static final String PREF_EVENT_PROCESSOR_LAST_SYNC_ID = "last_sync_id";
 
