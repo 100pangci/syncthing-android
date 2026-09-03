@@ -88,9 +88,8 @@ class SyncthingRunnableTest {
     @Test
     fun exitDisposition_coversEveryLegacyBranch() {
         assertEquals(ExitOutcome.NORMAL, exitDisposition(0).outcome)
-        assertEquals(ExitOutcome.NORMAL, exitDisposition(137).outcome)
         assertEquals(ExitOutcome.RESTART, exitDisposition(3).outcome)
-        for (code in intArrayOf(1, 2, 9, 64)) {
+        for (code in intArrayOf(1, 2, 9, 64, 137)) {
             assertEquals("code $code", ExitOutcome.CRASH, exitDisposition(code).outcome)
         }
         // Unknown codes fall into the default branch.
@@ -105,6 +104,7 @@ class SyncthingRunnableTest {
         assertTrue(exitDisposition(2).logMessage.contains("exitNoUpgradeAvailable"))
         assertTrue(exitDisposition(3).logMessage.contains("exitRestarting"))
         assertTrue(exitDisposition(9).logMessage.contains("exitForceKill"))
+        assertTrue(exitDisposition(137).logMessage.contains("exitForceKill"))
         assertTrue(exitDisposition(64).logMessage.contains("exitInvalidCommandLine"))
         assertTrue(exitDisposition(42).logMessage.contains("exited unexpectedly"))
     }
@@ -163,7 +163,7 @@ class SyncthingRunnableTest {
 
     @Test
     fun normalExitCodes_takeNoServiceAction() {
-        for (exitCode in intArrayOf(0, 137)) {
+        for (exitCode in intArrayOf(0)) {
             writeBinary("exit $exitCode")
             newRunnable(Command.main).run()
             assertNull("exit $exitCode: unexpected service intent", nextStartedService())
@@ -185,7 +185,7 @@ class SyncthingRunnableTest {
 
     @Test
     fun crashExitCodes_stopServiceWithExtraAndShowCrashNotification() {
-        for (exitCode in intArrayOf(1, 2, 9, 64, 7)) {   // 7 covers the default branch.
+        for (exitCode in intArrayOf(1, 2, 9, 64, 137, 7)) {   // 7 covers the default branch; 137 = SIGKILL.
             writeBinary("exit $exitCode")
             newRunnable(Command.main).run()
             val intent = nextStartedService()

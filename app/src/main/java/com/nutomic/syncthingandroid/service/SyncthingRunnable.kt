@@ -42,8 +42,11 @@ import kotlinx.coroutines.runBlocking
  * Divergences from the old implementation (all intentional):
  *  - The exit code is always logged (Log.i), not only in verbose mode. This closes the old
  *    "traceless death" gap where a crashed native process left no exit code trail.
- *  - The when(exitCode) mapping is preserved verbatim but extracted into [exitDisposition]
- *    so every branch is unit-testable.
+ *  - The when(exitCode) mapping is extracted into [exitDisposition] (unit-testable) and 137
+ *    is no longer treated as a normal exit: a process killed with SIGKILL reports 137 and the
+ *    old code swallowed that, leaving SyncthingService in a "fake ACTIVE" state while the
+ *    native process was gone (silent sync stop, Web GUI unreachable). All normal shutdown
+ *    paths exit with code 0, so 137 is now handled as a crash.
  *  - Guava Files/Charsets usages were replaced with kotlin stdlib file APIs.
  *  - Math.ceilDiv was replaced with a manual ceilDiv for the non-negative operands used
  *    here; Math.ceilDiv requires Android API 35+, which would break log trimming on older
@@ -457,11 +460,11 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
 }
 
 /**
- * Outcome of the legacy when(exitCode) mapping, kept verbatim from the Java implementation.
+ * Outcome of the when(exitCode) mapping, adapted from the Java implementation.
  */
 internal enum class ExitOutcome {
-    NORMAL,     // 0 / 137: shut down normally via API or SIGKILL.
-    CRASH,      // 1 / 2 / 9 / 64 / default: crash notification + stop the service.
+    NORMAL,     // 0: shut down normally via API or graceful SIGINT.
+    CRASH,      // 1 / 2 / 9 / 64 / 137 / default: crash notification + stop the service.
     RESTART,    // 3: exitRestarting -> ACTION_RESTART self-restart.
 }
 
@@ -472,11 +475,18 @@ internal data class ExitDisposition(
 )
 
 /**
- * Verbatim port of the old when(exitCode) block: each code keeps its exact log message,
- * log level and side effect so the native process lifecycle handling is unchanged.
+ * when(exitCode) mapping, adapted from the Java implementation.
+ *
+ * Divergence from the old code: 137 is no longer treated as a normal exit. A process killed
+ * with SIGKILL reports 137 (128 + 9); the old code swallowed that and left SyncthingService
+ * in a "fake ACTIVE" state while the native process was gone (silent sync stop, Web GUI
+ * unreachable). All normal shutdown paths (Service Util.killProcess sends SIGINT, RestApi
+ * shutdown goes through the REST API) exit with code 0, so 137 can only mean the process was
+ * force-killed and is now treated as a crash: crash notification + ACTION_STOP with
+ * EXTRA_STOP_AFTER_CRASHED_NATIVE, which tears the service down to State.DISABLED.
  */
 internal fun exitDisposition(exitCode: Int): ExitDisposition = when (exitCode) {
-    0, 137 -> ExitDisposition(
+    0 -> ExitDisposition(
             Log.INFO,
             "Syncthing was shut down normally via API or SIGKILL. Exit code = $exitCode",
             ExitOutcome.NORMAL
@@ -496,9 +506,9 @@ internal fun exitDisposition(exitCode: Int): ExitDisposition = when (exitCode) {
             "exit reason = exitRestarting. Restarting syncthing.",
             ExitOutcome.RESTART
     )
-    9 -> ExitDisposition(
+    9, 137 -> ExitDisposition(
             Log.WARN,
-            "exit reason = exitForceKill.",
+            "exit reason = exitForceKill. Syncthing was force killed (SIGKILL).",
             ExitOutcome.CRASH
     )
     64 -> ExitDisposition(
