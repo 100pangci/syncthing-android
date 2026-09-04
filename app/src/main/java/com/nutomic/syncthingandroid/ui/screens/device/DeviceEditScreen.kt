@@ -26,14 +26,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import com.google.gson.Gson
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.model.Device
 import com.nutomic.syncthingandroid.model.DiscoveredDevice
@@ -46,6 +45,7 @@ import com.nutomic.syncthingandroid.ui.dialogs.CompressionDialog
 import com.nutomic.syncthingandroid.ui.dialogs.ConfirmDialog
 import com.nutomic.syncthingandroid.ui.dialogs.DeviceIdQrDialog
 import com.nutomic.syncthingandroid.ui.nav.AppRoute
+import com.nutomic.syncthingandroid.ui.nav.EditStateStore
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
 import com.nutomic.syncthingandroid.util.Compression
 import com.nutomic.syncthingandroid.util.ConfigRouter
@@ -59,9 +59,14 @@ internal data class FolderShareState(
 /**
  * Per-field compose state for the device edit screen. Fields are kept
  * individually (instead of one data class holding the mutable Java model) so
- * that every change reliably triggers recomposition.
+ * that every change reliably triggers recomposition. The draft device model
+ * lives here too (NOT in rememberSaveable): the whole holder is store-backed
+ * so the draft survives being covered by another route, and is evicted when
+ * the route leaves the back stack - avoiding the stale-draft resurrection a
+ * SaveableStateHolder-backed value would risk.
  */
 internal class DeviceEditStateHolder {
+    var device by mutableStateOf<Device?>(null)
     var needsUpdate by mutableStateOf(false)
     var folderStates by mutableStateOf<List<FolderShareState>>(emptyList())
     var customSyncConditions by mutableStateOf(false)
@@ -69,10 +74,21 @@ internal class DeviceEditStateHolder {
     var deviceIdText by mutableStateOf("")
 }
 
-private val DeviceSaver: Saver<Device?, String> = Saver(
-    save = { Gson().toJson(it) },
-    restore = { Gson().fromJson(it, Device::class.java) }
-)
+/**
+ * Store providing [DeviceEditStateHolder] outside the Navigation 3 entry
+ * composition, keyed by [deviceEditStateKey].
+ */
+internal val LocalDeviceEditStateStore =
+    staticCompositionLocalOf<EditStateStore<DeviceEditStateHolder>> {
+        error("DeviceEditStateStore not provided")
+    }
+
+/**
+ * Stable identity of a device edit session; independent of the
+ * notification/scan extras (same lifecycle contract as folderEditStateKey).
+ */
+internal fun deviceEditStateKey(deviceId: String?, isCreate: Boolean): String =
+    if (isCreate || deviceId == null) "create" else "edit:$deviceId"
 
 /**
  * Device add/edit screen, ported from the legacy DeviceActivity.
@@ -95,17 +111,15 @@ fun DeviceEditScreen(
     val preferences = context.appPreferences()
     val prefExpertMode = preferences.getBoolean(Constants.PREF_EXPERT_MODE, false)
 
-    val holder = remember { DeviceEditStateHolder() }
-    var device by rememberSaveable(stateSaver = DeviceSaver) { mutableStateOf<Device?>(null) }
+    // Draft state is store-backed (NOT remember/rememberSaveable): Nav3 disposes this
+    // entry while the sync conditions route is on top, and the draft has to survive
+    // that while staying evictable when the edit session ends. See EditStateStore.
+    val holder = LocalDeviceEditStateStore.current.stateFor(deviceEditStateKey(deviceId, isCreate))
+    var device by holder::device
 
-    // Init the model once; after process recreation, resync the holder from
-    // the restored model instead of creating a new one.
+    // Init the model once.
     LaunchedEffect(Unit) {
-        val restored = device
-        if (restored != null) {
-            syncHolderFromDevice(holder, restored, context, isCreate, preferences)
-            return@LaunchedEffect
-        }
+        if (device != null) return@LaunchedEffect
         val d = if (isCreate) {
             Device().apply {
                 name = deviceName ?: ""

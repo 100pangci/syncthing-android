@@ -33,13 +33,17 @@ import com.nutomic.syncthingandroid.ui.LocalServiceState
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.ui.nav.AppNavDisplay
 import com.nutomic.syncthingandroid.ui.nav.AppRoute
+import com.nutomic.syncthingandroid.ui.nav.EditStateStore
 import com.nutomic.syncthingandroid.ui.nav.IntentAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.LocalResultBus
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
+import com.nutomic.syncthingandroid.ui.screens.device.DeviceEditStateHolder
+import com.nutomic.syncthingandroid.ui.screens.device.LocalDeviceEditStateStore
+import com.nutomic.syncthingandroid.ui.screens.device.deviceEditStateKey
 import com.nutomic.syncthingandroid.ui.screens.home.HomeDataHost
 import com.nutomic.syncthingandroid.ui.screens.home.HomeScreen
-import com.nutomic.syncthingandroid.ui.screens.folder.FolderEditStateStore
+import com.nutomic.syncthingandroid.ui.screens.folder.FolderEditStateHolder
 import com.nutomic.syncthingandroid.ui.screens.folder.LocalFolderEditStateStore
 import com.nutomic.syncthingandroid.ui.screens.folder.folderEditStateKey
 import com.nutomic.syncthingandroid.ui.screens.log.LogScreen
@@ -120,19 +124,26 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
                         }
                     }
                 }
-                // Unsaved folder edit drafts must survive being covered by another
-                // route (Nav3 disposes non-top entries), but must NOT survive the
-                // route leaving the back stack - see FolderEditStateStore.
-                val folderEditStateStore = remember { FolderEditStateStore() }
-                LaunchedEffect(backStack, folderEditStateStore) {
+                // Unsaved edit drafts must survive being covered by another route
+                // (Nav3 disposes non-top entries), but must NOT survive the route
+                // leaving the back stack - see EditStateStore.
+                val folderEditStateStore = remember { EditStateStore { FolderEditStateHolder() } }
+                val deviceEditStateStore = remember { EditStateStore { DeviceEditStateHolder() } }
+                LaunchedEffect(backStack, folderEditStateStore, deviceEditStateStore) {
                     snapshotFlow { backStack.toList() }
                         .map { stack ->
-                            stack.filterIsInstance<AppRoute.FolderEdit>()
-                                .map { folderEditStateKey(it.folderId, it.isCreate) }
-                                .toSet()
+                            Pair(
+                                stack.filterIsInstance<AppRoute.FolderEdit>()
+                                    .map { folderEditStateKey(it.folderId, it.isCreate) }.toSet(),
+                                stack.filterIsInstance<AppRoute.DeviceEdit>()
+                                    .map { deviceEditStateKey(it.deviceId, it.isCreate) }.toSet(),
+                            )
                         }
                         .distinctUntilChanged()
-                        .collect { liveKeys -> folderEditStateStore.retainAll(liveKeys) }
+                        .collect { (liveFolderKeys, liveDeviceKeys) ->
+                            folderEditStateStore.retainAll(liveFolderKeys)
+                            deviceEditStateStore.retainAll(liveDeviceKeys)
+                        }
                 }
 
                 CompositionLocalProvider(
@@ -141,6 +152,7 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
                     LocalAppNavigator provides navigator,
                     LocalResultBus provides resultBus,
                     LocalFolderEditStateStore provides folderEditStateStore,
+                    LocalDeviceEditStateStore provides deviceEditStateStore,
                 ) {
                     // Hoists the home list polling above the NavDisplay so the lists
                     // survive entry transitions (see HomeDataHost).

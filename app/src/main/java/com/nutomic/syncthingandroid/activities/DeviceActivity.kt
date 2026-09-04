@@ -3,11 +3,16 @@ package com.nutomic.syncthingandroid.activities
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.ui.CompositionLocalsHost
+import com.nutomic.syncthingandroid.ui.nav.EditStateStore
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
 import com.nutomic.syncthingandroid.ui.screens.device.DeviceEditScreen
+import com.nutomic.syncthingandroid.ui.screens.device.DeviceEditStateHolder
+import com.nutomic.syncthingandroid.ui.screens.device.LocalDeviceEditStateStore
 
 /**
  * Deep link host for the "device wants to connect" notification.
@@ -28,13 +33,20 @@ class DeviceActivity : SyncthingActivity() {
         val resultBus = ResultBus()
         setContent {
             ApplicationTheme {
+                // Single-screen host: the store has exactly one draft (no back stack
+                // to watch); it dies with the activity.
+                val deviceEditStateStore = remember { EditStateStore { DeviceEditStateHolder() } }
                 CompositionLocalsHost(activity = this, resultBus = resultBus) {
-                    DeviceEditScreen(
-                        deviceId = deviceId,
-                        deviceName = deviceName,
-                        isCreate = isCreate,
-                        notificationId = notificationId,
-                    )
+                    CompositionLocalProvider(
+                        LocalDeviceEditStateStore provides deviceEditStateStore,
+                    ) {
+                        DeviceEditScreen(
+                            deviceId = deviceId,
+                            deviceName = deviceName,
+                            isCreate = isCreate,
+                            notificationId = notificationId,
+                        )
+                    }
                 }
             }
         }

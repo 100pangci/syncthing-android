@@ -7,9 +7,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.ui.CompositionLocalsHost
+import com.nutomic.syncthingandroid.ui.nav.EditStateStore
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
 import com.nutomic.syncthingandroid.ui.screens.folder.FolderEditScreen
-import com.nutomic.syncthingandroid.ui.screens.folder.FolderEditStateStore
+import com.nutomic.syncthingandroid.ui.screens.folder.FolderEditStateHolder
 import com.nutomic.syncthingandroid.ui.screens.folder.LocalFolderEditStateStore
 
 /**
@@ -35,7 +36,7 @@ class FolderActivity : SyncthingActivity() {
             ApplicationTheme {
                 // Single-screen host: the store has exactly one draft (no back stack
                 // to watch); it dies with the activity.
-                val folderEditStateStore = remember { FolderEditStateStore() }
+                val folderEditStateStore = remember { EditStateStore { FolderEditStateHolder() } }
                 CompositionLocalsHost(activity = this, resultBus = resultBus) {
                     CompositionLocalProvider(
                         LocalFolderEditStateStore provides folderEditStateStore,
