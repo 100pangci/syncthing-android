@@ -32,7 +32,7 @@ import javax.net.ssl.X509TrustManager;
  * OS trust store when the self-signed pin does not match.
  *
  * Security scope: this trust manager is only ever wired into the loopback-pinned connection to the
- * local Syncthing instance (see ApiRequest#forceLoopbackHost). Because that connection cannot leave
+ * local Syncthing instance (see forceLoopbackHost in ApiClient.kt). Because that connection cannot leave
  * the device, falling back to the OS trust store — which trusts user-installed CAs — does not open a
  * network MITM surface. Do not reuse this trust manager for any routable/remote connection.
  */

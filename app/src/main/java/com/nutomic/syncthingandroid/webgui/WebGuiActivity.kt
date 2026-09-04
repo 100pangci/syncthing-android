@@ -210,7 +210,7 @@ class WebGuiActivity : SyncthingActivity(), SyncthingService.OnServiceStateChang
      * Rewrites the host of the given URL to 127.0.0.1, preserving the scheme and port. The port
      * comes from the configured GUI listen address; falls back to the default web GUI port.
      *
-     * Forcing loopback is intentional and security-relevant (mirrors ApiRequest.forceLoopbackHost):
+     * Forcing loopback is intentional and security-relevant (mirrors forceLoopbackHost in ApiClient.kt):
      * the GUI address is only ever 127.0.0.1 or 0.0.0.0 (the latter includes loopback), so the
      * instance is always reachable here; it keeps the API key off any routable interface; and it is
      * the precondition that makes proceeding past SSL_IDMISMATCH (see handleSslError) and trusting

@@ -21,7 +21,6 @@ import androidx.preference.PreferenceManager
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.activities.SyncthingActivity
 import com.nutomic.syncthingandroid.http.ApiClient
-import com.nutomic.syncthingandroid.http.GetRequest
 import com.nutomic.syncthingandroid.model.Device
 import com.nutomic.syncthingandroid.model.DiskEvent
 import com.nutomic.syncthingandroid.service.Constants
@@ -153,13 +152,10 @@ class RecentChangesActivity : SyncthingActivity(), SyncthingService.OnServiceSta
     }
 
     /**
-     * Fetches the most recent disk events over the new OkHttp-based [ApiClient] (phase2 of the
-     * Java-to-Kotlin migration). [RestApi.getDiskEvents] stays on Volley for the remaining Java
-     * callers and will be retired in phase6.
-     *
-     * A fresh [ApiClient] is built per fetch because the GUI address and API key can change on
-     * config reload; this screen only performs one request every few seconds, so the cost is
-     * negligible. Phase6 will move to a single long-lived client inside RestApi.
+     * Fetches the most recent disk events over the OkHttp-based [ApiClient] (phase2 of the
+     * Java-to-Kotlin migration). RestApi's own Volley-based getDiskEvents was retired in
+     * phase6a; this screen keeps its dedicated per-fetch client because the GUI address and
+     * API key can change on config reload and it only performs one request every few seconds.
      *
      * Error handling mirrors the observable behaviour of the old Volley-based wrapper: any
      * failure (transport, HTTP error, parse) leaves the current list untouched and returns null.
@@ -176,7 +172,7 @@ class RecentChangesActivity : SyncthingActivity(), SyncthingService.OnServiceSta
                 apiKey = api.apiKey,
             )
             val result = client.get(
-                GetRequest.URI_EVENTS_DISK,
+                ApiClient.URI_EVENTS_DISK,
                 params = mapOf("limit" to limit.toString(), "timeout" to "1"),
             )
             // Same parse as RestApi.getDiskEvents: the API returns events oldest-first, so walk

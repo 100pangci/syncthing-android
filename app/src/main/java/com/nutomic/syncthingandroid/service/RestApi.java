@@ -13,7 +13,6 @@ import androidx.preference.PreferenceManager;
 import com.annimon.stream.Stream;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,8 +22,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.nutomic.syncthingandroid.SyncthingApp;
 import com.nutomic.syncthingandroid.activities.ShareActivity;
-import com.nutomic.syncthingandroid.http.GetRequest;
-import com.nutomic.syncthingandroid.http.PostRequest;
+import com.nutomic.syncthingandroid.http.ApiClient;
+import com.nutomic.syncthingandroid.http.ApiClientBridge;
 import com.nutomic.syncthingandroid.model.CachedFolderStatus;
 import com.nutomic.syncthingandroid.model.CompletionInfo;
 import com.nutomic.syncthingandroid.model.Config;
@@ -33,7 +32,6 @@ import com.nutomic.syncthingandroid.model.Connections;
 import com.nutomic.syncthingandroid.model.Device;
 import com.nutomic.syncthingandroid.model.DeviceStat;
 import com.nutomic.syncthingandroid.model.DiscoveredDevice;
-import com.nutomic.syncthingandroid.model.DiskEvent;
 import com.nutomic.syncthingandroid.model.Event;
 import com.nutomic.syncthingandroid.model.Folder;
 import com.nutomic.syncthingandroid.model.FolderIgnoreList;
@@ -59,7 +57,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -72,6 +69,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
+
+import kotlinx.coroutines.CoroutineScope;
 
 import static com.nutomic.syncthingandroid.service.Constants.ENABLE_TEST_DATA;
 import static com.nutomic.syncthingandroid.util.Util.getLocalZonedDateTime;
@@ -122,6 +121,13 @@ public class RestApi {
     private URL mUrl;
     private final String mApiKey;
 
+    /**
+     * OkHttp/suspend-based REST engine (phase6a) behind the callback API. Replaces the
+     * Volley-based GetRequest/PostRequest classes; callbacks are delivered on the main
+     * thread like Volley did.
+     */
+    private final ApiClientBridge mApiBridge;
+
     private String mVersion;
     private Config mConfig;
 
@@ -132,13 +138,13 @@ public class RestApi {
     private Integer mUrVersionMax;
 
     /**
-     * Stores the result of the last successful request to {@link GetRequest#URI_CONNECTIONS},
+     * Stores the result of the last successful request to {@link ApiClient#URI_CONNECTIONS},
      * or an empty Map.
      */
     private Optional<Connections> mPreviousConnections = Optional.absent();
 
     /**
-     * Stores the timestamp of the last result of the REST API endpoint {@link GetRequest#URI_CONNECTIONS}.
+     * Stores the timestamp of the last result of the REST API endpoint {@link ApiClient#URI_CONNECTIONS}.
      */
     private long mPreviousConnectionTime = 0;
 
@@ -183,11 +189,23 @@ public class RestApi {
 
     public RestApi(Context context, URL url, String apiKey, OnApiAvailableListener apiListener,
                    OnConfigChangedListener configListener) {
+        this(context, url, apiKey, apiListener, configListener, null);
+    }
+
+    /**
+     * Test-only overload: lets tests inject a bridge {@link CoroutineScope} (e.g. backed by a
+     * test dispatcher) for deterministic callbacks. {@code bridgeScope == null} selects the
+     * production scope (main thread delivery, like the old Volley queue).
+     */
+    public RestApi(Context context, URL url, String apiKey, OnApiAvailableListener apiListener,
+                   OnConfigChangedListener configListener, CoroutineScope bridgeScope) {
         ((SyncthingApp) context.getApplicationContext()).component().inject(this);
         ENABLE_VERBOSE_LOG = AppPrefs.getPrefVerboseLog(context);
         mContext = context;
         mUrl = url;
         mApiKey = apiKey;
+        mApiBridge = new ApiClientBridge(
+                Constants.getHttpsCertFile(context), apiKey, bridgeScope);
         mOnApiAvailableListener = apiListener;
         mOnConfigChangedListener = configListener;
         mLocalCompletion = new LocalCompletion(ENABLE_VERBOSE_LOG);
@@ -213,7 +231,7 @@ public class RestApi {
             asyncQueryConfigComplete = false;
             asyncQuerySystemStatusComplete = false;
         }
-        new GetRequest(mContext, mUrl, GetRequest.URI_VERSION, mApiKey, null, result -> {
+        mApiBridge.get(mUrl, ApiClient.URI_VERSION, null, result -> {
             JsonObject json = new JsonParser().parse(result).getAsJsonObject();
             mVersion = json.get("version").getAsString();
             updateDebugFacilitiesCache();
@@ -222,7 +240,7 @@ public class RestApi {
                 checkReadConfigFromRestApiCompleted();
             }
         }, error -> {});
-        new GetRequest(mContext, mUrl, GetRequest.URI_CONFIG, mApiKey, null, result -> {
+        mApiBridge.get(mUrl, ApiClient.URI_CONFIG, null, result -> {
             onReloadConfigComplete(result);
             synchronized (mAsyncQueryCompleteLock) {
                 asyncQueryConfigComplete = true;
@@ -280,7 +298,7 @@ public class RestApi {
     }
 
     public void reloadConfig() {
-        new GetRequest(mContext, mUrl, GetRequest.URI_CONFIG, mApiKey, null, this::onReloadConfigComplete, error -> {});
+        mApiBridge.get(mUrl, ApiClient.URI_CONFIG, null, this::onReloadConfigComplete, error -> {});
     }
 
     private void onReloadConfigComplete(String configResult) {
@@ -309,7 +327,7 @@ public class RestApi {
             }
         }
 
-        new GetRequest(mContext, mUrl, GetRequest.URI_PENDING_DEVICES, mApiKey, null, result -> {
+        mApiBridge.get(mUrl, ApiClient.URI_PENDING_DEVICES, null, result -> {
             if (mNotificationHandler == null) {
                 Log.e(TAG, "ORCC: URI_PENDING_DEVICES, mNotificationHandler == null");
                 return;
@@ -341,7 +359,7 @@ public class RestApi {
                 );
             }
         }, error -> {});
-        new GetRequest(mContext, mUrl, GetRequest.URI_PENDING_FOLDERS, mApiKey, null, result -> {
+        mApiBridge.get(mUrl, ApiClient.URI_PENDING_FOLDERS, null, result -> {
             if (mNotificationHandler == null) {
                 Log.e(TAG, "ORCC: URI_PENDING_FOLDERS, mNotificationHandler == null");
                 return;
@@ -403,15 +421,10 @@ public class RestApi {
         for (Folder folder : tmpFolders) {
             final List<SharedWithDevice> sharedWithDevices = folder.getSharedWithDevices();
             for (SharedWithDevice device : sharedWithDevices) {
-                new GetRequest(mContext,
-                        mUrl,
-                        GetRequest.URI_DB_COMPLETION,
-                        mApiKey,
-                        ImmutableMap.of(
-                                "device", device.deviceID,
-                                "folder", folder.id
-                        ),
-                        result -> {
+            mApiBridge.get(mUrl,
+                    ApiClient.URI_DB_COMPLETION,
+                    params("device", device.deviceID, "folder", folder.id),
+                    result -> {
                     // LogV("ORCC: /rest/db/completion: folder=" + folder.id + ", device=" + device.deviceID + ", result=" + result);
                     final CompletionInfo completionInfo = mGson.fromJson(result, CompletionInfo.class);
                     LogV("ORCC: /rest/db/completion: folder=" + folder.id +
@@ -437,7 +450,7 @@ public class RestApi {
     private void updateDebugFacilitiesCache() {
         if (!mVersion.equals(PreferenceManager.getDefaultSharedPreferences(mContext).getString(Constants.PREF_LAST_BINARY_VERSION, ""))) {
             // First binary launch or binary upgraded case.
-            new GetRequest(mContext, mUrl, GetRequest.URI_SYSTEM_LOGLEVELS, mApiKey, null, result -> {
+            mApiBridge.get(mUrl, ApiClient.URI_SYSTEM_LOGLEVELS, null, result -> {
                 try {
                     Set<String> facilitiesToStore = new HashSet<String>();
                     JsonObject json = new JsonParser().parse(result).getAsJsonObject();
@@ -555,8 +568,7 @@ public class RestApi {
      */
     public void overrideChanges(String folderId) {
         Log.d(TAG, "overrideChanges '" + folderId + "'");
-        new PostRequest(mContext, mUrl, PostRequest.URI_DB_OVERRIDE, mApiKey,
-            ImmutableMap.of("folder", folderId), null, null);
+        mApiBridge.post(mUrl, ApiClient.URI_DB_OVERRIDE, params("folder", folderId));
     }
 
     /**
@@ -564,8 +576,7 @@ public class RestApi {
      */
     public void rescanAll() {
         Log.d(TAG, "rescanAll");
-        new PostRequest(mContext, mUrl, PostRequest.URI_DB_SCAN, mApiKey,
-            null, null, null);
+        mApiBridge.post(mUrl, ApiClient.URI_DB_SCAN);
     }
 
     /**
@@ -574,8 +585,7 @@ public class RestApi {
      */
     public void revertLocalChanges(String folderId) {
         Log.d(TAG, "revertLocalChanges '" + folderId + "'");
-        new PostRequest(mContext, mUrl, PostRequest.URI_DB_REVERT, mApiKey,
-            ImmutableMap.of("folder", folderId), null, null);
+        mApiBridge.post(mUrl, ApiClient.URI_DB_REVERT, params("folder", folderId));
     }
 
     public URL getWebGuiUrl() {
@@ -598,8 +608,7 @@ public class RestApi {
         synchronized (mConfigLock) {
             jsonConfig = mGson.toJson(mConfig);
         }
-        new PostRequest(mContext, mUrl, PostRequest.URI_SYSTEM_CONFIG, mApiKey,
-            null, jsonConfig, null);
+        mApiBridge.post(mUrl, ApiClient.URI_SYSTEM_CONFIG, null, jsonConfig);
         mUrl = getWebGuiUrl();
         mOnConfigChangedListener.onConfigChanged();
     }
@@ -612,8 +621,7 @@ public class RestApi {
         hasShutdown = true;
         executorService.shutdownNow();
         Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME);
-        new PostRequest(mContext, mUrl, PostRequest.URI_SYSTEM_SHUTDOWN, mApiKey,
-                null, null, null);
+        mApiBridge.post(mUrl, ApiClient.URI_SYSTEM_SHUTDOWN);
     }
 
     /**
@@ -804,7 +812,7 @@ public class RestApi {
      * Requests and parses information about current system status and resource usage.
      */
     public void getSystemStatus(OnResultListener1<SystemStatus> listener) {
-        new GetRequest(mContext, mUrl, GetRequest.URI_SYSTEM_STATUS, mApiKey, null, result -> {
+        mApiBridge.get(mUrl, ApiClient.URI_SYSTEM_STATUS, null, result -> {
             SystemStatus systemStatus;
             try {
                 systemStatus = mGson.fromJson(result, SystemStatus.class);
@@ -825,8 +833,7 @@ public class RestApi {
      * Requests locally discovered devices.
      */
     public void getDiscoveredDevices(OnResultListener1<Map<String, DiscoveredDevice>> listener) {
-        new GetRequest(mContext, mUrl, GetRequest.URI_SYSTEM_DISCOVERY, mApiKey,
-                null, result -> {
+        mApiBridge.get(mUrl, ApiClient.URI_SYSTEM_DISCOVERY, null, result -> {
             Map<String, DiscoveredDevice> discoveredDevices = mGson.fromJson(result, new TypeToken<Map<String, DiscoveredDevice>>(){}.getType());
             if (ENABLE_TEST_DATA) {
                 DiscoveredDevice fakeDiscoveredDevice = new DiscoveredDevice();
@@ -842,8 +849,7 @@ public class RestApi {
      * Requests ignore list for given folder.
      */
     public void getFolderIgnoreList(String folderId, OnResultListener1<FolderIgnoreList> listener) {
-        new GetRequest(mContext, mUrl, GetRequest.URI_DB_IGNORES, mApiKey,
-                ImmutableMap.of("folder", folderId), result -> {
+        mApiBridge.get(mUrl, ApiClient.URI_DB_IGNORES, params("folder", folderId), result -> {
             FolderIgnoreList folderIgnoreList = mGson.fromJson(result, FolderIgnoreList.class);
             listener.onResult(folderIgnoreList);
         }, error -> {});
@@ -855,8 +861,8 @@ public class RestApi {
     public void postFolderIgnoreList(String folderId, String[] ignore) {
         FolderIgnoreList folderIgnoreList = new FolderIgnoreList();
         folderIgnoreList.ignore = ignore;
-        new PostRequest(mContext, mUrl, PostRequest.URI_DB_IGNORES, mApiKey,
-            ImmutableMap.of("folder", folderId), mGson.toJson(folderIgnoreList), null);
+        mApiBridge.post(mUrl, ApiClient.URI_DB_IGNORES, params("folder", folderId),
+                mGson.toJson(folderIgnoreList));
     }
 
     /**
@@ -874,7 +880,7 @@ public class RestApi {
             if (!TextUtils.isEmpty(deviceId)) {
                 LogV("getRemoteDeviceStatus: Cache miss, deviceId=\"" + deviceId + "\". Performing query.");
             }
-            new GetRequest(mContext, mUrl, GetRequest.URI_CONNECTIONS, mApiKey, null, result -> {
+            mApiBridge.get(mUrl, ApiClient.URI_CONNECTIONS, null, result -> {
                     /**
                      * We got connection status information for ALL devices instead of one.
                      * It does not hurt storing all of them.
@@ -888,7 +894,7 @@ public class RestApi {
                         );
                     }
             }, error -> {});
-            new GetRequest(mContext, mUrl, GetRequest.URI_STATS_DEVICE, mApiKey, null, result -> {
+            mApiBridge.get(mUrl, ApiClient.URI_STATS_DEVICE, null, result -> {
                     /**
                      * We got the last seen timestamp for ALL devices - including the local device - instead of one.
                      * It does not hurt storing all of them.
@@ -996,40 +1002,6 @@ public class RestApi {
     }
 
     /**
-     * Requests and parses information about recent changes.
-     * Fetches the most recent disk events.
-     *
-     * "timeout=1" is important. /rest/events/disk is a long-poll endpoint: when no disk events are
-     * buffered it blocks for the server default of 60s before returning an empty array, which made
-     * the Recent changes screen appear to hang on open. The web GUI gets away without this because it
-     * only ever calls the endpoint in the background and renders cached results, never blocking the
-     * user. We fetch on screen open, so we want a query rather than a subscription.
-     *
-     * As a bonus this keeps each request well inside Volley's 5s socket timeout, so it is no longer
-     * retried 5 times per call (see the "should not be retried" note in the server's getEvents).
-     */
-    public void getDiskEvents(int limit, OnResultListener1<List<DiskEvent>> listener) {
-        new GetRequest(
-                mContext, mUrl,
-                GetRequest.URI_EVENTS_DISK, mApiKey,
-                ImmutableMap.of("limit", Integer.toString(limit), "timeout", "1"),
-                result -> {
-                    List<DiskEvent> diskEvents = new ArrayList<>();
-                    try {
-                        JsonArray jsonDiskEvents = new JsonParser().parse(result).getAsJsonArray();
-                        for (int i = jsonDiskEvents.size()-1; i >= 0; i--) {
-                            JsonElement jsonDiskEvent = jsonDiskEvents.get(i);
-                            diskEvents.add(mGson.fromJson(jsonDiskEvent, DiskEvent.class));
-                        }
-                        listener.onResult(diskEvents);
-                    } catch (Exception e) {
-                        Log.e(TAG, "getDiskEvents: Parsing REST API result failed. result=" + result, e);
-                    }
-                }, error -> {}
-        );
-    }
-
-    /**
      * Listener for {@link #getEvents}.
      */
     public interface OnReceiveEventListener {
@@ -1054,9 +1026,8 @@ public class RestApi {
      * The OnReceiveEventListeners onEvent method is called for each event.
      */
     public final void getEvents(final long sinceId, final long limit, final OnReceiveEventListener listener) {
-        Map<String, String> params =
-                ImmutableMap.of("since", String.valueOf(sinceId), "limit", String.valueOf(limit));
-        new GetRequest(mContext, mUrl, GetRequest.URI_EVENTS, mApiKey, params, result -> {
+        Map<String, String> params = params("since", String.valueOf(sinceId), "limit", String.valueOf(limit));
+        mApiBridge.get(mUrl, ApiClient.URI_EVENTS, params, result -> {
             JsonArray jsonEvents = new JsonParser().parse(result).getAsJsonArray();
             long lastId = 0;
 
@@ -1091,11 +1062,10 @@ public class RestApi {
              * Query the required information so it will be available on a future call to this function.
              */
             LogV("getFolderStatus: Cache miss, folderId=\"" + folderId + "\". Performing query.");
-            new GetRequest(mContext, mUrl, GetRequest.URI_DB_STATUS, mApiKey,
-                    ImmutableMap.of("folder", folderId), result -> {
+            mApiBridge.get(mUrl, ApiClient.URI_DB_STATUS, params("folder", folderId), result -> {
                 final Folder folder = getFolderByID(folderId);
                 if (folder == null) {
-                    Log.e(TAG, "getFolderStatus#GetRequest#onResult: folderId == null");
+                    Log.e(TAG, "getFolderStatus#onResult: folderId == null");
                     return;
                 }
                 mLocalCompletion.setFolderStatus(
@@ -1316,7 +1286,7 @@ public class RestApi {
      * Returns prettyfied usage report.
      */
     public void getUsageReport(final OnResultListener1<String> listener) {
-        new GetRequest(mContext, mUrl, GetRequest.URI_REPORT, mApiKey, null, result -> {
+        mApiBridge.get(mUrl, ApiClient.URI_REPORT, null, result -> {
             JsonElement json = new JsonParser().parse(result);
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             listener.onResult(gson.toJson(json));
@@ -1358,7 +1328,7 @@ public class RestApi {
     }
 
     public void downloadSupportBundle(File targetFile, final OnResultListener1<Boolean> listener) {
-        new GetRequest(mContext, mUrl, GetRequest.URI_DEBUG_SUPPORT, mApiKey, null, result -> {
+        mApiBridge.get(mUrl, ApiClient.URI_DEBUG_SUPPORT, null, result -> {
             boolean failSuccess = true;
             LogV("downloadSupportBundle: Writing '" + targetFile.getPath() + "' ...");
             FileOutputStream fileOutputStream = null;
@@ -1488,6 +1458,24 @@ public class RestApi {
         Gson gson = new GsonBuilder()
                 .create();
         return gson;
+    }
+
+    /**
+     * Builds the query parameter map for {@link ApiClientBridge} calls. Replaces the former
+     * {@code ImmutableMap.of} usage (guava is being phased out in phase8); HashMap is fine
+     * as query parameter order carries no meaning.
+     */
+    private static Map<String, String> params(String key1, String value1) {
+        Map<String, String> params = new HashMap<>();
+        params.put(key1, value1);
+        return params;
+    }
+
+    private static Map<String, String> params(String key1, String value1, String key2, String value2) {
+        Map<String, String> params = new HashMap<>();
+        params.put(key1, value1);
+        params.put(key2, value2);
+        return params;
     }
 
     private void LogV(String logMessage) {
