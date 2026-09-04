@@ -21,7 +21,6 @@ import com.nutomic.syncthingandroid.model.Event
 import com.nutomic.syncthingandroid.model.FolderStatus
 import java.io.File
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -65,10 +64,8 @@ class EventPoller @JvmOverloads constructor(
         CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
 ) {
 
-    @Inject
     lateinit var preferences: SharedPreferences
 
-    @Inject
     lateinit var notificationHandler: NotificationHandler
 
     private val verboseLog: Boolean
@@ -78,7 +75,9 @@ class EventPoller @JvmOverloads constructor(
     private var pollJob: Job? = null
 
     init {
-        (context.applicationContext as SyncthingApp).component().inject(this)
+        val app = context.applicationContext as SyncthingApp
+        preferences = app.preferences
+        notificationHandler = app.notificationHandler
         verboseLog = AppPrefs.getPrefVerboseLog(preferences)
     }
 

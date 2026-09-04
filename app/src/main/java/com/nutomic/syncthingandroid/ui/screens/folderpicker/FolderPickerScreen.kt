@@ -31,12 +31,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import com.google.common.collect.Sets
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.ui.components.EmptyListHint
 import com.nutomic.syncthingandroid.util.FileUtils
 import com.nutomic.syncthingandroid.util.Util
 import java.io.File
+import java.util.TreeSet
 
 /**
  * Built-in file system directory picker, ported from the legacy FolderPickerActivity.
@@ -245,5 +245,5 @@ private fun populateRoots(context: android.content.Context, rootDirectory: Strin
             iterator.remove()
         }
     }
-    return Sets.newTreeSet<File>(roots)
+    return TreeSet(roots)
 }

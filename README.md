@@ -33,7 +33,7 @@ An intensive rewrite on top of [researchxxl/Syncthing-Fork](https://github.com/r
 
 ### Goal
 
-- **Fully rewrite the service layer**: the service layer (`SyncthingService` / `RestApi` / `EventProcessor` / `RunConditionMonitor` / `ConfigXml`, etc.) is still Java; the plan is to migrate it step by step to a modern Kotlin implementation with coroutines / Flow, unifying the stack with the Compose UI and eventually removing all Java code and Dagger dependency injection.
+- **Fully rewrite the service layer**: the service layer (`ConfigXml` / `NotificationHandler` / helpers, etc.) is still Java; the plan is to migrate it step by step to a modern Kotlin implementation with coroutines / Flow, unifying the stack with the Compose UI. Dagger has already been removed in favor of manual DI, and Volley/guava have been replaced by OkHttp/stdlib.
 
 ## Download
 
@@ -65,9 +65,9 @@ The knowledge base (FAQ, battery optimization, vendor-specific background restri
 | Layer | Technologies |
 |---|---|
 | UI | Kotlin, Jetpack Compose, Material 3, Navigation 3 |
-| Service layer | Java (foreground service / REST API / event processing / run condition monitoring) |
+| Service layer | Kotlin (foreground service / REST API / event processing / run condition monitoring), Java helpers pending migration |
 | Sync core | Syncthing (Go, git submodule) → NDK cross-compile, run as child process |
-| DI / data | Dagger 2 (KSP), Gson, Volley, SharedPreferences |
+| DI / data | Manual DI, Gson, OkHttp, SharedPreferences |
 | Build | Gradle (Kotlin DSL) + Version Catalog, JDK 21, AGP 9.x |
 
 - minSdk 23 (Android 6.0) / targetSdk 36 / compileSdk 37

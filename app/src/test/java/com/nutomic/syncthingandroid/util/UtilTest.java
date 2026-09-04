@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.reflect.TypeToken;
+import com.google.gson.reflect.TypeToken;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 34)

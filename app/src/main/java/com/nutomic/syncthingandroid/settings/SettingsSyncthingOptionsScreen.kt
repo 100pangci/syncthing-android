@@ -24,7 +24,6 @@ import androidx.compose.ui.semantics.isSensitiveData
 import androidx.compose.ui.semantics.password
 import androidx.compose.ui.semantics.semantics
 import androidx.navigation3.runtime.EntryProviderScope
-import com.google.common.base.Splitter
 import com.nutomic.syncthingandroid.ui.LocalServiceTick
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.ui.dialogs.ConfirmDialog
@@ -605,7 +604,6 @@ private var RestApi.preferences: Preferences
         return MapPreferences(values)
     }
     set(value) {
-        val splitter = Splitter.on(",").trimResults().omitEmptyStrings()
         val valueMap = value.asMap()
 
         // update calls that change internal state of RestApi
@@ -617,7 +615,7 @@ private var RestApi.preferences: Preferences
         for ((key, mapValue) in valueMap) {
             when (key) {
                 Keys.LISTEN_ADDRESSES -> {
-                    val addresses = splitter.splitToList(mapValue as String)
+                    val addresses = (mapValue as String).split(",").map(String::trim).filter(String::isNotEmpty)
                     options.listenAddresses = addresses.toTypedArray()
                 }
                 Keys.INCOMING_RATE_LIMIT -> {
@@ -639,7 +637,7 @@ private var RestApi.preferences: Preferences
                     options.relaysEnabled = mapValue as Boolean
                 }
                 Keys.GLOBAL_SERVERS -> {
-                    val servers = splitter.splitToList(mapValue as String)
+                    val servers = (mapValue as String).split(",").map(String::trim).filter(String::isNotEmpty)
                     options.globalAnnounceServers = servers.toTypedArray()
                 }
                 Keys.CRASH_REPORTING -> {

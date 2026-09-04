@@ -24,11 +24,9 @@ compose-material-icons = "1.7.8"
 compose-ui = "1.11.3"
 constraintlayout = "2.2.2"
 core-ktx = "1.19.0"
-dagger = "2.60.1"
 documentfile = "1.1.0"
 fragment-ktx = "1.9.0"
 gson = "2.14.0"
-guava = "33.7.1-android"
 jbcrypt = "0.4"
 junit = "4.13.2"
 mockito-core = "5.18.0"
@@ -40,15 +38,12 @@ kotlin = "2.4.10"
 kotlinSerialization = "2.4.10"
 kotlinxSerializationCore = "1.11.0"
 kotlinx-coroutines = "1.10.2"
-ksp = "2.3.11"
 okhttp = "4.12.0"
 lingala-zip4j = "2.11.6"
 localbroadcastmanager = "1.1.0"
 nav3Core = "1.1.3"
 preference-ktx = "1.2.1"
 recyclerview = "1.4.0"
-stream = "1.2.2"
-volley = "1.2.1"
 zhanghai-compose-preference = "2.2.0"
 zxing-android-embedded = "4.3.0"
 # Do not upgrade zxing:core beyond 3.3.0 to ensure Android 6.0 compatibility.
@@ -68,12 +63,9 @@ compose-material-icons-extended = { module = "androidx.compose.material:material
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
-dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
-dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 documentfile = { module = "androidx.documentfile:documentfile", version.ref = "documentfile" }
 fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment-ktx" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-guava = { module = "com.google.guava:guava", version.ref = "guava" }
 jbcrypt = { module = "org.mindrot:jbcrypt", version.ref = "jbcrypt" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
@@ -85,8 +77,6 @@ navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref =
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preference-ktx" }
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
-stream = { module = "com.annimon:stream", version.ref = "stream" }
-volley = { module = "com.android.volley:volley", version.ref = "volley" }
 zhanghai-compose-preference = { module = "me.zhanghai.compose.preference:preference", version.ref = "zhanghai-compose-preference" }
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing-android-embedded" }
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing-core" }
@@ -103,5 +93,4 @@ androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "aboutLibraries" }
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }

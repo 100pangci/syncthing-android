@@ -19,7 +19,6 @@ import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.util.HashSet
-import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -194,10 +193,8 @@ class SyncthingService : Service() {
 
     private var syncthingRunnable: SyncthingRunnable? = null
 
-    @Inject
     lateinit var notificationHandler: NotificationHandler
 
-    @Inject
     lateinit var preferences: SharedPreferences
 
     /**
@@ -231,7 +228,9 @@ class SyncthingService : Service() {
      */
     override fun onCreate() {
         super.onCreate()
-        (application as SyncthingApp).component().inject(this)
+        val app = application as SyncthingApp
+        notificationHandler = app.notificationHandler
+        preferences = app.preferences
         enableVerboseLog = AppPrefs.getPrefVerboseLog(preferences)
         LogV("onCreate")
         configRouter = ConfigRouter(this)

@@ -33,7 +33,6 @@ import com.nutomic.syncthingandroid.util.ConfigXml.OpenConfigException
 import com.nutomic.syncthingandroid.util.LocalActivityScope
 import com.nutomic.syncthingandroid.util.PermissionUtil
 import com.nutomic.syncthingandroid.util.Util
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -62,7 +61,6 @@ class OnboardingActivity : ThemedAppCompatActivity() {
         private const val STATE_UI_STATE = "onboarding_ui_state"
     }
 
-    @Inject
     lateinit var prefs: SharedPreferences
 
     private var uiState by mutableStateOf(OnboardingUiState())
@@ -140,7 +138,7 @@ class OnboardingActivity : ThemedAppCompatActivity() {
         super.onCreate(savedInstanceState)
         // TODO: move to ThemedAppCompatActivity when every activity is compose
         enableEdgeToEdge()
-        (application as SyncthingApp).component().inject(this)
+        prefs = (application as SyncthingApp).preferences
 
         val activityScope = this.lifecycleScope
 

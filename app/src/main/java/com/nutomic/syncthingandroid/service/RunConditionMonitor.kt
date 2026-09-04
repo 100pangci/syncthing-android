@@ -23,7 +23,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.SyncthingApp
 import com.nutomic.syncthingandroid.util.JobUtils
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -99,7 +98,6 @@ class RunConditionMonitor(
      */
     private class SyncConditionResult(val conditionMet: Boolean, val explanation: String = "")
 
-    @Inject
     lateinit var preferences: SharedPreferences
 
     private val res: Resources = context.resources
@@ -144,7 +142,7 @@ class RunConditionMonitor(
     private var lastDeterminedShouldRun: Boolean = false
 
     init {
-        (context.applicationContext as SyncthingApp).component().inject(this)
+        preferences = (context.applicationContext as SyncthingApp).preferences
         verboseLog = AppPrefs.getPrefVerboseLog(preferences)
         logV("Created new instance")
 
