@@ -52,7 +52,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import com.nutomic.syncthingandroid.ui.screens.webview.WebViewScreen
 import com.nutomic.syncthingandroid.util.PermissionUtil
-import javax.inject.Inject
 
 /**
  * Single activity app shell: hosts the Compose navigation with folders/devices/status.
@@ -69,7 +68,6 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
         const val ACTION_EXIT = ".MainActivity.EXIT"
     }
 
-    @Inject
     lateinit var mPreferences: SharedPreferences
 
     private var serviceState by mutableStateOf(SyncthingService.State.INIT)
@@ -80,7 +78,7 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as SyncthingApp).component().inject(this)
+        mPreferences = (application as SyncthingApp).preferences
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 

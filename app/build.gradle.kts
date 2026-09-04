@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.aboutLibraries)
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
@@ -21,7 +20,6 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.constraintlayout)
     implementation(libs.core.ktx)
-    implementation(libs.dagger)
     implementation(libs.documentfile)
     implementation(libs.fragment.ktx)
     implementation(libs.gson)
@@ -41,7 +39,6 @@ dependencies {
     implementation(libs.zhanghai.compose.preference)
     implementation(libs.zxing.android.embedded) { isTransitive = false }
     implementation(libs.zxing.core)
-    ksp(libs.dagger.compiler)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

@@ -56,7 +56,6 @@ import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -223,7 +222,6 @@ class RestApi(
 
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
 
-    @Inject
     lateinit var notificationHandler: NotificationHandler
 
     private val onApiAvailableListener: OnApiAvailableListener = apiListener
@@ -238,7 +236,8 @@ class RestApi(
     private var config: Config? = null
 
     init {
-        (context.applicationContext as SyncthingApp).component().inject(this)
+        val app = context.applicationContext as SyncthingApp
+        notificationHandler = app.notificationHandler
     }
 
     private fun clientFor(targetUrl: URL): ApiClient =

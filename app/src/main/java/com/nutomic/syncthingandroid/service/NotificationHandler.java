@@ -21,7 +21,6 @@ import com.nutomic.syncthingandroid.activities.MainActivity;
 import com.nutomic.syncthingandroid.onboarding.OnboardingActivity;
 import com.nutomic.syncthingandroid.service.SyncthingService.State;
 
-import javax.inject.Inject;
 
 public class NotificationHandler {
 

@@ -22,17 +22,14 @@ import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.ui.LocalServiceTick
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.util.LocalActivityScope
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import me.zhanghai.compose.preference.Preferences
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
 
 class SettingsActivity : SyncthingActivity() {
 
-    @Inject
     lateinit var sharedPreferences: SharedPreferences
     private lateinit var prefFlow: MutableStateFlow<Preferences>
-    @Inject
     lateinit var notificationHandler: NotificationHandler
 
     private var syncthingServiceState by mutableStateOf<SyncthingService?>(service)
@@ -44,7 +41,9 @@ class SettingsActivity : SyncthingActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as SyncthingApp).component().inject(this)
+        val app = application as SyncthingApp
+        sharedPreferences = app.preferences
+        notificationHandler = app.notificationHandler
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 

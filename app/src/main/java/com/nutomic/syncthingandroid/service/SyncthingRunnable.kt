@@ -20,7 +20,6 @@ import java.io.InputStreamReader
 import java.io.RandomAccessFile
 import java.net.Inet4Address
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Inject
 import kotlin.math.min
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -54,10 +53,8 @@ import kotlinx.coroutines.runBlocking
  */
 class SyncthingRunnable(private val context: Context, command: Command) : Runnable {
 
-    @Inject
     lateinit var preferences: SharedPreferences
 
-    @Inject
     lateinit var notificationHandler: NotificationHandler
 
     private val verboseLog: Boolean
@@ -65,7 +62,9 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
     private val commandArgs: Array<String>
 
     init {
-        (context.applicationContext as SyncthingApp).component().inject(this)
+        val app = context.applicationContext as SyncthingApp
+        preferences = app.preferences
+        notificationHandler = app.notificationHandler
         verboseLog = AppPrefs.getPrefVerboseLog(preferences)
         // Example: syncthingBinary="/data/app/${applicationId}-8HsN-IsVtZXc8GrE5-Hepw==/lib/x86/libsyncthingnative.so"
         val syncthingBinary = Constants.getSyncthingBinary(context)
