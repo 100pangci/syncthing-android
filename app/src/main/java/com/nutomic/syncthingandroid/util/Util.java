@@ -13,13 +13,13 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.nutomic.syncthingandroid.R;
 import com.nutomic.syncthingandroid.service.Constants;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.nio.charset.StandardCharsets;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -229,7 +229,7 @@ public class Util {
             shellOut = null;
             BufferedReader bufferedReader = null;
             try {
-                bufferedReader = new BufferedReader(new InputStreamReader(shellProc.getInputStream(), Charsets.UTF_8));
+                bufferedReader = new BufferedReader(new InputStreamReader(shellProc.getInputStream(), StandardCharsets.UTF_8));
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     if (capturedStdOut == null) {

@@ -23,7 +23,6 @@ dependencies {
     implementation(libs.documentfile)
     implementation(libs.fragment.ktx)
     implementation(libs.gson)
-    implementation(libs.guava)
     implementation(libs.jbcrypt)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.coroutines.android)

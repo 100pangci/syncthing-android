@@ -6,7 +6,6 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.webkit.MimeTypeMap
-import com.google.common.io.Files
 import com.nutomic.syncthingandroid.R
 import java.io.File
 import java.io.FileNotFoundException
@@ -107,7 +106,7 @@ internal object ShareFilesHelper {
                     continue
                 }
                 inputStream = context.contentResolver.openInputStream(sourceUri)
-                Files.asByteSink(outFile).writeFrom(inputStream!!)
+                outFile.outputStream().use { output -> inputStream!!.copyTo(output) }
                 copied++
             } catch (e: FileNotFoundException) {
                 Log.e(TAG, String.format("Can't find input file \"%s\" to copy", sourceUri), e)

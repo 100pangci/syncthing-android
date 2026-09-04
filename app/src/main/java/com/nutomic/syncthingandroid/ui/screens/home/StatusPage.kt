@@ -38,7 +38,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.common.base.Optional
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.model.Connection
 import com.nutomic.syncthingandroid.model.SystemStatus
@@ -102,7 +101,7 @@ fun StatusPage(
                     val systemStatus = api.fetchSystemStatus()
                     val announceTotal = systemStatus.discoveryMethods
                     val announceConnected =
-                        announceTotal - Optional.fromNullable(systemStatus.discoveryErrors).transform { it.size }.or(0)
+                        announceTotal - (systemStatus.discoveryErrors?.size ?: 0)
                     ramUsage = Util.readableFileSize(context, systemStatus.sys.toDouble())
                     announceServer =
                         if (announceTotal == 0) ""

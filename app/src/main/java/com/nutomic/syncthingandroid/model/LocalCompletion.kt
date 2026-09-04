@@ -1,7 +1,7 @@
 package com.nutomic.syncthingandroid.model
 
 import android.util.Log
-import com.google.common.reflect.TypeToken
+import com.google.gson.reflect.TypeToken
 import com.nutomic.syncthingandroid.util.Util
 import java.util.AbstractMap
 

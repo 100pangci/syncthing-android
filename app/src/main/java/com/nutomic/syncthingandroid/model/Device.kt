@@ -2,7 +2,6 @@ package com.nutomic.syncthingandroid.model
 
 import android.text.TextUtils
 import android.util.Log
-import com.google.common.io.BaseEncoding
 import com.nutomic.syncthingandroid.util.Luhn
 import java.util.Arrays
 import java.util.Locale
@@ -104,7 +103,7 @@ class Device {
                 deviceIdToCheck = String(res)
                 // Fall-Through
                 return try {
-                    BaseEncoding.base32().decode(deviceIdToCheck + "====")
+                    requireValidBase32(deviceIdToCheck + "====")
                     true
                 } catch (e: IllegalArgumentException) {
                     false
@@ -114,7 +113,7 @@ class Device {
                 // Check for the "52 char" case reached via the fall-through above.
                 if (deviceIdToCheck.length == 52) {
                     return try {
-                        BaseEncoding.base32().decode(deviceIdToCheck + "====")
+                        requireValidBase32(deviceIdToCheck + "====")
                         true
                     } catch (e: IllegalArgumentException) {
                         false
@@ -250,5 +249,28 @@ class Device {
 
     companion object {
         private const val TAG = "Device"
+
+        /**
+         * Validation-only replacement for guava `BaseEncoding.base32().decode(...)`
+         * (the decoded bytes are never used): throws [IllegalArgumentException] on the
+         * same inputs guava rejects - non base32 characters, invalid lengths and
+         * invalid trailing padding. Leftover bits, which guava silently drops, are
+         * not checked.
+         */
+        private fun requireValidBase32(encoded: String) {
+            var dataEnd = encoded.length
+            while (dataEnd > 0 && encoded[dataEnd - 1] == '=') {
+                dataEnd--
+            }
+            val padding = encoded.length - dataEnd
+            require(padding < 8) { "Invalid padding: $encoded" }
+            when (dataEnd % 8) {
+                1, 3, 6 -> throw IllegalArgumentException("Invalid input length: $encoded")
+            }
+            for (i in 0 until dataEnd) {
+                val c = encoded[i]
+                require(c in 'A'..'Z' || c in '2'..'7') { "Unrecognized character: $c" }
+            }
+        }
     }
 }

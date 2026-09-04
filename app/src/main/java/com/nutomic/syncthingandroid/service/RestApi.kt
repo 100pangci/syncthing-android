@@ -7,14 +7,13 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.preference.PreferenceManager
-import com.google.common.base.Optional
-import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
+import com.google.gson.reflect.TypeToken
 import com.nutomic.syncthingandroid.SyncthingApp
 import com.nutomic.syncthingandroid.activities.ShareActivity
 import com.nutomic.syncthingandroid.http.ApiClient
@@ -174,9 +173,9 @@ class RestApi(
 
     /**
      * Stores the result of the last successful request to [ApiClient.URI_CONNECTIONS],
-     * or an empty Optional.
+     * or null.
      */
-    private var previousConnections: Optional<Connections> = Optional.absent()
+    private var previousConnections: Connections? = null
 
     /**
      * Stores the timestamp of the last result of the REST API endpoint [ApiClient.URI_CONNECTIONS].
@@ -987,10 +986,8 @@ class RestApi(
 
     val totalConnectionStatistic: Connection
         get() {
-            if (!previousConnections.isPresent) {
-                return Connection()
-            }
-            return Util.deepCopy(previousConnections.get().total!!, Connection::class.java)
+            val prevConnections = previousConnections ?: return Connection()
+            return Util.deepCopy(prevConnections.total!!, Connection::class.java)
         }
 
     /**
@@ -1001,23 +998,19 @@ class RestApi(
         val msElapsed = now - previousConnectionTime
         var connections = connections
         if (msElapsed < Constants.REST_UPDATE_INTERVAL) {
-            connections = Util.deepCopy(previousConnections.get(), Connections::class.java)
+            connections = Util.deepCopy(previousConnections!!, Connections::class.java)
             return
         }
 
         previousConnectionTime = now
         val connectionsMap = connections.connections!!
         for (e in connectionsMap.entries) {
-            val prev: Connection = if (previousConnections.isPresent && previousConnections.get().connections!!.containsKey(e.key)) {
-                previousConnections.get().connections!![e.key]!!
-            } else {
-                Connection()
-            }
+            val prev: Connection = previousConnections?.connections?.get(e.key) ?: Connection()
             e.value.setTransferRate(prev, msElapsed)
         }
-        val prev = previousConnections.transform { c -> c.total!! }.or(Connection())
+        val prev = previousConnections?.total ?: Connection()
         connections.total!!.setTransferRate(prev, msElapsed)
-        previousConnections = Optional.of(connections)
+        previousConnections = connections
     }
 
     /**
