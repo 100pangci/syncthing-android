@@ -239,7 +239,7 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
             return
         }
         // Evaluate run conditions to detect changes made to the metered wifi flags.
-        getService()?.evaluateRunConditions()
+        service?.evaluateRunConditions()
     }
 
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
@@ -249,7 +249,7 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
     }
 
     override fun onDestroy() {
-        getService()?.unregisterOnServiceStateChangeListener(this)
+        service?.unregisterOnServiceStateChangeListener(this)
         super.onDestroy()
     }
 

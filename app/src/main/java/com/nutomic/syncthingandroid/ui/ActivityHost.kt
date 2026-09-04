@@ -37,9 +37,9 @@ fun CompositionLocalsHost(
     // the first frame; without state-driven recomposition the locals would
     // stay null forever, making every config save silently fall back to the
     // config.xml path.
-    var service by remember { mutableStateOf(activity.getService()) }
+    var service by remember { mutableStateOf(activity.service) }
     var serviceState by remember {
-        mutableStateOf(service?.getCurrentState() ?: SyncthingService.State.INIT)
+        mutableStateOf(service?.currentState ?: SyncthingService.State.INIT)
     }
 
     DisposableEffect(activity) {
@@ -53,12 +53,12 @@ fun CompositionLocalsHost(
         }
         activity.addOnServiceConnectionChangedListener(connectionListener)
         // The service may have connected before we registered.
-        activity.getService()?.let { s ->
+        activity.service?.let { s ->
             service = s
             s.registerOnServiceStateChangeListener(stateListener)
         }
         onDispose {
-            activity.getService()?.unregisterOnServiceStateChangeListener(stateListener)
+            activity.service?.unregisterOnServiceStateChangeListener(stateListener)
             activity.removeOnServiceConnectionChangedListener(connectionListener)
         }
     }
