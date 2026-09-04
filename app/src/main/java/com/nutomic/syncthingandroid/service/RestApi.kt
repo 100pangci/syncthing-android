@@ -18,7 +18,6 @@ import com.google.gson.JsonSyntaxException
 import com.nutomic.syncthingandroid.SyncthingApp
 import com.nutomic.syncthingandroid.activities.ShareActivity
 import com.nutomic.syncthingandroid.http.ApiClient
-import com.nutomic.syncthingandroid.http.ApiClientBridge
 import com.nutomic.syncthingandroid.model.CachedFolderStatus
 import com.nutomic.syncthingandroid.model.CompletionInfo
 import com.nutomic.syncthingandroid.model.Config
@@ -54,10 +53,18 @@ import java.util.AbstractMap
 import java.util.Collections
 import java.util.HashSet
 import java.util.Locale
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Inject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 /**
  * Provides functions to interact with the syncthing REST API.
@@ -66,13 +73,14 @@ import kotlinx.coroutines.CoroutineScope
  * through [ApiClientBridge] (callback style) so existing callers keep working; the suspend
  * layer and cached StateFlows are added on top of this class.
  */
+
 class RestApi(
     context: Context,
     url: URL,
     val apiKey: String,
     apiListener: OnApiAvailableListener,
     configListener: OnConfigChangedListener,
-    bridgeScope: CoroutineScope? = null,
+    scope: CoroutineScope? = null,
 ) {
 
     companion object {
@@ -135,11 +143,29 @@ class RestApi(
     private var url: URL = url
 
     /**
-     * OkHttp/suspend-based REST engine (phase6a) behind the callback API. Replaces the
-     * Volley-based GetRequest/PostRequest classes; callbacks are delivered on the main
-     * thread like Volley did.
+     * Scope for fire-and-forget requests and the legacy callback API. Callbacks are
+     * delivered on the main thread like Volley did (phase6a); tests may inject a scope
+     * for deterministic delivery.
      */
-    private val apiBridge: ApiClientBridge
+    private val restScope: CoroutineScope =
+        scope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+    private val httpsCertFile: File = Constants.getHttpsCertFile(context)
+
+    /**
+     * One [ApiClient] per GUI address (each owns an OkHttpClient connection pool).
+     * The address can change at runtime (settings edit), which simply allocates
+     * a new cache entry.
+     */
+    private val clients = ConcurrentHashMap<String, ApiClient>()
+
+    /**
+     * Overall sync completion, cached as a StateFlow (phase6b). Event-driven: updated
+     * by [onTotalSyncCompletionChange] whenever the folder/device completion caches
+     * change in a way that alters the aggregate. -1 means "not applicable / unknown".
+     */
+    private val mutableTotalSyncCompletion = MutableStateFlow(-1)
+    val totalSyncCompletion: StateFlow<Int> = mutableTotalSyncCompletion.asStateFlow()
 
     /**
      * Results cached from systemInfo.
@@ -213,7 +239,58 @@ class RestApi(
 
     init {
         (context.applicationContext as SyncthingApp).component().inject(this)
-        apiBridge = ApiClientBridge(Constants.getHttpsCertFile(context), apiKey, bridgeScope)
+    }
+
+    private fun clientFor(targetUrl: URL): ApiClient =
+        clients.getOrPut(targetUrl.toString()) { ApiClient(httpsCertFile, targetUrl, apiKey) }
+
+    /**
+     * Fire-and-forget GET with optional success/error callbacks, mirroring the deleted
+     * ApiClientBridge: returns immediately, exactly one of the callbacks runs later on
+     * [restScope] (main thread in production). A null [onError] means "log and swallow"
+     * (ApiClient already logs each failure).
+     */
+    private fun apiGet(
+        path: String,
+        params: Map<String, String>? = null,
+        onSuccess: ((String) -> Unit)? = null,
+        onError: ((IOException) -> Unit)? = null,
+    ) {
+        val targetUrl = url
+        restScope.launch {
+            try {
+                // NOTE: request first, invoke after - `onSuccess?.invoke(post(...))` would
+                // skip the request entirely when the callback is null (safe-call evaluation).
+                val result = clientFor(targetUrl).get(path, params ?: emptyMap())
+                onSuccess?.invoke(result)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: IOException) {
+                onError?.invoke(e)
+            }
+        }
+    }
+
+    /** Fire-and-forget POST, see [apiGet]. */
+    private fun apiPost(
+        path: String,
+        params: Map<String, String>? = null,
+        body: String? = null,
+        onSuccess: ((String) -> Unit)? = null,
+    ) {
+        val targetUrl = url
+        restScope.launch {
+            try {
+                // NOTE: request first, invoke after - `onSuccess?.invoke(post(...))` would
+                // skip the request entirely when the callback is null (safe-call evaluation).
+                val result = clientFor(targetUrl).post(path, params ?: emptyMap(), body)
+                onSuccess?.invoke(result)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: IOException) {
+                // Swallowed like the old bridge's default error handler; ApiClient logged it.
+            }
+        }
     }
 
     /**
@@ -226,7 +303,7 @@ class RestApi(
             asyncQueryConfigComplete = false
             asyncQuerySystemStatusComplete = false
         }
-        apiBridge.get(url, ApiClient.URI_VERSION, null, { result ->
+        apiGet(ApiClient.URI_VERSION, null, { result ->
             val json = JsonParser.parseString(result).asJsonObject
             version = json.get("version").asString
             updateDebugFacilitiesCache()
@@ -235,7 +312,7 @@ class RestApi(
                 checkReadConfigFromRestApiCompleted()
             }
         }, { })
-        apiBridge.get(url, ApiClient.URI_CONFIG, null, { result ->
+        apiGet(ApiClient.URI_CONFIG, null, { result ->
             onReloadConfigComplete(result)
             synchronized(asyncQueryCompleteLock) {
                 asyncQueryConfigComplete = true
@@ -291,7 +368,7 @@ class RestApi(
     }
 
     fun reloadConfig() {
-        apiBridge.get(url, ApiClient.URI_CONFIG, null, { result ->
+        apiGet(ApiClient.URI_CONFIG, null, { result ->
             onReloadConfigComplete(result)
         }, { })
     }
@@ -322,7 +399,7 @@ class RestApi(
             }
         }
 
-        apiBridge.get(url, ApiClient.URI_PENDING_DEVICES, null, { result ->
+        apiGet(ApiClient.URI_PENDING_DEVICES, null, { result ->
             val jsonObject = JsonParser.parseString(result).asJsonObject
             for (deviceEntry in jsonObject.entrySet()) {
                 val resultDeviceId = deviceEntry.key ?: continue
@@ -338,7 +415,7 @@ class RestApi(
                 )
             }
         }, { })
-        apiBridge.get(url, ApiClient.URI_PENDING_FOLDERS, null, { result ->
+        apiGet(ApiClient.URI_PENDING_FOLDERS, null, { result ->
             val jsonObject = JsonParser.parseString(result).asJsonObject
             for (folderEntry in jsonObject.entrySet()) {
                 val resultFolderId = folderEntry.key ?: continue
@@ -377,8 +454,7 @@ class RestApi(
 
         for (folder in tmpFolders) {
             for (device in folder.getSharedWithDevices()) {
-                apiBridge.get(url,
-                    ApiClient.URI_DB_COMPLETION,
+                apiGet(ApiClient.URI_DB_COMPLETION,
                     params("device" to device.deviceID, "folder" to folder.id),
                     { result ->
                         val completionInfo = gson.fromJson(result, CompletionInfo::class.java)
@@ -407,7 +483,7 @@ class RestApi(
                 .getString(Constants.PREF_LAST_BINARY_VERSION, "")
         ) {
             // First binary launch or binary upgraded case.
-            apiBridge.get(url, ApiClient.URI_SYSTEM_LOGLEVELS, null, { result ->
+            apiGet(ApiClient.URI_SYSTEM_LOGLEVELS, null, { result ->
                 try {
                     val facilitiesToStore = HashSet<String>()
                     val json = JsonParser.parseString(result).asJsonObject
@@ -515,7 +591,7 @@ class RestApi(
      */
     fun overrideChanges(folderId: String) {
         Log.d(TAG, "overrideChanges '$folderId'")
-        apiBridge.post(url, ApiClient.URI_DB_OVERRIDE, params("folder" to folderId))
+        apiPost(ApiClient.URI_DB_OVERRIDE, params("folder" to folderId))
     }
 
     /**
@@ -523,7 +599,7 @@ class RestApi(
      */
     fun rescanAll() {
         Log.d(TAG, "rescanAll")
-        apiBridge.post(url, ApiClient.URI_DB_SCAN)
+        apiPost(ApiClient.URI_DB_SCAN)
     }
 
     /**
@@ -532,7 +608,7 @@ class RestApi(
      */
     fun revertLocalChanges(folderId: String) {
         Log.d(TAG, "revertLocalChanges '$folderId'")
-        apiBridge.post(url, ApiClient.URI_DB_REVERT, params("folder" to folderId))
+        apiPost(ApiClient.URI_DB_REVERT, params("folder" to folderId))
     }
 
     val webGuiUrl: URL
@@ -555,7 +631,7 @@ class RestApi(
         synchronized(configLock) {
             jsonConfig = gson.toJson(config)
         }
-        apiBridge.post(url, ApiClient.URI_SYSTEM_CONFIG, null, jsonConfig)
+        apiPost(ApiClient.URI_SYSTEM_CONFIG, null, jsonConfig)
         url = webGuiUrl
         onConfigChangedListener.onConfigChanged()
     }
@@ -568,7 +644,7 @@ class RestApi(
         hasShutdown = true
         executorService.shutdownNow()
         Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME)
-        apiBridge.post(url, ApiClient.URI_SYSTEM_SHUTDOWN)
+        apiPost(ApiClient.URI_SYSTEM_SHUTDOWN)
     }
 
     val folders: List<Folder>
@@ -747,7 +823,7 @@ class RestApi(
      * Requests and parses information about current system status and resource usage.
      */
     fun getSystemStatus(listener: OnResultListener1<SystemStatus>) {
-        apiBridge.get(url, ApiClient.URI_SYSTEM_STATUS, null, { result ->
+        apiGet(ApiClient.URI_SYSTEM_STATUS, null, { result ->
             try {
                 val systemStatus = gson.fromJson(result, SystemStatus::class.java)
                 listener.onResult(systemStatus)
@@ -755,6 +831,53 @@ class RestApi(
                 Log.e(TAG, "getSystemStatus: Parsing REST API result failed. result=$result", e)
             }
         }, { })
+    }
+
+    /**
+     * Suspend variant of [getSystemStatus] for coroutine callers (phase6b). Throws
+     * [IOException] on transport failure and [Exception]-subclasses on parse failure.
+     */
+    suspend fun fetchSystemStatus(): SystemStatus {
+        val result = clientFor(url).get(ApiClient.URI_SYSTEM_STATUS)
+        return gson.fromJson(result, SystemStatus::class.java)
+    }
+
+    /**
+     * Suspend refresh of the remote device status caches: fetches connections (with
+     * transfer-rate calculation) and device last-seen stats, updating the caches so
+     * subsequent [getRemoteDeviceStatus] / [getRemoteDeviceCompletion] reads are fresh.
+     * Polling callers (StatusPage, HomeDataHost) use this instead of the old
+     * cache-miss-triggered fire-and-forget path.
+     */
+    suspend fun refreshRemoteDeviceStatuses() {
+        val connections = gson.fromJson(
+            clientFor(url).get(ApiClient.URI_CONNECTIONS),
+            Connections::class.java
+        )
+        calculateConnectionStats(connections)
+        storeDeviceStatuses(connections)
+
+        storeDeviceLastSeenStats(
+            clientFor(url).get(ApiClient.URI_STATS_DEVICE)
+        )
+    }
+
+    private fun storeDeviceStatuses(connections: Connections) {
+        val connectionsMap = connections.connections ?: return
+        for (e in connectionsMap.entries) {
+            remoteCompletion.setDeviceStatus(e.key, e.value)
+        }
+    }
+
+    private fun storeDeviceLastSeenStats(result: String) {
+        val jsonObject = JsonParser.parseString(result).asJsonObject
+        for (entry in jsonObject.entrySet()) {
+            val resultDeviceId = entry.key
+            val deviceStat = gson.fromJson(entry.value, DeviceStat::class.java)
+            PreferenceManager.getDefaultSharedPreferences(context).edit()
+                .putString(Constants.PREF_CACHE_DEVICE_LASTSEEN_PREFIX + resultDeviceId, deviceStat.lastSeen)
+                .apply()
+        }
     }
 
     val isConfigLoaded: Boolean
@@ -766,7 +889,7 @@ class RestApi(
      * Requests locally discovered devices.
      */
     fun getDiscoveredDevices(listener: OnResultListener1<Map<String, DiscoveredDevice>>) {
-        apiBridge.get(url, ApiClient.URI_SYSTEM_DISCOVERY, null, { result ->
+        apiGet(ApiClient.URI_SYSTEM_DISCOVERY, null, { result ->
             val discoveredDevices: MutableMap<String, DiscoveredDevice> = gson.fromJson(
                 result,
                 object : TypeToken<Map<String, DiscoveredDevice>>() {}.type
@@ -785,7 +908,7 @@ class RestApi(
      * Requests ignore list for given folder.
      */
     fun getFolderIgnoreList(folderId: String, listener: OnResultListener1<FolderIgnoreList>) {
-        apiBridge.get(url, ApiClient.URI_DB_IGNORES, params("folder" to folderId), { result ->
+        apiGet(ApiClient.URI_DB_IGNORES, params("folder" to folderId), { result ->
             val folderIgnoreList = gson.fromJson(result, FolderIgnoreList::class.java)
             listener.onResult(folderIgnoreList)
         }, { })
@@ -797,7 +920,7 @@ class RestApi(
     fun postFolderIgnoreList(folderId: String, ignore: Array<String>) {
         val folderIgnoreList = FolderIgnoreList()
         folderIgnoreList.ignore = ignore
-        apiBridge.post(url, ApiClient.URI_DB_IGNORES, params("folder" to folderId),
+        apiPost(ApiClient.URI_DB_IGNORES, params("folder" to folderId),
             gson.toJson(folderIgnoreList))
     }
 
@@ -813,26 +936,17 @@ class RestApi(
             if (deviceId.isNotEmpty()) {
                 LogV("getRemoteDeviceStatus: Cache miss, deviceId=\"$deviceId\". Performing query.")
             }
-            apiBridge.get(url, ApiClient.URI_CONNECTIONS, null, { result ->
+            apiGet(ApiClient.URI_CONNECTIONS, null, { result ->
                 // We got connection status information for ALL devices instead of one.
                 // It does not hurt storing all of them.
                 val connections = gson.fromJson(result, Connections::class.java)
                 calculateConnectionStats(connections)
-                for (e in connections.connections!!.entries) {
-                    remoteCompletion.setDeviceStatus(e.key, e.value)
-                }
+                storeDeviceStatuses(connections)
             }, { })
-            apiBridge.get(url, ApiClient.URI_STATS_DEVICE, null, { result ->
+            apiGet(ApiClient.URI_STATS_DEVICE, null, { result ->
                 // We got the last seen timestamp for ALL devices - including the local
                 // device - instead of one. It does not hurt storing all of them.
-                val jsonObject = JsonParser.parseString(result).asJsonObject
-                for (entry in jsonObject.entrySet()) {
-                    val resultDeviceId = entry.key
-                    val deviceStat = gson.fromJson(entry.value, DeviceStat::class.java)
-                    PreferenceManager.getDefaultSharedPreferences(context).edit()
-                        .putString(Constants.PREF_CACHE_DEVICE_LASTSEEN_PREFIX + resultDeviceId, deviceStat.lastSeen)
-                        .apply()
-                }
+                storeDeviceLastSeenStats(result)
             }, { })
         }
         return cacheEntry
@@ -915,7 +1029,7 @@ class RestApi(
      */
     fun getEvents(sinceId: Long, limit: Long, listener: OnReceiveEventListener) {
         val params = params("since" to sinceId.toString(), "limit" to limit.toString())
-        apiBridge.get(url, ApiClient.URI_EVENTS, params, { result ->
+        apiGet(ApiClient.URI_EVENTS, params, { result ->
             val jsonEvents = JsonParser.parseString(result).asJsonArray
             var lastId: Long = 0
 
@@ -947,11 +1061,11 @@ class RestApi(
             // Query the required information so it will be available on a future call
             // to this function.
             LogV("getFolderStatus: Cache miss, folderId=\"$folderId\". Performing query.")
-            apiBridge.get(url, ApiClient.URI_DB_STATUS, params("folder" to folderId), { result ->
+            apiGet(ApiClient.URI_DB_STATUS, params("folder" to folderId), { result ->
                 val folder = getFolderByID(folderId)
                 if (folder == null) {
                     Log.e(TAG, "getFolderStatus#onResult: folderId == null")
-                    return@get
+                    return@apiGet
                 }
                 localCompletion.setFolderStatus(
                     folderId,
@@ -1159,7 +1273,7 @@ class RestApi(
      * Returns prettyfied usage report.
      */
     fun getUsageReport(listener: OnResultListener1<String>) {
-        apiBridge.get(url, ApiClient.URI_REPORT, null, { result ->
+        apiGet(ApiClient.URI_REPORT, null, { result ->
             val json = JsonParser.parseString(result)
             val gson = GsonBuilder().setPrettyPrinting().create()
             listener.onResult(gson.toJson(json))
@@ -1197,7 +1311,7 @@ class RestApi(
     }
 
     fun downloadSupportBundle(targetFile: File, listener: OnResultListener1<Boolean>?) {
-        apiBridge.get(url, ApiClient.URI_DEBUG_SUPPORT, null, { result ->
+        apiGet(ApiClient.URI_DEBUG_SUPPORT, null, { result ->
             var failSuccess = true
             LogV("downloadSupportBundle: Writing '${targetFile.path}' ...")
             var fileOutputStream: FileOutputStream? = null
@@ -1304,6 +1418,7 @@ class RestApi(
         ) {
             return
         }
+        mutableTotalSyncCompletion.value = totalSyncCompletion
         notificationHandler.updatePersistentNotification(
             context as SyncthingService,
             false, // Do not persist previous notification text.
