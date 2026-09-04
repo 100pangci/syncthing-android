@@ -8,15 +8,34 @@ import android.os.IBinder
 import android.util.Log
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.SyncthingApp
-import com.nutomic.syncthingandroid.http.PollWebGuiAvailableTask
+import com.nutomic.syncthingandroid.http.ApiClient
 import com.nutomic.syncthingandroid.model.Device
 import com.nutomic.syncthingandroid.model.Folder
 import com.nutomic.syncthingandroid.util.ConfigRouter
 import com.nutomic.syncthingandroid.util.ConfigXml
 import com.nutomic.syncthingandroid.util.PermissionUtil
 import com.nutomic.syncthingandroid.util.Util
+import java.io.IOException
+import java.net.ConnectException
+import java.net.SocketTimeoutException
 import java.util.HashSet
 import javax.inject.Inject
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+private const val TAG = "SyncthingService"
+
+/**
+ * Interval in ms, at which connections to the web gui are performed on first start
+ * to find out if it's online.
+ */
+private const val WEB_GUI_POLL_INTERVAL = 150L
 
 /**
  * Holds the native syncthing instance and provides an API to access it.
@@ -24,8 +43,6 @@ import javax.inject.Inject
 class SyncthingService : Service() {
 
     companion object {
-        private const val TAG = "SyncthingService"
-
         /**
          * Delay before retrying a deferred shutdown or re-applying certificate changes.
          */
@@ -161,7 +178,12 @@ class SyncthingService : Service() {
     private val onServiceStateChangeListeners = HashSet<OnServiceStateChangeListener>()
     private val binder = SyncthingServiceBinder(this)
 
-    private var pollWebGuiAvailableTask: PollWebGuiAvailableTask? = null
+    /**
+     * Scope for the web gui availability poll. Callbacks are delivered on the
+     * main thread like the old Volley/PollWebGuiAvailableTask path did.
+     */
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private var webGuiPollJob: Job? = null
 
     var api: RestApi? = null
         private set
@@ -542,16 +564,25 @@ class SyncthingService : Service() {
         // In case the binary is to be stopped, also be aware that another thread could request
         // to stop the binary in the time while waiting for the GUI to become active. See the
         // comment for [onDestroy] for details.
-        if (pollWebGuiAvailableTask == null) {
-            // Note: the listener must be passed positionally - a trailing lambda
-            // would bind to the optional `scope` parameter instead.
-            pollWebGuiAvailableTask = PollWebGuiAvailableTask(
-                this, config.webGuiUrl, config.apiKey,
-                {
-                    Log.i(TAG, "Web GUI has come online at ${config.webGuiUrl}")
-                    api?.readConfigFromRestApi()
-                }
+        if (webGuiPollJob == null) {
+            // Poll for the web-gui of the native syncthing binary to come online.
+            //
+            // In case the binary is to be stopped, also be aware that another thread could request
+            // to stop the binary in the time while waiting for the GUI to become active. See the
+            // comment for [onDestroy] for details.
+            val pollClient = ApiClient(
+                httpsCertFile = Constants.getHttpsCertFile(this),
+                url = config.webGuiUrl,
+                apiKey = config.apiKey,
+                logFailures = false,
             )
+            webGuiPollJob = serviceScope.launch {
+                pollWebGuiUntilAvailable(
+                    fetch = { pollClient.get("") },
+                    webGuiUrl = config.webGuiUrl.toString(),
+                    onAvailable = { api?.readConfigFromRestApi() },
+                )
+            }
         }
     }
 
@@ -602,6 +633,7 @@ class SyncthingService : Service() {
             Log.i(TAG, "Shutting down syncthing binary due to missing storage permission.")
         }
         shutdownToState(State.DISABLED)
+        serviceScope.cancel()
         super.onDestroy()
     }
 
@@ -621,10 +653,8 @@ class SyncthingService : Service() {
             onServiceStateChange(newState)
         }
 
-        pollWebGuiAvailableTask?.let {
-            it.cancelRequestsAndCallback()
-            pollWebGuiAvailableTask = null
-        }
+        webGuiPollJob?.cancel()
+        webGuiPollJob = null
 
         eventPoller?.let {
             it.stop()
@@ -748,6 +778,50 @@ class SyncthingService : Service() {
     private fun LogV(logMessage: String) {
         if (enableVerboseLog) {
             Log.v(TAG, logMessage)
+        }
+    }
+}
+
+/**
+ * Polls [fetch] every WEB_GUI_POLL_INTERVAL ms until one
+ * attempt succeeds, then invokes [onAvailable] exactly once and returns.
+ *
+ * This replaces the former `PollWebGuiAvailableTask` (deleted in phase7): the poll loop is
+ * inlined into the service, which is now Kotlin, but kept as a top-level function taking a
+ * `fetch` lambda so the retry/cancel semantics stay unit-testable without a real service.
+ *
+ * Behaviour parity with the deleted implementation:
+ *  - Transport failures (syncthing not up yet) retry silently: connection failures and
+ *    timeouts log at most once every 10 attempts, everything else warns.
+ *  - Cancelling the calling coroutine stops the poll and the in-flight request (ApiClient
+ *    awaits the OkHttp call with coroutine-aware cancellation), like the old
+ *    `cancelRequestsAndCallback` did.
+ */
+internal suspend fun pollWebGuiUntilAvailable(
+    fetch: suspend () -> String,
+    webGuiUrl: String,
+    onAvailable: () -> Unit,
+) {
+    Log.i(TAG, "Starting to poll for web gui availability")
+    var logIncidence = 0
+    while (true) {
+        try {
+            fetch()
+            Log.i(TAG, "Web GUI has come online at $webGuiUrl")
+            onAvailable()
+            return
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: IOException) {
+            if (e is ConnectException || e is SocketTimeoutException) {
+                logIncidence++
+                if (logIncidence == 1 || logIncidence % 10 == 0) {
+                    Log.v(TAG, "Polling web gui ... ($logIncidence)")
+                }
+            } else {
+                Log.w(TAG, "Unexpected error while polling web gui", e)
+            }
+            delay(WEB_GUI_POLL_INTERVAL)
         }
     }
 }
