@@ -856,6 +856,7 @@ class RestApi(
         )
         calculateConnectionStats(connections)
         storeDeviceStatuses(connections)
+        onTotalSyncCompletionChange()
 
         storeDeviceLastSeenStats(
             clientFor(url).get(ApiClient.URI_STATS_DEVICE)
@@ -942,6 +943,7 @@ class RestApi(
                 val connections = gson.fromJson(result, Connections::class.java)
                 calculateConnectionStats(connections)
                 storeDeviceStatuses(connections)
+                onTotalSyncCompletionChange()
             }, { })
             apiGet(ApiClient.URI_STATS_DEVICE, null, { result ->
                 // We got the last seen timestamp for ALL devices - including the local
