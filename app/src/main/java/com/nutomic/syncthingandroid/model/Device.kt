@@ -91,8 +91,7 @@ class Device {
                     System.arraycopy(p, 0, res, i * 13, 13)
 
                     // Generate check digit.
-                    val luhn = Luhn()
-                    val checkRune = luhn.generate(p)
+                    val checkRune = Luhn.generate(p)
                     if (checkRune == null) {
                         return false
                     }
