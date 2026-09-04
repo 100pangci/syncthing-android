@@ -27,7 +27,7 @@ class Device {
     @JvmField
     var paused: Boolean = false
     @JvmField
-    var ignoredFolders: List<IgnoredFolder>? = null
+    var ignoredFolders: MutableList<IgnoredFolder>? = null
     @JvmField
     var autoAcceptFolders: Boolean = false
     @JvmField

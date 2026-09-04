@@ -86,7 +86,7 @@ fun HomeScreen(
     val service = LocalSyncthingService.current
     val serviceState = LocalServiceState.current
     val api = service?.api
-    val apiConfigLoaded = api?.isConfigLoaded() ?: false
+    val apiConfigLoaded = api?.isConfigLoaded ?: false
 
     // Folder/device lists are polled and owned by HomeDataHost (above the
     // NavDisplay), so they survive entry transitions; see HomeDataHost.

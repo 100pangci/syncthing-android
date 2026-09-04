@@ -581,7 +581,7 @@ private var RestApi.preferences: Preferences
         val values = mutableMapOf<String, Any>()
         values[Keys.DEVICE_NAME] = this.localDevice.name
         values[Keys.API_KEY] = this.apiKey
-        values[Keys.USAGE_REPORTING] = this.isUsageReportingAccepted
+        values[Keys.USAGE_REPORTING] = this.isUsageReportingAccepted()
 
         this.options?.let { options ->
             values[Keys.LISTEN_ADDRESSES] = options.listenAddresses?.joinToString() ?: ""

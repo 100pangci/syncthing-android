@@ -87,7 +87,7 @@ fun StatusPage(
     LaunchedEffect(serviceState, visible) {
         if (!visible) return@LaunchedEffect
         while (isActive) {
-            if (serviceState == SyncthingService.State.ACTIVE && api != null && api.isConfigLoaded()) {
+            if (serviceState == SyncthingService.State.ACTIVE && api != null && api.isConfigLoaded) {
                 api.getRemoteDeviceStatus("")
                 totalSyncCompletion = api.getTotalSyncCompletion()
                 api.getSystemStatus { systemStatus ->
@@ -110,7 +110,7 @@ fun StatusPage(
                     }
 
                     val total: Connection =
-                        if (api.isConfigLoaded()) api.getTotalConnectionStatistic() else Connection()
+                        if (api.isConfigLoaded) api.totalConnectionStatistic else Connection()
                     // "Hide" rates below 1 KiB/s to avoid bothering the user with idle traffic.
                     download = (if (total.inBits / 8 < 1024) "0 B/s" else Util.readableTransferRate(context, total.inBits)) +
                             " (" + Util.readableFileSize(context, total.inBytesTotal.toDouble()) + ")"

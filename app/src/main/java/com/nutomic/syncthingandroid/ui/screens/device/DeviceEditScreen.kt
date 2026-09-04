@@ -106,7 +106,7 @@ fun DeviceEditScreen(
     val service = LocalSyncthingService.current
     val serviceState = LocalServiceState.current
     val api = service?.api
-    val apiConfigLoaded = api?.isConfigLoaded() ?: false
+    val apiConfigLoaded = api?.isConfigLoaded ?: false
     val configRouter = remember { ConfigRouter(context) }
     val preferences = context.appPreferences()
     val prefExpertMode = preferences.getBoolean(Constants.PREF_EXPERT_MODE, false)

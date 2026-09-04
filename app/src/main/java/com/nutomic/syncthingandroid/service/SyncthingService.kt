@@ -355,9 +355,9 @@ class SyncthingService : Service() {
             )
             notificationHandler.cancelConsentNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0))
         } else if (ACTION_OVERRIDE_CHANGES == intent.action && currentState == State.ACTIVE) {
-            api?.overrideChanges(intent.getStringExtra(EXTRA_FOLDER_ID))
+            intent.getStringExtra(EXTRA_FOLDER_ID)?.let { api?.overrideChanges(it) }
         } else if (ACTION_REVERT_LOCAL_CHANGES == intent.action && currentState == State.ACTIVE) {
-            api?.revertLocalChanges(intent.getStringExtra(EXTRA_FOLDER_ID))
+            intent.getStringExtra(EXTRA_FOLDER_ID)?.let { api?.revertLocalChanges(it) }
         } else {
             afterFreshServiceInstanceStart()
         }

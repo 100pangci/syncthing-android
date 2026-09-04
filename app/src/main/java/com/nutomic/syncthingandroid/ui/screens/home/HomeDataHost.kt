@@ -45,7 +45,7 @@ fun HomeDataHost(content: @Composable () -> Unit) {
     val service = LocalSyncthingService.current
     val serviceState = LocalServiceState.current
     val api = service?.api
-    val apiConfigLoaded = api?.isConfigLoaded() ?: false
+    val apiConfigLoaded = api?.isConfigLoaded ?: false
 
     val configRouter = remember { ConfigRouter(context) }
 
