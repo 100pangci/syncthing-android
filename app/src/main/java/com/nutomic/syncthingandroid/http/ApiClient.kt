@@ -15,7 +15,9 @@ import javax.net.ssl.TrustManager
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.HttpUrl
@@ -105,6 +107,19 @@ class ApiClient(
             .method(method, requestBody)
             .build()
 
+        // Network I/O must run off the caller's dispatcher: call.await() suspends until the
+        // RESPONSE HEADERS arrive, but the coroutine then resumes on the caller's dispatcher
+        // (Main.immediate for the RestApi/poller callers) and response.body.bytes() below is a
+        // BLOCKING read of the body. On a slow/stale HTTP/2 connection that stall ran on the
+        // main thread for seconds and ANR'd the app (traced: main waiting on Http2Stream inside
+        // execute). Dispatchers.IO moves the whole round trip off whatever thread resumes us;
+        // response delivery (the resumption of THIS suspend function's caller) is unaffected.
+        return withContext(Dispatchers.IO) {
+            executeWithRetries(request, httpUrl)
+        }
+    }
+
+    private suspend fun executeWithRetries(request: Request, httpUrl: HttpUrl): String {
         var lastCause: IOException? = null
         repeat(maxAttempts) { attempt ->
             val call = okHttpClient.newCall(request)
