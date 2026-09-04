@@ -33,7 +33,7 @@
 
 ### 目标
 
-- **完全重写服务层**：目前服务层（`SyncthingService` / `RestApi` / `EventProcessor` / `RunConditionMonitor` / `ConfigXml` 等）仍是 Java，计划将其逐步迁移为 Kotlin + 协程 / Flow 的现代实现，与 Compose UI 层统一技术栈，最终移除 Java 代码与 Dagger 依赖注入。
+- **完全重写服务层**：目前服务层（`ConfigXml` / `NotificationHandler` 及各辅助类等）仍有 Java，计划将其逐步迁移为 Kotlin + 协程 / Flow 的现代实现，与 Compose UI 层统一技术栈。Dagger 已移除，改为手动 DI；Volley/guava 已替换为 OkHttp/标准库。
 
 ## 下载
 
@@ -65,9 +65,9 @@ python3 scripts/install_minimum_android_sdk_prerequisites.py
 | 层 | 技术 |
 |---|---|
 | UI | Kotlin, Jetpack Compose, Material 3, Navigation 3 |
-| 服务层 | Java（前台服务 / REST API / 事件处理 / 运行条件监视） |
+| 服务层 | Kotlin（前台服务 / REST API / 事件处理 / 运行条件监视），辅助类待迁移 |
 | 同步核心 | Syncthing (Go, git submodule) → NDK 交叉编译，子进程方式运行 |
-| DI / 数据 | Dagger 2 (KSP), Gson, Volley, SharedPreferences |
+| DI / 数据 | 手动 DI, Gson, OkHttp, SharedPreferences |
 | 构建 | Gradle (Kotlin DSL) + Version Catalog, JDK 21, AGP 9.x |
 
 - minSdk 23 (Android 6.0) / targetSdk 36 / compileSdk 37

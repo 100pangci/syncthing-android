@@ -45,7 +45,7 @@ public class NotificationHandler {
     private boolean lastStartForegroundService = false;
     private boolean appShutdownInProgress = false;
 
-    // Dagger2 constructor injection - receives SharedPreferences directly to avoid circular dependency
+    // Receives SharedPreferences directly to avoid circular dependency
     public NotificationHandler(Context context, SharedPreferences preferences) {
         mContext = context;
         mPreferences = preferences;
