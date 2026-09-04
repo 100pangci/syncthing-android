@@ -661,6 +661,30 @@ class RestApi(
             return folders
         }
 
+    /**
+     * Looks a folder up in the live config WITHOUT the deep copy [getFolderByID] performs.
+     *
+     * This is the hot path for event handling (setLocalFolderLastItemFinished,
+     * setRemoteCompletionInfo, folder status refresh): the full-config Gson deep copy used to
+     * run once per event on the main thread and was a measurable source of scroll jank during
+     * active syncs. Callers MUST treat the result as read-only - it is shared with the live
+     * config. Returns null when the config is not loaded or the id is unknown.
+     */
+    internal fun findFolderReadonly(folderID: String): Folder? {
+        if (Constants.ENABLE_TEST_DATA && folderID == "abcd-efgh") {
+            val folder = Folder()
+            folder.id = "abcd-efgh"
+            folder.label = "label_abcd-efgh"
+            folder.path = "/storage/emulated/0/testdata"
+            folder.type = Constants.FOLDER_TYPE_SEND_RECEIVE
+            return folder
+        }
+
+        synchronized(configLock) {
+            return config?.folders?.firstOrNull { it.id == folderID }
+        }
+    }
+
     fun getFolderByID(folderID: String): Folder? {
         if (Constants.ENABLE_TEST_DATA && folderID == "abcd-efgh") {
             val folder = Folder()
@@ -1064,7 +1088,7 @@ class RestApi(
             // to this function.
             LogV("getFolderStatus: Cache miss, folderId=\"$folderId\". Performing query.")
             apiGet(ApiClient.URI_DB_STATUS, params("folder" to folderId), { result ->
-                val folder = getFolderByID(folderId)
+                val folder = findFolderReadonly(folderId)
                 if (folder == null) {
                     Log.e(TAG, "getFolderStatus#onResult: folderId == null")
                     return@apiGet
@@ -1116,26 +1140,37 @@ class RestApi(
         lastItemFinishedItem: String?,
         lastItemFinishedTime: String?
     ) {
+        val fId = folderId ?: return
         // lastItemFinishedAction RAW data from Syncthing:
         // update: A file was changed or deleted
-        var realLastItemFinishedAction = lastItemFinishedAction
+        //
+        // The File.exists() below is a filesystem stat per event; it used to run on the main
+        // thread (EventPoller callbacks) and stalled frames during active syncs. Offload the
+        // whole cache update to the single-thread executor like the conflict-file scans; the
+        // UI picks the result up on the next read, a few ms later.
+        executorService.execute {
+            if (hasShutdown || executorService.isShutdown) {
+                return@execute
+            }
+            var realLastItemFinishedAction = lastItemFinishedAction
 
-        // Check if the file was updated or deleted in reality.
-        if (lastItemFinishedAction == "update") {
-            val folder = folderId?.let { getFolderByID(it) }
-            if (!(folder == null || folder.path == null)) {
-                val fileExists = File(folder.path + "/" + lastItemFinishedItem).exists()
-                if (!fileExists) {
-                    realLastItemFinishedAction = "delete"
+            // Check if the file was updated or deleted in reality.
+            if (lastItemFinishedAction == "update") {
+                val folder = findFolderReadonly(fId)
+                if (!(folder == null || folder.path == null)) {
+                    val fileExists = File(folder.path + "/" + lastItemFinishedItem).exists()
+                    if (!fileExists) {
+                        realLastItemFinishedAction = "delete"
+                    }
                 }
             }
+            localCompletion.setLastItemFinished(
+                fId,
+                realLastItemFinishedAction ?: "",
+                lastItemFinishedItem ?: "",
+                lastItemFinishedTime ?: ""
+            )
         }
-        localCompletion.setLastItemFinished(
-            folderId ?: return,
-            realLastItemFinishedAction ?: "",
-            lastItemFinishedItem ?: "",
-            lastItemFinishedTime ?: ""
-        )
     }
 
     fun setRemoteCompletionInfo(deviceId: String?, folderId: String?, needBytes: Double?, completion: Double?) {
@@ -1143,7 +1178,7 @@ class RestApi(
             Log.e(TAG, "setRemoteCompletionInfo: folderId == null")
             return
         }
-        val folder = getFolderByID(fId)
+        val folder = findFolderReadonly(fId)
         if (folder == null) {
             Log.e(TAG, "setRemoteCompletionInfo: folderId == null")
             return
