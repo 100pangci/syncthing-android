@@ -29,8 +29,8 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 /**
  * OkHttp-based, coroutine-friendly client for the local Syncthing REST API.
  *
- * This is the phase2 replacement for the Volley-based [ApiRequest] family
- * ([GetRequest]/[PostRequest]). Behaviour is aligned with the old implementation:
+ * This is the phase2 replacement for the Volley-based ApiRequest/GetRequest/PostRequest family
+ * (deleted in phase6a). Behaviour is aligned with the old implementation:
  *
  *  - Every request carries the `X-API-Key` header.
  *  - [forceLoopbackHost] pins the connection to the loopback interface regardless of the
@@ -62,6 +62,8 @@ class ApiClient(
     private val apiKey: String,
     maxAttempts: Int = 1 + MAX_RETRIES,
     timeoutMs: Long = REQUEST_TIMEOUT_MS,
+    /** Set to false for high-frequency polling whose failures are logged (or throttled) by the caller. */
+    private val logFailures: Boolean = true,
 ) {
     private val maxAttempts = maxAttempts.coerceAtLeast(1)
 
@@ -115,7 +117,9 @@ class ApiClient(
                     lastCause = e
                     return@repeat
                 }
-                Log.w(TAG, "Request to $httpUrl failed: $e")
+                if (logFailures) {
+                    Log.w(TAG, "Request to $httpUrl failed: $e")
+                }
                 throw e
             }
             val bytes = try {
@@ -133,7 +137,9 @@ class ApiClient(
             if (!response.isSuccessful) {
                 response.close()
                 // HTTP errors fail fast (Volley's default: no client/server error retries).
-                Log.w(TAG, "Request to $httpUrl failed, code=${response.code}")
+                if (logFailures) {
+                    Log.w(TAG, "Request to $httpUrl failed, code=${response.code}")
+                }
                 throw ApiHttpException(response.code, httpUrl)
             }
             return decodeBody(bytes, response.header("Content-Type"))
@@ -182,12 +188,44 @@ class ApiClient(
     class ApiHttpException(val statusCode: Int, url: HttpUrl) :
         IOException("HTTP $statusCode for $url")
 
-    private companion object {
-        const val HEADER_API_KEY = "X-API-Key"
-        const val REQUEST_TIMEOUT_MS = 5000L
-        const val MAX_RETRIES = 5
+    /**
+     * REST endpoint paths of the Syncthing REST API.
+     *
+     * Formerly defined on the Volley-based GetRequest/PostRequest classes (deleted in phase6a);
+     * the names are unchanged so call sites only swap the qualifier.
+     */
+    companion object {
+        // Endpoints formerly on GetRequest.
+        const val URI_CONFIG           = "/rest/system/config"
+        const val URI_SYSTEM_DISCOVERY = "/rest/system/discovery"
+        const val URI_SYSTEM_LOGLEVELS = "/rest/system/loglevels"
+        const val URI_VERSION          = "/rest/system/version"
+        const val URI_SYSTEM_STATUS    = "/rest/system/status"
+        const val URI_CONNECTIONS      = "/rest/system/connections"
+        const val URI_PENDING_DEVICES  = "/rest/cluster/pending/devices"
+        const val URI_PENDING_FOLDERS  = "/rest/cluster/pending/folders"
+        const val URI_DEBUG_SUPPORT    = "/rest/debug/support"
+        const val URI_DB_COMPLETION    = "/rest/db/completion"
+        const val URI_DB_IGNORES       = "/rest/db/ignores"
+        const val URI_DB_STATUS        = "/rest/db/status"
+        const val URI_REPORT           = "/rest/svc/report"
+        const val URI_EVENTS           = "/rest/events"
+        const val URI_EVENTS_DISK      = "/rest/events/disk"
+        const val URI_STATS_DEVICE     = "/rest/stats/device"
 
-        val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
+        // Endpoints formerly on PostRequest.
+        // URI_DB_IGNORES is shared with the GET endpoint above (same path, different method).
+        const val URI_DB_OVERRIDE      = "/rest/db/override"
+        const val URI_DB_REVERT        = "/rest/db/revert"
+        const val URI_DB_SCAN          = "/rest/db/scan"
+        const val URI_SYSTEM_CONFIG    = "/rest/system/config"
+        const val URI_SYSTEM_SHUTDOWN  = "/rest/system/shutdown"
+
+        private const val HEADER_API_KEY = "X-API-Key"
+        private const val REQUEST_TIMEOUT_MS = 5000L
+        private const val MAX_RETRIES = 5
+
+        private val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
     }
 }
 
