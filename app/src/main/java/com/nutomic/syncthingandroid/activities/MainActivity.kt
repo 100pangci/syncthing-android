@@ -75,8 +75,8 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
     private var serviceState by mutableStateOf(SyncthingService.State.INIT)
     private val resultBus = ResultBus()
 
-    override fun onServiceStateChange(currentState: SyncthingService.State?) {
-        serviceState = currentState ?: SyncthingService.State.INIT
+    override fun onServiceStateChange(currentState: SyncthingService.State) {
+        serviceState = currentState
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -239,17 +239,17 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
             return
         }
         // Evaluate run conditions to detect changes made to the metered wifi flags.
-        getService()?.evaluateRunConditions()
+        service?.evaluateRunConditions()
     }
 
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
         super.onServiceConnected(componentName, iBinder)
         val binder = iBinder as SyncthingServiceBinder
-        binder.getService().registerOnServiceStateChangeListener(this)
+        binder.service.registerOnServiceStateChangeListener(this)
     }
 
     override fun onDestroy() {
-        getService()?.unregisterOnServiceStateChangeListener(this)
+        service?.unregisterOnServiceStateChangeListener(this)
         super.onDestroy()
     }
 

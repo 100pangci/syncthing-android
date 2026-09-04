@@ -26,6 +26,7 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,11 +48,15 @@ import com.nutomic.syncthingandroid.ui.LocalServiceState
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.ui.appPreferences
 import com.nutomic.syncthingandroid.util.Util
+import android.util.Log
+import java.io.IOException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import java.text.NumberFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+
+private const val TAG = "StatusPage"
 
 /**
  * Status tab: why syncthing is (not) running plus system statistics.
@@ -68,7 +73,7 @@ fun StatusPage(
 ) {
     val context = LocalContext.current
     val service = LocalSyncthingService.current
-    val api = service?.getApi()
+    val api = service?.api
     val preferences = context.appPreferences()
 
     var forceStartStopState by remember {
@@ -82,15 +87,19 @@ fun StatusPage(
     var upload by remember { mutableStateOf("") }
     var announceServer by remember { mutableStateOf("") }
     var uptime by remember { mutableStateOf("") }
-    var totalSyncCompletion by remember { mutableStateOf(-1) }
+
+    // Overall sync completion is event-driven inside RestApi and cached as a
+    // StateFlow (phase6b): collect it instead of polling the cache here.
+    val totalSyncCompletion = api?.totalSyncCompletion?.collectAsState()?.value ?: -1
 
     LaunchedEffect(serviceState, visible) {
         if (!visible) return@LaunchedEffect
         while (isActive) {
-            if (serviceState == SyncthingService.State.ACTIVE && api != null && api.isConfigLoaded()) {
-                api.getRemoteDeviceStatus("")
-                totalSyncCompletion = api.getTotalSyncCompletion()
-                api.getSystemStatus { systemStatus ->
+            if (serviceState == SyncthingService.State.ACTIVE && api != null && api.isConfigLoaded) {
+                try {
+                    api.getRemoteDeviceStatus("")
+
+                    val systemStatus = api.fetchSystemStatus()
                     val announceTotal = systemStatus.discoveryMethods
                     val announceConnected =
                         announceTotal - Optional.fromNullable(systemStatus.discoveryErrors).transform { it.size }.or(0)
@@ -110,12 +119,16 @@ fun StatusPage(
                     }
 
                     val total: Connection =
-                        if (api.isConfigLoaded()) api.getTotalConnectionStatistic() else Connection()
+                        if (api.isConfigLoaded) api.totalConnectionStatistic else Connection()
                     // "Hide" rates below 1 KiB/s to avoid bothering the user with idle traffic.
                     download = (if (total.inBits / 8 < 1024) "0 B/s" else Util.readableTransferRate(context, total.inBits)) +
                             " (" + Util.readableFileSize(context, total.inBytesTotal.toDouble()) + ")"
                     upload = (if (total.outBits / 8 < 1024) "0 B/s" else Util.readableTransferRate(context, total.outBits)) +
                             " (" + Util.readableFileSize(context, total.outBytesTotal.toDouble()) + ")"
+                } catch (e: Exception) {
+                    // Transient transport/parse failure - keep the old callback API's
+                    // fire-and-forget tolerance and retry on the next cycle.
+                    Log.w(TAG, "StatusPage: system status fetch failed", e)
                 }
             }
             delay(Constants.REST_UPDATE_INTERVAL)

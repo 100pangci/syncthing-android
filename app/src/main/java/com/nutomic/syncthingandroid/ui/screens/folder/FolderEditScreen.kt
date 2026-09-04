@@ -70,8 +70,8 @@ fun FolderEditScreen(
     val navigator = LocalAppNavigator.current
     val service = LocalSyncthingService.current
     val serviceState = LocalServiceState.current
-    val api = service?.getApi()
-    val apiConfigLoaded = api?.isConfigLoaded() ?: false
+    val api = service?.api
+    val apiConfigLoaded = api?.isConfigLoaded ?: false
     val configRouter = remember { ConfigRouter(context) }
     val preferences = context.appPreferences()
     val scope = rememberCoroutineScope()
@@ -100,7 +100,7 @@ fun FolderEditScreen(
     // the init effect runs, so cancellation has to react to the service
     // becoming available instead.
     LaunchedEffect(service) {
-        service?.getNotificationHandler()?.cancelConsentNotification(notificationId)
+        service?.notificationHandler?.cancelConsentNotification(notificationId)
     }
     // Refresh device share states when the api becomes available or folder changes.
     LaunchedEffect(apiConfigLoaded, holder.folder?.id) {

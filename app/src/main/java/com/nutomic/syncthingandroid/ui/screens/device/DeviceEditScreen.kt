@@ -105,8 +105,8 @@ fun DeviceEditScreen(
     val navigator = LocalAppNavigator.current
     val service = LocalSyncthingService.current
     val serviceState = LocalServiceState.current
-    val api = service?.getApi()
-    val apiConfigLoaded = api?.isConfigLoaded() ?: false
+    val api = service?.api
+    val apiConfigLoaded = api?.isConfigLoaded ?: false
     val configRouter = remember { ConfigRouter(context) }
     val preferences = context.appPreferences()
     val prefExpertMode = preferences.getBoolean(Constants.PREF_EXPERT_MODE, false)
@@ -181,7 +181,7 @@ fun DeviceEditScreen(
     // the init effect runs, so cancellation has to react to the service
     // becoming available instead.
     LaunchedEffect(service) {
-        service?.getNotificationHandler()?.cancelConsentNotification(notificationId)
+        service?.notificationHandler?.cancelConsentNotification(notificationId)
     }
 
     // Query discovered devices in create mode (when the id field is still empty).
