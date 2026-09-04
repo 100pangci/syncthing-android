@@ -68,7 +68,7 @@ fun StatusPage(
 ) {
     val context = LocalContext.current
     val service = LocalSyncthingService.current
-    val api = service?.getApi()
+    val api = service?.api
     val preferences = context.appPreferences()
 
     var forceStartStopState by remember {

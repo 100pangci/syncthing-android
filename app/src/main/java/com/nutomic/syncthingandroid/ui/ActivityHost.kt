@@ -44,7 +44,7 @@ fun CompositionLocalsHost(
 
     DisposableEffect(activity) {
         val stateListener = SyncthingService.OnServiceStateChangeListener { currentState ->
-            serviceState = currentState ?: SyncthingService.State.INIT
+            serviceState = currentState
         }
         val connectionListener = SyncthingActivity.OnServiceConnectionChangedListener { s ->
             service = s

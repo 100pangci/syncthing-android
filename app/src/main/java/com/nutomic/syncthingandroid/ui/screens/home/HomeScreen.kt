@@ -85,7 +85,7 @@ fun HomeScreen(
     val navigator = LocalAppNavigator.current
     val service = LocalSyncthingService.current
     val serviceState = LocalServiceState.current
-    val api = service?.getApi()
+    val api = service?.api
     val apiConfigLoaded = api?.isConfigLoaded() ?: false
 
     // Folder/device lists are polled and owned by HomeDataHost (above the

@@ -31,7 +31,7 @@ fun MainActivityDialogsHost() {
     val serviceState = LocalServiceState.current
     val resultBus = LocalResultBus.current
     val configRouter = remember { ConfigRouter(context) }
-    val api = service?.getApi()
+    val api = service?.api
     val apiConfigLoaded = api?.isConfigLoaded() ?: false
 
     // ---- Device id QR dialog ----
