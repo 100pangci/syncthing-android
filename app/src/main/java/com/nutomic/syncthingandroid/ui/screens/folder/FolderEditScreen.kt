@@ -78,7 +78,10 @@ fun FolderEditScreen(
     val resultBus = LocalResultBus.current
 
     val prefExpertMode = preferences.getBoolean(Constants.PREF_EXPERT_MODE, false)
-    val holder = rememberFolderEditStateHolder()
+    // Draft state is store-backed (NOT remember): Nav3 disposes this entry while the
+    // sync conditions / folder picker routes are on top, and the draft has to survive
+    // that. See FolderEditStateStore for the eviction lifecycle.
+    val holder = LocalFolderEditStateStore.current.holderFor(folderEditStateKey(folderId, isCreate))
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
     var showDiscardDialog by rememberSaveable { mutableStateOf(false) }
     var showFolderTypeDialog by rememberSaveable { mutableStateOf(false) }

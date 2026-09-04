@@ -15,7 +15,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
@@ -37,8 +39,13 @@ import com.nutomic.syncthingandroid.ui.nav.LocalResultBus
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
 import com.nutomic.syncthingandroid.ui.screens.home.HomeDataHost
 import com.nutomic.syncthingandroid.ui.screens.home.HomeScreen
+import com.nutomic.syncthingandroid.ui.screens.folder.FolderEditStateStore
+import com.nutomic.syncthingandroid.ui.screens.folder.LocalFolderEditStateStore
+import com.nutomic.syncthingandroid.ui.screens.folder.folderEditStateKey
 import com.nutomic.syncthingandroid.ui.screens.log.LogScreen
 import com.nutomic.syncthingandroid.ui.screens.syncconditions.SyncConditionsScreen
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import com.nutomic.syncthingandroid.ui.screens.webview.WebViewScreen
 import com.nutomic.syncthingandroid.util.PermissionUtil
 import javax.inject.Inject
@@ -113,12 +120,27 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
                         }
                     }
                 }
+                // Unsaved folder edit drafts must survive being covered by another
+                // route (Nav3 disposes non-top entries), but must NOT survive the
+                // route leaving the back stack - see FolderEditStateStore.
+                val folderEditStateStore = remember { FolderEditStateStore() }
+                LaunchedEffect(backStack, folderEditStateStore) {
+                    snapshotFlow { backStack.toList() }
+                        .map { stack ->
+                            stack.filterIsInstance<AppRoute.FolderEdit>()
+                                .map { folderEditStateKey(it.folderId, it.isCreate) }
+                                .toSet()
+                        }
+                        .distinctUntilChanged()
+                        .collect { liveKeys -> folderEditStateStore.retainAll(liveKeys) }
+                }
 
                 CompositionLocalProvider(
                     LocalSyncthingService provides service,
                     LocalServiceState provides serviceState,
                     LocalAppNavigator provides navigator,
                     LocalResultBus provides resultBus,
+                    LocalFolderEditStateStore provides folderEditStateStore,
                 ) {
                     // Hoists the home list polling above the NavDisplay so the lists
                     // survive entry transitions (see HomeDataHost).

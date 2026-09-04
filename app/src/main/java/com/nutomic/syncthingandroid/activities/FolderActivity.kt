@@ -3,10 +3,14 @@ package com.nutomic.syncthingandroid.activities
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.ui.CompositionLocalsHost
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
 import com.nutomic.syncthingandroid.ui.screens.folder.FolderEditScreen
+import com.nutomic.syncthingandroid.ui.screens.folder.FolderEditStateStore
+import com.nutomic.syncthingandroid.ui.screens.folder.LocalFolderEditStateStore
 
 /**
  * Deep link host for the "folder shared by device" notification.
@@ -29,15 +33,22 @@ class FolderActivity : SyncthingActivity() {
         val resultBus = ResultBus()
         setContent {
             ApplicationTheme {
+                // Single-screen host: the store has exactly one draft (no back stack
+                // to watch); it dies with the activity.
+                val folderEditStateStore = remember { FolderEditStateStore() }
                 CompositionLocalsHost(activity = this, resultBus = resultBus) {
-                    FolderEditScreen(
-                        folderId = folderId,
-                        folderLabel = folderLabel,
-                        isCreate = isCreate,
-                        deviceId = deviceId,
-                        receiveEncrypted = receiveEncrypted,
-                        notificationId = notificationId,
-                    )
+                    CompositionLocalProvider(
+                        LocalFolderEditStateStore provides folderEditStateStore,
+                    ) {
+                        FolderEditScreen(
+                            folderId = folderId,
+                            folderLabel = folderLabel,
+                            isCreate = isCreate,
+                            deviceId = deviceId,
+                            receiveEncrypted = receiveEncrypted,
+                            notificationId = notificationId,
+                        )
+                    }
                 }
             }
         }
