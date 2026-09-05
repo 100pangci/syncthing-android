@@ -2,6 +2,7 @@ package com.nutomic.syncthingandroid.model
 
 import android.text.TextUtils
 
+/** Public fields on purpose: Gson reflective binding + direct field access from Java tests. */
 class RemoteIgnoredDevice {
     @JvmField
     var time: String = ""

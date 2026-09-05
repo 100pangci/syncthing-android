@@ -2,6 +2,7 @@ package com.nutomic.syncthingandroid.model
 
 /**
  * REST API endpoint "/rest/events/disk"
+ * Public fields on purpose: Gson reflective binding + direct field access from Java tests.
  */
 class DiskEvent {
     @JvmField

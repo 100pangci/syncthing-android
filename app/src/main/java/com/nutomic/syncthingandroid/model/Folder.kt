@@ -7,6 +7,7 @@ import com.nutomic.syncthingandroid.service.Constants
  * Sources:
  * - https://github.com/syncthing/syncthing/tree/master/lib/config
  * - https://github.com/syncthing/syncthing/blob/master/lib/config/folderconfiguration.go
+ * Public fields on purpose: Gson reflective binding + direct field access from Java tests.
  */
 class Folder {
     // Folder Configuration

@@ -2,6 +2,7 @@ package com.nutomic.syncthingandroid.model
 
 /**
  * /rest/db/completion?device=deviceId&folder=folderId
+ * Public fields on purpose: Gson reflective binding + direct field access from Java tests.
  */
 class CompletionInfo {
     @JvmField

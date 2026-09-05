@@ -6,6 +6,7 @@ import com.nutomic.syncthingandroid.util.Luhn
 import java.util.Arrays
 import java.util.Locale
 
+/** Public fields on purpose: Gson reflective binding + direct field access from Java tests. */
 class Device {
     @JvmField
     var deviceID: String = ""

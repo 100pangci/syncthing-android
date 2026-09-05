@@ -4,6 +4,7 @@ package com.nutomic.syncthingandroid.model
  * Sources:
  * - https://github.com/syncthing/syncthing/tree/master/lib/config
  * - https://github.com/syncthing/syncthing/blob/master/lib/config/guiconfiguration.go
+ * Public fields on purpose: Gson reflective binding + direct field access from Java tests.
  */
 class Gui {
     @JvmField
