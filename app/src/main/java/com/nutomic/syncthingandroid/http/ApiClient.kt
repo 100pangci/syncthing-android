@@ -264,8 +264,7 @@ class ApiClient(
  * would break the trust model above.
  */
 internal fun forceLoopbackHost(url: URL): URL {
-    // Constants.DEFAULT_WEBGUI_TCP_PORT is a boxed Integer on the Java side.
-    val port = if (url.port != -1) url.port else Constants.DEFAULT_WEBGUI_TCP_PORT.toInt()
+    val port = if (url.port != -1) url.port else Constants.DEFAULT_WEBGUI_TCP_PORT
     return try {
         URL(url.protocol, LOOPBACK_HOST, port, url.file)
     } catch (e: MalformedURLException) {
