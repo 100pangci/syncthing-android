@@ -57,7 +57,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
  * instead of processing the remaining batch afterwards. The old behaviour could invoke event
  * handling after shutdown had begun; dropping it is safer and simpler.
  */
-class EventPoller @JvmOverloads constructor(
+class EventPoller(
     private val context: Context,
     private val restApi: RestApi,
     private val pollerScope: CoroutineScope =
