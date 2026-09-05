@@ -20,6 +20,7 @@ An intensive rewrite on top of [researchxxl/Syncthing-Fork](https://github.com/r
 - All legacy View code and resources removed
 
 ### New Features
+- **SAF bridge**: folders exposed by third-party DocumentsProviders (no real filesystem path, e.g. another app's data root) are bridged into the Syncthing core via an in-app forwarding layer and synced like any other folder
 - **AMOLED black theme**: follow system / light / dark / AMOLED, switching instantly, with the embedded Web GUI synced to its black theme
 - **Full i18n coverage**: all 38 language packs completed to 100% (496 keys + 8 plurals each, including az / be / ckb / gl built from scratch), with every file's key order aligned to the master `values/strings.xml` for easy maintenance
 - Application ID changed to `com.github.ywpc05.syncthingfork`, so it installs alongside the upstream app
@@ -33,7 +34,7 @@ An intensive rewrite on top of [researchxxl/Syncthing-Fork](https://github.com/r
 
 ### Goal
 
-- **Fully rewrite the service layer**: the service layer (`ConfigXml` / `NotificationHandler` / helpers, etc.) is still Java; the plan is to migrate it step by step to a modern Kotlin implementation with coroutines / Flow, unifying the stack with the Compose UI. Dagger has already been removed in favor of manual DI, and Volley/guava have been replaced by OkHttp/stdlib.
+- **Fully rewrite the service layer**: the service layer is now fully Kotlin + coroutines / Flow (`SyncthingService` / `RestApi` / event polling / run condition monitoring / `ConfigXml` / receivers / quick-settings tiles / TLS trust manager / notification & config helpers) — zero Java left in the app sources. Dagger has already been removed in favor of manual DI, and Volley/guava have been replaced by OkHttp/stdlib.
 
 ## Download
 
@@ -65,7 +66,7 @@ The knowledge base (FAQ, battery optimization, vendor-specific background restri
 | Layer | Technologies |
 |---|---|
 | UI | Kotlin, Jetpack Compose, Material 3, Navigation 3 |
-| Service layer | Kotlin (foreground service / REST API / event processing / run condition monitoring), Java helpers pending migration |
+| Service layer | Kotlin + coroutines / Flow (foreground service, REST API, event polling, run condition monitoring, config XML, receivers, quick-settings tiles, notifications & backups) — zero Java |
 | Sync core | Syncthing (Go, git submodule) → NDK cross-compile, run as child process |
 | DI / data | Manual DI, Gson, OkHttp, SharedPreferences |
 | Build | Gradle (Kotlin DSL) + Version Catalog, JDK 21, AGP 9.x |
