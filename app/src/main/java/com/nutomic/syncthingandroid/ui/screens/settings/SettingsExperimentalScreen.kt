@@ -19,8 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.EntryProviderScope
 import com.nutomic.syncthingandroid.R
-import com.nutomic.syncthingandroid.SyncthingApp
-import com.nutomic.syncthingandroid.service.AppPrefs
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.SyncthingService
 import com.nutomic.syncthingandroid.util.ConfigXml
@@ -56,7 +54,6 @@ fun SettingsExperimentalScreen() {
     // Non-null while the "turn off root" confirmation dialog (root-only folders) is up.
     val pendingRootDisableFolders = remember { mutableStateOf<List<String>?>(null) }
     val scope = rememberCoroutineScope()
-    val appPrefs = (context.applicationContext as SyncthingApp).preferences
 
     // React to root-mode toggles: turning it on probes su right away (this is what makes
     // the Magisk grant dialog appear immediately instead of at the next core start), and
@@ -94,7 +91,8 @@ fun SettingsExperimentalScreen() {
                             return@collect
                         }
                     }
-                    if (AppPrefs.getLastCoreRunAsRoot(appPrefs)) {
+                    val rootOwned = withContext(Dispatchers.IO) { RootAccess.appStorageOwnedByRoot(context) }
+                    if (rootOwned) {
                         withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
                     }
                     context.startService(
@@ -127,9 +125,7 @@ fun SettingsExperimentalScreen() {
                         try {
                             suppressNextRootChange.value = true
                             runAsRoot.value = false
-                            if (AppPrefs.getLastCoreRunAsRoot(appPrefs)) {
-                                withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
-                            }
+                            withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
                             context.startService(
                                 Intent(context, SyncthingService::class.java)
                                     .setAction(SyncthingService.ACTION_RESTART)

@@ -62,4 +62,23 @@ object RootAccess {
         }
         return ok
     }
+
+    /**
+     * True when app-private files are owned by another UID (i.e. the root-uid core left
+     * them behind), so [handBackStorage] is needed. Uses the config file's actual owner
+     * rather than any preference marker: a failed non-root launch must not mask files
+     * that a previous root session left behind. stat() metadata is readable by the app
+     * even for root-owned 0600 files inside its own data directory.
+     */
+    fun appStorageOwnedByRoot(context: Context): Boolean {
+        val config = java.io.File(context.filesDir, "config.xml")
+        if (!config.exists()) {
+            return false
+        }
+        return try {
+            android.system.Os.stat(config.absolutePath).st_uid != android.os.Process.myUid()
+        } catch (e: Exception) {
+            false
+        }
+    }
 }
