@@ -21,6 +21,11 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
+import com.nutomic.syncthingandroid.ui.nav.BACK_PEEK_PAD_DP
+import com.nutomic.syncthingandroid.ui.nav.backPopTransform
+import com.nutomic.syncthingandroid.ui.nav.backPredictivePopTransform
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -105,6 +110,7 @@ fun SettingsNavDisplay(
     backStack: NavBackStack<SettingsRoute>
 ) {
     val navigator = LocalSettingsNavigator.current
+    val peekPadPx = with(LocalDensity.current) { BACK_PEEK_PAD_DP.dp.roundToPx() }
 
     NavDisplay(
         backStack = backStack,
@@ -127,16 +133,8 @@ fun SettingsNavDisplay(
             slideInHorizontally(initialOffsetX = { it }) togetherWith
                     slideOutHorizontally(targetOffsetX = { -it })
         },
-        popTransitionSpec = {
-            // Slide in from left when navigating back
-            slideInHorizontally(initialOffsetX = { -it }) togetherWith
-                    slideOutHorizontally(targetOffsetX = { it })
-        },
-        predictivePopTransitionSpec = {
-            // Slide in from left when navigating back
-            slideInHorizontally(initialOffsetX = { -it }) togetherWith
-                    slideOutHorizontally(targetOffsetX = { it })
-        },
+        popTransitionSpec = { backPopTransform() },
+        predictivePopTransitionSpec = { swipeEdge -> backPredictivePopTransform(swipeEdge, peekPadPx) },
         modifier = Modifier.onKeyEvent { keyEvent ->
             if (keyEvent.key == Key.DirectionLeft
                 && keyEvent.type == KeyEventType.KeyDown) {
