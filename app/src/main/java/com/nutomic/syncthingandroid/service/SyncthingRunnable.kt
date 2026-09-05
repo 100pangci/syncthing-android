@@ -441,7 +441,6 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
 
         private val syncthingProcess = AtomicReference<Process?>(null)
 
-        @JvmStatic
         fun getGatewayIpV4(context: Context): String? {
             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetwork = cm.activeNetwork ?: return null
