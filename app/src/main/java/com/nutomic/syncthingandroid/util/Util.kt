@@ -124,9 +124,10 @@ object Util {
      *
      * With [asRoot] the listing runs through the root shell: the root-uid syncthing core
      * is invisible to the app's own `ps` (Android procfs only exposes same-UID processes).
-     * Root listing uses the args column, so [processName] should then be the full binary
-     * path — other apps on the device ship cores with the same basename, and a basename
-     * match would kill them too.
+     * Root listing matches the FIRST argument exactly against [processName] (pass the
+     * full binary path) — a substring match would also hit the `su` wrapper whose
+     * command line embeds the launch script containing that same path, and killing the
+     * wrapper reports a spurious crash exit code (130) for the watched process.
      */
     fun getProcessPIDs(processName: String, asRoot: Boolean = false): List<String> {
         val output = if (asRoot) {
@@ -516,14 +517,21 @@ object Util {
  * Parses `ps` output into PIDs whose line contains [processName].
  *
  * Two column layouts exist: the app-shell `ps` (NAME column only, PID is the second
- * token) and the root-shell `ps -A -o pid,args` (PID first). The root variant pairs with
- * full-binary-path filters so cores of other apps on the same device are never matched.
+ * token, substring match) and the root-shell `ps -A -o pid,args` (PID first, exact match
+ * on the first argument). The exact root match pairs with full-binary-path filters and
+ * deliberately skips lines like `su -c <script>` whose arguments merely CONTAIN the
+ * path — killing that wrapper instead of only the core reports a spurious 130 crash.
  */
 internal fun parsePsOutput(output: String, processName: String, asRoot: Boolean): List<String> {
     val pidTokenIndex = if (asRoot) 0 else 1
     val processPIDs = mutableListOf<String>()
     for (line in output.split("\n".toRegex())) {
-        if (line.contains(processName)) {
+        if (asRoot) {
+            val tokens = line.trim().split("\\s+".toRegex())
+            if (tokens.size > 1 && tokens[1] == processName) {
+                processPIDs.add(tokens[0])
+            }
+        } else if (line.contains(processName)) {
             val tokens = line.trim().split("\\s+".toRegex())
             if (tokens.size > pidTokenIndex) {
                 processPIDs.add(tokens[pidTokenIndex])

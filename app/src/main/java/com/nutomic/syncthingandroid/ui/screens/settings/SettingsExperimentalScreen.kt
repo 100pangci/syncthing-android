@@ -82,18 +82,22 @@ fun SettingsExperimentalScreen() {
                             return@collect
                         }
                     } else {
-                        // OFF: warn when configured folders live in directories the app
+                        // OFF: while su is still guaranteed to work, hand root-session
+                        // files back FIRST — the root-uid core rewrites config.xml with
+                        // explicit 0600 modes, so the root-only-folder scan below could
+                        // not even read the config otherwise.
+                        if (withContext(Dispatchers.IO) { RootAccess.appStorageOwnedByRoot(context) }) {
+                            withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
+                        }
+                        // Then warn when configured folders live in directories the app
                         // cannot reach without root — they will stop syncing.
                         val rootOnlyFolders = withContext(Dispatchers.IO) { getRootOnlyFolders(context) }
                         if (rootOnlyFolders.isNotEmpty()) {
                             // Keep the switch on until the user decides in the dialog.
+                            // The storage hand-back already happened and is idempotent.
                             pendingRootDisableFolders.value = rootOnlyFolders
                             return@collect
                         }
-                    }
-                    val rootOwned = withContext(Dispatchers.IO) { RootAccess.appStorageOwnedByRoot(context) }
-                    if (rootOwned) {
-                        withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
                     }
                     context.startService(
                         Intent(context, SyncthingService::class.java)
@@ -125,7 +129,8 @@ fun SettingsExperimentalScreen() {
                         try {
                             suppressNextRootChange.value = true
                             runAsRoot.value = false
-                            withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
+                            // Storage hand-back already ran before the dialog; the root
+                            // folders the user was warned about are intentionally left.
                             context.startService(
                                 Intent(context, SyncthingService::class.java)
                                     .setAction(SyncthingService.ACTION_RESTART)

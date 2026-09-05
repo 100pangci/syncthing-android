@@ -89,6 +89,24 @@ class UtilTest {
     }
 
     @Test
+    fun parsePsOutput_rootSkipsSuWrapperContainingThePath() {
+        // The su wrapper's command line embeds the launch script, which contains the same
+        // binary path. Killing it instead of only the core reports a spurious 130 crash.
+        val output = """
+            PID ARGS
+              111 /data/app/~~ours==/lib/arm64/libsyncthingnative.so serve --no-browser
+              555 su -c export HOME='/data/user/0/pkg/files'
+              777 /data/app/~~ours==/lib/arm64/libsyncthingnative.soX
+        """.trimIndent()
+        val pids = parsePsOutput(
+            output,
+            "/data/app/~~ours==/lib/arm64/libsyncthingnative.so",
+            asRoot = true,
+        )
+        assertEquals(listOf("111"), pids)
+    }
+
+    @Test
     fun parsePsOutput_nonRootReadsPidFromSecondToken() {
         val output = """
             USER      PID   PPID  VSIZE  RSS   WCHAN    NAME        S
