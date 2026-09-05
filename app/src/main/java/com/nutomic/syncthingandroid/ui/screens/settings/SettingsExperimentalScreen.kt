@@ -29,6 +29,7 @@ fun SettingsExperimentalScreen() {
     val useTor = rememberPreferenceState(Constants.PREF_USE_TOR, false)
     val socksProxy = rememberPreferenceState(Constants.PREF_SOCKS_PROXY_ADDRESS, "")
     val httpProxy = rememberPreferenceState(Constants.PREF_HTTP_PROXY_ADDRESS, "")
+    val runAsRoot = rememberPreferenceState(Constants.PREF_RUN_AS_ROOT, false)
 
     SettingsScaffold(
         title = stringResource(R.string.category_experimental),
@@ -78,6 +79,13 @@ fun SettingsExperimentalScreen() {
                     )
                 },
                 enabled = !useTor.value,
+            )
+        }
+        item {
+            SwitchPreference(
+                title = { Text(stringResource(R.string.run_as_root_title)) },
+                summary = { Text(stringResource(R.string.run_as_root_summary)) },
+                state = runAsRoot,
             )
         }
     }
