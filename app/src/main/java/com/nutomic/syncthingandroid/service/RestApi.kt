@@ -616,7 +616,7 @@ class RestApi(
                 Log.e(TAG, "getWebGuiUrl: config.gui.address == null, returning 127.0.0.1:${Constants.DEFAULT_WEBGUI_TCP_PORT}")
                 return@synchronized Util.buildWebGuiUrl("127.0.0.1:" + Constants.DEFAULT_WEBGUI_TCP_PORT)
             }
-            Util.buildWebGuiUrl(gui.address)
+            Util.buildWebGuiUrl(gui.address!!)
         }
 
     /**
