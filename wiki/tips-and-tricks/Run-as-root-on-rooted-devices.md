@@ -1,44 +1,54 @@
-# 以 root 运行 Syncthing 核心(root 设备)
+# Run Syncthing as root (rooted devices)
 
-> 适用:已 root(Magisk/KernelSU 等)并已给本应用授予 su 的设备。此功能默认关闭,见
-> 设置 → 实验性 → "以 root 运行 Syncthing 核心"。
+> Applies to rooted devices (Magisk / KernelSU etc.) where su has been granted to this
+> app. The feature is off by default; find it under Settings → Experimental → "Run
+> Syncthing core as root".
 
-## 能做什么
+## What it does
 
-开启后,syncthing 核心以 root 身份运行,可同步**任意目录**,典型场景:
+With root mode enabled, the Syncthing core runs with root privileges and can sync **any
+directory**, typically:
 
-- 其他应用的数据目录,如 `/data/data/<某应用>/files/...`(免 SAF 桥接)
-- 应用私有目录 `/data/media/0/Android/data/<包名>/`
-- 系统目录、外置存储的受限路径
+- Other apps' data directories, e.g. `/data/data/<some.app>/files/...` (no SAF bridge
+  needed)
+- App-private storage like `/data/media/0/Android/data/<package>/`
+- System directories and restricted paths on external storage
 
-配合文件夹选择器:路径选择页右上角出现 **终端图标(Root 浏览)**,打开后目录列表经
-root shell 读取,可以浏览并选中任何目录。
+The built-in folder picker gains a **root browse mode** (terminal icon in the top bar):
+directory listings are read through the root shell, so any folder on the device can be
+picked for syncing.
 
-## 行为与安全说明
+## Behaviour and safety notes
 
-1. **umask 000**:核心以 root 创建的文件(含应用私有目录里的 config.xml、证书、日志与
-   桥接暂存目录)权限为 666/777,保证应用自身(非 root)仍能读写——否则会"自锁"。
-   代价:应用私有存储中由核心创建的文件对**其他应用**也可写。root 设备的安全边界本已
-   不同,请自行权衡。
-2. **公共存储别用 root 模式**:/sdcard 下的路径用普通模式即可;用 root 模式同步会把
-   文件写成 root 属主,其他应用反而读不了。
-3. **进程管理走 root shell**:root 模式下核心对应用的 `ps` 不可见、`kill` 会被拒,
-   停止/重启核心均经 root shell 完成,并按完整二进制路径过滤,不会波及同设备安装的
-   其他 Syncthing 客户端。
-4. **su 授权可随时撤销**:撤销后下次核心启动自动回退为普通权限运行并写警告日志。
-5. **切回普通权限时的所有权交还**:syncthing 核心对 config.xml/密钥等以显式 0600 写入,
-   root 模式下这些文件归 root 所有。关闭 root 开关时,应用会在 su 仍可用的当下用 root
-   shell 把应用私有存储 chown 回应用自身,然后自动重启核心——config 可读、密钥生成正常。
-   应用进程被杀后的冷启动也有同样兜底。
-6. **root 目录警告**:关闭 root 时若配置中存在应用无权访问的文件夹(如其他应用的数据
-   目录),会弹窗列出并要求确认——这些目录在非 root 下无法同步,请先删除文件夹或取出
-   内容。应用私有存储内的文件会被自动交还,无需手动处理。
-5. 开关**下次核心启动时生效**(重启应用或"重启 Syncthing")。
+1. **umask 000**: the root-uid core creates files (config.xml, certificates, logs and
+   bridge staging dirs inside the app's private storage) with modes 666/777 so the
+   unprivileged app itself can keep reading and writing them — otherwise it would lock
+   itself out. The trade-off: files the core creates inside the app's private storage are
+   writable by other apps. On a rooted device the security boundary is different anyway;
+   weigh this yourself.
+2. **Don't use root mode for shared storage**: paths under /sdcard sync fine in normal
+   mode; syncing them as root leaves root-owned files behind that other apps cannot
+   access.
+3. **Process management goes through the root shell**: a root-uid core is invisible to
+   the app's own `ps` and cannot be signalled by it, so stop/restart operations run
+   through the root shell and match the full binary path — cores of other installed
+   Syncthing clients on the same device are never touched.
+4. **Switching root off**: when the setting is turned off, the app uses the still-working
+   su to hand app-private storage back to the app UID (chown) before restarting the core
+   with normal privileges — config and key generation keep working. A confirmation
+   dialog reminds you that folders which only sync with root will stop syncing.
+   The same hand-back runs as a safety net on cold starts after a root session.
+5. **su can be revoked at any time**: after revocation the next core start falls back to
+   normal privileges with a warning log; folders that only sync with root will then
+   report access errors, which is expected.
+6. The setting takes effect after the **next core start** (restart the app or use
+   "Restart Syncthing").
 
-## 验收要点(开发者)
+## Acceptance checklist (developers)
 
-- `ps` 中核心 PPID=应用、UID=0;电脑端设备正常连接
-- root 浏览选中 `/data/data/<其他应用>/...` → 双向同步流通
-- 修改配置(如文件夹重命名)→ webui 与主页同步生效(验证 umask 下 config.xml 仍可写)
-- 强杀核心(`su -c kill -9 <pid>`)→ "已崩溃(退出代码 137)"通知
-- Magisk 撤销授权 → 核心回退普通权限运行
+- `ps` shows the core with UID 0 and PPID = app; the device connects on the desktop side
+- Pick `/data/data/<other.app>/...` via root browse → two-way sync works
+- Change the config (e.g. rename a folder) → web UI and home page stay in sync (config
+  remains writable for the app while root mode is on)
+- Kill the core (`su -c kill -9 <pid>`) → "has crashed (exit code 137)" notification
+- Revoke the su grant in Magisk → next start falls back to normal privileges

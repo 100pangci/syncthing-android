@@ -21,6 +21,7 @@
 
 ### 新特性
 - **SAF 桥接**：第三方 DocumentsProvider 提供的虚拟文件夹（无真实文件路径，如其他应用的数据根目录）通过应用内转发桥接入 Syncthing 核心，与普通文件夹一样同步
+- **Root 模式（可选，默认关闭）**：以 root 身份运行 Syncthing 核心，可直接同步任意目录（如其他应用的数据），无需任何桥接。开关打开时请求 su 授权并弹窗确认；内置目录选择器提供 Root 浏览模式；关闭 root 时自动把应用私有文件的所有权交还给应用。详见 [root 模式说明](wiki/tips-and-tricks/Run-as-root-on-rooted-devices.md)
 - **AMOLED 纯黑主题**：跟随系统 / 浅色 / 深色 / AMOLED 四档即时切换，同步内嵌 Web GUI 的 black 主题
 - **全量本地化补全**：38 种语言全部补齐至 100%（每种含 496 键 + 8 组复数，其中 az / be / ckb / gl 为从零新建），所有语言文件的键顺序与主模板 `values/strings.xml` 完全对齐，便于后续维护
 - 包名改为 `com.github.ywpc05.syncthingfork`，可与上游版本并存安装
@@ -69,6 +70,7 @@ python3 scripts/install_minimum_android_sdk_prerequisites.py
 | 服务层 | Kotlin + 协程 / Flow（前台服务、REST API、事件轮询、运行条件监视、配置 XML、广播接收器、快捷设置磁贴、通知与备份）——零 Java |
 | 同步核心 | Syncthing (Go, git submodule) → NDK 交叉编译，子进程方式运行 |
 | DI / 数据 | 手动 DI, Gson, OkHttp, SharedPreferences |
+| 可选 Root | libsu（su 检测、root shell、存储所有权交还） |
 | 构建 | Gradle (Kotlin DSL) + Version Catalog, JDK 21, AGP 9.x |
 
 - minSdk 23 (Android 6.0) / targetSdk 36 / compileSdk 37
