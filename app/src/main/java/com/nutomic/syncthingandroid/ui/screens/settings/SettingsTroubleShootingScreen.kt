@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.settings
+package com.nutomic.syncthingandroid.ui.screens.settings
 
 import android.app.Activity
 import android.content.Context

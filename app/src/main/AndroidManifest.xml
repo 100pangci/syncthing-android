@@ -145,14 +145,14 @@
         <activity
             android:name=".activities.LogActivity"
             android:exported="true"
-            android:parentActivityName=".settings.SettingsActivity">
+            android:parentActivityName=".activities.SettingsActivity">
             <intent-filter>
                 <action android:name=".activities.LogActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".settings.SettingsActivity" />
+                android:value=".activities.SettingsActivity" />
         </activity>
         <activity
             android:name=".activities.FolderPickerActivity"
@@ -181,7 +181,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-        <activity android:name=".settings.SettingsActivity"
+        <activity android:name=".activities.SettingsActivity"
             android:label="@string/settings_title"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".activities.MainActivity">

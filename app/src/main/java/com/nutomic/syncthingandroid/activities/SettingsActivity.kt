@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.settings
+package com.nutomic.syncthingandroid.activities
 
 import android.content.ComponentName
 import android.content.SharedPreferences
@@ -26,6 +26,12 @@ import com.nutomic.syncthingandroid.util.LocalActivityScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import me.zhanghai.compose.preference.Preferences
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
+import com.nutomic.syncthingandroid.ui.screens.settings.SettingsNavDisplay
+import com.nutomic.syncthingandroid.ui.screens.settings.SettingsRoute
+import com.nutomic.syncthingandroid.ui.screens.settings.LocalSettingsNavigator
+import com.nutomic.syncthingandroid.ui.screens.settings.Navigator
+import com.nutomic.syncthingandroid.ui.screens.settings.createPreferenceFlow
+import com.nutomic.syncthingandroid.ui.screens.settings.rememberSettingsNavBackStack
 
 class SettingsActivity : SyncthingActivity() {
 

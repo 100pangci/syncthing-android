@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.settings
+package com.nutomic.syncthingandroid.ui.screens.settings
 
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate

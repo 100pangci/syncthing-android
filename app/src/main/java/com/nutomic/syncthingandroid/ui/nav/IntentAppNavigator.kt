@@ -3,7 +3,7 @@ package com.nutomic.syncthingandroid.ui.nav
 import android.app.Activity
 import android.content.Intent
 import com.nutomic.syncthingandroid.activities.RecentChangesActivity
-import com.nutomic.syncthingandroid.settings.SettingsActivity
+import com.nutomic.syncthingandroid.activities.SettingsActivity
 import com.nutomic.syncthingandroid.webgui.WebGuiActivity
 
 /**

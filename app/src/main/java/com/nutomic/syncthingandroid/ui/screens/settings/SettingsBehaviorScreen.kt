@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.settings
+package com.nutomic.syncthingandroid.ui.screens.settings
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
