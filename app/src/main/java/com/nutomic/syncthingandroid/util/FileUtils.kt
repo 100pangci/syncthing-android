@@ -26,8 +26,6 @@ import java.io.IOException
 import java.io.OutputStream
 import java.lang.reflect.Method
 import java.nio.charset.StandardCharsets
-import java.util.ArrayList
-import java.util.HashMap
 import java.util.Locale
 
 /**
@@ -341,9 +339,6 @@ object FileUtils {
     /**
      * Deletes a directory recursively.
      */
-    // @JvmStatic + @Throws: Java caller ConfigBackupManager.deleteDirectory(path)
-    // declares this as throwing IOException in its own signature.
-    @JvmStatic
     @Throws(IOException::class)
     fun deleteDirectoryRecursively(dir: File?): Boolean {
         if (dir == null || !dir.exists()) return false
