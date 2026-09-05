@@ -124,32 +124,21 @@ object Util {
      *
      * With [asRoot] the listing runs through the root shell: the root-uid syncthing core
      * is invisible to the app's own `ps` (Android procfs only exposes same-UID processes).
+     * Root listing uses the args column, so [processName] should then be the full binary
+     * path — other apps on the device ship cores with the same basename, and a basename
+     * match would kill them too.
      */
     fun getProcessPIDs(processName: String, asRoot: Boolean = false): List<String> {
-        val processPIDs = mutableListOf<String>()
         val output = if (asRoot) {
-            RootAccess.out("ps").joinToString("\n")
+            RootAccess.out("ps -A -o pid,args").joinToString("\n")
         } else {
             runShellCommandGetOutput("ps\n")
         }
         if (output.isEmpty()) {
             Log.w(TAG, "getProcessPIDs: Failed to list processes. ps command returned empty.")
-            return processPIDs
+            return emptyList()
         }
-
-        val lines = output.split("\n".toRegex())
-        if (lines.isEmpty()) {
-            Log.w(TAG, "getProcessPIDs: Failed to list processes. ps command returned no rows.")
-            return processPIDs
-        }
-
-        for (line in lines) {
-            if (line.contains(processName)) {
-                val processPID = line.trim().split("\\s+".toRegex())[1]
-                processPIDs.add(processPID)
-            }
-        }
-        return processPIDs
+        return parsePsOutput(output, processName, asRoot)
     }
 
     /**
@@ -521,4 +510,25 @@ object Util {
         }
         return osTrustManager
     }
+}
+
+/**
+ * Parses `ps` output into PIDs whose line contains [processName].
+ *
+ * Two column layouts exist: the app-shell `ps` (NAME column only, PID is the second
+ * token) and the root-shell `ps -A -o pid,args` (PID first). The root variant pairs with
+ * full-binary-path filters so cores of other apps on the same device are never matched.
+ */
+internal fun parsePsOutput(output: String, processName: String, asRoot: Boolean): List<String> {
+    val pidTokenIndex = if (asRoot) 0 else 1
+    val processPIDs = mutableListOf<String>()
+    for (line in output.split("\n".toRegex())) {
+        if (line.contains(processName)) {
+            val tokens = line.trim().split("\\s+".toRegex())
+            if (tokens.size > pidTokenIndex) {
+                processPIDs.add(tokens[pidTokenIndex])
+            }
+        }
+    }
+    return processPIDs
 }

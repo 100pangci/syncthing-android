@@ -593,7 +593,7 @@ class SyncthingService : Service() {
         // cleanup kills by process name, so spawning must wait for it to complete.
         binaryKillPending = true
         shutdownExecutor.execute {
-            Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY, AppPrefs.getRunAsRoot(preferences))
+            killStaleBinary()
             handler.post {
                 binaryKillPending = false
                 if (syncthingRunnable == null) {
@@ -805,7 +805,7 @@ class SyncthingService : Service() {
     }
 
     private fun killBinaryAndAwaitExit(runnable: SyncthingRunnable, runnableThread: Thread?) {
-        Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY, AppPrefs.getRunAsRoot(preferences))
+        killStaleBinary()
         runnableThread?.let { thread ->
             LogV("Waiting for syncthingRunnableThread to finish after killProcess(Syncthing) ...")
             try {
@@ -815,6 +815,25 @@ class SyncthingService : Service() {
             }
             Log.d(TAG, "Finished syncthingRunnableThread.")
         }
+    }
+
+    /**
+     * Ends stale instances of the syncthing binary, e.g. leftovers from an in-place app
+     * upgrade or the currently running core during a forced shutdown.
+     *
+     * In root mode the core runs as root, invisible to the app's own `ps`: both the lookup
+     * and the SIGINT go through the root shell, and the filter is the FULL binary path —
+     * other installed forks ship cores with the same basename, which a basename match
+     * would kill as collateral.
+     */
+    private fun killStaleBinary() {
+        val asRoot = AppPrefs.getRunAsRoot(preferences)
+        val processName = if (asRoot) {
+            Constants.getSyncthingBinary(this).absolutePath
+        } else {
+            Constants.FILENAME_SYNCTHING_BINARY
+        }
+        Util.killProcess(processName, asRoot)
     }
 
     /**

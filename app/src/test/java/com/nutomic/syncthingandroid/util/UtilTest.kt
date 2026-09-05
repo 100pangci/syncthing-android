@@ -72,4 +72,29 @@ class UtilTest {
         copy[0].id = "changed"
         assertEquals("folder-a", folders[0].id)
     }
+
+    @Test
+    fun parsePsOutput_rootMatchesFullPathOnly() {
+        val output = """
+            PID ARGS
+              111 /data/app/~~ours==/lib/arm64/libsyncthingnative.so serve --no-browser
+              222 /data/app/~~theirs==/lib/arm64/libsyncthingnative.so serve --no-browser
+        """.trimIndent()
+        val pids = parsePsOutput(
+            output,
+            "/data/app/~~ours==/lib/arm64/libsyncthingnative.so",
+            asRoot = true,
+        )
+        assertEquals(listOf("111"), pids)
+    }
+
+    @Test
+    fun parsePsOutput_nonRootReadsPidFromSecondToken() {
+        val output = """
+            USER      PID   PPID  VSIZE  RSS   WCHAN    NAME        S
+            u0_a123   5678  999   1234   567   0        libsyncthingnative.so S
+        """.trimIndent()
+        val pids = parsePsOutput(output, "libsyncthingnative.so", asRoot = false)
+        assertEquals(listOf("5678"), pids)
+    }
 }
