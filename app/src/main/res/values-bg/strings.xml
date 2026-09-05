@@ -602,6 +602,15 @@
 
     <string name="use_tor_title">Използване на Tor</string>
     <string name="use_tor_summary">Пренасочва целия трафик през мрежата на Tor с цел поверителност. Изисква Orbot. Изключва настройките за мрежов посредник.</string>
+    <string name="run_as_root_title">Стартиране на ядрото на Syncthing като root</string>
+    <string name="run_as_root_summary">Само за рутирани устройства: ядрото може да чете и пише във всяка директория (напр. данни на други приложения). Файловете, създадени от него в личното хранилище на приложението, стават записваеми от всички. Влиза в сила при следващото стартиране на ядрото.</string>
+    <string name="root_authorization_unavailable">Root разрешението не е налично; настройката беше изключена.</string>
+    <string name="root_warning_title">Предупреждение за режим root</string>
+    <string name="root_enable_warning_message">Ако root разрешението се загуби, ядрото няма да стартира и папките само за root ще спрат да се синхронизират. Включи въпреки това?</string>
+    <string name="root_enable_warning_continue">Включи въпреки това</string>
+    <string name="root_disable_warning_message">Папките само за root ще спрат да се синхронизират след изключването; собствеността на личното хранилище на приложението се връща автоматично. Изключи въпреки това?</string>
+    <string name="root_disable_warning_continue">Изключи въпреки това</string>
+    <string name="folder_picker_root_browse">Преглед с root</string>
 
     <string name="socks_proxy_address_title">Мрежов посредник SOCKS5</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>

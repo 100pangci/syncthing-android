@@ -114,6 +114,18 @@ object Constants {
     const val PREF_KNOWN_WIFI_SSIDS            = "knownWifiSsids"
     const val PREF_LAST_BINARY_VERSION         = "lastBinaryVersion"
     const val PREF_LOCAL_DEVICE_ID             = "localDeviceID"
+    /**
+     * Run the syncthing core as root via su (rooted devices only). The core then gains
+     * unrestricted filesystem access; app-shared files stay writable thanks to the
+     * umask 000 wrapper the launch path applies.
+     */
+    const val PREF_RUN_AS_ROOT                 = "run_as_root"
+    /**
+     * Cached: the privilege mode the currently/last running core was actually launched
+     * with. Shutdown paths must use this (not the user preference) so a core keeps being
+     * killable/inspectable right after the user toggles the preference.
+     */
+    const val PREF_LAST_CORE_RUN_AS_ROOT       = "last_core_run_as_root"
     // from SystemClock.elapsedRealtime()
     const val PREF_LAST_RUN_TIME               = "last_run_time"
     const val PREF_APP_START_COUNTER           = "app_start_counter"

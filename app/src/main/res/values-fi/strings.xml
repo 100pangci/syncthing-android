@@ -603,6 +603,15 @@
 
     <string name="use_tor_title">Käytä Tor-verkkoa</string>
     <string name="use_tor_summary">Pakota kaikki liikenne Tor-verkon kautta parantaaksesi yksityisyyttä. Vaatii Orbotin. Poistaa välityspalvelinvaihtoehdot käytöstä.</string>
+    <string name="run_as_root_title">Suorita Syncthingin ydin root-oikeuksin</string>
+    <string name="run_as_root_summary">Vain juurituille laitteille: ydin voi lukea ja kirjoittaa mihin tahansa hakemistoon (esim. muiden sovellusten dataa). Ytimen sovelluksen yksityiseen tallennustilaan luomat tiedostot ovat kaikkien kirjoitettavissa. Astuu voimaan ytimen seuraavalla käynnistyksellä.</string>
+    <string name="root_authorization_unavailable">Root-oikeutta ei ole myönnetty; asetus poistettiin käytöstä.</string>
+    <string name="root_warning_title">Root-tilan varoitus</string>
+    <string name="root_enable_warning_message">Jos root-oikeus menetetään myöhemmin, ydin ei käynnisty ja vain-root-kansiot lopettavat synkronoinnin. Ota silti käyttöön?</string>
+    <string name="root_enable_warning_continue">Ota silti käyttöön</string>
+    <string name="root_disable_warning_message">Vain-root-kansiot lopettavat synkronoinnin käytöstä poiston jälkeen; sovelluksen yksityisen tallennustilan omistus palautetaan automaattisesti. Poista silti käytöstä?</string>
+    <string name="root_disable_warning_continue">Poista käytöstä silti</string>
+    <string name="folder_picker_root_browse">Selaa root-oikeuksilla</string>
 
     <string name="socks_proxy_address_title">SOCKS5-välityspalvelin</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>

@@ -14,6 +14,7 @@ import com.nutomic.syncthingandroid.model.Folder
 import com.nutomic.syncthingandroid.util.ConfigRouter
 import com.nutomic.syncthingandroid.util.ConfigXml
 import com.nutomic.syncthingandroid.util.PermissionUtil
+import com.nutomic.syncthingandroid.util.RootAccess
 import com.nutomic.syncthingandroid.util.Util
 import java.io.IOException
 import java.net.ConnectException
@@ -247,6 +248,17 @@ class SyncthingService : Service() {
         preferences = app.preferences
         enableVerboseLog = AppPrefs.getPrefVerboseLog(preferences)
         LogV("onCreate")
+        if (RootAccess.appStorageOwnedByRoot(this)) {
+            // Safety net for cold starts after a root-mode session (e.g. the app process
+            // was killed while the root-uid core was up): config and key material are
+            // root-owned with explicit 0600 modes and must be readable before anything
+            // parses the config below. Detected via the config file's actual owner — not
+            // the launch marker, which a failed non-root launch would have reset. Marker
+            // is intentionally kept: killStaleBinary still needs root to stop an orphaned
+            // root core; the non-root launch path clears it.
+            Log.i(TAG, "Previous core ran as root; returning app storage to app ownership")
+            RootAccess.handBackStorage(this)
+        }
         configRouter = ConfigRouter(this)
         handler = Handler()
         configBackupManager = ConfigBackupManager(this, preferences, enableVerboseLog)
@@ -574,7 +586,8 @@ class SyncthingService : Service() {
             api = RestApi(
                 this, config.webGuiUrl, config.apiKey,
                 { onApiAvailable() },
-                { onServiceStateChange(currentState) }
+                { onServiceStateChange(currentState) },
+                runAsRoot = AppPrefs.getLastCoreRunAsRoot(preferences),
             )
             Log.i(TAG, "Web GUI will be available at ${config.webGuiUrl}")
         }
@@ -592,7 +605,7 @@ class SyncthingService : Service() {
         // cleanup kills by process name, so spawning must wait for it to complete.
         binaryKillPending = true
         shutdownExecutor.execute {
-            Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY)
+            killStaleBinary()
             handler.post {
                 binaryKillPending = false
                 if (syncthingRunnable == null) {
@@ -804,7 +817,7 @@ class SyncthingService : Service() {
     }
 
     private fun killBinaryAndAwaitExit(runnable: SyncthingRunnable, runnableThread: Thread?) {
-        Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY)
+        killStaleBinary()
         runnableThread?.let { thread ->
             LogV("Waiting for syncthingRunnableThread to finish after killProcess(Syncthing) ...")
             try {
@@ -814,6 +827,26 @@ class SyncthingService : Service() {
             }
             Log.d(TAG, "Finished syncthingRunnableThread.")
         }
+    }
+
+    /**
+     * Ends stale instances of the syncthing binary, e.g. leftovers from an in-place app
+     * upgrade or the currently running core during a forced shutdown.
+     *
+     * The privilege mode comes from the last-launch marker, not the user preference: right
+     * after a toggle the running core still has the previous mode, and a root-uid core is
+     * invisible to the app's own `ps` (kill EPERM). Root lookups use the FULL binary path —
+     * other installed forks ship cores with the same basename, which a basename match
+     * would kill as collateral.
+     */
+    private fun killStaleBinary() {
+        val asRoot = AppPrefs.getLastCoreRunAsRoot(preferences)
+        val processName = if (asRoot) {
+            Constants.getSyncthingBinary(this).absolutePath
+        } else {
+            Constants.FILENAME_SYNCTHING_BINARY
+        }
+        Util.killProcess(processName, asRoot)
     }
 
     /**

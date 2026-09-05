@@ -21,6 +21,7 @@ An intensive rewrite on top of [researchxxl/Syncthing-Fork](https://github.com/r
 
 ### New Features
 - **SAF bridge**: folders exposed by third-party DocumentsProviders (no real filesystem path, e.g. another app's data root) are bridged into the Syncthing core via an in-app forwarding layer and synced like any other folder
+- **Root mode (optional, off by default)**: run the Syncthing core as root to sync any directory — e.g. other apps' data — without any bridging. Toggling the setting asks for su authorization with a confirmation warning; the built-in folder picker gains a root browse mode; app-private files are handed back to the app automatically when root is switched off. See the [root mode guide](wiki/tips-and-tricks/Run-as-root-on-rooted-devices.md)
 - **AMOLED black theme**: follow system / light / dark / AMOLED, switching instantly, with the embedded Web GUI synced to its black theme
 - **Full i18n coverage**: all 38 language packs completed to 100% (496 keys + 8 plurals each, including az / be / ckb / gl built from scratch), with every file's key order aligned to the master `values/strings.xml` for easy maintenance
 - Application ID changed to `com.github.ywpc05.syncthingfork`, so it installs alongside the upstream app
@@ -69,6 +70,7 @@ The knowledge base (FAQ, battery optimization, vendor-specific background restri
 | Service layer | Kotlin + coroutines / Flow (foreground service, REST API, event polling, run condition monitoring, config XML, receivers, quick-settings tiles, notifications & backups) — zero Java |
 | Sync core | Syncthing (Go, git submodule) → NDK cross-compile, run as child process |
 | DI / data | Manual DI, Gson, OkHttp, SharedPreferences |
+| Optional root | libsu (su detection, root shell, storage ownership hand-back) |
 | Build | Gradle (Kotlin DSL) + Version Catalog, JDK 21, AGP 9.x |
 
 - minSdk 23 (Android 6.0) / targetSdk 36 / compileSdk 37

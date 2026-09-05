@@ -11,6 +11,7 @@ import android.util.Log
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.SyncthingApp
 import com.nutomic.syncthingandroid.util.FileUtils
+import com.nutomic.syncthingandroid.util.RootAccess
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileOutputStream
@@ -58,6 +59,7 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
     lateinit var notificationHandler: NotificationHandler
 
     private val verboseLog: Boolean
+    private val runAsRoot: Boolean
     private val logFile: File
     private val commandArgs: Array<String>
 
@@ -66,6 +68,7 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
         preferences = app.preferences
         notificationHandler = app.notificationHandler
         verboseLog = AppPrefs.getPrefVerboseLog(preferences)
+        runAsRoot = AppPrefs.getRunAsRoot(preferences)
         // Example: syncthingBinary="/data/app/${applicationId}-8HsN-IsVtZXc8GrE5-Hepw==/lib/x86/libsyncthingnative.so"
         val syncthingBinary = Constants.getSyncthingBinary(context)
         logFile = Constants.getSyncthingLogFile(context)
@@ -421,9 +424,37 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
                 throw ExecutableNotFoundException(commandArgs[0])
             }
         }
-        val pb = ProcessBuilder(*commandArgs)
-        pb.environment().putAll(env)
-        return pb.start()
+        var launchedAsRoot = false
+        val pb: ProcessBuilder = if (runAsRoot) {
+            val suBinary = RootAccess.suBinaryPath()
+            if (suBinary != null && RootAccess.isSuAvailable()) {
+                // The umask 000 wrapper is load-bearing: the root-uid core creates app-shared
+                // files (config.xml, cert.pem, logs, SAF-bridge staging dirs) that the
+                // unprivileged app must stay able to read, write and delete.
+                Log.i(TAG, "Root mode: launching syncthing core via root shell (umask 000)")
+                launchedAsRoot = true
+                ProcessBuilder(suBinary, "-c", buildRootLaunchScript(env, commandArgs))
+            } else {
+                Log.w(TAG, "Root mode enabled but su is unavailable or denied; " +
+                        "falling back to an app-uid launch")
+                ProcessBuilder(*commandArgs).also { it.environment().putAll(env) }
+            }
+        } else {
+            // Hand root-session files back to the app UID before the unprivileged core
+            // (or the app itself, e.g. key generation) needs them: root-written config
+            // and key material carry explicit 0600 modes that umask cannot influence.
+            if (RootAccess.appStorageOwnedByRoot(context)) {
+                Log.i(TAG, "Previous core ran as root; returning app storage to app ownership")
+                RootAccess.handBackStorage(context)
+            }
+            ProcessBuilder(*commandArgs).also { it.environment().putAll(env) }
+        }
+        val process = pb.start()
+        // Record the privilege mode the running core actually uses: shutdown paths must
+        // keep being able to kill and inspect it even after the user toggles the
+        // preference while the core is up.
+        AppPrefs.setLastCoreRunAsRoot(preferences, launchedAsRoot)
+        return process
     }
 
     private fun logV(logMessage: String) {
@@ -455,6 +486,21 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
             return null
         }
     }
+}
+
+/**
+ * Builds the shell script executed by `su -c` for a root-mode core launch.
+ *
+ * Environment variables are re-exported inside the script (instead of relying on su
+ * passing the parent environment through), then umask 000 is set so that every file the
+ * root-uid core creates stays writable for the unprivileged app, and finally the binary
+ * is exec'd (replacing the shell so signals and the exit code reach it directly).
+ */
+internal fun buildRootLaunchScript(env: Map<String, String>, commandArgs: Array<String>): String {
+    val singleQuoted = { value: String -> "'" + value.replace("'", "'\\''") + "'" }
+    val exports = env.entries.joinToString("") { (key, value) -> "export $key=${singleQuoted(value)}\n" }
+    val execLine = commandArgs.joinToString(" ") { arg -> singleQuoted(arg) }
+    return "${exports}umask 000\nexec $execLine"
 }
 
 /**

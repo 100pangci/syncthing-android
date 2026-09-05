@@ -74,13 +74,25 @@ object Util {
     /**
      * Returns if the syncthing binary would be able to write a file into
      * the given folder given the configured access level.
+     *
+     * With [asRoot] the probe runs through the root shell, which is what the syncthing
+     * core's effective access looks like when the "run as root" mode is enabled: the app
+     * UID's own EACCES would otherwise wrongly reject root-only folders.
      */
-    fun nativeBinaryCanWriteToPath(context: Context, absoluteFolderPath: String): Boolean {
+    fun nativeBinaryCanWriteToPath(
+        context: Context,
+        absoluteFolderPath: String,
+        asRoot: Boolean = false,
+    ): Boolean {
         val touchFileName = ".stwritetest"
 
         // Write permission test file.
         val touchFile = "$absoluteFolderPath/$touchFileName"
-        val exitCode = runShellCommand("echo \"\" > \"$touchFile\"\n")
+        val exitCode = if (asRoot) {
+            RootAccess.code("touch '$touchFile'")
+        } else {
+            runShellCommand("echo \"\" > \"$touchFile\"\n")
+        }
         if (exitCode != 0) {
             val error = when (exitCode) {
                 1 -> "Permission denied"
@@ -94,7 +106,12 @@ object Util {
         Log.i(TAG, "Successfully wrote test file '$touchFile'")
 
         // Remove test file.
-        if (runShellCommand("rm \"$touchFile\"\n") != 0) {
+        val rmExitCode = if (asRoot) {
+            RootAccess.code("rm '$touchFile'")
+        } else {
+            runShellCommand("rm \"$touchFile\"\n")
+        }
+        if (rmExitCode != 0) {
             // This is very unlikely to happen, so we have less error handling.
             Log.i(TAG, "Failed to remove test file")
         }
@@ -104,41 +121,45 @@ object Util {
     /**
      * Look for running processes and return a list
      * containing the PIDs of found instances.
+     *
+     * With [asRoot] the listing runs through the root shell: the root-uid syncthing core
+     * is invisible to the app's own `ps` (Android procfs only exposes same-UID processes).
+     * Root listing matches the FIRST argument exactly against [processName] (pass the
+     * full binary path) — a substring match would also hit the `su` wrapper whose
+     * command line embeds the launch script containing that same path, and killing the
+     * wrapper reports a spurious crash exit code (130) for the watched process.
      */
-    fun getProcessPIDs(processName: String): List<String> {
-        val processPIDs = mutableListOf<String>()
-        val output = runShellCommandGetOutput("ps\n")
+    fun getProcessPIDs(processName: String, asRoot: Boolean = false): List<String> {
+        val output = if (asRoot) {
+            RootAccess.out("ps -A -o pid,args").joinToString("\n")
+        } else {
+            runShellCommandGetOutput("ps\n")
+        }
         if (output.isEmpty()) {
             Log.w(TAG, "getProcessPIDs: Failed to list processes. ps command returned empty.")
-            return processPIDs
+            return emptyList()
         }
-
-        val lines = output.split("\n".toRegex())
-        if (lines.isEmpty()) {
-            Log.w(TAG, "getProcessPIDs: Failed to list processes. ps command returned no rows.")
-            return processPIDs
-        }
-
-        for (line in lines) {
-            if (line.contains(processName)) {
-                val processPID = line.trim().split("\\s+".toRegex())[1]
-                processPIDs.add(processPID)
-            }
-        }
-        return processPIDs
+        return parsePsOutput(output, processName, asRoot)
     }
 
     /**
      * Look for running processes and end them gracefully.
+     *
+     * With [asRoot] both the lookup and the SIGINT go through the root shell: an app-UID
+     * `kill` cannot signal the root-uid syncthing core (EPERM), and `ps` cannot see it.
      */
-    fun killProcess(processName: String) {
-        val processPIDs = getProcessPIDs(processName)
+    fun killProcess(processName: String, asRoot: Boolean = false) {
+        val processPIDs = getProcessPIDs(processName, asRoot)
         if (processPIDs.isEmpty()) {
             Log.v(TAG, "killProcess: Found no running instances of [$processName]")
             return
         }
         for (processPID in processPIDs) {
-            val exitCode = runShellCommand("kill -SIGINT $processPID\n")
+            val exitCode = if (asRoot) {
+                RootAccess.code("kill -SIGINT $processPID")
+            } else {
+                runShellCommand("kill -SIGINT $processPID\n")
+            }
             if (exitCode != 0) {
                 Log.w(TAG, "killProcess: Failed to send kill SIGINT to process [$processPID" +
                         "] exit code $exitCode")
@@ -148,7 +169,7 @@ object Util {
         /**
          * Wait for process to end.
          */
-        while (getProcessPIDs(processName).isNotEmpty()) {
+        while (getProcessPIDs(processName, asRoot).isNotEmpty()) {
             SystemClock.sleep(50)
         }
         Log.d(TAG, "killProcess: No more instances of [$processName] running")
@@ -490,4 +511,32 @@ object Util {
         }
         return osTrustManager
     }
+}
+
+/**
+ * Parses `ps` output into PIDs whose line contains [processName].
+ *
+ * Two column layouts exist: the app-shell `ps` (NAME column only, PID is the second
+ * token, substring match) and the root-shell `ps -A -o pid,args` (PID first, exact match
+ * on the first argument). The exact root match pairs with full-binary-path filters and
+ * deliberately skips lines like `su -c <script>` whose arguments merely CONTAIN the
+ * path — killing that wrapper instead of only the core reports a spurious 130 crash.
+ */
+internal fun parsePsOutput(output: String, processName: String, asRoot: Boolean): List<String> {
+    val pidTokenIndex = if (asRoot) 0 else 1
+    val processPIDs = mutableListOf<String>()
+    for (line in output.split("\n".toRegex())) {
+        if (asRoot) {
+            val tokens = line.trim().split("\\s+".toRegex())
+            if (tokens.size > 1 && tokens[1] == processName) {
+                processPIDs.add(tokens[0])
+            }
+        } else if (line.contains(processName)) {
+            val tokens = line.trim().split("\\s+".toRegex())
+            if (tokens.size > pidTokenIndex) {
+                processPIDs.add(tokens[pidTokenIndex])
+            }
+        }
+    }
+    return processPIDs
 }

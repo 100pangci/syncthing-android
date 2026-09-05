@@ -602,6 +602,15 @@
 
     <string name="use_tor_title">Tor benutzen</string>
     <string name="use_tor_summary">Der gesamte Netzwerkverkehr wird zur Erhöhung der Privatsphäre über Tor geleitet. Benötigt Orbot. Deaktiviert die Proxy-Optionen.</string>
+    <string name="run_as_root_title">Syncthing-Kern als root ausführen</string>
+    <string name="run_as_root_summary">Nur für Geräte mit Root: Der Kern kann in jedes Verzeichnis lesen und schreiben (z. B. Daten anderer Apps). Dateien, die er im privaten App-Speicher anlegt, sind für alle beschreibbar. Wirksam beim nächsten Kernstart.</string>
+    <string name="root_authorization_unavailable">Root-Autorisierung nicht verfügbar; die Einstellung wurde deaktiviert.</string>
+    <string name="root_warning_title">Root-Modus-Warnung</string>
+    <string name="root_enable_warning_message">Wenn die Root-Autorisierung später verloren geht, startet der Kern nicht und nur-mit-Root-Ordner stoppen die Synchronisierung. Trotzdem aktivieren?</string>
+    <string name="root_enable_warning_continue">Trotzdem aktivieren</string>
+    <string name="root_disable_warning_message">Nur-mit-Root-Ordner stoppen die Synchronisierung nach dem Deaktivieren; der private App-Speicher wird automatisch zurückübertragen. Trotzdem deaktivieren?</string>
+    <string name="root_disable_warning_continue">Trotzdem deaktivieren</string>
+    <string name="folder_picker_root_browse">Mit root browsen</string>
 
     <string name="socks_proxy_address_title">SOCKS5-Proxy</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>

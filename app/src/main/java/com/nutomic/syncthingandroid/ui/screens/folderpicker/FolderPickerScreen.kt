@@ -13,6 +13,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowUpward
 import androidx.compose.material.icons.outlined.CreateNewFolder
 import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.Terminal
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,22 +25,58 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.nutomic.syncthingandroid.R
+import com.nutomic.syncthingandroid.SyncthingApp
+import com.nutomic.syncthingandroid.service.AppPrefs
 import com.nutomic.syncthingandroid.ui.components.EmptyListHint
 import com.nutomic.syncthingandroid.util.FileUtils
+import com.nutomic.syncthingandroid.util.RootAccess
 import com.nutomic.syncthingandroid.util.Util
 import java.io.File
 import java.util.TreeSet
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+/**
+ * A single browsable directory entry. The indirection exists because root-only paths
+ * cannot be stat'ed by the app's own UID — in root browse mode the listing (including
+ * the is-directory flag) comes from the root shell instead of java.io.File.
+ */
+internal data class PickerEntry(
+    val name: String,
+    val path: String,
+    val isDirectory: Boolean,
+)
+
+/** Single-quotes a path for safe use inside a root shell command. */
+internal fun shellQuote(value: String): String {
+    return "'" + value.replace("'", "'\\''") + "'"
+}
+
+/**
+ * Parses `ls -Ap` output (directories carry a trailing slash) into entries of [parentPath].
+ */
+internal fun parseLsApOutput(lines: List<String>, parentPath: String): List<PickerEntry> {
+    return lines.filter { it.isNotBlank() }.map { line ->
+        val isDirectory = line.endsWith("/")
+        val name = line.removeSuffix("/")
+        PickerEntry(name, File(parentPath, name).absolutePath, isDirectory)
+    }
+}
 
 /**
  * Built-in file system directory picker, ported from the legacy FolderPickerActivity.
+ * With "run as root" enabled (and su granted) a root browse mode becomes available that
+ * lists and creates directories through the root shell, so folders outside the app's
+ * own reach (e.g. other apps' data) can be picked for syncing.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,8 +88,18 @@ fun FolderPickerScreen(
     val context = LocalContext.current
     var roots by remember { mutableStateOf<Set<File>>(emptySet()) }
     var location by remember { mutableStateOf<File?>(null) }
-    var files by remember { mutableStateOf<List<File>>(emptyList()) }
+    var entries by remember { mutableStateOf<List<PickerEntry>>(emptyList()) }
     var showCreateDialog by remember { mutableStateOf(false) }
+    var rootBrowse by rememberSaveable { mutableStateOf(false) }
+    var rootAvailable by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        val prefs = (context.applicationContext as SyncthingApp).preferences
+        if (AppPrefs.getRunAsRoot(prefs)) {
+            // Blocking su spawn (may show the grant dialog) — keep it off the main thread.
+            rootAvailable = withContext(Dispatchers.IO) { RootAccess.isSuAvailable() }
+        }
+    }
 
     LaunchedEffect(rootDirectory) {
         roots = populateRoots(context, rootDirectory)
@@ -65,20 +112,13 @@ fun FolderPickerScreen(
         }
     }
 
-    // Refresh the file list whenever the location changes.
-    LaunchedEffect(location) {
+    // Refresh the entry list whenever the location or the browse mode changes.
+    LaunchedEffect(location, rootBrowse) {
         val loc = location
-        files = if (loc == null) {
+        entries = if (loc == null) {
             emptyList()
         } else {
-            val contents = loc.listFiles() ?: emptyArray()
-            contents.sortedWith { f1, f2 ->
-                when {
-                    f1.isDirectory && f2.isFile -> -1
-                    f1.isFile && f2.isDirectory -> 1
-                    else -> f1.name.compareTo(f2.name, ignoreCase = true)
-                }
-            }
+            withContext(Dispatchers.IO) { listEntries(loc, rootBrowse) }
         }
     }
 
@@ -99,6 +139,19 @@ fun FolderPickerScreen(
                     }
                 },
                 actions = {
+                    if (rootAvailable) {
+                        IconButton(onClick = { rootBrowse = !rootBrowse }) {
+                            Icon(
+                                Icons.Outlined.Terminal,
+                                stringResource(R.string.folder_picker_root_browse),
+                                tint = if (rootBrowse) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                },
+                            )
+                        }
+                    }
                     if (!isRootView) {
                         val canGoUp = canGoUpToSubDir(location, roots) || canGoUpToRootDir(location, roots)
                         IconButton(
@@ -133,7 +186,7 @@ fun FolderPickerScreen(
         ) {
             if (isRootView) {
                 LazyColumn(Modifier.fillMaxSize()) {
-                    items(roots.toList()) { root ->
+                    items(roots.toList(), key = { it.absolutePath }) { root ->
                         Text(
                             text = root.absolutePath,
                             style = MaterialTheme.typography.bodyLarge,
@@ -144,20 +197,20 @@ fun FolderPickerScreen(
                         )
                     }
                 }
-            } else if (files.isEmpty()) {
+            } else if (entries.isEmpty()) {
                 EmptyListHint(stringResource(R.string.folder_picker_title))
             } else {
                 LazyColumn(Modifier.fillMaxSize()) {
-                    items(files, key = { it.absolutePath }) { file ->
+                    items(entries, key = { it.path }) { entry ->
                         Text(
-                            text = file.name,
+                            text = entry.name,
                             style = MaterialTheme.typography.bodyLarge,
-                            fontStyle = if (file.isFile) FontStyle.Italic else FontStyle.Normal,
+                            fontStyle = if (entry.isDirectory) FontStyle.Normal else FontStyle.Italic,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    if (file.isDirectory) {
-                                        location = file
+                                    if (entry.isDirectory) {
+                                        location = File(entry.path)
                                     }
                                 }
                                 .padding(horizontal = 16.dp, vertical = 14.dp)
@@ -185,9 +238,13 @@ fun FolderPickerScreen(
                     showCreateDialog = false
                     val loc = location
                     if (loc != null && name.isNotBlank()) {
-                        val newFolder = File(loc, name.trim())
-                        if (newFolder.mkdir()) {
-                            location = newFolder
+                        val created = if (rootBrowse) {
+                            RootAccess.code("mkdir ${shellQuote(File(loc, name.trim()).absolutePath)}") == 0
+                        } else {
+                            File(loc, name.trim()).mkdir()
+                        }
+                        if (created) {
+                            location = File(loc, name.trim())
                         } else {
                             android.widget.Toast.makeText(
                                 context, R.string.create_folder_failed, android.widget.Toast.LENGTH_SHORT
@@ -204,6 +261,25 @@ fun FolderPickerScreen(
                 }
             }
         )
+    }
+}
+
+/**
+ * Lists the entries of [location], sorted directories-first. In root browse mode the
+ * listing comes from the root shell (`ls -Ap`), which also works for directories the
+ * app UID cannot stat itself.
+ */
+internal fun listEntries(location: File, rootBrowse: Boolean): List<PickerEntry> {
+    val comparator = compareByDescending<PickerEntry> { it.isDirectory }
+        .thenBy { it.name.lowercase() }
+    return if (rootBrowse) {
+        val out = RootAccess.out("ls -Ap ${shellQuote(location.absolutePath)}")
+        parseLsApOutput(out, location.absolutePath).sortedWith(comparator)
+    } else {
+        location.listFiles()
+            ?.map { PickerEntry(it.name, it.absolutePath, it.isDirectory) }
+            ?.sortedWith(comparator)
+            ?: emptyList()
     }
 }
 

@@ -602,6 +602,15 @@
 
     <string name="use_tor_title">Tor を使用する</string>
     <string name="use_tor_summary">プライバシーを高めるため、すべてのトラフィックを Tor 経由にします。Orbot が必要です。プロキシオプションを無効にします。</string>
+    <string name="run_as_root_title">Syncthing コアを root で実行</string>
+    <string name="run_as_root_summary">root 化されたデバイス専用:コアはどのディレクトリでも読み書きできます(例:他アプリのデータ)。アプリの非公開ストレージ内に作成したファイルは、誰でも書き込める状態になります。次回コア起動時に有効になります。</string>
+    <string name="root_authorization_unavailable">root 権限を取得できないため、設定をオフにしました。</string>
+    <string name="root_warning_title">root モードの警告</string>
+    <string name="root_enable_warning_message">後で root 権限を失うと、コアは起動できず、root でしか同期できないフォルダも同期が止まります。それでもオンにしますか?</string>
+    <string name="root_enable_warning_continue">それでもオンにする</string>
+    <string name="root_disable_warning_message">オフにすると root でしか同期できないフォルダは同期が止まり、アプリの非公開ストレージの所有権は自動的に返却されます。それでもオフにしますか?</string>
+    <string name="root_disable_warning_continue">それでもオフにする</string>
+    <string name="folder_picker_root_browse">root でブラウズ</string>
 
     <string name="socks_proxy_address_title">SOCKS5 プロキシ</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>

@@ -614,6 +614,15 @@
 
     <string name="use_tor_title">Use Tor</string>
     <string name="use_tor_summary">Force all traffic through Tor for increased privacy. Requires Orbot. Disables proxy options.</string>
+    <string name="run_as_root_title">Run Syncthing core as root</string>
+    <string name="run_as_root_summary">For rooted devices only: the core can read and write any directory (e.g. other apps\' data). Files it creates inside app-private storage become world-writable. Takes effect on the next core start.</string>
+    <string name="root_authorization_unavailable">Root authorization is not available; the setting was turned off.</string>
+    <string name="root_warning_title">Root mode warning</string>
+    <string name="root_enable_warning_message">If root authorization is ever lost, the core will fail to start and folders that only sync with root will stop syncing. Turn on anyway?</string>
+    <string name="root_enable_warning_continue">Turn on anyway</string>
+    <string name="root_disable_warning_message">Folders that only sync with root will stop syncing after turning it off; app-private storage ownership is handed back automatically. Turn off anyway?</string>
+    <string name="root_disable_warning_continue">Turn off anyway</string>
+    <string name="folder_picker_root_browse">Browse with root</string>
 
     <string name="socks_proxy_address_title">SOCKS5 proxy</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>

@@ -602,6 +602,15 @@
 
     <string name="use_tor_title">Tor 사용</string>
     <string name="use_tor_summary">개인 정보 보호를 위해 모든 트래픽을 Tor를 통하도록 강제합니다. Orbot이 필요합니다. 프록시 옵션을 비활성화합니다.</string>
+    <string name="run_as_root_title">Syncthing 코어를 root로 실행</string>
+    <string name="run_as_root_summary">루팅된 기기 전용: 코어가 모든 디렉터리를 읽고 쓸 수 있습니다(예: 다른 앱의 데이터). 앱 비공개 저장소에 생성하는 파일은 누구나 쓸 수 있게 됩니다. 다음 코어 시작 시 적용됩니다.</string>
+    <string name="root_authorization_unavailable">root 권한을 사용할 수 없어 설정이 해제되었습니다.</string>
+    <string name="root_warning_title">root 모드 경고</string>
+    <string name="root_enable_warning_message">나중에 root 권한을 잃으면 코어가 시작되지 않고 root 전용 폴더의 동기화도 중지됩니다. 그래도 켜시겠습니까?</string>
+    <string name="root_enable_warning_continue">그래도 켜기</string>
+    <string name="root_disable_warning_message">끄면 root로만 동기화되는 폴더는 동기화가 중지되며, 앱 비공개 저장소의 소유권은 자동으로 반환됩니다. 그래도 끄시겠습니까?</string>
+    <string name="root_disable_warning_continue">그래도 끄기</string>
+    <string name="folder_picker_root_browse">root로 탐색</string>
 
     <string name="socks_proxy_address_title">SOCKS5 프록시</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>

@@ -79,6 +79,7 @@ class RestApi(
     apiListener: OnApiAvailableListener,
     configListener: OnConfigChangedListener,
     scope: CoroutineScope? = null,
+    private val runAsRoot: Boolean = false,
 ) {
 
     companion object {
@@ -661,8 +662,10 @@ class RestApi(
         executorService.shutdownNow()
         // Util.killProcess polls via "ps" and must not run on the main thread. Cleaning up a
         // stale versioning "find" helper has no ordering dependency with the shutdown POST.
+        // The helper is a child of the syncthing core, so in root mode it runs as root too
+        // and both ps and kill must go through the root shell.
         restScope.launch(Dispatchers.IO) {
-            Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME)
+            Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME, runAsRoot)
         }
         apiPost(ApiClient.URI_SYSTEM_SHUTDOWN)
     }

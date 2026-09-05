@@ -3,7 +3,9 @@ package com.nutomic.syncthingandroid.ui.screens.folder
 import android.content.Context
 import android.widget.Toast
 import com.nutomic.syncthingandroid.R
+import com.nutomic.syncthingandroid.SyncthingApp
 import com.nutomic.syncthingandroid.model.Folder
+import com.nutomic.syncthingandroid.service.AppPrefs
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.util.Util
 
@@ -15,7 +17,13 @@ internal fun checkWriteAndUpdateUI(context: Context, holder: FolderEditStateHold
     if (folder.path.isNullOrEmpty()) {
         return
     }
-    holder.canWriteToPath = Util.nativeBinaryCanWriteToPath(context, folder.path)
+    // In root mode the core accesses paths with root privileges, so the write probe must
+    // run through the root shell too: the app UID's own EACCES would wrongly reject
+    // root-only folders and force the folder to "sendonly".
+    val asRoot = AppPrefs.getRunAsRoot(
+        (context.applicationContext as SyncthingApp).preferences
+    )
+    holder.canWriteToPath = Util.nativeBinaryCanWriteToPath(context, folder.path, asRoot)
     if (!holder.canWriteToPath) {
         // Force "sendonly" folder.
         folder.type = Constants.FOLDER_TYPE_SEND_ONLY

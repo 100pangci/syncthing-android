@@ -303,4 +303,26 @@ class SyncthingRunnableTest {
         )
     }
 
+    @Test
+    fun rootLaunchScript_exportsEnvSetsUmaskAndExecsQuotedArgs() {
+        val script = buildRootLaunchScript(
+                mapOf("HOME" to "/data/user/0/pkg/files", "STTRACE" to "a b"),
+                arrayOf("/path/to/libsyncthingnative.so", "serve", "--no-browser"),
+        )
+        assertTrue(script.contains("export HOME='/data/user/0/pkg/files'\n"))
+        assertTrue(script.contains("export STTRACE='a b'\n"))
+        assertTrue(script.contains("umask 000\n"))
+        assertTrue(script.contains("exec '/path/to/libsyncthingnative.so' 'serve' '--no-browser'"))
+        // exec must be the last statement so signals and the exit code reach the binary.
+        assertTrue(script.trimEnd().endsWith("exec '/path/to/libsyncthingnative.so' 'serve' '--no-browser'"))
+    }
+
+    @Test
+    fun rootLaunchScript_escapesSingleQuotesInValues() {
+        val script = buildRootLaunchScript(
+                mapOf("STVERSIONEXTRA" to "it's a fork"),
+                arrayOf("/bin"),
+        )
+        assertTrue(script.contains("export STVERSIONEXTRA='it'\\''s a fork'"))
+    }
 }

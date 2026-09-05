@@ -192,8 +192,39 @@ class ConfigXml(private val context: Context) {
         return localDeviceID
     }
 
+    /**
+     * Makes the core's security files readable/writable for the app again when a root-mode
+     * session left them root-owned: syncthing writes config.xml and the key material with
+     * explicit 0600 modes (which the launch-time umask cannot influence), and the app's
+     * own config IO then fails until ownership is returned. Chowns only this small set of
+     * files through the root shell — instant, no recursive walk over the index database.
+     * Harmless no-op when the files are already app-owned or su is unavailable.
+     */
+    private fun ensureCoreFilesReadable(): Boolean {
+        val uid = android.os.Process.myUid()
+        var ok = true
+        for (file in listOf(
+            configFile,
+            Constants.getPublicKeyFile(context),
+            Constants.getPrivateKeyFile(context),
+        )) {
+            try {
+                if (android.system.Os.stat(file.absolutePath).st_uid == uid) {
+                    continue
+                }
+            } catch (e: Exception) {
+                continue // missing file: nothing to fix here
+            }
+            val quoted = "'" + file.absolutePath.replace("'", "'\\''") + "'"
+            if (RootAccess.code("chown ${uid}:${uid} $quoted") != 0) {
+                ok = false
+            }
+        }
+        return ok
+    }
+
     private fun parseConfig() {
-        if (!configFile.canRead()) {
+        if (!configFile.canRead() && !ensureCoreFilesReadable()) {
             Log.w(TAG, "Failed to open config file '$configFile'")
             throw OpenConfigException()
         }
@@ -1171,7 +1202,7 @@ class ConfigXml(private val context: Context) {
      * Writes updated config back to file.
      */
     fun saveChanges() {
-        if (!configFile.canWrite()) {
+        if (!configFile.canWrite() && !ensureCoreFilesReadable()) {
             Log.w(TAG, "Failed to save updated config. Cannot change the owner of the config file.")
             return
         }
