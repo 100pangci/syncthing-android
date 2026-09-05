@@ -20,4 +20,24 @@ object RootAccess {
         Shell.getShell()
         return Shell.isAppGrantedRoot() == true
     }
+
+    /**
+     * Absolute path of the su binary (via the root shell's PATH), or null if su could not
+     * be resolved. ProcessBuilder cannot rely on the app's PATH covering mounts like
+     * /product/bin or /sbin, so the launch path resolves it explicitly.
+     */
+    fun suBinaryPath(): String? {
+        return Shell.cmd("command -v su").exec().out
+            .firstOrNull { it.isNotBlank() }
+    }
+
+    /** Runs the command in the shared root shell; returns its exit code. */
+    fun code(cmd: String): Int {
+        return Shell.cmd(cmd).exec().code
+    }
+
+    /** Runs the command in the shared root shell; returns its stdout lines. */
+    fun out(cmd: String): List<String> {
+        return Shell.cmd(cmd).exec().out
+    }
 }

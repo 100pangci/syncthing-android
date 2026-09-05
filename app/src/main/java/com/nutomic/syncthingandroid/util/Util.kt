@@ -74,13 +74,25 @@ object Util {
     /**
      * Returns if the syncthing binary would be able to write a file into
      * the given folder given the configured access level.
+     *
+     * With [asRoot] the probe runs through the root shell, which is what the syncthing
+     * core's effective access looks like when the "run as root" mode is enabled: the app
+     * UID's own EACCES would otherwise wrongly reject root-only folders.
      */
-    fun nativeBinaryCanWriteToPath(context: Context, absoluteFolderPath: String): Boolean {
+    fun nativeBinaryCanWriteToPath(
+        context: Context,
+        absoluteFolderPath: String,
+        asRoot: Boolean = false,
+    ): Boolean {
         val touchFileName = ".stwritetest"
 
         // Write permission test file.
         val touchFile = "$absoluteFolderPath/$touchFileName"
-        val exitCode = runShellCommand("echo \"\" > \"$touchFile\"\n")
+        val exitCode = if (asRoot) {
+            RootAccess.code("touch '$touchFile'")
+        } else {
+            runShellCommand("echo \"\" > \"$touchFile\"\n")
+        }
         if (exitCode != 0) {
             val error = when (exitCode) {
                 1 -> "Permission denied"
@@ -94,7 +106,12 @@ object Util {
         Log.i(TAG, "Successfully wrote test file '$touchFile'")
 
         // Remove test file.
-        if (runShellCommand("rm \"$touchFile\"\n") != 0) {
+        val rmExitCode = if (asRoot) {
+            RootAccess.code("rm '$touchFile'")
+        } else {
+            runShellCommand("rm \"$touchFile\"\n")
+        }
+        if (rmExitCode != 0) {
             // This is very unlikely to happen, so we have less error handling.
             Log.i(TAG, "Failed to remove test file")
         }
@@ -104,10 +121,17 @@ object Util {
     /**
      * Look for running processes and return a list
      * containing the PIDs of found instances.
+     *
+     * With [asRoot] the listing runs through the root shell: the root-uid syncthing core
+     * is invisible to the app's own `ps` (Android procfs only exposes same-UID processes).
      */
-    fun getProcessPIDs(processName: String): List<String> {
+    fun getProcessPIDs(processName: String, asRoot: Boolean = false): List<String> {
         val processPIDs = mutableListOf<String>()
-        val output = runShellCommandGetOutput("ps\n")
+        val output = if (asRoot) {
+            RootAccess.out("ps").joinToString("\n")
+        } else {
+            runShellCommandGetOutput("ps\n")
+        }
         if (output.isEmpty()) {
             Log.w(TAG, "getProcessPIDs: Failed to list processes. ps command returned empty.")
             return processPIDs
@@ -130,15 +154,22 @@ object Util {
 
     /**
      * Look for running processes and end them gracefully.
+     *
+     * With [asRoot] both the lookup and the SIGINT go through the root shell: an app-UID
+     * `kill` cannot signal the root-uid syncthing core (EPERM), and `ps` cannot see it.
      */
-    fun killProcess(processName: String) {
-        val processPIDs = getProcessPIDs(processName)
+    fun killProcess(processName: String, asRoot: Boolean = false) {
+        val processPIDs = getProcessPIDs(processName, asRoot)
         if (processPIDs.isEmpty()) {
             Log.v(TAG, "killProcess: Found no running instances of [$processName]")
             return
         }
         for (processPID in processPIDs) {
-            val exitCode = runShellCommand("kill -SIGINT $processPID\n")
+            val exitCode = if (asRoot) {
+                RootAccess.code("kill -SIGINT $processPID")
+            } else {
+                runShellCommand("kill -SIGINT $processPID\n")
+            }
             if (exitCode != 0) {
                 Log.w(TAG, "killProcess: Failed to send kill SIGINT to process [$processPID" +
                         "] exit code $exitCode")
@@ -148,7 +179,7 @@ object Util {
         /**
          * Wait for process to end.
          */
-        while (getProcessPIDs(processName).isNotEmpty()) {
+        while (getProcessPIDs(processName, asRoot).isNotEmpty()) {
             SystemClock.sleep(50)
         }
         Log.d(TAG, "killProcess: No more instances of [$processName] running")

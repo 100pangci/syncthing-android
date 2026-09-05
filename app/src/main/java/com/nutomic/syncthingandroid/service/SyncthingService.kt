@@ -574,7 +574,8 @@ class SyncthingService : Service() {
             api = RestApi(
                 this, config.webGuiUrl, config.apiKey,
                 { onApiAvailable() },
-                { onServiceStateChange(currentState) }
+                { onServiceStateChange(currentState) },
+                runAsRoot = AppPrefs.getRunAsRoot(preferences),
             )
             Log.i(TAG, "Web GUI will be available at ${config.webGuiUrl}")
         }
@@ -592,7 +593,7 @@ class SyncthingService : Service() {
         // cleanup kills by process name, so spawning must wait for it to complete.
         binaryKillPending = true
         shutdownExecutor.execute {
-            Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY)
+            Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY, AppPrefs.getRunAsRoot(preferences))
             handler.post {
                 binaryKillPending = false
                 if (syncthingRunnable == null) {
@@ -804,7 +805,7 @@ class SyncthingService : Service() {
     }
 
     private fun killBinaryAndAwaitExit(runnable: SyncthingRunnable, runnableThread: Thread?) {
-        Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY)
+        Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY, AppPrefs.getRunAsRoot(preferences))
         runnableThread?.let { thread ->
             LogV("Waiting for syncthingRunnableThread to finish after killProcess(Syncthing) ...")
             try {
