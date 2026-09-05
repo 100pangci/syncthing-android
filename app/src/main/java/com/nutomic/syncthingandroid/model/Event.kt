@@ -10,5 +10,5 @@ class Event {
     @JvmField
     var time: String? = null
     @JvmField
-    var data: java.util.Map<String, Any>? = null
+    var data: Map<String, Any>? = null
 }

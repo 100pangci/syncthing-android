@@ -316,7 +316,7 @@ class EventPoller @JvmOverloads constructor(
         )
     }
 
-    private fun onFolderCompletion(eventData: java.util.Map<String, Any>?) {
+    private fun onFolderCompletion(eventData: Map<String, Any>?) {
         restApi.setRemoteCompletionInfo(
                 eventData?.get("device") as String?,       // deviceId
                 eventData?.get("folder") as String?,       // folderId
