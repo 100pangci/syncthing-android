@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.localbroadcastmanager)
     implementation(libs.navigation3.runtime)
     implementation(libs.navigation3.ui)
+    implementation(libs.libsu.core)
     implementation(libs.okhttp)
     implementation(libs.preference.ktx)
     implementation(libs.recyclerview)
