@@ -470,21 +470,19 @@ class ConfigXml(private val context: Context) {
                 folder.order = getContentOrDefault(r.getElementsByTagName("order").item(0), folder.order)
                 folder.paused = getContentOrDefault(r.getElementsByTagName("paused").item(0), folder.paused)
                 folder.ignoreDelete = getContentOrDefault(r.getElementsByTagName("ignoreDelete").item(0), folder.ignoreDelete)
-                // The fallbacks below are read from a freshly constructed Folder(), so they are
-                // never null here (same as the Java original which passed the boxed defaults).
-                folder.copyOwnershipFromParent = getContentOrDefault(r.getElementsByTagName("copyOwnershipFromParent").item(0), folder.copyOwnershipFromParent ?: false)
+                folder.copyOwnershipFromParent = getContentOrDefault(r.getElementsByTagName("copyOwnershipFromParent").item(0), folder.copyOwnershipFromParent)
                 folder.modTimeWindowS = getContentOrDefault(r.getElementsByTagName("modTimeWindowS").item(0), folder.modTimeWindowS)
                 folder.blockPullOrder = getContentOrDefault(r.getElementsByTagName("blockPullOrder").item(0), folder.blockPullOrder)
-                folder.disableFsync = getContentOrDefault(r.getElementsByTagName("disableFsync").item(0), folder.disableFsync ?: false)
+                folder.disableFsync = getContentOrDefault(r.getElementsByTagName("disableFsync").item(0), folder.disableFsync)
                 folder.maxConcurrentWrites = getContentOrDefault(r.getElementsByTagName("maxConcurrentWrites").item(0), folder.maxConcurrentWrites)
                 folder.maxConflicts = getContentOrDefault(r.getElementsByTagName("maxConflicts").item(0), folder.maxConflicts)
                 folder.copyRangeMethod = getContentOrDefault(r.getElementsByTagName("copyRangeMethod").item(0), folder.copyRangeMethod)
-                folder.caseSensitiveFS = getContentOrDefault(r.getElementsByTagName("caseSensitiveFS").item(0), folder.caseSensitiveFS ?: false)
-                folder.syncOwnership = getContentOrDefault(r.getElementsByTagName("syncOwnership").item(0), folder.syncOwnership ?: false)
-                folder.sendOwnership = getContentOrDefault(r.getElementsByTagName("sendOwnership").item(0), folder.sendOwnership ?: false)
-                folder.syncXattrs = getContentOrDefault(r.getElementsByTagName("syncXattrs").item(0), folder.syncXattrs ?: false)
-                folder.sendXattrs = getContentOrDefault(r.getElementsByTagName("sendXattrs").item(0), folder.sendXattrs ?: false)
-                folder.blockIndexing = getContentOrDefault(r.getElementsByTagName("blockIndexing").item(0), folder.blockIndexing ?: true)
+                folder.caseSensitiveFS = getContentOrDefault(r.getElementsByTagName("caseSensitiveFS").item(0), folder.caseSensitiveFS)
+                folder.syncOwnership = getContentOrDefault(r.getElementsByTagName("syncOwnership").item(0), folder.syncOwnership)
+                folder.sendOwnership = getContentOrDefault(r.getElementsByTagName("sendOwnership").item(0), folder.sendOwnership)
+                folder.syncXattrs = getContentOrDefault(r.getElementsByTagName("syncXattrs").item(0), folder.syncXattrs)
+                folder.sendXattrs = getContentOrDefault(r.getElementsByTagName("sendXattrs").item(0), folder.sendXattrs)
+                folder.blockIndexing = getContentOrDefault(r.getElementsByTagName("blockIndexing").item(0), folder.blockIndexing)
                 folder.filesystemType = getContentOrDefault(r.getElementsByTagName("filesystemType").item(0), folder.filesystemType)
 
                 // Devices
@@ -765,11 +763,11 @@ class ConfigXml(private val context: Context) {
             device.introducer = getAttributeOrDefault(r, "introducer", device.introducer)
             device.name = getAttributeOrDefault(r, "name", device.name)
             device.autoAcceptFolders = getContentOrDefault(r.getElementsByTagName("autoAcceptFolders").item(0), device.autoAcceptFolders)
-            device.maxRecvKbps = getContentOrDefault(r.getElementsByTagName("maxRecvKbps").item(0), device.maxRecvKbps ?: 0)
-            device.maxSendKbps = getContentOrDefault(r.getElementsByTagName("maxSendKbps").item(0), device.maxSendKbps ?: 0)
+            device.maxRecvKbps = getContentOrDefault(r.getElementsByTagName("maxRecvKbps").item(0), device.maxRecvKbps)
+            device.maxSendKbps = getContentOrDefault(r.getElementsByTagName("maxSendKbps").item(0), device.maxSendKbps)
             device.paused = getContentOrDefault(r.getElementsByTagName("paused").item(0), device.paused)
             device.untrusted = getContentOrDefault(r.getElementsByTagName("untrusted").item(0), device.untrusted)
-            device.numConnections = getContentOrDefault(r.getElementsByTagName("numConnections").item(0), device.numConnections ?: 0)
+            device.numConnections = getContentOrDefault(r.getElementsByTagName("numConnections").item(0), device.numConnections)
 
             // Addresses
             /*
@@ -861,7 +859,7 @@ class ConfigXml(private val context: Context) {
                     setConfigElement(r, "autoAcceptFolders", device.autoAcceptFolders)
                     setConfigElement(r, "paused", device.paused)
                     setConfigElement(r, "untrusted", device.untrusted)
-                    setConfigElement(r, "numConnections", device.numConnections?.toString())
+                    setConfigElement(r, "numConnections", device.numConnections.toString())
                     updateDeviceAddresses(r, device)
                     updateDeviceAllowedNetworks(r, device)
                     break
@@ -1073,8 +1071,8 @@ class ConfigXml(private val context: Context) {
         parentElement.removeChild(childElement)
     }
 
-    private fun setConfigElement(parent: Element, tagName: String, newValue: Boolean?): Boolean {
-        return setConfigElement(parent, tagName, newValue?.toString())
+    private fun setConfigElement(parent: Element, tagName: String, newValue: Boolean): Boolean {
+        return setConfigElement(parent, tagName, newValue.toString())
     }
 
     private fun setConfigElement(parent: Element, tagName: String, textContent: String?): Boolean {
@@ -1116,7 +1114,7 @@ class ConfigXml(private val context: Context) {
 
     /**
      * Set device model name as device name for Syncthing.
-     * We need to iterate through XML nodes manually, as mConfig.getDocumentElement() will also
+     * We need to iterate through XML nodes manually, as config.getDocumentElement() will also
      * return nested elements inside folder element. We have to check that we only rename the
      * device corresponding to the local device ID.
      * Returns if changes to the config have been made.

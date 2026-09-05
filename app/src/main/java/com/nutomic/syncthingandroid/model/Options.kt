@@ -4,6 +4,7 @@ package com.nutomic.syncthingandroid.model
  * Sources:
  * - https://github.com/syncthing/syncthing/tree/main/lib/config
  * - https://github.com/syncthing/syncthing/blob/main/lib/config/optionsconfiguration.go
+ * Public fields on purpose: Gson reflective binding + direct field access from Java tests.
  */
 class Options {
     @JvmField

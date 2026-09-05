@@ -57,7 +57,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
  * instead of processing the remaining batch afterwards. The old behaviour could invoke event
  * handling after shutdown had begun; dropping it is safer and simpler.
  */
-class EventPoller @JvmOverloads constructor(
+class EventPoller(
     private val context: Context,
     private val restApi: RestApi,
     private val pollerScope: CoroutineScope =
@@ -316,7 +316,7 @@ class EventPoller @JvmOverloads constructor(
         )
     }
 
-    private fun onFolderCompletion(eventData: java.util.Map<String, Any>?) {
+    private fun onFolderCompletion(eventData: Map<String, Any>?) {
         restApi.setRemoteCompletionInfo(
                 eventData?.get("device") as String?,       // deviceId
                 eventData?.get("folder") as String?,       // folderId

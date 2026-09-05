@@ -69,7 +69,7 @@ class EventPollerTest {
         val event = Event()
         event.id = 1
         event.type = type
-        event.data = data as java.util.Map<String, Any>
+        event.data = data
         return event
     }
 

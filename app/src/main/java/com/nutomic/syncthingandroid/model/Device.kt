@@ -6,6 +6,7 @@ import com.nutomic.syncthingandroid.util.Luhn
 import java.util.Arrays
 import java.util.Locale
 
+/** Public fields on purpose: Gson reflective binding + direct field access from Java tests. */
 class Device {
     @JvmField
     var deviceID: String = ""
@@ -30,9 +31,9 @@ class Device {
     @JvmField
     var autoAcceptFolders: Boolean = false
     @JvmField
-    var maxRecvKbps: Int? = 0
+    var maxRecvKbps: Int = 0
     @JvmField
-    var maxSendKbps: Int? = 0
+    var maxSendKbps: Int = 0
 
     // Since v1.12.0
     @JvmField
@@ -40,7 +41,7 @@ class Device {
 
     // Since v1.25.0
     @JvmField
-    var numConnections: Int? = 0
+    var numConnections: Int = 0
 
     /**
      * Returns the device name, or the first characters of the ID if the name is empty.

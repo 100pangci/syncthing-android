@@ -1,5 +1,6 @@
 package com.nutomic.syncthingandroid.model
 
+/** Public fields on purpose: Gson reflective binding + direct field access from Java tests. */
 class Event {
     @JvmField
     var id: Int = 0
@@ -10,5 +11,5 @@ class Event {
     @JvmField
     var time: String? = null
     @JvmField
-    var data: java.util.Map<String, Any>? = null
+    var data: Map<String, Any>? = null
 }

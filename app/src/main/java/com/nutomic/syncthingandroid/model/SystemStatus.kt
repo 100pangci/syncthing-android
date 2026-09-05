@@ -2,6 +2,7 @@ package com.nutomic.syncthingandroid.model
 
 /**
  * REST API endpoint "/rest/system/status"
+ * Public fields on purpose: Gson reflective binding + direct field access from Java tests.
  */
 class SystemStatus {
     // Example: 25857744

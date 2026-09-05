@@ -20,6 +20,9 @@ import com.nutomic.syncthingandroid.util.Util
 @RequiresApi(api = Build.VERSION_CODES.N)
 class QuickSettingsTileSchedule : TileService(), ServiceConnection, SyncthingService.OnServiceStateChangeListener {
 
+    // Nullable on purpose (mirrors the Java original): TileService can be destroyed without
+    // ever receiving onStartListening, so onDestroy must tolerate unset fields. The `!!` sites
+    // below are only reachable while the tile is listening (i.e. after onStartListening).
     private var context: Context? = null
     private var preferences: SharedPreferences? = null
     private var syncthingService: SyncthingService? = null
