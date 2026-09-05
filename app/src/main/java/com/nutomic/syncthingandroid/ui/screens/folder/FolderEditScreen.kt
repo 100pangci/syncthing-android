@@ -142,9 +142,11 @@ fun FolderEditScreen(
                 // the Syncthing core can sync.
                 val safBridge = (context.applicationContext as SyncthingApp).safBridge
                 val currentPath = holder.folder?.path
-                val forwardedPath = if (currentPath != null && safBridge.needsAuthorization(currentPath)) {
-                    // Re-authorizing an existing forwarded folder after a fresh
-                    // install + config import: keep the configured path unchanged.
+                val forwardedPath = if (currentPath != null && safBridge.isForwardedPath(currentPath)) {
+                    // An existing forwarded folder being (re-)authorized: keep the
+                    // configured path and reset the stale snapshot. Deciding by the
+                    // path (NOT by grant state) is important: the fresh grant taken
+                    // above would mask a lost-grant situation and skip the reset.
                     safBridge.reauthorize(currentPath, uri)
                     currentPath
                 } else {

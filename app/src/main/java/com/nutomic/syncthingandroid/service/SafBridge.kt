@@ -2,6 +2,7 @@ package com.nutomic.syncthingandroid.service
 
 import android.content.Context
 import android.net.Uri
+import android.provider.DocumentsContract
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.PreferenceManager
@@ -285,6 +286,7 @@ class SafBridge(private val context: Context) {
         private val forwardedDir = File(folderPath)
         private val tree: SafTree = DocumentFileSafTree(context, uri)
         private val inFlight = java.util.concurrent.atomic.AtomicBoolean(false)
+        private var emptySafScans = 0
         private var loop: Job? = null
 
         fun start() {
@@ -317,6 +319,24 @@ class SafBridge(private val context: Context) {
                 val saf = tree.scan()
                 val fwd = scanForwardedDir(forwardedDir)
                 val last = loadState(stateKey)
+
+                // A single failed/empty provider scan (transient provider error) must
+                // never wipe the whole tree; require two consecutive empty scans
+                // before accepting a genuinely emptied provider.
+                if (saf.isEmpty() && last.isNotEmpty()) {
+                    emptySafScans++
+                    if (emptySafScans < 2) {
+                        Log.w(
+                            TAG, "forwardPass: [$stateKey] Provider scan empty while " +
+                                "snapshot holds ${last.size} entries; skipping this pass"
+                        )
+                        return@withContext
+                    }
+                    Log.w(TAG, "forwardPass: [$stateKey] Provider empty $emptySafScans x in a row; accepting deletions")
+                } else {
+                    emptySafScans = 0
+                }
+
                 val plan = MirrorMerge.plan(saf, fwd, last)
                 val appliedFwd = applyToForwardedDir(plan, tree)
                 val appliedSaf = applyToSaf(plan)
@@ -711,7 +731,15 @@ internal class DocumentFileSafTree(private val context: Context, treeUri: Uri) :
         val rootNode = root ?: throw IOException("Tree uri unavailable")
         val result = LinkedHashMap<String, SafBridge.NodeInfo>()
         fun walk(dir: DocumentFile, prefix: String) {
-            for (child in dir.listFiles()) {
+            val expected = childCount(dir)
+                ?: throw IOException("Provider query failed for ${dir.uri}")
+            val children = dir.listFiles()
+            if (children.size != expected) {
+                // listFiles() swallows query failures into an empty array; never
+                // mistake that for a genuinely emptied provider directory.
+                throw IOException("Provider returned ${children.size}/$expected children for ${dir.uri}")
+            }
+            for (child in children) {
                 val name = child.name ?: continue
                 if (isSyncthingInternalName(name)) {
                     continue
@@ -731,6 +759,26 @@ internal class DocumentFileSafTree(private val context: Context, treeUri: Uri) :
         }
         walk(rootNode, "")
         return result
+    }
+
+    /**
+     * Row count of the directory query, or null when the query FAILED.
+     * [DocumentFile.listFiles] hides query failures behind empty arrays.
+     */
+    private fun childCount(dir: DocumentFile): Int? {
+        return try {
+            val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
+                dir.uri, DocumentsContract.getDocumentId(dir.uri)
+            )
+            context.contentResolver.query(
+                childrenUri,
+                arrayOf(DocumentsContract.Document.COLUMN_DOCUMENT_ID),
+                null, null, null
+            )?.use { it.count }
+        } catch (e: Exception) {
+            Log.w(TAG, "childCount: query failed for ${dir.uri}", e)
+            null
+        }
     }
 
     override fun open(path: String): InputStream? {
