@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Syncthing çekirdeğini root olarak çalıştır</string>
     <string name="run_as_root_summary">Yalnızca root\'lu cihazlar için: çekirdek herhangi bir dizini okuyup yazabilir (ör. diğer uygulamaların verileri). Uygulamanın özel deposunda oluşturduğu dosyalar herkes tarafından yazılabilir hale gelir. Bir sonraki çekirdek başlangıcında etkin olur.</string>
     <string name="root_authorization_unavailable">Root yetkilendirmesi yok; ayar kapatıldı.</string>
-    <string name="root_disable_warning_title">Yalnızca-root klasörleri algılandı</string>
-    <string name="root_disable_warning_message">Bu klasörler root olmadan erişilemeyen dizinlerde bulunur ve kapatıldığında eşitleme durur. Önce bunları silin veya içeriklerini çıkarın:
-
-%1$s</string>
+    <string name="root_warning_title">Root modu uyarısı</string>
+    <string name="root_enable_warning_message">Root yetkilendirmesi daha sonra kaybedilirse çekirdek başlamaz ve yalnızca-root klasörleri eşitlemeyi durdurur. Yine de aç?</string>
+    <string name="root_enable_warning_continue">Yine de aç</string>
+    <string name="root_disable_warning_message">Yalnızca-root klasörleri kapatınca eşitlemeyi durdurur; uygulamanın özel depolama sahipliği otomatik iade edilir. Yine de kapat?</string>
     <string name="root_disable_warning_continue">Yine de kapat</string>
     <string name="folder_picker_root_browse">Root ile göz at</string>
 

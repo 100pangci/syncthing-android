@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Spustit jádro Syncthing jako root</string>
     <string name="run_as_root_summary">Pouze pro rootovaná zařízení: jádro může číst a zapisovat do libovolného adresáře (např. data jiných aplikací). Soubory, které v soukromém úložišti aplikace vytvoří, jsou zapisovatelné pro všechny. Projeví se při dalším spuštění jádra.</string>
     <string name="root_authorization_unavailable">Oprávnění root není k dispozici; nastavení bylo vypnuto.</string>
-    <string name="root_disable_warning_title">Zjištěny složky jen pro root</string>
-    <string name="root_disable_warning_message">Tyto složky jsou v adresářích, které aplikace bez rootu nemůže zpřístupnit, a po vypnutí rootu se přestanou synchronizovat. Nejprve je odstraňte nebo vyjměte jejich obsah:
-
-%1$s</string>
+    <string name="root_warning_title">Varování režimu root</string>
+    <string name="root_enable_warning_message">Pokud se oprávnění root později ztratí, jádro se nespustí a složky jen pro root přestanou být synchronizovány. Přesto zapnout?</string>
+    <string name="root_enable_warning_continue">Přesto zapnout</string>
+    <string name="root_disable_warning_message">Složky jen pro root po vypnutí přestanou být synchronizovány; vlastnictví soukromého úložiště aplikace se vrátí automaticky. Přesto vypnout?</string>
     <string name="root_disable_warning_continue">Přesto vypnout</string>
     <string name="folder_picker_root_browse">Procházet s rootem</string>
 

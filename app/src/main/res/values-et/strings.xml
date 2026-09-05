@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Käivita Syncthingi tuum root õigustes</string>
     <string name="run_as_root_summary">Ainult juuritud seadmetele: tuum saab lugeda ja kirjutada mis tahes kataloogi (nt teiste rakenduste andmed). Rakenduse privaatsalvestusse loodud failid muutuvad kõigile kirjutatavaks. Rakendub tuuma järgmisel käivitamisel.</string>
     <string name="root_authorization_unavailable">Rooti luba pole saadaval; seade lülitati välja.</string>
-    <string name="root_disable_warning_title">Tuvastati ainult-root kaustad</string>
-    <string name="root_disable_warning_message">Need kaustad asuvad kataloogides, mis on ilma rootita juurdepääsematud, ja pärast väljalülitamist ei sünkroonita neid enam. Eemaldage need või tõstke sisu välja:
-
-%1$s</string>
+    <string name="root_warning_title">Root-režiimi hoiatus</string>
+    <string name="root_enable_warning_message">Kui rooti luba hiljem kaob, ei käivitu tuum ja ainult-root kaustad lõpetavad sünkroonimise. Siiski sisse lülitada?</string>
+    <string name="root_enable_warning_continue">Siiski sisse lülitada</string>
+    <string name="root_disable_warning_message">Ainult-root kaustad pärast väljalülitamist ei sünkroonita; rakenduse privaatsalvesti omand tagastatakse automaatselt. Lülita siiski välja?</string>
     <string name="root_disable_warning_continue">Lülita siiski välja</string>
     <string name="folder_picker_root_browse">Sirvi root õigustega</string>
 

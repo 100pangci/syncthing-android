@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Køyr Syncthing-kjernen som root</string>
     <string name="run_as_root_summary">Berre for rotete einingar: kjernen kan lesa og skriva i vilkårlege mapper (t.d. data frå andre appar). Filer han oppretter i appen sin private lagring blir skrivbare for alle. Gjer seg gjeldande ved neste kjerneoppstart.</string>
     <string name="root_authorization_unavailable">Root-godkjenning er ikkje tilgjengelig; innstillinga vart slått av.</string>
-    <string name="root_disable_warning_title">Berre-root-mapper oppdaga</string>
-    <string name="root_disable_warning_message">Desse mappene ligg i katalogar som ikkje er tilgjengelege utan root, og dei sluttar å synkroniserast etter avslåing. Fjern dei eller ta ut innhaldet først:
-
-%1$s</string>
+    <string name="root_warning_title">Root-modus åtvaring</string>
+    <string name="root_enable_warning_message">Viss root-løyvet går tapt, startar ikkje kjernen og berre-root-mapper sluttar å synkroniserast. Slå på likevel?</string>
+    <string name="root_enable_warning_continue">Slå på likevel</string>
+    <string name="root_disable_warning_message">Berre-root-mapper sluttar å synkroniserast etter avslåing; appen sin private lagring blir gitt tilbake automatisk. Slå av likevel?</string>
     <string name="root_disable_warning_continue">Slå av likevel</string>
     <string name="folder_picker_root_browse">Utforsk med root</string>
 

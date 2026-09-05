@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Kör Syncthing-kärnan som root</string>
     <string name="run_as_root_summary">Endast för rootade enheter: kärnan kan läsa och skriva i valfri katalog (t.ex. data från andra appar). Filer den skapar i appens privata lagring blir skrivbara för alla. Gäller vid nästa kärnstart.</string>
     <string name="root_authorization_unavailable">Root-auktorisering är inte tillgänglig; inställningen inaktiverades.</string>
-    <string name="root_disable_warning_title">Endast-root-mappar upptäcktes</string>
-    <string name="root_disable_warning_message">Dessa mappar ligger i kataloger som inte är åtkomliga utan root och slutar synkroniseras efter avstängningen. Ta bort dem eller hämta ut innehållet först:
-
-%1$s</string>
+    <string name="root_warning_title">Root-lägesvarning</string>
+    <string name="root_enable_warning_message">Om root-auktoriseringen går förlorad senare startar inte kärnan och endast-root-mappar slutar synkroniseras. Aktivera ändå?</string>
+    <string name="root_enable_warning_continue">Aktivera ändå</string>
+    <string name="root_disable_warning_message">Endast-root-mappar slutar synkroniseras efter avstängning; appens privata lagrings ägarskap lämnas tillbaka automatiskt. Inaktivera ändå?</string>
     <string name="root_disable_warning_continue">Inaktivera ändå</string>
     <string name="folder_picker_root_browse">Bläddra med root</string>
 

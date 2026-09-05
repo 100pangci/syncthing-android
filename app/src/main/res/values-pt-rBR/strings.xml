@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Executar o núcleo do Syncthing como root</string>
     <string name="run_as_root_summary">Apenas para dispositivos com root: o núcleo pode ler e gravar em qualquer diretório (ex.: dados de outros apps). Os arquivos que ele criar no armazenamento privado do app ficam graváveis por todos. Tem efeito na próxima inicialização do núcleo.</string>
     <string name="root_authorization_unavailable">Autorização root indisponível; a opção foi desativada.</string>
-    <string name="root_disable_warning_title">Pastas somente-root detectadas</string>
-    <string name="root_disable_warning_message">Estas pastas estão em diretórios inacessíveis sem root e deixarão de sincronizar após a desativação. Remova-as ou retire antes o conteúdo:
-
-%1$s</string>
+    <string name="root_warning_title">Aviso do modo root</string>
+    <string name="root_enable_warning_message">Se a autorização root se perder, o núcleo não iniciará e as pastas somente-root deixarão de sincronizar. Ativar mesmo assim?</string>
+    <string name="root_enable_warning_continue">Ativar mesmo assim</string>
+    <string name="root_disable_warning_message">As pastas somente-root deixarão de sincronizar após desativar; o armazenamento privado do app é devolvido automaticamente. Desativar mesmo assim?</string>
     <string name="root_disable_warning_continue">Desativar mesmo assim</string>
     <string name="folder_picker_root_browse">Navegar com root</string>
 

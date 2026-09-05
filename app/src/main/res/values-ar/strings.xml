@@ -605,10 +605,10 @@
     <string name="run_as_root_title">تشغيل نواة Syncthing بصلاحيات root</string>
     <string name="run_as_root_summary">للأجهزة المروتة فقط: يمكن للنواة قراءة وكتابة أي دليل (مثل بيانات التطبيقات الأخرى). الملفات التي تنشئها داخل التخزين الخاص بالتطبيق تصبح قابلة للكتابة من قِبل الجميع. يسري التأثير عند بدء النواة التالي.</string>
     <string name="root_authorization_unavailable">تفويض root غير متاح; تم إيقاف الإعداد.</string>
-    <string name="root_disable_warning_title">اكتشاف مجلدات تعمل مع root فقط</string>
-    <string name="root_disable_warning_message">هذه المجلدات موجودة في أدلة لا يمكن الوصول إليها دون root وسيتوقف مزامنتها بعد الإيقاف. احذفها أو أخرج محتواها أولاً:
-
-%1$s</string>
+    <string name="root_warning_title">تحذير وضع root</string>
+    <string name="root_enable_warning_message">إذا فُقد تفويض root لاحقًا، لن تبدأ النواة وتتوقف المجلدات التي تعمل مع root فقط عن المزامنة. التشغيل على أي حال؟</string>
+    <string name="root_enable_warning_continue">التشغيل على أي حال</string>
+    <string name="root_disable_warning_message">المجلدات التي تعمل مع root فقط ستتوقف عن المزامنة بعد الإيقاف؛ تُعاد ملكية التخزين الخاص بالتطبيق تلقائيًا. الإيقاف على أي حال؟</string>
     <string name="root_disable_warning_continue">الإيقاف على أي حال</string>
     <string name="folder_picker_root_browse">تصفّح بصلاحيات root</string>
 

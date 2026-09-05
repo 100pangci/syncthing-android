@@ -605,10 +605,10 @@
     <string name="run_as_root_title">以 root 執行 Syncthing 核心</string>
     <string name="run_as_root_summary">僅限已授權的 root 裝置:核心可讀寫任意目錄(如其他應用程式的資料);其在應用程式私有儲存空間中建立的檔案將對其他應用程式可寫。下次核心啟動時生效。</string>
     <string name="root_authorization_unavailable">無法取得 root 授權,已關閉該開關。</string>
-    <string name="root_disable_warning_title">偵測到僅限 root 的資料夾</string>
-    <string name="root_disable_warning_message">這些資料夾位於沒有 root 就無法存取的目錄中,關閉後將停止同步。請先刪除或取出內容:
-
-%1$s</string>
+    <string name="root_warning_title">root 模式警告</string>
+    <string name="root_enable_warning_message">若日後失去 root 授權,核心將無法正常啟動,僅 root 能同步的資料夾也會停止同步。確定開啟?</string>
+    <string name="root_enable_warning_continue">仍要開啟</string>
+    <string name="root_disable_warning_message">關閉後,僅 root 能同步的資料夾將停止同步;應用程式私有儲存空間的擁有權會自動交還。確定關閉?</string>
     <string name="root_disable_warning_continue">仍要關閉</string>
     <string name="folder_picker_root_browse">Root 瀏覽</string>
 

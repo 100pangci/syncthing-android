@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Покрени Syncthing језгро као root</string>
     <string name="run_as_root_summary">Само за рутоване уређаје: језгро може читати и писати у било који директоријум (нпр. податке других апликација). Датотеке које направи у приватном складишту апликације постају записиве за све. Ступа на снагу при следећем покретању језгра.</string>
     <string name="root_authorization_unavailable">Root овлашћење није доступно; подешавање је искључено.</string>
-    <string name="root_disable_warning_title">Откривене фасцикле само за root</string>
-    <string name="root_disable_warning_message">Ове фасцикле су у директоријумима недоступним без root-а и престаће се синхронизовати након искључења. Прво их уклоните или извадите садржај:
-
-%1$s</string>
+    <string name="root_warning_title">Упозорење за root режим</string>
+    <string name="root_enable_warning_message">Ако се root овлашћење изгуби, језгро се неће покренути и фасцикле само за root ће престати са синхронизацијом. Ипак укључи?</string>
+    <string name="root_enable_warning_continue">Ипак укључи</string>
+    <string name="root_disable_warning_message">Фасцикле само за root престаће са синхронизацијом након искључења; власништво над приватним складиштем апликације се аутоматски враћа. Ипак искључи?</string>
     <string name="root_disable_warning_continue">Ипак искључи</string>
     <string name="folder_picker_root_browse">Прегледај са root</string>
 

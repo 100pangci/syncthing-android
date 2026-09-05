@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Chạy nhân Syncthing dưới quyền root</string>
     <string name="run_as_root_summary">Chỉ dành cho thiết bị đã root: nhân có thể đọc và ghi vào bất kỳ thư mục nào (ví dụ: dữ liệu của ứng dụng khác). Tệp nó tạo trong bộ nhớ riêng của ứng dụng sẽ ai cũng ghi được. Có hiệu lực từ lần khởi động nhân tiếp theo.</string>
     <string name="root_authorization_unavailable">Không thể xin quyền root; cài đặt đã được tắt.</string>
-    <string name="root_disable_warning_title">Phát hiện thư mục chỉ-root</string>
-    <string name="root_disable_warning_message">Các thư mục này nằm trong thư mục con không thể truy cập nếu không có root và sẽ ngừng đồng bộ sau khi tắt. Hãy xóa chúng hoặc lấy nội dung ra trước:
-
-%1$s</string>
+    <string name="root_warning_title">Cảnh báo chế độ root</string>
+    <string name="root_enable_warning_message">Nếu mất quyền root sau này, nhân sẽ không khởi động được và các thư mục chỉ-root sẽ ngừng đồng bộ. Vẫn bật?</string>
+    <string name="root_enable_warning_continue">Vẫn bật</string>
+    <string name="root_disable_warning_message">Sau khi tắt, các thư mục chỉ đồng bộ bằng root sẽ ngừng đồng bộ; quyền sở hữu bộ nhớ riêng của ứng dụng được tự động trả lại. Vẫn tắt?</string>
     <string name="root_disable_warning_continue">Vẫn tắt</string>
     <string name="folder_picker_root_browse">Duyệt bằng root</string>
 

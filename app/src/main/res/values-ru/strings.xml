@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Запускать ядро Syncthing от имени root</string>
     <string name="run_as_root_summary">Только для устройств с root: ядро может читать и писать в любой каталог (например, данные других приложений). Файлы, созданные им в закрытом хранилище приложения, становятся доступными для записи всем. Вступает в силу при следующем запуске ядра.</string>
     <string name="root_authorization_unavailable">Авторизация root недоступна; настройка была отключена.</string>
-    <string name="root_disable_warning_title">Обнаружены папки, доступные только root</string>
-    <string name="root_disable_warning_message">Эти папки находятся в каталогах, недоступных без root, и после выключения перестанут синхронизироваться. Сначала удалите их или извлеките содержимое:
-
-%1$s</string>
+    <string name="root_warning_title">Предупреждение о режиме root</string>
+    <string name="root_enable_warning_message">Если авторизация root будет утрачена, ядро не запустится, а папки только для root перестанут синхронизироваться. Всё равно включить?</string>
+    <string name="root_enable_warning_continue">Всё равно включить</string>
+    <string name="root_disable_warning_message">Папки только для root перестанут синхронизироваться после выключения; владение закрытым хранилищем приложения возвращается автоматически. Всё равно выключить?</string>
     <string name="root_disable_warning_continue">Всё равно выключить</string>
     <string name="folder_picker_root_browse">Обзор с root</string>
 

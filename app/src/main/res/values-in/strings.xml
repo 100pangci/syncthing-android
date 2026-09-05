@@ -608,10 +608,10 @@
     <string name="run_as_root_title">Jalankan inti Syncthing sebagai root</string>
     <string name="run_as_root_summary">Hanya untuk perangkat yang di-root: inti dapat membaca dan menulis ke direktori mana pun (mis. data aplikasi lain). File yang dibuatnya di penyimpanan privat aplikasi dapat ditulis oleh siapa saja. Berlaku pada mulai inti berikutnya.</string>
     <string name="root_authorization_unavailable">Otorisasi root tidak tersedia; setelan dimatikan.</string>
-    <string name="root_disable_warning_title">Folder hanya-root terdeteksi</string>
-    <string name="root_disable_warning_message">Folder ini berada di direktori yang tidak dapat diakses tanpa root dan akan berhenti disinkronkan setelah dimatikan. Hapus dulu atau keluarkan isinya:
-
-%1$s</string>
+    <string name="root_warning_title">Peringatan mode root</string>
+    <string name="root_enable_warning_message">Jika otorisasi root hilang nanti, inti tidak akan mulai dan folder hanya-root berhenti disinkronkan. Tetap aktifkan?</string>
+    <string name="root_enable_warning_continue">Tetap aktifkan</string>
+    <string name="root_disable_warning_message">Folder hanya-root berhenti disinkronkan setelah dimatikan; kepemilikan penyimpanan privat aplikasi dikembalikan otomatis. Matikan saja?</string>
     <string name="root_disable_warning_continue">Matikan saja</string>
     <string name="folder_picker_root_browse">Telusuri dengan root</string>
 

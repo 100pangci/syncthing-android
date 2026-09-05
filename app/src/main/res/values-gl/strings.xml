@@ -616,10 +616,10 @@
     <string name="run_as_root_title">Executar o núcleo de Syncthing como root</string>
     <string name="run_as_root_summary">Só para dispositivos con root: o núcleo pode ler e escribir en calquera directorio (p. ex. datos doutras aplicacións). Os ficheiros que cree no almacenamento privado da app serán escribibles por calquera. Ten efecto no seguinte inicio do núcleo.</string>
     <string name="root_authorization_unavailable">A autorización root non está dispoñible; desactivouse a opción.</string>
-    <string name="root_disable_warning_title">Cartafons só-root detectados</string>
-    <string name="root_disable_warning_message">Estes cartafois están en directorios inaccesibles sen root e deixarán de sincronizar ao desactivalo. Elimínaos ou saca antes o seu contido:
-
-%1$s</string>
+    <string name="root_warning_title">Aviso do modo root</string>
+    <string name="root_enable_warning_message">Se se perde a autorización root, o núcleo non se iniciará e os cartafois só-root deixarán de sincronizar. Activar igualmente?</string>
+    <string name="root_enable_warning_continue">Activar igualmente</string>
+    <string name="root_disable_warning_message">Os cartafois só-root deixarán de sincronizar ao desactivalo; o almacenamento privado da app devólvese automaticamente. Desactivar igualmente?</string>
     <string name="root_disable_warning_continue">Desactivar igualmente</string>
     <string name="folder_picker_root_browse">Explorar con root</string>
 

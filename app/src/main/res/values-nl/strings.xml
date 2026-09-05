@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Syncthing-kernel als root uitvoeren</string>
     <string name="run_as_root_summary">Alleen voor apparaten met root: de kernel kan in elke map lezen en schrijven (bijv. gegevens van andere apps). Bestanden die hij in de privéopslag van de app aanmaakt, worden door iedereen beschrijfbaar. Van kracht bij de volgende kernelstart.</string>
     <string name="root_authorization_unavailable">Root-autorisatie niet beschikbaar; de instelling is uitgeschakeld.</string>
-    <string name="root_disable_warning_title">Alleen-root-mappen gedetecteerd</string>
-    <string name="root_disable_warning_message">Deze mappen liggen in mappen die zonder root ontoegankelijk zijn en stoppen met synchroniseren na het uitschakelen. Verwijder ze of haal eerst de inhoud op:
-
-%1$s</string>
+    <string name="root_warning_title">Root-moduswaarschuwing</string>
+    <string name="root_enable_warning_message">Als de root-autorisatie later verloren gaat, start de kernel niet en stoppen alleen-root-mappen met synchroniseren. Toch inschakelen?</string>
+    <string name="root_enable_warning_continue">Toch inschakelen</string>
+    <string name="root_disable_warning_message">Alleen-root-mappen stoppen met synchroniseren na het uitschakelen; de privéopslag van de app wordt automatisch teruggegeven. Toch uitschakelen?</string>
     <string name="root_disable_warning_continue">Toch uitschakelen</string>
     <string name="folder_picker_root_browse">Met root bladeren</string>
 

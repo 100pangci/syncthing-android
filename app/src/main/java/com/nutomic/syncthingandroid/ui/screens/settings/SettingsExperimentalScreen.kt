@@ -21,9 +21,7 @@ import androidx.navigation3.runtime.EntryProviderScope
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.SyncthingService
-import com.nutomic.syncthingandroid.util.ConfigXml
 import com.nutomic.syncthingandroid.util.RootAccess
-import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
@@ -51,16 +49,17 @@ fun SettingsExperimentalScreen() {
     val rootSwitchBusy = remember { mutableStateOf(false) }
     // Guard against re-processing the revert write when authorization was denied.
     val suppressNextRootChange = remember { mutableStateOf(false) }
-    // Non-null while the "turn off root" confirmation dialog (root-only folders) is up.
-    val pendingRootDisableFolders = remember { mutableStateOf<List<String>?>(null) }
+    // Non-null while the root-mode warning dialog is up: true = enabling, false = disabling.
+    val pendingRootWarning = remember { mutableStateOf<Boolean?>(null) }
     val scope = rememberCoroutineScope()
 
     // React to root-mode toggles: turning it on probes su right away (this is what makes
-    // the Magisk grant dialog appear immediately instead of at the next core start), and
-    // every accepted change restarts the core so the mode applies instantly. Before the
-    // restart the root shell hands app storage back to the app UID (root-written config
-    // and key material carry explicit 0600 modes), while su is still guaranteed to work.
-    // The revert write after a denied grant is skipped via suppressNextRootChange.
+    // the Magisk grant dialog appear immediately instead of at the next core start), then
+    // BOTH directions show a plain warning dialog and only restart the core after the
+    // user confirms. On confirm the root shell hands app storage back to the app UID when
+    // needed (root-written config and key material carry explicit 0600 modes) — it must
+    // run while su is still guaranteed to work. The revert write after a denied grant is
+    // skipped via suppressNextRootChange.
     LaunchedEffect(Unit) {
         snapshotFlow { runAsRoot.value }
             .drop(1)
@@ -81,56 +80,43 @@ fun SettingsExperimentalScreen() {
                             ).show()
                             return@collect
                         }
-                    } else {
-                        // OFF: while su is still guaranteed to work, hand root-session
-                        // files back FIRST — the root-uid core rewrites config.xml with
-                        // explicit 0600 modes, so the root-only-folder scan below could
-                        // not even read the config otherwise.
-                        if (withContext(Dispatchers.IO) { RootAccess.appStorageOwnedByRoot(context) }) {
-                            withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
-                        }
-                        // Then warn when configured folders live in directories the app
-                        // cannot reach without root — they will stop syncing.
-                        val rootOnlyFolders = withContext(Dispatchers.IO) { getRootOnlyFolders(context) }
-                        if (rootOnlyFolders.isNotEmpty()) {
-                            // Keep the switch on until the user decides in the dialog.
-                            // The storage hand-back already happened and is idempotent.
-                            pendingRootDisableFolders.value = rootOnlyFolders
-                            return@collect
-                        }
                     }
-                    context.startService(
-                        Intent(context, SyncthingService::class.java)
-                            .setAction(SyncthingService.ACTION_RESTART)
-                    )
+                    // Keep the switch unchanged until the user decides in the dialog.
+                    pendingRootWarning.value = enabled
                 } finally {
                     rootSwitchBusy.value = false
                 }
             }
     }
 
-    pendingRootDisableFolders.value?.let { rootOnlyFolders ->
+    pendingRootWarning.value?.let { enabling ->
         AlertDialog(
-            onDismissRequest = { pendingRootDisableFolders.value = null },
-            title = { Text(stringResource(R.string.root_disable_warning_title)) },
+            onDismissRequest = { pendingRootWarning.value = null },
+            title = { Text(stringResource(R.string.root_warning_title)) },
             text = {
                 Text(
                     stringResource(
-                        R.string.root_disable_warning_message,
-                        rootOnlyFolders.joinToString("\n"),
+                        if (enabling) {
+                            R.string.root_enable_warning_message
+                        } else {
+                            R.string.root_disable_warning_message
+                        }
                     )
                 )
             },
             confirmButton = {
                 TextButton(onClick = {
-                    pendingRootDisableFolders.value = null
+                    pendingRootWarning.value = null
                     scope.launch {
                         rootSwitchBusy.value = true
                         try {
                             suppressNextRootChange.value = true
-                            runAsRoot.value = false
-                            // Storage hand-back already ran before the dialog; the root
-                            // folders the user was warned about are intentionally left.
+                            runAsRoot.value = enabling
+                            if (!enabling &&
+                                withContext(Dispatchers.IO) { RootAccess.appStorageOwnedByRoot(context) }
+                            ) {
+                                withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
+                            }
                             context.startService(
                                 Intent(context, SyncthingService::class.java)
                                     .setAction(SyncthingService.ACTION_RESTART)
@@ -140,11 +126,19 @@ fun SettingsExperimentalScreen() {
                         }
                     }
                 }) {
-                    Text(stringResource(R.string.root_disable_warning_continue))
+                    Text(
+                        stringResource(
+                            if (enabling) {
+                                R.string.root_enable_warning_continue
+                            } else {
+                                R.string.root_disable_warning_continue
+                            }
+                        )
+                    )
                 }
             },
             dismissButton = {
-                TextButton(onClick = { pendingRootDisableFolders.value = null }) {
+                TextButton(onClick = { pendingRootWarning.value = null }) {
                     Text(stringResource(android.R.string.cancel))
                 }
             },
@@ -225,22 +219,5 @@ private fun validateProxy(
             Toast.makeText(context, errorResId, Toast.LENGTH_LONG).show()
             null
         }
-    }
-}
-
-/**
- * Configured folder paths that the app's own UID cannot write: those only sync while the
- * core runs as root, so turning root off strands them. Best-effort: an unreadable config
- * (it should not happen — the caller hand-backs storage first) yields an empty list.
- */
-private fun getRootOnlyFolders(context: Context): List<String> {
-    return try {
-        val configXml = ConfigXml(context)
-        configXml.loadConfig()
-        configXml.folders
-            .mapNotNull { folder -> folder.path?.takeIf { path -> path.isNotBlank() && !File(path).canWrite() } }
-            .distinct()
-    } catch (e: Exception) {
-        emptyList()
     }
 }

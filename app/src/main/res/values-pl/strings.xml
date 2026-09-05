@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Uruchom rdzeń Syncthing jako root</string>
     <string name="run_as_root_summary">Tylko dla urządzeń z rootem: rdzeń może odczytywać i zapisywać dowolne katalogi (np. dane innych aplikacji). Pliki tworzone przez niego w prywatnej pamięci aplikacji stają się zapisywalne dla wszystkich. Wchodzi w życie przy następnym uruchomieniu rdzenia.</string>
     <string name="root_authorization_unavailable">Brak autoryzacji root; ustawienie zostało wyłączone.</string>
-    <string name="root_disable_warning_title">Wykryto foldery tylko-root</string>
-    <string name="root_disable_warning_message">Te foldery znajdują się w katalogach niedostępnych bez roota i przestaną się synchronizować po jego wyłączeniu. Najpierw usuń je lub wyjmij ich zawartość:
-
-%1$s</string>
+    <string name="root_warning_title">Ostrzeżenie trybu root</string>
+    <string name="root_enable_warning_message">Jeśli autoryzacja root zostanie później utracona, rdzeń się nie uruchomi, a foldery tylko-root przestaną się synchronizować. Mimo to włączyć?</string>
+    <string name="root_enable_warning_continue">Mimo to włączyć</string>
+    <string name="root_disable_warning_message">Foldery tylko-root przestaną się synchronizować po wyłączeniu; własność prywatnej pamięci aplikacji jest automatycznie zwracana. Mimo to wyłączyć?</string>
     <string name="root_disable_warning_continue">Mimo to wyłącz</string>
     <string name="folder_picker_root_browse">Przeglądaj z root</string>
 

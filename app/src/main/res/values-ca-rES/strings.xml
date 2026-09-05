@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Executa el nucli de Syncthing com a root</string>
     <string name="run_as_root_summary">Només per a dispositius amb root: el nucli pot llegir i escriure a qualsevol directori (p. ex. dades d\'altres aplicacions). Els fitxers que crea dins l\'emmagatzematge privat de l\'aplicació esdevenen d\'escriptura per a tothom. Té efecte en el proper inici del nucli.</string>
     <string name="root_authorization_unavailable">L\'autorització root no està disponible; s\'ha desactivat l\'opció.</string>
-    <string name="root_disable_warning_title">Carpetes només per a root detectades</string>
-    <string name="root_disable_warning_message">Aquestes carpetes són en directoris que l\'aplicació no pot assolir sense root i deixaran de sincronitzar-se en desactivar-lo. Elimineu-les o traieu-ne el contingut abans:
-
-%1$s</string>
+    <string name="root_warning_title">Avís del mode root</string>
+    <string name="root_enable_warning_message">Si es perd l\'autorització root, el nucli no s\'iniciarà i les carpetes només per a root deixaran de sincronitzar-se. Activar igualment?</string>
+    <string name="root_enable_warning_continue">Activa igualment</string>
+    <string name="root_disable_warning_message">Les carpetes només per a root deixaran de sincronitzar-se en desactivar-lo; l\'emmagatzematge privat de l\'aplicació es retorna automàticament. Desactivar igualment?</string>
     <string name="root_disable_warning_continue">Desactiva igualment</string>
     <string name="folder_picker_root_browse">Explora amb root</string>
 

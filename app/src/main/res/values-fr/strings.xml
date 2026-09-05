@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Exécuter le cœur de Syncthing en tant que root</string>
     <string name="run_as_root_summary">Pour appareils rootés uniquement : le cœur peut lire et écrire dans n\'importe quel répertoire (p. ex. les données d\'autres applications). Les fichiers qu\'il crée dans le stockage privé de l\'app deviennent inscriptibles par tous. Prend effet au prochain démarrage du cœur.</string>
     <string name="root_authorization_unavailable">Autorisation root indisponible ; le paramètre a été désactivé.</string>
-    <string name="root_disable_warning_title">Dossiers réservés à root détectés</string>
-    <string name="root_disable_warning_message">Ces dossiers se trouvent dans des répertoires inaccessibles sans root et cesseront de se synchroniser après la désactivation. Supprimez-les ou récupérez d\'abord leur contenu :
-
-%1$s</string>
+    <string name="root_warning_title">Avertissement mode root</string>
+    <string name="root_enable_warning_message">Si l\'autorisation root est perdue plus tard, le cœur ne démarrera plus et les dossiers réservés à root cesseront de se synchroniser. Activer quand même ?</string>
+    <string name="root_enable_warning_continue">Activer quand même</string>
+    <string name="root_disable_warning_message">Les dossiers réservés à root cesseront de se synchroniser après la désactivation ; le stockage privé de l\'app est automatiquement restitué. Désactiver quand même ?</string>
     <string name="root_disable_warning_continue">Désactiver quand même</string>
     <string name="folder_picker_root_browse">Parcourir avec root</string>
 

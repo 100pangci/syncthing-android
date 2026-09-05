@@ -605,10 +605,10 @@
     <string name="run_as_root_title">Syncthing mag futtatása rootként</string>
     <string name="run_as_root_summary">Csak rootolt eszközökhöz: a mag bármely könyvtárat olvashat és írhat (pl. más alkalmazások adatait). Az alkalmazás privát tárhelyén létrehozott fájlok mindenki által írhatóvá válnak. A mag következő indításakor lép életbe.</string>
     <string name="root_authorization_unavailable">A root engedély nem érhető el; a beállítás ki lett kapcsolva.</string>
-    <string name="root_disable_warning_title">Csak root által elérhető mappák észlelve</string>
-    <string name="root_disable_warning_message">E mappák olyan könyvtárakban vannak, amelyeket root nélkül nem ér el az alkalmazás, és a kikapcsolítás után leáll a szinkronizálásuk. Előbb távolítsa el őket, vagy mentse ki a tartalmukat:
-
-%1$s</string>
+    <string name="root_warning_title">Root mód figyelmeztetés</string>
+    <string name="root_enable_warning_message">Ha a root engedély később elvész, a mag nem indul el, és a csak root által elérhető mappák szinkronizálása leáll. Mindenképp bekapcsolja?</string>
+    <string name="root_enable_warning_continue">Mindenképp bekapcsolás</string>
+    <string name="root_disable_warning_message">A csak roottal szinkronizált mappák a kikapcsolítás után leállnak; az alkalmazás privát tárolójának tulajdonosa automatikusan visszaadódik. Mindenképp kikapcsolja?</string>
     <string name="root_disable_warning_continue">Mindenképp kikapcsolás</string>
     <string name="folder_picker_root_browse">Böngészés roottal</string>
 
