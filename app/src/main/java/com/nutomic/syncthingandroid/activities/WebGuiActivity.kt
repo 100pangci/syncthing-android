@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.webgui
+package com.nutomic.syncthingandroid.activities
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
@@ -49,6 +49,7 @@ import java.security.cert.CertificateException
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import androidx.core.net.toUri
+import com.nutomic.syncthingandroid.ui.screens.webgui.WebGuiScreen
 
 /**
  * Holds a WebView that shows the web ui of the local syncthing instance.

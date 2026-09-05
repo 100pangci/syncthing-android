@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.webgui
+package com.nutomic.syncthingandroid.ui.screens.webgui
 
 import android.content.Context
 import android.webkit.WebView
