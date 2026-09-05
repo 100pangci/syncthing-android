@@ -1,5 +1,10 @@
 package com.nutomic.syncthingandroid.ui.nav
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
@@ -26,16 +31,22 @@ fun <T : NavKey> AppNavDisplay(
         onBack = onBack,
         entryProvider = entryProvider(builder = entryProvider),
         transitionSpec = {
-            slideInHorizontally(initialOffsetX = { it }) togetherWith
-                    slideOutHorizontally(targetOffsetX = { -it })
+            slideInHorizontally(tween(350, easing = FastOutSlowInEasing)) { it } togetherWith
+                    slideOutHorizontally(tween(350, easing = FastOutSlowInEasing)) { -it }
         },
         popTransitionSpec = {
-            slideInHorizontally(initialOffsetX = { -it }) togetherWith
-                    slideOutHorizontally(targetOffsetX = { it })
+            // Material "stack" reveal: the previous screen scales up in place while
+            // the top screen slides off to the trailing edge. Tweens with the standard
+            // M3 easing keep the gesture-seeked transition smooth (spring defaults
+            // feel stiff when seeked by the back gesture).
+            (fadeIn(tween(350, easing = LinearOutSlowInEasing)) +
+                    scaleIn(tween(350, easing = LinearOutSlowInEasing), initialScale = 0.9f)) togetherWith
+                    slideOutHorizontally(tween(350, easing = FastOutSlowInEasing)) { it }
         },
         predictivePopTransitionSpec = {
-            slideInHorizontally(initialOffsetX = { -it }) togetherWith
-                    slideOutHorizontally(targetOffsetX = { it })
+            (fadeIn(tween(350, easing = LinearOutSlowInEasing)) +
+                    scaleIn(tween(350, easing = LinearOutSlowInEasing), initialScale = 0.9f)) togetherWith
+                    slideOutHorizontally(tween(350, easing = FastOutSlowInEasing)) { it }
         },
         modifier = modifier,
     )
