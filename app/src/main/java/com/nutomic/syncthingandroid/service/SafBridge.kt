@@ -174,12 +174,27 @@ class SafBridge(private val context: Context) {
     }
 
     /**
+     * True if [uri] still carries a persisted read+write grant. Grants are revoked
+     * by clearing app data / reinstalling, even though a config import may have
+     * restored the mapping itself (the backup includes shared preferences).
+     */
+    private fun hasUsableGrant(uri: Uri): Boolean {
+        return context.contentResolver.persistedUriPermissions.any {
+            it.uri == uri && it.isReadPermission && it.isWritePermission
+        }
+    }
+
+    /**
      * True for a folder that is configured to live in the forwarding root but whose
-     * bridge is gone - the fresh-install + config-import case, where the SAF grant
-     * and the persisted mapping are both lost while folder.path still points here.
+     * bridge is not usable: either the mapping is gone, or the mapping was restored
+     * by a config import while the SAF grant was lost (fresh install + import).
      */
     fun needsAuthorization(path: String): Boolean {
-        return isForwardedPath(path) && !isForwarded(path)
+        if (!isForwardedPath(path)) {
+            return false
+        }
+        val uriString = loadMappings()[path] ?: return true
+        return !hasUsableGrant(Uri.parse(uriString))
     }
 
     /**
@@ -191,6 +206,10 @@ class SafBridge(private val context: Context) {
         val mappings = loadMappings()
         mappings[folderPath] = uri.toString()
         saveMappings(mappings)
+        // Re-authorizing implies a fresh forwarded dir (data wiped / re-install):
+        // drop any stale imported snapshot so provider content is PULLED instead of
+        // being diffed against it (which could produce bogus provider deletions).
+        prefs.edit().remove(PREF_STATE_PREFIX + hashOf(uri)).commit()
         val bridge = synchronized(bridges) {
             bridges.getOrPut(folderPath) { Bridge(folderPath, uri) }
         }
@@ -230,7 +249,20 @@ class SafBridge(private val context: Context) {
             return
         }
         for ((folderPath, uriString) in mappings) {
-            val bridge = Bridge(folderPath, Uri.parse(uriString))
+            val uri = Uri.parse(uriString)
+            if (!hasUsableGrant(uri)) {
+                // Grant revoked by clear-data/reinstall; the config import restored
+                // the mapping but only re-picking the folder can restore access.
+                Log.i(TAG, "startAll: Skipping [$folderPath], SAF grant lost; open the folder to re-authorize")
+                continue
+            }
+            if (!File(folderPath).isDirectory) {
+                // Fresh forwarded dir (config imported onto a wiped install): start
+                // from an empty snapshot so provider content is PULLED instead of
+                // being diffed against a stale imported snapshot.
+                prefs.edit().remove(PREF_STATE_PREFIX + hashOf(uri)).commit()
+            }
+            val bridge = Bridge(folderPath, uri)
             synchronized(bridges) { bridges[folderPath] = bridge }
             bridge.start()
         }

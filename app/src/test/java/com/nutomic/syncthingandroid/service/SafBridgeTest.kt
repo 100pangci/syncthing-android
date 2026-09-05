@@ -1,6 +1,7 @@
 package com.nutomic.syncthingandroid.service
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
@@ -10,6 +11,7 @@ import com.nutomic.syncthingandroid.SyncthingApp
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -27,6 +29,14 @@ class SafBridgeTest {
 
     private val fcitxUri: Uri =
         Uri.parse("content://org.fcitx.fcitx5.android.provider/tree/sync")
+
+    @Before
+    fun takePersistableGrant() {
+        context.contentResolver.takePersistableUriPermission(
+            fcitxUri,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        )
+    }
 
     @Test
     fun register_returnsForwardedPathUnderBridgeRoot() {
@@ -80,6 +90,29 @@ class SafBridgeTest {
         assertTrue(safBridge.isForwarded(path))
         safBridge.unregister(path)
         assertFalse(safBridge.isForwarded(path))
+    }
+
+    @Test
+    fun restoredMappingWithLostGrant_needsAuthorization() {
+        // The clear-data/reinstall case: the config import restored the mapping,
+        // but the persisted grant was revoked by the system.
+        val safBridge = SafBridge(context)
+        val path = safBridge.register(fcitxUri)
+        assertFalse(safBridge.needsAuthorization(path))
+
+        context.contentResolver.releasePersistableUriPermission(
+            fcitxUri,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        )
+        assertTrue(safBridge.needsAuthorization(path))
+
+        // Re-picking the folder re-takes the grant and clears the condition.
+        context.contentResolver.takePersistableUriPermission(
+            fcitxUri,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        )
+        assertFalse(safBridge.needsAuthorization(path))
+        safBridge.unregister(path)
     }
 
     @Test
