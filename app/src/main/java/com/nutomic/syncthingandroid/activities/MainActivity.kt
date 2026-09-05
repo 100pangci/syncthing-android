@@ -236,7 +236,7 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
         super.onResume()
         // Check if storage permission has been revoked at runtime.
         if (!PermissionUtil.haveStoragePermission(this)) {
-            startActivity(Intent(this, com.nutomic.syncthingandroid.onboarding.OnboardingActivity::class.java))
+            startActivity(Intent(this, com.nutomic.syncthingandroid.activities.OnboardingActivity::class.java))
             finish()
             return
         }

@@ -2,9 +2,9 @@ package com.nutomic.syncthingandroid.ui.nav
 
 import android.app.Activity
 import android.content.Intent
-import com.nutomic.syncthingandroid.recentchanges.RecentChangesActivity
-import com.nutomic.syncthingandroid.settings.SettingsActivity
-import com.nutomic.syncthingandroid.webgui.WebGuiActivity
+import com.nutomic.syncthingandroid.activities.RecentChangesActivity
+import com.nutomic.syncthingandroid.activities.SettingsActivity
+import com.nutomic.syncthingandroid.activities.WebGuiActivity
 
 /**
  * Shared [AppNavigator] glue for activity based hosts. In-app routes are dispatched
