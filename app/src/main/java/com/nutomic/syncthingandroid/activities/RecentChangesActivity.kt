@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.recentchanges
+package com.nutomic.syncthingandroid.activities
 
 import android.content.ComponentName
 import android.content.SharedPreferences
@@ -39,6 +39,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.nutomic.syncthingandroid.ui.screens.recentchanges.RecentChangesScreen
 
 /**
  * Shows the list of recent changes to files and folders reported by the local Syncthing instance.

@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.recentchanges
+package com.nutomic.syncthingandroid.ui.screens.recentchanges
 
 import android.text.format.DateUtils
 import androidx.compose.animation.core.Spring
@@ -71,6 +71,9 @@ import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.util.isTelevision
 import java.text.DateFormat
 import java.util.Date
+import com.nutomic.syncthingandroid.activities.RecentChange
+import com.nutomic.syncthingandroid.activities.ChangeAction
+import com.nutomic.syncthingandroid.activities.ChangeType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
