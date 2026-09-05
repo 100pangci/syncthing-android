@@ -30,8 +30,6 @@ object AppPrefs {
         return sharedPreferences.getBoolean(Constants.PREF_VERBOSE_LOG, PREF_VERBOSE_LOG_DEFAULT)
     }
 
-    // BootReceiver.java (migrated in phase11) calls this statically.
-    @JvmStatic
     fun getStartServiceOnBoot(context: Context): Boolean {
         val sp = PreferenceManager.getDefaultSharedPreferences(context)
         return sp.getBoolean(Constants.PREF_START_SERVICE_ON_BOOT, false)
