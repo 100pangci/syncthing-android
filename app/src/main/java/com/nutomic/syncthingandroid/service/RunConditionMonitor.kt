@@ -75,14 +75,11 @@ class RunConditionMonitor(
         private const val DEFAULT_SYNC_DURATION_MINUTES = "5"
         private const val DEFAULT_SLEEP_INTERVAL_MINUTES = "60"
 
-        @JvmField
-        val ACTION_SYNC_TRIGGER_FIRED = ".service.RunConditionMonitor.ACTION_SYNC_TRIGGER_FIRED"
+        const val ACTION_SYNC_TRIGGER_FIRED = ".service.RunConditionMonitor.ACTION_SYNC_TRIGGER_FIRED"
 
-        @JvmField
-        val ACTION_UPDATE_SHOULDRUN_DECISION = ".service.RunConditionMonitor.ACTION_UPDATE_SHOULDRUN_DECISION"
+        const val ACTION_UPDATE_SHOULDRUN_DECISION = ".service.RunConditionMonitor.ACTION_UPDATE_SHOULDRUN_DECISION"
 
-        @JvmField
-        val EXTRA_BEGIN_ACTIVE_TIME_WINDOW = ".service.RunConditionMonitor.BEGIN_ACTIVE_TIME_WINDOW"
+        const val EXTRA_BEGIN_ACTIVE_TIME_WINDOW = ".service.RunConditionMonitor.BEGIN_ACTIVE_TIME_WINDOW"
     }
 
     interface OnShouldRunChangedListener {
