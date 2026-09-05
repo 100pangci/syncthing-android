@@ -104,11 +104,6 @@ internal fun RecentChangesScreen(
     }
 
     Scaffold(
-        modifier = if (configuration.isTelevision) {
-            Modifier
-        } else {
-            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-        },
         topBar = {
             if (configuration.isTelevision) {
                 // Plain bar because of the limited vertical space, and no back button: TV remotes
@@ -173,12 +168,23 @@ internal fun RecentChangesScreen(
             // TV entry point.
             Box(modifier = containerModifier, content = listContent)
         } else {
+            // The exit-until-collapsed connection must sit BETWEEN the list and pull-to-refresh's
+            // own nested scroll connection: dispatch runs outward from the scrolling child, so the
+            // nearest connection wins the leftover drag. On the Scaffold it sat outside the
+            // pull-to-refresh connection, which consumed the downward overscroll first — the large
+            // title then never re-expanded and repeated drags got eaten (stuck pull state).
             PullToRefreshBox(
                 isRefreshing = isRefreshing,
                 onRefresh = onRefresh,
                 modifier = containerModifier,
-                content = listContent,
-            )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                    content = listContent,
+                )
+            }
         }
     }
 }
