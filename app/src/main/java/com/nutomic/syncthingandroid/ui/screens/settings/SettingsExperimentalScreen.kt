@@ -173,8 +173,8 @@ fun SettingsExperimentalScreen() {
         }
         item {
             SwitchPreference(
-                checked = runAsRoot.value,
-                onCheckedChange = { requested -> pendingRootWarning.value = requested },
+                value = runAsRoot.value,
+                onValueChange = { requested -> pendingRootWarning.value = requested },
                 title = { Text(stringResource(R.string.run_as_root_title)) },
                 summary = { Text(stringResource(R.string.run_as_root_summary)) },
                 enabled = !rootSwitchBusy.value,
