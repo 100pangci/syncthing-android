@@ -302,6 +302,8 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Android versiyanız Syncthing-ə seçilmiş qovluğa yalnız oxuma icazəsi verir.</string>
+    <string name="saf_bridge_folder_mapped">Bu yer başqa tətbiq tərəfindən təqdim edilir. Syncthing onu avtomatik ötürəcək ki, sinxronizasiya edilə bilsin.</string>
+    <string name="saf_bridge_needs_authorization">Bu qovluq başqa tətbiqdən ötürülür və yenidən avtorizasiya tələb edir. Növbəti dialoqda qovluğu seçin.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Android versiyanız Syncthing-ə seçilmiş qovluğa oxuma və yazma icazəsi verir.</string>

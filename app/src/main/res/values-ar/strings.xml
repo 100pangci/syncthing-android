@@ -291,6 +291,8 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">يمنح إصدار Android الخاص بك Syncthing فقط حقَّ القراءة للمجلد المحدد.</string>
+    <string name="saf_bridge_folder_mapped">يوفر هذا الموقع تطبيق آخر. سيقوم Syncthing بإعادة توجيهه تلقائيًا حتى يمكن مزامنته.</string>
+    <string name="saf_bridge_needs_authorization">يتم إعادة توجيه هذا المجلد من تطبيق آخر ويحتاج إلى التخويل مرة أخرى. حدد المجلد في مربع الحوار التالي.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">يمنح إصدار Android الخاص بك Syncthing حقَّ القراءة والكتابة للمجلد المختار.</string>

@@ -291,6 +291,8 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">У вашій версії Android програма Синхронізація надає доступ до вибраної теки лише для читання.</string>
+    <string name="saf_bridge_folder_mapped">Це розташування надано іншою програмою. Syncthing автоматично переспрямовуватиме його для синхронізації.</string>
+    <string name="saf_bridge_needs_authorization">Ця папка передається з іншої програми і потребує повторної авторизації. Виберіть папку в наступному діалоговому вікні.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Ваша версія Android надає Syncthing дозвіл на читання і запис до вибраної теки.</string>

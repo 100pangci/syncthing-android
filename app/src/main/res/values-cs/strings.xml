@@ -291,6 +291,8 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Vaše verze Androidu umožňuje aplikaci Syncthing pouze čtení vybrané složky.</string>
+    <string name="saf_bridge_folder_mapped">Toto umístění poskytuje jiná aplikace. Syncthing jej automaticky přeposílá, aby mohlo být synchronizováno.</string>
+    <string name="saf_bridge_needs_authorization">Tato složka se přeposílá z jiné aplikace a vyžaduje opětovné autorizování. Vyberte složku v dalším dialogovém okně.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Vaše verze Androidu umožňuje aplikaci Syncthing ve vybrané složce čtení i zápis.</string>

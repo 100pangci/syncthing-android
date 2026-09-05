@@ -291,6 +291,8 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">La vostra versió d\'Android només permet accés de lectura al Syncthing per la carpeta seleccionada</string>
+    <string name="saf_bridge_folder_mapped">Aquesta ubicació la proporciona una altra aplicació. El Syncthing la reenviarà automàticament per poder-la sincronitzar.</string>
+    <string name="saf_bridge_needs_authorization">Aquesta carpeta es reenvia des d\'una altra aplicació i cal autoritzar-la de nou. Seleccioneu la carpeta al diàleg següent.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">La vostra versió d\'Android permet accés de lectura i escriptura al Syncthing per la carpeta seleccionada</string>

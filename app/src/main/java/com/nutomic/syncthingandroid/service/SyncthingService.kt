@@ -187,6 +187,18 @@ class SyncthingService : Service() {
     var api: RestApi? = null
         private set
 
+    /**
+     * Adds the "Syncthing Camera" folder to the RUNNING config right after the user
+     * enabled the feature, so no restart is needed. While the core is not running,
+     * ConfigXml.updateIfNeeded covers it at the next startup instead.
+     */
+    private val syncthingCameraPrefListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == Constants.PREF_ENABLE_SYNCTHING_CAMERA) {
+                addSyncthingCameraFolderIfMissing()
+            }
+        }
+
     private var eventPoller: EventPoller? = null
 
     private var runConditionMonitor: RunConditionMonitor? = null
@@ -243,6 +255,11 @@ class SyncthingService : Service() {
         storagePermissionGranted = PermissionUtil.haveStoragePermission(this)
 
         notificationHandler.setAppShutdownInProgress(false)
+
+        // Forward SAF provider folders (e.g. fcitx's data root) into real dirs the
+        // core can sync; no-op when no bridge is registered.
+        app.safBridge.startAll()
+        preferences.registerOnSharedPreferenceChangeListener(syncthingCameraPrefListener)
     }
 
     /**
@@ -608,6 +625,30 @@ class SyncthingService : Service() {
         if (eventPoller == null) {
             eventPoller = EventPoller(this, restApi).also { it.start() }
         }
+
+        // Close the "enabled while STARTING" gap: ConfigXml already ran before the
+        // pref was flipped, so make sure the camera folder exists once the API is up.
+        addSyncthingCameraFolderIfMissing()
+    }
+
+    private fun addSyncthingCameraFolderIfMissing() {
+        if (!preferences.getBoolean(Constants.PREF_ENABLE_SYNCTHING_CAMERA, false)) {
+            return
+        }
+        val restApi = api ?: return
+        if (!restApi.isConfigLoaded) {
+            return
+        }
+        if (restApi.folders.any { it.id == Constants.syncthingCameraFolderId }) {
+            return
+        }
+        val folder = buildSyncthingCameraFolder(this)
+        if (folder == null) {
+            Log.e(TAG, "addSyncthingCameraFolderIfMissing: Could not determine the camera storage dir")
+            return
+        }
+        Log.i(TAG, "addSyncthingCameraFolderIfMissing: Adding camera folder to the running config")
+        restApi.addFolder(folder)
     }
 
     override fun onBind(intent: Intent?): IBinder {
@@ -620,6 +661,8 @@ class SyncthingService : Service() {
      */
     override fun onDestroy() {
         Log.d(TAG, "onDestroy")
+        preferences.unregisterOnSharedPreferenceChangeListener(syncthingCameraPrefListener)
+        (application as SyncthingApp).safBridge.stopAll()
         if (runConditionMonitor != null) {
             // Shut down the OnShouldRunChangedListener so we won't get interrupted by run
             // condition events that occur during shutdown.

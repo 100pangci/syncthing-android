@@ -3,6 +3,7 @@ package com.nutomic.syncthingandroid.ui.screens.folder
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -38,9 +39,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.background
 import com.nutomic.syncthingandroid.R
+import com.nutomic.syncthingandroid.SyncthingApp
 import com.nutomic.syncthingandroid.model.Folder
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.RestApi
+import com.nutomic.syncthingandroid.service.SafBridge
 import com.nutomic.syncthingandroid.service.SyncthingService
 import com.nutomic.syncthingandroid.ui.LocalServiceState
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
@@ -52,6 +55,8 @@ import com.nutomic.syncthingandroid.ui.nav.LocalResultBus
 import com.nutomic.syncthingandroid.ui.nav.ResultBus
 import com.nutomic.syncthingandroid.util.ConfigRouter
 import com.nutomic.syncthingandroid.util.FileUtils
+
+private const val TAG = "FolderEditScreen"
 
 /**
  * Folder add/edit screen, ported from the legacy FolderActivity.
@@ -122,12 +127,54 @@ fun FolderEditScreen(
         ActivityResultContracts.OpenDocumentTree()
     ) { uri: Uri? ->
         if (uri != null) {
-            holder.folderUri = uri
-            val targetPath = FileUtils.getAbsolutePathFromSAFUri(context, uri)
-            onPickedPath(context, holder, targetPath)
+            try {
+                // Survive reboots: without the persisted grant the provider access is lost.
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                        android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
+            } catch (e: SecurityException) {
+                Log.w(TAG, "takePersistableUriPermission failed for $uri", e)
+            }
+            if (SafBridge.requiresBridge(uri)) {
+                // Third-party DocumentsProvider root: forward it into a real folder
+                // the Syncthing core can sync.
+                val safBridge = (context.applicationContext as SyncthingApp).safBridge
+                val currentPath = holder.folder?.path
+                val forwardedPath = if (currentPath != null && safBridge.isForwardedPath(currentPath)) {
+                    // An existing forwarded folder being (re-)authorized: keep the
+                    // configured path and reset the stale snapshot. Deciding by the
+                    // path (NOT by grant state) is important: the fresh grant taken
+                    // above would mask a lost-grant situation and skip the reset.
+                    safBridge.reauthorize(currentPath, uri)
+                    currentPath
+                } else {
+                    safBridge.register(uri)
+                }
+                holder.folderUri = uri
+                onPickedPath(context, holder, forwardedPath)
+                Toast.makeText(context, R.string.saf_bridge_folder_mapped, Toast.LENGTH_LONG).show()
+            } else {
+                holder.folderUri = uri
+                val targetPath = FileUtils.getAbsolutePathFromSAFUri(context, uri)
+                onPickedPath(context, holder, targetPath)
+            }
         }
     }
     val f = holder.folder
+
+    // A forwarded folder whose SAF grant was lost (fresh install + config import)
+    // pops the SAF picker automatically on entry, one folder at a time. Once
+    // re-authorized the path stays unchanged, so the picker is not offered again.
+    LaunchedEffect(f?.path) {
+        val path = f?.path ?: return@LaunchedEffect
+        if ((context.applicationContext as SyncthingApp).safBridge.needsAuthorization(path)) {
+            Toast.makeText(context, R.string.saf_bridge_needs_authorization, Toast.LENGTH_LONG).show()
+            safLauncher.launch(null)
+        }
+    }
+
     fun saveFolder() {
         val folder = holder.folder ?: return
         FolderEditActions.save(
@@ -385,11 +432,14 @@ private fun FolderEditConfirmDialogs(
     onDismissDiscardDialog: () -> Unit,
 ) {
     val navigator = LocalAppNavigator.current
+    val context = LocalContext.current
     if (showDeleteDialog && folder != null) {
         ConfirmDialog(
             message = stringResource(R.string.remove_folder_confirm),
             onConfirm = {
                 onDismissDeleteDialog()
+                // Drop the SAF forwarding bridge if this folder had one (no-op otherwise).
+                (context.applicationContext as SyncthingApp).safBridge.unregister(folder.path)
                 FolderEditActions.delete(configRouter, api, preferences, folder.id, navigator)
             },
             onDismiss = onDismissDeleteDialog

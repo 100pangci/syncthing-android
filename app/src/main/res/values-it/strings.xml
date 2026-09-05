@@ -291,6 +291,8 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">La versione di Android consente a Syncthing l\'accesso in sola lettura alla cartella selezionata.</string>
+    <string name="saf_bridge_folder_mapped">Questa posizione è fornita da un\'altra app. Syncthing la inoltrerà automaticamente per poterla sincronizzare.</string>
+    <string name="saf_bridge_needs_authorization">Questa cartella viene inoltrata da un\'altra app e deve essere autorizzata di nuovo. Seleziona la cartella nella finestra successiva.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">La versione di Android in uso concede a Syncthing permessi di lettura e scrittura per la cartella selezionata.</string>

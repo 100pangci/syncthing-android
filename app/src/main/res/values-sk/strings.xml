@@ -296,6 +296,8 @@ IGNOROVAŤ PODMIENKY SPUSTENIA</string>
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Vaša verzia systému Android poskytuje Syncthingu iba prístup na čítanie do vybraného adresára.</string>
+    <string name="saf_bridge_folder_mapped">Toto umiestnenie poskytuje iná aplikácia. Syncthing ho automaticky preposiela, aby mohlo byť synchronizované.</string>
+    <string name="saf_bridge_needs_authorization">Tento priečinok sa preposiela z inej aplikácie a vyžaduje opätovnú autorizáciu. Vyberte priečinok v ďalšom dialógovom okne.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Vaša verzia systému Android poskytuje Syncthingu prístup na čítanie a zápis do vybraného adresára.</string>

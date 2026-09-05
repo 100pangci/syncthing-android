@@ -291,6 +291,8 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Versiunea de Android permite Synthing numai acces citire pentru dosarul selectat.</string>
+    <string name="saf_bridge_folder_mapped">Această locație este furnizată de o altă aplicație. Syncthing o va redirecționa automat pentru a putea fi sincronizată.</string>
+    <string name="saf_bridge_needs_authorization">Acest dosar este redirecționat din altă aplicație și trebuie autorizat din nou. Selectați dosarul în următoarea fereastră de dialog.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Versiunea de Android a permis Synthing acces citire și scriere pentru dosarul selectat.</string>

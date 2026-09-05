@@ -291,6 +291,8 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Sinu Androidi versioon annab Syncthingile valitud kaustale ainult lugemisõiguse.</string>
+    <string name="saf_bridge_folder_mapped">Selle asukoha pakub teine rakendus. Syncthing edastab selle automaatselt, et seda saaks sünkroonida.</string>
+    <string name="saf_bridge_needs_authorization">Seda kausta edastatakse teisest rakendusest ja see vajab uut luba. Valige kaust järgmises dialoogis.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Sinu Androidi versioon annab Syncthingile valitud kaustale lugemis- ja kirjutamisõiguse.</string>
