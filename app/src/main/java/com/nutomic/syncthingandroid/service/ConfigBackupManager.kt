@@ -43,8 +43,9 @@ class ConfigBackupManager(private val service: SyncthingService,
         Log.d(TAG, "exportConfig BEGIN")
 
         if (service.currentState != State.DISABLED) {
-            // Shutdown synchronously.
-            service.shutdownToState(State.DISABLED)
+            // Synchronous shutdown on this background thread: the backup must only read
+            // files after the binary has fully exited.
+            service.shutdownToStateBlocking(State.DISABLED)
         }
 
         // Create export dir if non-existant.
@@ -191,8 +192,9 @@ class ConfigBackupManager(private val service: SyncthingService,
         var failSuccess = true
         Log.d(TAG, "importConfig BEGIN")
         if (service.currentState != State.DISABLED) {
-            // Shutdown synchronously.
-            service.shutdownToState(State.DISABLED)
+            // Synchronous shutdown on this background thread: the backup must only read
+            // files after the binary has fully exited.
+            service.shutdownToStateBlocking(State.DISABLED)
         }
 
         // Remove database folder if it exists.
