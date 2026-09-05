@@ -19,7 +19,7 @@ import com.nutomic.syncthingandroid.activities.DeviceActivity
 import com.nutomic.syncthingandroid.activities.FolderActivity
 import com.nutomic.syncthingandroid.activities.LogActivity
 import com.nutomic.syncthingandroid.activities.MainActivity
-import com.nutomic.syncthingandroid.onboarding.OnboardingActivity
+import com.nutomic.syncthingandroid.activities.OnboardingActivity
 import com.nutomic.syncthingandroid.service.SyncthingService.State
 
 class NotificationHandler(context: Context, private val preferences: SharedPreferences) {

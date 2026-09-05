@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.onboarding.pages
+package com.nutomic.syncthingandroid.ui.screens.onboarding.pages
 
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -22,10 +22,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import com.nutomic.syncthingandroid.R
-import com.nutomic.syncthingandroid.onboarding.OnboardingIcon
-import com.nutomic.syncthingandroid.onboarding.OnboardingScaffold
-import com.nutomic.syncthingandroid.onboarding.OnboardingUiState
-import com.nutomic.syncthingandroid.onboarding.PermissionButton
+import com.nutomic.syncthingandroid.ui.screens.onboarding.OnboardingIcon
+import com.nutomic.syncthingandroid.ui.screens.onboarding.OnboardingScaffold
+import com.nutomic.syncthingandroid.activities.OnboardingUiState
+import com.nutomic.syncthingandroid.ui.screens.onboarding.PermissionButton
 
 private const val TAG = "BatteryOptimizationPage"
 

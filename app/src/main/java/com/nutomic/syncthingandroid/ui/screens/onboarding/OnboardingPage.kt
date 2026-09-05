@@ -1,12 +1,13 @@
-package com.nutomic.syncthingandroid.onboarding
+package com.nutomic.syncthingandroid.ui.screens.onboarding
 
 import androidx.compose.runtime.Composable
-import com.nutomic.syncthingandroid.onboarding.pages.BatteryOptimizationPage
-import com.nutomic.syncthingandroid.onboarding.pages.KeyGenerationPage
-import com.nutomic.syncthingandroid.onboarding.pages.LocationPermissionPage
-import com.nutomic.syncthingandroid.onboarding.pages.NotificationPermissionPage
-import com.nutomic.syncthingandroid.onboarding.pages.StoragePermissionPage
-import com.nutomic.syncthingandroid.onboarding.pages.WelcomePage
+import com.nutomic.syncthingandroid.ui.screens.onboarding.pages.BatteryOptimizationPage
+import com.nutomic.syncthingandroid.ui.screens.onboarding.pages.KeyGenerationPage
+import com.nutomic.syncthingandroid.ui.screens.onboarding.pages.LocationPermissionPage
+import com.nutomic.syncthingandroid.ui.screens.onboarding.pages.NotificationPermissionPage
+import com.nutomic.syncthingandroid.ui.screens.onboarding.pages.StoragePermissionPage
+import com.nutomic.syncthingandroid.ui.screens.onboarding.pages.WelcomePage
+import com.nutomic.syncthingandroid.activities.OnboardingUiState
 
 /**
  * Specifies the type and content of each onboarding page.

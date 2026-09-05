@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.onboarding
+package com.nutomic.syncthingandroid.ui.screens.onboarding
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent

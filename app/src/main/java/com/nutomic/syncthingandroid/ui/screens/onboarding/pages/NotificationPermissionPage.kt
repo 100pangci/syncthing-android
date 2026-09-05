@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.onboarding.pages
+package com.nutomic.syncthingandroid.ui.screens.onboarding.pages
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
@@ -7,10 +7,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import com.nutomic.syncthingandroid.R
-import com.nutomic.syncthingandroid.onboarding.OnboardingIcon
-import com.nutomic.syncthingandroid.onboarding.OnboardingScaffold
-import com.nutomic.syncthingandroid.onboarding.OnboardingUiState
-import com.nutomic.syncthingandroid.onboarding.PermissionButton
+import com.nutomic.syncthingandroid.ui.screens.onboarding.OnboardingIcon
+import com.nutomic.syncthingandroid.ui.screens.onboarding.OnboardingScaffold
+import com.nutomic.syncthingandroid.activities.OnboardingUiState
+import com.nutomic.syncthingandroid.ui.screens.onboarding.PermissionButton
 
 @Composable
 fun NotificationPermissionPage(

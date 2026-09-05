@@ -1,11 +1,11 @@
-package com.nutomic.syncthingandroid.onboarding.pages
+package com.nutomic.syncthingandroid.ui.screens.onboarding.pages
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.nutomic.syncthingandroid.R
-import com.nutomic.syncthingandroid.onboarding.OnboardingIcon
-import com.nutomic.syncthingandroid.onboarding.OnboardingScaffold
-import com.nutomic.syncthingandroid.onboarding.OnboardingUiState
+import com.nutomic.syncthingandroid.ui.screens.onboarding.OnboardingIcon
+import com.nutomic.syncthingandroid.ui.screens.onboarding.OnboardingScaffold
+import com.nutomic.syncthingandroid.activities.OnboardingUiState
 
 @Composable
 fun WelcomePage(

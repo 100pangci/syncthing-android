@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.onboarding
+package com.nutomic.syncthingandroid.activities
 
 import android.Manifest
 import android.content.Intent
@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.SyncthingApp
 import com.nutomic.syncthingandroid.activities.MainActivity
+import com.nutomic.syncthingandroid.ui.screens.onboarding.OnboardingPage
 import com.nutomic.syncthingandroid.activities.ThemedAppCompatActivity
 import com.nutomic.syncthingandroid.webgui.WebGuiActivity
 import com.nutomic.syncthingandroid.service.Constants
@@ -36,6 +37,7 @@ import com.nutomic.syncthingandroid.util.Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.nutomic.syncthingandroid.ui.screens.onboarding.OnboardingScreen
 
 data class OnboardingUiState(
     val pages: List<OnboardingPage> = emptyList(),

@@ -1,4 +1,4 @@
-package com.nutomic.syncthingandroid.onboarding
+package com.nutomic.syncthingandroid.ui.screens.onboarding
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +7,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import com.nutomic.syncthingandroid.activities.OnboardingUiState
 
 /**
  * The list of onboarding pages shown in order.
