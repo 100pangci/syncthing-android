@@ -69,7 +69,7 @@ class Folder {
 
     // Since v1.1.0
     @JvmField
-    var copyOwnershipFromParent: Boolean? = false
+    var copyOwnershipFromParent: Boolean = false
 
     // Since v1.2.1, see PR #5852
     @JvmField
@@ -81,7 +81,7 @@ class Folder {
     var blockPullOrder: String = "standard"
     // see PR #6588
     @JvmField
-    var disableFsync: Boolean? = false
+    var disableFsync: Boolean = false
     // see PR #6573, #10200
     @JvmField
     var maxConcurrentWrites: Int = 0
@@ -93,23 +93,23 @@ class Folder {
 
     // Since v1.9.0
     @JvmField
-    var caseSensitiveFS: Boolean? = false
+    var caseSensitiveFS: Boolean = false
 
     // Since v1.21.0
     @JvmField
-    var syncOwnership: Boolean? = false
+    var syncOwnership: Boolean = false
     @JvmField
-    var sendOwnership: Boolean? = false
+    var sendOwnership: Boolean = false
 
     // Since v1.22.0
     @JvmField
-    var syncXattrs: Boolean? = false
+    var syncXattrs: Boolean = false
     @JvmField
-    var sendXattrs: Boolean? = false
+    var sendXattrs: Boolean = false
 
     // Since v2.1.0
     @JvmField
-    var blockIndexing: Boolean? = true
+    var blockIndexing: Boolean = true
 
     // Folder Status
     @JvmField

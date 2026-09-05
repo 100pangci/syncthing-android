@@ -7,7 +7,7 @@ class PendingFolder {
     @JvmField
     var time: String = ""
     @JvmField
-    var receiveEncrypted: Boolean? = false
+    var receiveEncrypted: Boolean = false
     @JvmField
-    var remoteEncrypted: Boolean? = false
+    var remoteEncrypted: Boolean = false
 }

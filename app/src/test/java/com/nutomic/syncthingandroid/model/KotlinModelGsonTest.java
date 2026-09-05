@@ -95,7 +95,7 @@ public class KotlinModelGsonTest {
         assertNotNull(device.addresses);
         assertEquals(1, device.addresses.size());
         assertEquals("dynamic", device.addresses.get(0));
-        assertEquals(Integer.valueOf(2048), device.maxRecvKbps);
+        assertEquals(2048, device.maxRecvKbps);
     }
 
     @Test
@@ -106,7 +106,7 @@ public class KotlinModelGsonTest {
         assertEquals(false, device.introducer);
         assertEquals(false, device.paused);
         assertEquals(false, device.autoAcceptFolders);
-        assertEquals(Integer.valueOf(0), device.maxRecvKbps);
+        assertEquals(0, device.maxRecvKbps);
         assertNull(device.addresses);
         assertNull(device.ignoredFolders);
     }
@@ -363,8 +363,8 @@ public class KotlinModelGsonTest {
                 "{\"label\":\"Camera\",\"receiveEncrypted\":true,\"remoteEncrypted\":false}",
                 PendingFolder.class);
         assertEquals("Camera", folder.label);
-        assertEquals(Boolean.TRUE, folder.receiveEncrypted);
-        assertEquals(Boolean.FALSE, folder.remoteEncrypted);
+        assertEquals(true, folder.receiveEncrypted);
+        assertEquals(false, folder.remoteEncrypted);
     }
 
     @Test
