@@ -602,6 +602,9 @@
 
     <string name="use_tor_title">Folosește Tor</string>
     <string name="use_tor_summary">Forțează tot traficul prin rețeaua Tor pentru a spori confidențialitatea. Necesită aplicația Orbot. Dezactivează opțiunile proxy.</string>
+    <string name="run_as_root_title">Rulează nucleul Syncthing ca root</string>
+    <string name="run_as_root_summary">Doar pentru dispozitive rootate: nucleul poate citi și scrie în orice director (de ex. datele altor aplicații). Fișierele create de acesta în stocarea privată a aplicației devin accesibile la scriere pentru oricine. Se aplică la următoarea pornire a nucleului.</string>
+    <string name="folder_picker_root_browse">Răsfoiește cu root</string>
 
     <string name="socks_proxy_address_title">Proxy SOCKS5</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>

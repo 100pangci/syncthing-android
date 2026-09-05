@@ -605,6 +605,9 @@
 
     <string name="use_tor_title">Gunakan Tor</string>
     <string name="use_tor_summary">Paksakan semua lalu lintas melalui Tor untuk privasi yang lebih baik. Memerlukan Orbot. Menonaktifkan opsi proksi.</string>
+    <string name="run_as_root_title">Jalankan inti Syncthing sebagai root</string>
+    <string name="run_as_root_summary">Hanya untuk perangkat yang di-root: inti dapat membaca dan menulis ke direktori mana pun (mis. data aplikasi lain). File yang dibuatnya di penyimpanan privat aplikasi dapat ditulis oleh siapa saja. Berlaku pada mulai inti berikutnya.</string>
+    <string name="folder_picker_root_browse">Telusuri dengan root</string>
 
     <string name="socks_proxy_address_title">Proksi SOCKS5</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>

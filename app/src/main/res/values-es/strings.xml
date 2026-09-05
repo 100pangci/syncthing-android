@@ -602,6 +602,9 @@
 
     <string name="use_tor_title">Usar Tor</string>
     <string name="use_tor_summary">Forzar todo el tráfico a través de Tor para aumentar la privacidad. Requiere Orbot. Desactiva las opciones de proxy.</string>
+    <string name="run_as_root_title">Ejecutar el núcleo de Syncthing como root</string>
+    <string name="run_as_root_summary">Solo para dispositivos rooteados: el núcleo puede leer y escribir en cualquier directorio (p. ej., datos de otras aplicaciones). Los archivos que cree en el almacenamiento privado de la app serán escribibles por cualquiera. Surte efecto en el próximo inicio del núcleo.</string>
+    <string name="folder_picker_root_browse">Explorar con root</string>
 
     <string name="socks_proxy_address_title">Proxy SOCKS5</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>

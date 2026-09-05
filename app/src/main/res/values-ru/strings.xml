@@ -602,6 +602,9 @@
 
     <string name="use_tor_title">Использовать Tor</string>
     <string name="use_tor_summary">Для дополнительной приватности перенаправлять весь трафик через Tor. Требует наличия Orbot. Отключает опции прокси.</string>
+    <string name="run_as_root_title">Запускать ядро Syncthing от имени root</string>
+    <string name="run_as_root_summary">Только для устройств с root: ядро может читать и писать в любой каталог (например, данные других приложений). Файлы, созданные им в закрытом хранилище приложения, становятся доступными для записи всем. Вступает в силу при следующем запуске ядра.</string>
+    <string name="folder_picker_root_browse">Обзор с root</string>
 
     <string name="socks_proxy_address_title">SOCKS5 прокси</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>

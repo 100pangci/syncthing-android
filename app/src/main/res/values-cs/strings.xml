@@ -602,6 +602,9 @@
 
     <string name="use_tor_title">Použít Tor</string>
     <string name="use_tor_summary">Pro lepší ochranu soukromí vynutit nasměrování veškerého provozu skrz Tor. Vyžaduje, aby byl nainstalován Orbot. Vypíná volby pro proxy.</string>
+    <string name="run_as_root_title">Spustit jádro Syncthing jako root</string>
+    <string name="run_as_root_summary">Pouze pro rootovaná zařízení: jádro může číst a zapisovat do libovolného adresáře (např. data jiných aplikací). Soubory, které v soukromém úložišti aplikace vytvoří, jsou zapisovatelné pro všechny. Projeví se při dalším spuštění jádra.</string>
+    <string name="folder_picker_root_browse">Procházet s rootem</string>
 
     <string name="socks_proxy_address_title">SOCKS5 proxy</string>
     <string name="socks_proxy_address_example" translatable="false">socks5://192.168.0.1:1080</string>
