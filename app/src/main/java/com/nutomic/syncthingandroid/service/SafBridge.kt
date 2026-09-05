@@ -104,6 +104,21 @@ class SafBridge(private val context: Context) {
     private val bridges = LinkedHashMap<String, Bridge>()
     private var started = false
 
+    /**
+     * Invoked by a bridge whenever it changed the forwarded directory in a way the
+     * Syncthing core must pick up (files/dirs created, updated or deleted on the
+     * forwarded side). The core does not watch the forwarded dir reliably (app-private
+     * path, no SAF notifications), so without this the core index would go stale until
+     * the next periodic rescan - e.g. right after a fresh install + config import the
+     * bridge pulls the provider content in AFTER the core's initial scan already ran,
+     * leaving the UI on "0 files".
+     *
+     * Injected by [SyncthingService] once the REST API is available; null while the
+     * service is down (no-op). Kept as a plain function reference so [SafBridge] stays
+     * decoupled from the REST layer.
+     */
+    var onForwardedDirChanged: ((folderPath: String) -> Unit)? = null
+
     /** Snapshot entry of one path in a forwarded/provider tree. */
     data class NodeInfo(val isDir: Boolean, val size: Long = 0, val mtime: Long = 0)
 
@@ -345,6 +360,13 @@ class SafBridge(private val context: Context) {
                 saveState(stateKey, MirrorMerge.verifiedResult(plan, appliedFwd, appliedSaf))
                 if (plan.hasWork()) {
                     Log.i(TAG, "forwardPass: [$stateKey] ${plan.summary()}")
+                }
+                // The core cannot see the forwarded dir change on its own (no SAF
+                // change notifications; fs watcher on the app-private dir is not
+                // guaranteed) - nudge it to rescan this folder now instead of
+                // waiting up to rescanIntervalS.
+                if (appliedFwd.isNotEmpty()) {
+                    onForwardedDirChanged?.invoke(folderPath)
                 }
             } finally {
                 inFlight.set(false)

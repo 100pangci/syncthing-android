@@ -364,6 +364,45 @@ class RestApiTest {
         assertEquals("f1", override.requestUrl!!.queryParameter("folder"))
     }
 
+    @Test
+    fun rescanFolderByPath_postsScanForMatchingFolder() {
+        restApi.readConfigFromRestApi()
+        awaitConfigLoaded()
+
+        restApi.rescanFolderByPath("/data/f1")
+
+        // Startup requests may still be in flight; scan the queue until the POST shows up.
+        var recorded: okhttp3.mockwebserver.RecordedRequest? = null
+        val deadline = System.currentTimeMillis() + 10_000
+        while (recorded == null && System.currentTimeMillis() < deadline) {
+            val next = server.takeRequest(100, TimeUnit.MILLISECONDS) ?: continue
+            if (next.method == "POST" && next.path!!.startsWith("/rest/db/scan")) {
+                recorded = next
+            }
+        }
+        assertNotNull("no POST /rest/db/scan reached the server", recorded)
+        assertEquals("f1", recorded!!.requestUrl!!.queryParameter("folder"))
+    }
+
+    @Test
+    fun rescanFolderByPath_noConfiguredFolder_isNoop() {
+        restApi.readConfigFromRestApi()
+        awaitConfigLoaded()
+
+        restApi.rescanFolderByPath("/data/does-not-exist")
+
+        // No scan POST may appear for an unknown folder path. Give the (async,
+        // fire-and-forget) call enough time to have posted if it were going to.
+        val deadline = System.currentTimeMillis() + 1_000
+        while (System.currentTimeMillis() < deadline) {
+            val next = server.takeRequest(100, TimeUnit.MILLISECONDS) ?: continue
+            assertTrue(
+                "unexpected request reached the server: ${next.method} ${next.path}",
+                !(next.method == "POST" && next.path!!.startsWith("/rest/db/scan"))
+            )
+        }
+    }
+
     // endregion
 
     /** Awaits the asynchronous startup query burst so tests that issue their own requests

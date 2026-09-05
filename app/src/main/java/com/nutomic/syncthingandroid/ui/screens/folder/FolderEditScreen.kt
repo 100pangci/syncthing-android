@@ -97,7 +97,7 @@ fun FolderEditScreen(
     LaunchedEffect(Unit) {
         initFolderEditState(
             context, holder, isCreate, folderId, folderLabel, receiveEncrypted,
-            deviceId, notificationId, configRouter, navigator, preferences,
+            deviceId, notificationId, api, configRouter, navigator, preferences,
         )
     }
     // Cancel the consent notification once the service is connected. On a
@@ -108,7 +108,14 @@ fun FolderEditScreen(
         service?.notificationHandler?.cancelConsentNotification(notificationId)
     }
     // Refresh device share states when the api becomes available or folder changes.
+    // A draft that is still untouched also gets rebased onto the live REST config
+    // once the api is up: init may have loaded it from the config.xml fallback
+    // (core not started yet / config import in progress) and saving such a stale
+    // snapshot would clobber newer share state with a whole-folder PUT.
     LaunchedEffect(apiConfigLoaded, holder.folder?.id) {
+        if (!isCreate && apiConfigLoaded && holder.folder != null && !holder.needsUpdate) {
+            resyncCleanDraftFromApi(context, api, configRouter, holder, navigator)
+        }
         refreshDeviceShareStates(configRouter, api, holder)
     }
     // Collect folder picker result pushed by the FolderPicker route.
@@ -466,6 +473,7 @@ private suspend fun initFolderEditState(
     receiveEncrypted: Boolean,
     deviceId: String?,
     notificationId: Int,
+    api: RestApi?,
     configRouter: ConfigRouter,
     navigator: AppNavigator,
     preferences: SharedPreferences,
@@ -475,8 +483,13 @@ private suspend fun initFolderEditState(
         holder.folder = initNewFolder(folderId, folderLabel, receiveEncrypted)
         holder.needsUpdate = true
     } else {
+        // Prefer the live REST config (deep copy) over the config.xml fallback:
+        // ConfigRouter falls back to the XML file when the api is not loaded yet.
+        // Saving a draft that was loaded from a stale XML snapshot would clobber
+        // newer share state (e.g. right after a config import) - updateFolder PUTs
+        // the whole folder object, not a diff.
         var found: Folder? = null
-        for (current in configRouter.getFolders(null)) {
+        for (current in configRouter.getFolders(api)) {
             if (current.id == (folderId ?: "")) {
                 found = current
                 break
@@ -487,7 +500,7 @@ private suspend fun initFolderEditState(
             return
         }
         holder.folder = found
-        configRouter.getFolderIgnoreList(null, found) { list ->
+        configRouter.getFolderIgnoreList(api, found) { list ->
             holder.ignoreListText = list.ignore?.joinToString("\n") ?: ""
         }
     }
@@ -509,6 +522,41 @@ private suspend fun initFolderEditState(
         })
         holder.needsUpdate = true
     }
+}
+
+/**
+ * Rebases a still-untouched edit draft onto the live REST config. Called when the
+ * api becomes available after [initFolderEditState] had to fall back to the
+ * config.xml file (core not started yet / import still settling). Never runs on a
+ * dirty draft: user edits must not be discarded.
+ */
+private suspend fun resyncCleanDraftFromApi(
+    context: Context,
+    api: RestApi?,
+    configRouter: ConfigRouter,
+    holder: FolderEditStateHolder,
+    navigator: AppNavigator,
+) {
+    val folderId = holder.folder?.id ?: return
+    var live: Folder? = null
+    for (current in configRouter.getFolders(api)) {
+        if (current.id == folderId) {
+            live = current
+            break
+        }
+    }
+    if (live == null) {
+        // The folder vanished from the live config while the editor was open.
+        navigator.navigateBack()
+        return
+    }
+    holder.folder = live
+    holder.folderUri = null
+    holder.needsUpdate = false
+    configRouter.getFolderIgnoreList(api, live) { list ->
+        holder.ignoreListText = list.ignore?.joinToString("\n") ?: ""
+    }
+    checkWriteAndUpdateUI(context, holder)
 }
 
 private suspend fun refreshDeviceShareStates(

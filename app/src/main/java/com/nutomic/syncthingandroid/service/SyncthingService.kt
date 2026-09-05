@@ -259,6 +259,12 @@ class SyncthingService : Service() {
         // Forward SAF provider folders (e.g. fcitx's data root) into real dirs the
         // core can sync; no-op when no bridge is registered.
         app.safBridge.startAll()
+        // Nudge the core to rescan a forwarded folder whenever the bridge wrote
+        // changes into it (the core cannot see SAF/provider-side changes itself).
+        // api is resolved lazily because it may not exist yet at onCreate time.
+        app.safBridge.onForwardedDirChanged = { folderPath ->
+            api?.rescanFolderByPath(folderPath)
+        }
         preferences.registerOnSharedPreferenceChangeListener(syncthingCameraPrefListener)
     }
 
@@ -663,6 +669,7 @@ class SyncthingService : Service() {
         Log.d(TAG, "onDestroy")
         preferences.unregisterOnSharedPreferenceChangeListener(syncthingCameraPrefListener)
         (application as SyncthingApp).safBridge.stopAll()
+        (application as SyncthingApp).safBridge.onForwardedDirChanged = null
         if (runConditionMonitor != null) {
             // Shut down the OnShouldRunChangedListener so we won't get interrupted by run
             // condition events that occur during shutdown.

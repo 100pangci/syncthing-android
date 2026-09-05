@@ -601,6 +601,24 @@ class RestApi(
     }
 
     /**
+     * Rescans the folder whose configured path equals [folderPath], if any.
+     * Used by [SafBridge] to tell the core about forwarded-dir changes that
+     * happened without a file-system notification (SAF pull, config import).
+     * No-op when no folder is configured at that path (e.g. folder just removed).
+     */
+    fun rescanFolderByPath(folderPath: String) {
+        val folderId = synchronized(configLock) {
+            config?.folders?.firstOrNull { it.path == folderPath }?.id
+        }
+        if (folderId == null) {
+            Log.d(TAG, "rescanFolderByPath: No configured folder at '$folderPath', skipping")
+            return
+        }
+        Log.d(TAG, "rescanFolderByPath: '$folderPath' -> folder '$folderId'")
+        apiPost(ApiClient.URI_DB_SCAN, params("folder" to folderId))
+    }
+
+    /**
      * Revert local folder changes. This is the same as hitting
      * the "Revert local changes" button from the web UI.
      */
