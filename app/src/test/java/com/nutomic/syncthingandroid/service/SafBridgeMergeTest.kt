@@ -132,6 +132,54 @@ class SafBridgeMergeTest {
     }
 
     @Test
+    fun verifiedResult_dropsFailedCopyDownInsteadOfMistakingItForDeletion() {
+        // Regression: a failed provider->forwarded copy must NOT advance the
+        // snapshot; otherwise the next pass reads the empty forwarded dir as
+        // "user deleted everything" and propagates deletions to the provider.
+        val saf = mapOf("keep.txt" to file(5, 100))
+        val plan = MirrorMerge.plan(saf, emptyMap(), emptyMap())
+        assertEquals(listOf("keep.txt"), plan.copyToForwarded.map { it.first })
+
+        // Copy-down FAILED (nothing applied): the entry is retried next pass.
+        val failed = MirrorMerge.verifiedResult(plan, appliedFwd = emptySet(), appliedSaf = emptySet())
+        assertFalse(failed.containsKey("keep.txt"))
+
+        // Copy-down SUCCEEDED: the entry advances the snapshot.
+        val succeeded = MirrorMerge.verifiedResult(plan, appliedFwd = setOf("keep.txt"), appliedSaf = emptySet())
+        assertEquals(saf, succeeded)
+    }
+
+    @Test
+    fun verifiedResult_dropsFailedPushAndFailedDelete() {
+        // Push failure: retried next pass.
+        val fwd = mapOf("out.bin" to file(9, 0))
+        val pushPlan = MirrorMerge.plan(emptyMap(), fwd, emptyMap())
+        assertFalse(
+            MirrorMerge.verifiedResult(pushPlan, emptySet(), emptySet()).containsKey("out.bin")
+        )
+        assertTrue(
+            MirrorMerge.verifiedResult(pushPlan, emptySet(), setOf("out.bin")).containsKey("out.bin")
+        )
+
+        // Provider-side deletion failure: retried next pass (entry stays absent from
+        // the snapshot either way - deletions record themselves by absence).
+        val last = mapOf("gone.txt" to file(5, 100))
+        val deletePlan = MirrorMerge.plan(emptyMap(), last, last)
+        assertEquals(listOf("gone.txt"), deletePlan.deleteInForwarded)
+        assertTrue(MirrorMerge.verifiedResult(deletePlan, emptySet(), emptySet()).isEmpty())
+    }
+
+    @Test
+    fun verifiedResult_keepsUntouchedPaths() {
+        val state = mapOf(
+            "docs" to dir(),
+            "docs/a.txt" to file(3, 1000)
+        )
+        val plan = MirrorMerge.plan(state, state, state)
+        assertEquals(state, MirrorMerge.verifiedResult(plan, emptySet(), emptySet()))
+    }
+
+    @Test
     fun requiresBridge_onlyForThirdPartyProviders() {
         // The externalstorage provider maps to real paths and must not be bridged.
         assertFalse(

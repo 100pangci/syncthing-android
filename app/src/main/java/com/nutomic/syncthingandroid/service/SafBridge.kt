@@ -286,9 +286,11 @@ class SafBridge(private val context: Context) {
                 val fwd = scanForwardedDir(forwardedDir)
                 val last = loadState(stateKey)
                 val plan = MirrorMerge.plan(saf, fwd, last)
-                applyToForwardedDir(plan, tree)
-                applyToSaf(plan)
-                saveState(stateKey, plan.result)
+                val appliedFwd = applyToForwardedDir(plan, tree)
+                val appliedSaf = applyToSaf(plan)
+                // Only operations that actually succeeded advance the snapshot;
+                // failures are retried next pass (see MirrorMerge.verifiedResult).
+                saveState(stateKey, MirrorMerge.verifiedResult(plan, appliedFwd, appliedSaf))
                 if (plan.hasWork()) {
                     Log.i(TAG, "forwardPass: [$stateKey] ${plan.summary()}")
                 }
@@ -322,17 +324,32 @@ class SafBridge(private val context: Context) {
             return isSyncthingInternalName(name)
         }
 
-        private fun applyToForwardedDir(plan: MirrorMerge.Plan, tree: SafTree) {
+        /**
+         * Applies the provider->forwarded-dir part of [plan]; paths in the returned
+         * set reached the target state and may advance the snapshot. Plan paths are
+         * RELATIVE to the forwarded dir.
+         */
+        private fun applyToForwardedDir(plan: MirrorMerge.Plan, tree: SafTree): Set<String> {
+            val applied = HashSet<String>()
             for (path in plan.deleteInForwarded) {
-                File(path).deleteRecursively()
+                if (File(forwardedDir, path).deleteRecursively()) {
+                    applied.add(path)
+                } else {
+                    Log.w(TAG, "applyToForwardedDir: Failed to delete $path")
+                }
             }
             for (path in plan.makeDirsInForwarded) {
-                File(path).mkdirs()
+                val dir = File(forwardedDir, path)
+                if (dir.mkdirs() || dir.isDirectory) {
+                    applied.add(path)
+                } else {
+                    Log.w(TAG, "applyToForwardedDir: Failed to create dir $path")
+                }
             }
             val tempDir = File(bridgeRoot, stateKey + ".tmp")
             tempDir.mkdirs()
             for ((path, info) in plan.copyToForwarded) {
-                val target = File(path)
+                val target = File(forwardedDir, path)
                 target.parentFile?.mkdirs()
                 if (target.exists()) {
                     target.delete()
@@ -347,6 +364,12 @@ class SafBridge(private val context: Context) {
                     stream.use { input ->
                         temp.outputStream().use { output -> input.copyTo(output) }
                     }
+                    // A partially written file must never be renamed into place.
+                    if (temp.length() != info.size) {
+                        Log.w(TAG, "applyToForwardedDir: Size mismatch after copy of $path")
+                        temp.delete()
+                        continue
+                    }
                     if (!temp.renameTo(target)) {
                         temp.copyTo(target, overwrite = true)
                         temp.delete()
@@ -354,31 +377,49 @@ class SafBridge(private val context: Context) {
                     if (info.mtime > 0) {
                         target.setLastModified(info.mtime)
                     }
+                    if (target.length() == info.size) {
+                        applied.add(path)
+                    } else {
+                        Log.w(TAG, "applyToForwardedDir: Verification failed for $path")
+                    }
                 } catch (e: IOException) {
                     Log.w(TAG, "applyToForwardedDir: Failed to forward $path", e)
                 }
             }
+            tempDir.deleteRecursively()
+            return applied
         }
 
-        private fun applyToSaf(plan: MirrorMerge.Plan) {
+        /**
+         * Applies the forwarded-dir->provider part of [plan]; paths in the returned
+         * set reached the target state on the provider side.
+         */
+        private fun applyToSaf(plan: MirrorMerge.Plan): Set<String> {
+            val applied = HashSet<String>()
             for (path in plan.deleteInSaf) {
-                if (!tree.delete(path)) {
+                if (tree.delete(path)) {
+                    applied.add(path)
+                } else {
                     Log.w(TAG, "applyToSaf: Failed to delete $path")
                 }
             }
             for (path in plan.makeDirsInSaf) {
-                if (!tree.createDir(path)) {
+                if (tree.createDir(path)) {
+                    applied.add(path)
+                } else {
                     Log.w(TAG, "applyToSaf: Failed to create dir $path")
                 }
             }
             for (path in plan.copyToSaf) {
-                val source = File(path)
+                val source = File(forwardedDir, path)
                 if (!source.isFile) {
                     continue
                 }
                 try {
                     source.inputStream().use { input ->
-                        if (!tree.writeFile(path, input)) {
+                        if (tree.writeFile(path, input)) {
+                            applied.add(path)
+                        } else {
                             Log.w(TAG, "applyToSaf: Failed to write $path")
                         }
                     }
@@ -386,6 +427,7 @@ class SafBridge(private val context: Context) {
                     Log.w(TAG, "applyToSaf: Failed to forward $path", e)
                 }
             }
+            return applied
         }
     }
 }
@@ -425,6 +467,35 @@ internal object MirrorMerge {
                 deleteInSaf.size, makeDirsInSaf.size, copyToSaf.size
             )
         }
+    }
+
+    /**
+     * Narrows [Plan.result] down to the entries whose required operations ACTUALLY
+     * succeeded. Failed operations are left out of the snapshot, so the next pass
+     * sees them as "provider changed" again and RETRIES - they must never be
+     * mistaken for deletions on the forwarded side (which would propagate
+     * deletions into the provider).
+     */
+    fun verifiedResult(
+        plan: Plan,
+        appliedFwd: Set<String>,
+        appliedSaf: Set<String>
+    ): Map<String, SafBridge.NodeInfo> {
+        val result = LinkedHashMap<String, SafBridge.NodeInfo>()
+        for ((path, target) in plan.result) {
+            val touchedFwd = plan.deleteInForwarded.contains(path) ||
+                plan.makeDirsInForwarded.contains(path) ||
+                plan.copyToForwarded.any { it.first == path }
+            val touchedSaf = plan.deleteInSaf.contains(path) ||
+                plan.makeDirsInSaf.contains(path) ||
+                plan.copyToSaf.contains(path)
+            if ((!touchedFwd || appliedFwd.contains(path)) &&
+                (!touchedSaf || appliedSaf.contains(path))
+            ) {
+                result[path] = target
+            }
+        }
+        return result
     }
 
     private fun depth(path: String): Int = path.count { it == '/' }
