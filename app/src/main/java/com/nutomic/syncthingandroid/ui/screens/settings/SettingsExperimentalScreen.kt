@@ -8,13 +8,11 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.EntryProviderScope
@@ -23,7 +21,6 @@ import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.SyncthingService
 import com.nutomic.syncthingandroid.util.RootAccess
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.zhanghai.compose.preference.SwitchPreference
@@ -47,47 +44,11 @@ fun SettingsExperimentalScreen() {
     val httpProxy = rememberPreferenceState(Constants.PREF_HTTP_PROXY_ADDRESS, "")
     val runAsRoot = rememberPreferenceState(Constants.PREF_RUN_AS_ROOT, false)
     val rootSwitchBusy = remember { mutableStateOf(false) }
-    // Guard against re-processing the revert write when authorization was denied.
-    val suppressNextRootChange = remember { mutableStateOf(false) }
     // Non-null while the root-mode warning dialog is up: true = enabling, false = disabling.
+    // The switch never writes the preference directly — a tap only opens this dialog, and
+    // the preference is written (and the core restarted) only after the user confirms.
     val pendingRootWarning = remember { mutableStateOf<Boolean?>(null) }
     val scope = rememberCoroutineScope()
-
-    // React to root-mode toggles: turning it on probes su right away (this is what makes
-    // the Magisk grant dialog appear immediately instead of at the next core start), then
-    // BOTH directions show a plain warning dialog and only restart the core after the
-    // user confirms. On confirm the root shell hands app storage back to the app UID when
-    // needed (root-written config and key material carry explicit 0600 modes) — it must
-    // run while su is still guaranteed to work. The revert write after a denied grant is
-    // skipped via suppressNextRootChange.
-    LaunchedEffect(Unit) {
-        snapshotFlow { runAsRoot.value }
-            .drop(1)
-            .collect { enabled ->
-                if (suppressNextRootChange.value) {
-                    suppressNextRootChange.value = false
-                    return@collect
-                }
-                rootSwitchBusy.value = true
-                try {
-                    if (enabled) {
-                        val granted = withContext(Dispatchers.IO) { RootAccess.isSuAvailable() }
-                        if (!granted) {
-                            suppressNextRootChange.value = true
-                            runAsRoot.value = false
-                            Toast.makeText(
-                                context, R.string.root_authorization_unavailable, Toast.LENGTH_LONG
-                            ).show()
-                            return@collect
-                        }
-                    }
-                    // Keep the switch unchanged until the user decides in the dialog.
-                    pendingRootWarning.value = enabled
-                } finally {
-                    rootSwitchBusy.value = false
-                }
-            }
-    }
 
     pendingRootWarning.value?.let { enabling ->
         AlertDialog(
@@ -110,12 +71,27 @@ fun SettingsExperimentalScreen() {
                     scope.launch {
                         rootSwitchBusy.value = true
                         try {
-                            suppressNextRootChange.value = true
-                            runAsRoot.value = enabling
-                            if (!enabling &&
-                                withContext(Dispatchers.IO) { RootAccess.appStorageOwnedByRoot(context) }
-                            ) {
-                                withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
+                            if (enabling) {
+                                // Request the su grant here — this is where the Magisk
+                                // dialog appears. Abort without writing the preference
+                                // when su is unavailable or denied.
+                                val granted = withContext(Dispatchers.IO) { RootAccess.isSuAvailable() }
+                                if (!granted) {
+                                    Toast.makeText(
+                                        context, R.string.root_authorization_unavailable, Toast.LENGTH_LONG
+                                    ).show()
+                                    return@launch
+                                }
+                                runAsRoot.value = true
+                            } else {
+                                // While su is still guaranteed to work, hand root-session
+                                // files back to the app UID: the root-uid core writes
+                                // config.xml and key material with explicit 0600 modes,
+                                // which the unprivileged app could no longer read.
+                                if (withContext(Dispatchers.IO) { RootAccess.appStorageOwnedByRoot(context) }) {
+                                    withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
+                                }
+                                runAsRoot.value = false
                             }
                             context.startService(
                                 Intent(context, SyncthingService::class.java)
@@ -197,9 +173,10 @@ fun SettingsExperimentalScreen() {
         }
         item {
             SwitchPreference(
+                checked = runAsRoot.value,
+                onCheckedChange = { requested -> pendingRootWarning.value = requested },
                 title = { Text(stringResource(R.string.run_as_root_title)) },
                 summary = { Text(stringResource(R.string.run_as_root_summary)) },
-                state = runAsRoot,
                 enabled = !rootSwitchBusy.value,
             )
         }
