@@ -19,6 +19,9 @@ import com.nutomic.syncthingandroid.util.Util
 @RequiresApi(api = Build.VERSION_CODES.N)
 class QuickSettingsTileForce : TileService() {
 
+    // Nullable on purpose (mirrors the Java original): TileService can be destroyed without
+    // ever receiving onStartListening, so lifecycle teardown must tolerate unset fields.
+    // The `!!` sites are only reachable while the tile is listening (i.e. after onStartListening).
     private var context: Context? = null
     private var preferences: SharedPreferences? = null
     private var res: Resources? = null
