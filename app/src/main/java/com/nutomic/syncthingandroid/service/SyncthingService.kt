@@ -49,67 +49,51 @@ class SyncthingService : Service() {
         private const val SHUTDOWN_RETRY_DELAY_MS = 1000L
 
         /** Intent action to perform a Syncthing restart. */
-        @JvmField
-        val ACTION_RESTART = ".SyncthingService.RESTART"
+        const val ACTION_RESTART = ".SyncthingService.RESTART"
 
         /** Intent action to perform a Syncthing stop. */
-        @JvmField
-        val ACTION_STOP = ".SyncthingService.STOP"
+        const val ACTION_STOP = ".SyncthingService.STOP"
 
         /** Intent action to reset Syncthing's database. */
-        @JvmField
-        val ACTION_RESET_DATABASE = ".SyncthingService.RESET_DATABASE"
+        const val ACTION_RESET_DATABASE = ".SyncthingService.RESET_DATABASE"
 
         /** Intent action to reset Syncthing's delta indexes. */
-        @JvmField
-        val ACTION_RESET_DELTAS = ".SyncthingService.RESET_DELTAS"
+        const val ACTION_RESET_DELTAS = ".SyncthingService.RESET_DELTAS"
 
-        @JvmField
-        val ACTION_REFRESH_NETWORK_INFO = ".SyncthingService.REFRESH_NETWORK_INFO"
+        const val ACTION_REFRESH_NETWORK_INFO = ".SyncthingService.REFRESH_NETWORK_INFO"
 
         /** Intent action to permanently ignore a device connection request. */
-        @JvmField
-        val ACTION_IGNORE_DEVICE = ".SyncthingService.IGNORE_DEVICE"
+        const val ACTION_IGNORE_DEVICE = ".SyncthingService.IGNORE_DEVICE"
 
         /** Intent action to permanently ignore a folder share request. */
-        @JvmField
-        val ACTION_IGNORE_FOLDER = ".SyncthingService.IGNORE_FOLDER"
+        const val ACTION_IGNORE_FOLDER = ".SyncthingService.IGNORE_FOLDER"
 
         /** Intent action to override folder changes. */
-        @JvmField
-        val ACTION_OVERRIDE_CHANGES = ".SyncthingService.OVERRIDE_CHANGES"
+        const val ACTION_OVERRIDE_CHANGES = ".SyncthingService.OVERRIDE_CHANGES"
 
         /** Intent action to revert local folder changes. */
-        @JvmField
-        val ACTION_REVERT_LOCAL_CHANGES = ".SyncthingService.REVERT_LOCAL_CHANGES"
+        const val ACTION_REVERT_LOCAL_CHANGES = ".SyncthingService.REVERT_LOCAL_CHANGES"
 
         /** Extra used together with ACTION_IGNORE_DEVICE, ACTION_IGNORE_FOLDER. */
-        @JvmField
-        val EXTRA_NOTIFICATION_ID = ".SyncthingService.EXTRA_NOTIFICATION_ID"
+        const val EXTRA_NOTIFICATION_ID = ".SyncthingService.EXTRA_NOTIFICATION_ID"
 
         /** Extra used together with ACTION_IGNORE_DEVICE. */
-        @JvmField
-        val EXTRA_DEVICE_ID = ".SyncthingService.EXTRA_DEVICE_ID"
+        const val EXTRA_DEVICE_ID = ".SyncthingService.EXTRA_DEVICE_ID"
 
         /** Extra used together with ACTION_IGNORE_DEVICE. */
-        @JvmField
-        val EXTRA_DEVICE_ADDRESS = ".SyncthingService.EXTRA_DEVICE_ADDRESS"
+        const val EXTRA_DEVICE_ADDRESS = ".SyncthingService.EXTRA_DEVICE_ADDRESS"
 
         /** Extra used together with ACTION_IGNORE_DEVICE. */
-        @JvmField
-        val EXTRA_DEVICE_NAME = ".SyncthingService.EXTRA_DEVICE_NAME"
+        const val EXTRA_DEVICE_NAME = ".SyncthingService.EXTRA_DEVICE_NAME"
 
         /** Extra used together with ACTION_IGNORE_FOLDER. */
-        @JvmField
-        val EXTRA_FOLDER_ID = ".SyncthingService.EXTRA_FOLDER_ID"
+        const val EXTRA_FOLDER_ID = ".SyncthingService.EXTRA_FOLDER_ID"
 
         /** Extra used together with ACTION_IGNORE_FOLDER. */
-        @JvmField
-        val EXTRA_FOLDER_LABEL = ".SyncthingService.EXTRA_FOLDER_LABEL"
+        const val EXTRA_FOLDER_LABEL = ".SyncthingService.EXTRA_FOLDER_LABEL"
 
         /** Extra used together with ACTION_STOP. */
-        @JvmField
-        val EXTRA_STOP_AFTER_CRASHED_NATIVE = ".SyncthingService.EXTRA_STOP_AFTER_CRASHED_NATIVE"
+        const val EXTRA_STOP_AFTER_CRASHED_NATIVE = ".SyncthingService.EXTRA_STOP_AFTER_CRASHED_NATIVE"
     }
 
     /**
