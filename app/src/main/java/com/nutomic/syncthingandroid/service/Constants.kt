@@ -120,6 +120,12 @@ object Constants {
      * umask 000 wrapper the launch path applies.
      */
     const val PREF_RUN_AS_ROOT                 = "run_as_root"
+    /**
+     * Cached: the privilege mode the currently/last running core was actually launched
+     * with. Shutdown paths must use this (not the user preference) so a core keeps being
+     * killable/inspectable right after the user toggles the preference.
+     */
+    const val PREF_LAST_CORE_RUN_AS_ROOT       = "last_core_run_as_root"
     // from SystemClock.elapsedRealtime()
     const val PREF_LAST_RUN_TIME               = "last_run_time"
     const val PREF_APP_START_COUNTER           = "app_start_counter"

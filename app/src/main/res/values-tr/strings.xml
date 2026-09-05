@@ -604,6 +604,7 @@
     <string name="use_tor_summary">Artırılmış gizlilik için tüm trafiği Tor üzerinden zorlayın. Orbot gerektirir. Proksi seçeneklerini etkisizleştirir.</string>
     <string name="run_as_root_title">Syncthing çekirdeğini root olarak çalıştır</string>
     <string name="run_as_root_summary">Yalnızca root\'lu cihazlar için: çekirdek herhangi bir dizini okuyup yazabilir (ör. diğer uygulamaların verileri). Uygulamanın özel deposunda oluşturduğu dosyalar herkes tarafından yazılabilir hale gelir. Bir sonraki çekirdek başlangıcında etkin olur.</string>
+    <string name="root_authorization_unavailable">Root yetkilendirmesi yok; ayar kapatıldı.</string>
     <string name="folder_picker_root_browse">Root ile göz at</string>
 
     <string name="socks_proxy_address_title">SOCKS5 proksi</string>

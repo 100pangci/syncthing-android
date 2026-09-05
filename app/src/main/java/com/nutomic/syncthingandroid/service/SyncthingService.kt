@@ -575,7 +575,7 @@ class SyncthingService : Service() {
                 this, config.webGuiUrl, config.apiKey,
                 { onApiAvailable() },
                 { onServiceStateChange(currentState) },
-                runAsRoot = AppPrefs.getRunAsRoot(preferences),
+                runAsRoot = AppPrefs.getLastCoreRunAsRoot(preferences),
             )
             Log.i(TAG, "Web GUI will be available at ${config.webGuiUrl}")
         }
@@ -821,13 +821,14 @@ class SyncthingService : Service() {
      * Ends stale instances of the syncthing binary, e.g. leftovers from an in-place app
      * upgrade or the currently running core during a forced shutdown.
      *
-     * In root mode the core runs as root, invisible to the app's own `ps`: both the lookup
-     * and the SIGINT go through the root shell, and the filter is the FULL binary path —
+     * The privilege mode comes from the last-launch marker, not the user preference: right
+     * after a toggle the running core still has the previous mode, and a root-uid core is
+     * invisible to the app's own `ps` (kill EPERM). Root lookups use the FULL binary path —
      * other installed forks ship cores with the same basename, which a basename match
      * would kill as collateral.
      */
     private fun killStaleBinary() {
-        val asRoot = AppPrefs.getRunAsRoot(preferences)
+        val asRoot = AppPrefs.getLastCoreRunAsRoot(preferences)
         val processName = if (asRoot) {
             Constants.getSyncthingBinary(this).absolutePath
         } else {

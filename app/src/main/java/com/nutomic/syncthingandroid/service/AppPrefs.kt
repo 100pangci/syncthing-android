@@ -44,4 +44,16 @@ object AppPrefs {
         }
         return sharedPreferences.getBoolean(Constants.PREF_RUN_AS_ROOT, PREF_RUN_AS_ROOT_DEFAULT)
     }
+
+    fun getLastCoreRunAsRoot(sharedPreferences: SharedPreferences?): Boolean {
+        if (sharedPreferences == null) {
+            Log.e(TAG, "getLastCoreRunAsRoot: sharedPreferences == null")
+            return PREF_RUN_AS_ROOT_DEFAULT
+        }
+        return sharedPreferences.getBoolean(Constants.PREF_LAST_CORE_RUN_AS_ROOT, PREF_RUN_AS_ROOT_DEFAULT)
+    }
+
+    fun setLastCoreRunAsRoot(sharedPreferences: SharedPreferences, value: Boolean) {
+        sharedPreferences.edit().putBoolean(Constants.PREF_LAST_CORE_RUN_AS_ROOT, value).apply()
+    }
 }

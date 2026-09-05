@@ -604,6 +604,7 @@
     <string name="use_tor_summary">Forcer tout le trafic à travers Tor mieux préserver sa vie privée. Nécessite Orbot. Désactive les options de proxy.</string>
     <string name="run_as_root_title">Exécuter le cœur de Syncthing en tant que root</string>
     <string name="run_as_root_summary">Pour appareils rootés uniquement : le cœur peut lire et écrire dans n\'importe quel répertoire (p. ex. les données d\'autres applications). Les fichiers qu\'il crée dans le stockage privé de l\'app deviennent inscriptibles par tous. Prend effet au prochain démarrage du cœur.</string>
+    <string name="root_authorization_unavailable">Autorisation root indisponible ; le paramètre a été désactivé.</string>
     <string name="folder_picker_root_browse">Parcourir avec root</string>
 
     <string name="socks_proxy_address_title">Proxy SOCKS5</string>

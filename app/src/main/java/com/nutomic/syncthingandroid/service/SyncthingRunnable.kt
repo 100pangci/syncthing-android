@@ -424,13 +424,15 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
                 throw ExecutableNotFoundException(commandArgs[0])
             }
         }
-        val pb = if (runAsRoot) {
+        var launchedAsRoot = false
+        val pb: ProcessBuilder = if (runAsRoot) {
             val suBinary = RootAccess.suBinaryPath()
             if (suBinary != null && RootAccess.isSuAvailable()) {
                 // The umask 000 wrapper is load-bearing: the root-uid core creates app-shared
                 // files (config.xml, cert.pem, logs, SAF-bridge staging dirs) that the
                 // unprivileged app must stay able to read, write and delete.
                 Log.i(TAG, "Root mode: launching syncthing core via root shell (umask 000)")
+                launchedAsRoot = true
                 ProcessBuilder(suBinary, "-c", buildRootLaunchScript(env, commandArgs))
             } else {
                 Log.w(TAG, "Root mode enabled but su is unavailable or denied; " +
@@ -440,7 +442,12 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
         } else {
             ProcessBuilder(*commandArgs).also { it.environment().putAll(env) }
         }
-        return pb.start()
+        val process = pb.start()
+        // Record the privilege mode the running core actually uses: shutdown paths must
+        // keep being able to kill and inspect it even after the user toggles the
+        // preference while the core is up.
+        AppPrefs.setLastCoreRunAsRoot(preferences, launchedAsRoot)
+        return process
     }
 
     private fun logV(logMessage: String) {
