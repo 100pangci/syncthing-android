@@ -291,6 +291,7 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">사용자가 사용 중인 Android 버전은 Syncthing이 선택한 폴더에 대한 읽기 전용 접근 권한만 부여합니다.</string>
+    <string name="saf_bridge_folder_mapped">이 위치는 다른 앱에서 제공합니다. Syncthing이 자동으로 전달하여 동기화합니다.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">사용자가 사용 중인 Android 버전은 Syncthing이 선택한 폴더에 대한 읽기 및 쓰기 접근 권한을 부여합니다.</string>

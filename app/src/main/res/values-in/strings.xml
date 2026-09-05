@@ -293,6 +293,7 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Versi Android Anda hanya memberi Syncthing akses baca saja ke folder yang dipilih.</string>
+    <string name="saf_bridge_folder_mapped">Lokasi ini disediakan oleh aplikasi lain. Syncthing akan meneruskannya secara otomatis agar dapat disinkronkan.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Versi Android Anda memberi Syncthing akses baca dan tulis ke folder yang dipilih.</string>

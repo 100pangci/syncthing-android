@@ -291,6 +291,7 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Ваша Android верзија омогућава Syncthing-у само приступ само за читање изабраној фасцикли.</string>
+    <string name="saf_bridge_folder_mapped">Ову локацију обезбеђује друга апликација. Syncthing ће је аутоматски проследити како би могла бити синхронизована.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Ваша Android верзија омогућава Syncthing-у приступ за читање и писање изабраној фасцикли.</string>

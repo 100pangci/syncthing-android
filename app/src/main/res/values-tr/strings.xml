@@ -291,6 +291,7 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Android sürümünüz, Syncthing\'e seçilen klasöre yalnızca salt okunur erişimi verir.</string>
+    <string name="saf_bridge_folder_mapped">Bu konum başka bir uygulama tarafından sağlanıyor. Syncthing, senkronize edilebilmesi için otomatik olarak iletecek.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Android sürümünüz, Syncthing\'e seçilen klasöre okuma ve yazma erişimi verir.</string>

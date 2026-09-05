@@ -291,6 +291,7 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Sua versão de Android concede apenas acesso de leitura ao Syncthing na pasta selecionada.</string>
+    <string name="saf_bridge_folder_mapped">Este local é fornecido por outro aplicativo. O Syncthing vai encaminhá-lo automaticamente para poder sincronizá-lo.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Sua versão do Android concede ao Syncthing acesso de leitura e gravação na pasta selecionada.</string>

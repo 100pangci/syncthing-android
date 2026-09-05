@@ -301,6 +301,7 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">A túa versión de Android só lle concede a Syncthing acceso de lectura ao cartafol seleccionado.</string>
+    <string name="saf_bridge_folder_mapped">Esta localización é fornecida por outra aplicación. Syncthing reenviaraa automaticamente para poder sincronizala.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">A túa versión de Android concédelle a Syncthing acceso de lectura e escritura ao cartafol seleccionado.</string>

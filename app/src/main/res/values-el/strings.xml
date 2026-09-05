@@ -296,6 +296,7 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Η έκδοση Android σας παρέχει στο Syncthing μόνο δικαιώματα ανάγνωσης στον επιλεγμένο φάκελο.</string>
+    <string name="saf_bridge_folder_mapped">Αυτή η τοποθεσία παρέχεται από άλλη εφαρμογή. Το Syncthing θα την προωθεί αυτόματα για να συγχρονιστεί.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Η έκδοση Android σας παρέχει στο Syncthing δικαιώματα ανάγνωσης και εγγραφής στον επιλεγμένο φάκελο.</string>

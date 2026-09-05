@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.StrictMode
 import androidx.preference.PreferenceManager
 import com.nutomic.syncthingandroid.service.NotificationHandler
+import com.nutomic.syncthingandroid.service.SafBridge
 
 class SyncthingApp : Application() {
 
@@ -14,6 +15,10 @@ class SyncthingApp : Application() {
 
     val notificationHandler: NotificationHandler by lazy {
         NotificationHandler(this, preferences)
+    }
+
+    val safBridge: SafBridge by lazy {
+        SafBridge(this)
     }
 
     override fun onCreate() {

@@ -243,6 +243,10 @@ class SyncthingService : Service() {
         storagePermissionGranted = PermissionUtil.haveStoragePermission(this)
 
         notificationHandler.setAppShutdownInProgress(false)
+
+        // Forward SAF provider folders (e.g. fcitx's data root) into real dirs the
+        // core can sync; no-op when no bridge is registered.
+        app.safBridge.startAll()
     }
 
     /**
@@ -620,6 +624,7 @@ class SyncthingService : Service() {
      */
     override fun onDestroy() {
         Log.d(TAG, "onDestroy")
+        (application as SyncthingApp).safBridge.stopAll()
         if (runConditionMonitor != null) {
             // Shut down the OnShouldRunChangedListener so we won't get interrupted by run
             // condition events that occur during shutdown.

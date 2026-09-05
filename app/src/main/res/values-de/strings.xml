@@ -291,6 +291,7 @@
 
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Diese Android-Version erlaubt Syncthing nur schreibgeschützten Zugriff auf den ausgewählten Ordner.</string>
+    <string name="saf_bridge_folder_mapped">Dieser Ort wird von einer anderen App bereitgestellt. Syncthing leitet ihn automatisch weiter, damit er synchronisiert werden kann.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Diese Android-Version erlaubt Syncthing Lese- und Schreibzugriff auf den ausgewählten Ordner.</string>
