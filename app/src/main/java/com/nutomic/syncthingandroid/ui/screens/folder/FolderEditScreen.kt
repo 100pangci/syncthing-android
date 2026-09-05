@@ -38,8 +38,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.background
+import com.google.gson.Gson
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.SyncthingApp
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import com.nutomic.syncthingandroid.model.Folder
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.RestApi
@@ -93,8 +98,12 @@ fun FolderEditScreen(
     var showPullOrderDialog by rememberSaveable { mutableStateOf(false) }
     var showVersioningDialog by rememberSaveable { mutableStateOf(false) }
 
-    // Init the model once.
-    LaunchedEffect(Unit) {
+    // Init the model once. Keyed by the holder INSTANCE, not Unit: Nav3 can keep a
+    // composition alive across a pop -> re-push of the same route (fast exit during
+    // the enter transition), and a Unit-keyed effect that was consumed/cancelled in
+    // that limbo state never runs again, leaving folder == null forever (black
+    // screen). A fresh holder instance re-keys the effect and the init self-heals.
+    LaunchedEffect(holder) {
         initFolderEditState(
             context, holder, isCreate, folderId, folderLabel, receiveEncrypted,
             deviceId, notificationId, api, configRouter, navigator, preferences,
@@ -112,22 +121,24 @@ fun FolderEditScreen(
     // once the api is up: init may have loaded it from the config.xml fallback
     // (core not started yet / config import in progress) and saving such a stale
     // snapshot would clobber newer share state with a whole-folder PUT.
+    // The delay keeps the REST-callback recompositions out of the enter transition.
     LaunchedEffect(apiConfigLoaded, holder.folder?.id) {
+        delay(450)
         if (!isCreate && apiConfigLoaded && holder.folder != null && !holder.needsUpdate) {
             resyncCleanDraftFromApi(context, api, configRouter, holder, navigator)
         }
         refreshDeviceShareStates(configRouter, api, holder)
     }
     // Collect folder picker result pushed by the FolderPicker route.
-    LaunchedEffect(Unit) {
+    // Holder-keyed: see the init effect comment on Nav3 composition reuse.
+    LaunchedEffect(holder) {
         collectFolderPickerResults(resultBus, context, holder)
     }
-    BackHandler(enabled = !holder.isSaving) {
-        if (holder.needsUpdate) {
-            showDiscardDialog = true
-        } else {
-            navigator.navigateBack()
-        }
+    // Intercept back only while the draft is dirty: a clean draft lets the event reach
+    // NavDisplay so the predictive pop transition (peek of the previous screen) plays,
+    // a dirty draft shows the discard dialog instead (no peek, standard UX).
+    BackHandler(enabled = holder.needsUpdate && !holder.isSaving) {
+        showDiscardDialog = true
     }
     // SAF directory picker used when the system picker is available.
     val safLauncher = rememberLauncherForActivityResult(
@@ -310,6 +321,11 @@ private fun FolderEditBody(
         Modifier
             .fillMaxSize()
             .padding(innerPadding)
+            // Keep the scrollable viewport above the IME so a focused field at the
+            // bottom (ignore patterns) is scrolled into view by Compose itself.
+            // Without this the system pans the whole window as a fallback and the
+            // FAB's own imePadding double-counts, pushing it far above the keyboard.
+            .imePadding()
     ) {
         if (folder != null) {
             FolderEditContent(
@@ -489,7 +505,9 @@ private suspend fun initFolderEditState(
         // newer share state (e.g. right after a config import) - updateFolder PUTs
         // the whole folder object, not a diff.
         var found: Folder? = null
-        for (current in configRouter.getFolders(api)) {
+        // Full-config Gson deep copy (or a config.xml DOM parse when the api is down):
+        // keep it off the main thread so the enter transition stays smooth.
+        for (current in withContext(Dispatchers.IO) { configRouter.getFolders(api) }) {
             if (current.id == (folderId ?: "")) {
                 found = current
                 break
@@ -500,6 +518,8 @@ private suspend fun initFolderEditState(
             return
         }
         holder.folder = found
+        // Defer past the enter transition; the callback's state write recomposes the editor.
+        delay(450)
         configRouter.getFolderIgnoreList(api, found) { list ->
             holder.ignoreListText = list.ignore?.joinToString("\n") ?: ""
         }
@@ -514,7 +534,8 @@ private suspend fun initFolderEditState(
     )
     // Evaluate the write access of the folder path so "folder type" and the
     // ignore patterns are enabled for folders that are only being edited.
-    checkWriteAndUpdateUI(context, holder)
+    // The write test forks two shell subprocesses - never on the main thread.
+    withContext(Dispatchers.IO) { checkWriteAndUpdateUI(context, holder) }
     // Automatically share with the given device (e.g. when accepting a folder share).
     deviceId?.let { devId ->
         holder.folder?.addDevice(com.nutomic.syncthingandroid.model.SharedWithDevice().apply {
@@ -539,7 +560,7 @@ private suspend fun resyncCleanDraftFromApi(
 ) {
     val folderId = holder.folder?.id ?: return
     var live: Folder? = null
-    for (current in configRouter.getFolders(api)) {
+    for (current in withContext(Dispatchers.IO) { configRouter.getFolders(api) }) {
         if (current.id == folderId) {
             live = current
             break
@@ -550,13 +571,24 @@ private suspend fun resyncCleanDraftFromApi(
         navigator.navigateBack()
         return
     }
-    holder.folder = live
+    // Swapping the folder object invalidates every reader of holder.folder and
+    // recomposes the whole editor tree. Skip the swap when the fresh copy is
+    // content-identical to the draft (the common case: init already loaded from
+    // the REST config), otherwise the recomposition lands right after the
+    // enter transition as a visible hitch.
+    val unchanged = withContext(Dispatchers.IO) {
+        Gson().toJson(live) == Gson().toJson(holder.folder)
+    }
+    if (!unchanged) {
+        holder.folder = live
+    }
     holder.folderUri = null
     holder.needsUpdate = false
     configRouter.getFolderIgnoreList(api, live) { list ->
         holder.ignoreListText = list.ignore?.joinToString("\n") ?: ""
     }
-    checkWriteAndUpdateUI(context, holder)
+    // The write test forks two shell subprocesses - never on the main thread.
+    withContext(Dispatchers.IO) { checkWriteAndUpdateUI(context, holder) }
 }
 
 private suspend fun refreshDeviceShareStates(
@@ -565,7 +597,7 @@ private suspend fun refreshDeviceShareStates(
     holder: FolderEditStateHolder,
 ) {
     val f = holder.folder ?: return
-    val devices = configRouter.getDevices(api, false)
+    val devices = withContext(Dispatchers.IO) { configRouter.getDevices(api, false) }
     holder.deviceStates = devices.map { device ->
         val shared = f.getDevice(device.deviceID) != null
         val password = f.getDevice(device.deviceID)?.encryptionPassword ?: ""

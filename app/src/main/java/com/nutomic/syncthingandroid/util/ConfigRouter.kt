@@ -23,6 +23,7 @@ class ConfigRouter(context: Context) {
 
     private val configXml: ConfigXml = ConfigXml(context)
 
+    @Synchronized
     fun getFolders(restApi: RestApi?): List<Folder> {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -34,6 +35,7 @@ class ConfigRouter(context: Context) {
         return restApi.folders
     }
 
+    @Synchronized
     fun getSharedFolders(deviceID: String): List<Folder> {
         val folders = getFolders(null)
         val sharedFolders = ArrayList<Folder>()
@@ -48,6 +50,7 @@ class ConfigRouter(context: Context) {
         return sharedFolders
     }
 
+    @Synchronized
     fun addFolder(restApi: RestApi?, folder: Folder) {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -61,6 +64,7 @@ class ConfigRouter(context: Context) {
         restApi.addFolder(folder)       // This will send the config afterwards.
     }
 
+    @Synchronized
     fun ignoreFolder(restApi: RestApi?,
                             deviceId: String?,
                             folderId: String?,
@@ -83,6 +87,7 @@ class ConfigRouter(context: Context) {
         )       // This will send the config afterwards.
     }
 
+    @Synchronized
     fun updateFolder(restApi: RestApi?, folder: Folder) {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -96,6 +101,7 @@ class ConfigRouter(context: Context) {
         restApi.updateFolder(folder)       // This will send the config afterwards.
     }
 
+    @Synchronized
     fun removeFolder(restApi: RestApi?, folderId: String) {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -112,6 +118,7 @@ class ConfigRouter(context: Context) {
     /**
      * Gets ignore list for given folder.
      */
+    @Synchronized
     fun getFolderIgnoreList(restApi: RestApi?, folder: Folder, listener: OnResultListener1<FolderIgnoreList>) {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -127,6 +134,7 @@ class ConfigRouter(context: Context) {
     /**
      * Stores ignore list for given folder.
      */
+    @Synchronized
     fun postFolderIgnoreList(restApi: RestApi?, folder: Folder, ignore: Array<String>) {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -139,6 +147,7 @@ class ConfigRouter(context: Context) {
         restApi.postFolderIgnoreList(folder.id, ignore)
     }
 
+    @Synchronized
     fun getDevices(restApi: RestApi?, includeLocal: Boolean): List<Device> {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -150,6 +159,7 @@ class ConfigRouter(context: Context) {
         return restApi.getDevices(includeLocal)
     }
 
+    @Synchronized
     fun updateDevice(restApi: RestApi?, device: Device) {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -163,6 +173,7 @@ class ConfigRouter(context: Context) {
         restApi.updateDevice(device)       // This will send the config afterwards.
     }
 
+    @Synchronized
     fun removeDevice(restApi: RestApi?, deviceID: String?) {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -176,6 +187,7 @@ class ConfigRouter(context: Context) {
         restApi.removeDevice(deviceID ?: return)       // This will send the config afterwards.
     }
 
+    @Synchronized
     fun ignoreDevice(restApi: RestApi?,
                             deviceID: String?,
                             deviceName: String?,
@@ -197,6 +209,7 @@ class ConfigRouter(context: Context) {
         )       // This will send the config afterwards.
     }
 
+    @Synchronized
     fun getGui(restApi: RestApi?): Gui {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -208,6 +221,7 @@ class ConfigRouter(context: Context) {
         return restApi.gui
     }
 
+    @Synchronized
     fun updateGui(restApi: RestApi?, gui: Gui) {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.
@@ -221,6 +235,7 @@ class ConfigRouter(context: Context) {
         restApi.updateGui(gui)       // This will send the config afterwards.
     }
 
+    @Synchronized
     fun getOptions(restApi: RestApi?): Options {
         if (restApi == null || !restApi.isConfigLoaded) {
             // Syncthing is not running or REST API is not (yet) available.

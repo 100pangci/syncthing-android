@@ -659,7 +659,11 @@ class RestApi(
     fun shutdown() {
         hasShutdown = true
         executorService.shutdownNow()
-        Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME)
+        // Util.killProcess polls via "ps" and must not run on the main thread. Cleaning up a
+        // stale versioning "find" helper has no ordering dependency with the shutdown POST.
+        restScope.launch(Dispatchers.IO) {
+            Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME)
+        }
         apiPost(ApiClient.URI_SYSTEM_SHUTDOWN)
     }
 

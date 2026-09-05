@@ -54,11 +54,20 @@ class HttpsCertManager(private val service: SyncthingService, private val handle
         val certFile = Constants.getHttpsCertFile(service)
         val keyFile = Constants.getHttpsKeyFile(service)
 
-        // Stop the binary so it releases the cert/key before we overwrite them.
-        if (service.currentState != State.DISABLED) {
-            service.shutdownToState(State.DISABLED)
+        // Stop the binary so it releases the cert/key before we overwrite them. The binary's
+        // kill/join runs on the service's shutdown executor; continue once it has exited.
+        val continueReplace = {
+            backupWriteAndVerify(certFile, keyFile, certPem, keyPem, listener)
         }
+        if (service.currentState != State.DISABLED) {
+            service.shutdownToState(State.DISABLED) { continueReplace() }
+        } else {
+            continueReplace()
+        }
+    }
 
+    private fun backupWriteAndVerify(certFile: File, keyFile: File, certPem: ByteArray, keyPem: ByteArray,
+                                     listener: OnHttpsCertReplaceResultListener) {
         val certBak = backupFile(certFile)
         val keyBak = backupFile(keyFile)
 
@@ -89,17 +98,20 @@ class HttpsCertManager(private val service: SyncthingService, private val handle
         val certFile = Constants.getHttpsCertFile(service)
         val keyFile = Constants.getHttpsKeyFile(service)
 
-        if (service.currentState != State.DISABLED) {
-            service.shutdownToState(State.DISABLED)
+        val continueReset = {
+            val certBak = backupFile(certFile)
+            val keyBak = backupFile(keyFile)
+            // Removing the files makes syncthing generate a fresh self-signed certificate at startup.
+            deleteQuietly(certFile)
+            deleteQuietly(keyFile)
+
+            applyCertChangeWithVerify(certFile, keyFile, certBak, keyBak, listener)
         }
-
-        val certBak = backupFile(certFile)
-        val keyBak = backupFile(keyFile)
-        // Removing the files makes syncthing generate a fresh self-signed certificate at startup.
-        deleteQuietly(certFile)
-        deleteQuietly(keyFile)
-
-        applyCertChangeWithVerify(certFile, keyFile, certBak, keyBak, listener)
+        if (service.currentState != State.DISABLED) {
+            service.shutdownToState(State.DISABLED) { continueReset() }
+        } else {
+            continueReset()
+        }
     }
 
     private fun applyCertChangeWithVerify(certFile: File, keyFile: File,
@@ -137,12 +149,16 @@ class HttpsCertManager(private val service: SyncthingService, private val handle
             restoreFile(certBak, certFile)
             restoreFile(keyBak, keyFile)
             // Bring the previous, known-good certificate back online.
-            if (service.currentState != State.DISABLED && service.currentState != State.INIT) {
-                service.shutdownToState(State.INIT)
+            val restartWithPreviousCertificate = {
+                service.launchStartupTask(SyncthingRunnable.Command.main)
+                listener.onResult(HttpsCertReplaceResult.FAILED,
+                    "Syncthing did not come online with the new certificate.")
             }
-            service.launchStartupTask(SyncthingRunnable.Command.main)
-            listener.onResult(HttpsCertReplaceResult.FAILED,
-                "Syncthing did not come online with the new certificate.")
+            if (service.currentState != State.DISABLED && service.currentState != State.INIT) {
+                service.shutdownToState(State.INIT) { restartWithPreviousCertificate() }
+            } else {
+                restartWithPreviousCertificate()
+            }
         }
 
         watchdog = Runnable {

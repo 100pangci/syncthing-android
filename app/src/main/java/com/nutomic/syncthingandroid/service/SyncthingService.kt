@@ -19,6 +19,7 @@ import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.util.HashSet
+import java.util.concurrent.Executors
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -172,6 +173,23 @@ class SyncthingService : Service() {
     private lateinit var configRouter: ConfigRouter
     private var config: ConfigXml? = null
     private var syncthingRunnableThread: Thread? = null
+
+    /**
+     * Serializes the blocking kill/join work of the native binary off the main thread.
+     * Shutdown and old-instance cleanup jobs run here in FIFO order; their continuations
+     * are posted back to [handler] (main thread).
+     */
+    private val shutdownExecutor = Executors.newSingleThreadExecutor { r ->
+        Thread(r, "SyncthingShutdown")
+    }
+
+    /**
+     * Main-thread-only guard: true while a kill by binary name is queued or running on
+     * [shutdownExecutor]. [launchStartupTask] defers while this is set, so a freshly
+     * spawned binary can never race a name-based kill aimed at the previous instance.
+     */
+    private var binaryKillPending = false
+
     private lateinit var handler: Handler
 
     private val onServiceStateChangeListeners = HashSet<OnServiceStateChangeListener>()
@@ -308,8 +326,9 @@ class SyncthingService : Service() {
         }
 
         if (ACTION_RESTART == intent.action && currentState == State.ACTIVE) {
-            shutdownToState(State.INIT)
-            launchStartupTask(SyncthingRunnable.Command.main)
+            shutdownToState(State.INIT) {
+                launchStartupTask(SyncthingRunnable.Command.main)
+            }
         } else if (ACTION_STOP == intent.action) {
             if (intent.getBooleanExtra(EXTRA_STOP_AFTER_CRASHED_NATIVE, false)) {
                 // We were requested to stop the service because the syncthing native
@@ -332,13 +351,18 @@ class SyncthingService : Service() {
             // 2. Reset the database, syncthing native will exit after performing the reset.
             // 3. Relaunch syncthing native if it was previously running.
             Log.i(TAG, "Invoking reset of database")
-            if (currentState != State.DISABLED) {
-                // Shutdown synchronously.
-                shutdownToState(State.DISABLED)
+            val resetDatabaseAndRestart = {
+                SyncthingRunnable(this, SyncthingRunnable.Command.resetdatabase).run()
+                if (lastDeterminedShouldRun) {
+                    launchStartupTask(SyncthingRunnable.Command.main)
+                }
             }
-            SyncthingRunnable(this, SyncthingRunnable.Command.resetdatabase).run()
-            if (lastDeterminedShouldRun) {
-                launchStartupTask(SyncthingRunnable.Command.main)
+            if (currentState != State.DISABLED) {
+                // Shutdown the running binary first; its kill/join runs on the shutdown
+                // executor and we continue once it has fully exited.
+                shutdownToState(State.DISABLED) { resetDatabaseAndRestart() }
+            } else {
+                resetDatabaseAndRestart()
             }
         } else if (ACTION_RESET_DELTAS == intent.action) {
             // 1. Stop syncthing native if it's running.
@@ -349,14 +373,17 @@ class SyncthingService : Service() {
             //    deferred until State.ACTIVE was reached, then syncthing native will be
             //    shutdown synchronously.
             Log.i(TAG, "Invoking reset of delta indexes")
-            if (currentState != State.DISABLED) {
-                // Shutdown synchronously.
-                shutdownToState(State.DISABLED)
+            val launchResetDeltasAndMaybeStop = {
+                launchStartupTask(SyncthingRunnable.Command.resetdeltas)
+                if (!lastDeterminedShouldRun) {
+                    // Shutdown if syncthing was not running before the UI action was raised.
+                    shutdownToState(State.DISABLED)
+                }
             }
-            launchStartupTask(SyncthingRunnable.Command.resetdeltas)
-            if (!lastDeterminedShouldRun) {
-                // Shutdown if syncthing was not running before the UI action was raised.
-                shutdownToState(State.DISABLED)
+            if (currentState != State.DISABLED) {
+                shutdownToState(State.DISABLED) { launchResetDeltasAndMaybeStop() }
+            } else {
+                launchResetDeltasAndMaybeStop()
             }
         } else if (ACTION_REFRESH_NETWORK_INFO == intent.action) {
             runConditionMonitor?.updateShouldRunDecision()
@@ -520,6 +547,13 @@ class SyncthingService : Service() {
      * Prepares to launch the syncthing binary.
      */
     fun launchStartupTask(srCommand: SyncthingRunnable.Command) {
+        if (binaryKillPending) {
+            // A kill by binary name (shutdown or old-instance cleanup) is still in flight;
+            // spawning now could get the new binary SIGINTed by that kill.
+            handler.postDelayed({ launchStartupTask(srCommand) }, SHUTDOWN_RETRY_DELAY_MS)
+            return
+        }
+
         synchronized(stateLock) {
             if (currentState != State.DISABLED && currentState != State.INIT) {
                 Log.e(TAG, "launchStartupTask: Wrong state $currentState detected. Cancelling.")
@@ -566,14 +600,31 @@ class SyncthingService : Service() {
             Log.e(TAG, "onStartupTaskCompleteListener: Syncthing binary lifecycle violated")
             return
         }
-        syncthingRunnable = SyncthingRunnable(this, srCommand)
+        val runnable = SyncthingRunnable(this, srCommand)
+        syncthingRunnable = runnable
 
-        // Check if an old syncthing instance is still running.
-        // This happens after an in-place app upgrade. If so, end it.
-        Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY)
+        // End any still-running old instance (eg left over from an in-place app upgrade)
+        // on the shutdown executor, then spawn the new binary from the main thread. The
+        // cleanup kills by process name, so spawning must wait for it to complete.
+        binaryKillPending = true
+        shutdownExecutor.execute {
+            Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY)
+            handler.post {
+                binaryKillPending = false
+                if (syncthingRunnable == null) {
+                    // shutdownToState ran while the cleanup was in flight and consumed the
+                    // pending runnable - the startup was aborted, do not spawn.
+                    Log.i(TAG, "launchStartupTask: Startup aborted, binary was shut down in the meantime.")
+                    return@post
+                }
+                startBinaryThread(runnable, config)
+            }
+        }
+    }
 
+    private fun startBinaryThread(runnable: SyncthingRunnable, config: ConfigXml) {
         // Start the syncthing binary in a separate thread.
-        val syncthingRunnableThread = Thread(syncthingRunnable)
+        val syncthingRunnableThread = Thread(runnable)
         syncthingRunnableThread.setUncaughtExceptionHandler { _, _ ->
             Log.e(TAG, "mSyncthingRunnableThread: Uncaught exception [ExecutableNotFoundException]")
             notificationHandler.showCrashedNotification(R.string.executable_not_found, Constants.FILENAME_SYNCTHING_BINARY)
@@ -689,15 +740,63 @@ class SyncthingService : Service() {
     /**
      * Stop SyncthingNative and all helpers like event processor and api handler.
      * Sets [currentState] to newState.
-     * Performs a synchronous shutdown of the native binary.
+     *
+     * The blocking kill/join of the native binary runs on [shutdownExecutor]: the calling
+     * (main) thread returns immediately and [onShutdownComplete] is invoked on the main
+     * thread once the binary has fully exited. Must be called from the main thread.
      */
-    fun shutdownToState(newState: State) {
+    fun shutdownToState(newState: State, onShutdownComplete: (() -> Unit)? = null) {
         if (currentState == State.STARTING) {
             Log.w(TAG, "Deferring shutdown until State.STARTING was left")
-            handler.postDelayed({ shutdownToState(newState) }, SHUTDOWN_RETRY_DELAY_MS)
+            handler.postDelayed({ shutdownToState(newState, onShutdownComplete) }, SHUTDOWN_RETRY_DELAY_MS)
             return
         }
 
+        prepareShutdown(newState)
+
+        val runnable = syncthingRunnable
+        val runnableThread = syncthingRunnableThread
+        syncthingRunnable = null
+        syncthingRunnableThread = null
+
+        if (runnable == null) {
+            onShutdownComplete?.let { handler.post(it) }
+            return
+        }
+
+        binaryKillPending = true
+        shutdownExecutor.execute {
+            killBinaryAndAwaitExit(runnable, runnableThread)
+            handler.post {
+                binaryKillPending = false
+                onShutdownComplete?.invoke()
+            }
+        }
+    }
+
+    /**
+     * Synchronous shutdown variant for callers that must continue only after the binary has
+     * exited (eg config backup on a background thread). Blocks the calling thread, so it
+     * must never be called from the main thread - use [shutdownToState] there.
+     */
+    fun shutdownToStateBlocking(newState: State) {
+        if (currentState == State.STARTING) {
+            Log.w(TAG, "Deferring shutdown until State.STARTING was left")
+            handler.postDelayed({ shutdownToStateBlocking(newState) }, SHUTDOWN_RETRY_DELAY_MS)
+            return
+        }
+
+        prepareShutdown(newState)
+
+        val runnable = syncthingRunnable ?: return
+        val runnableThread = syncthingRunnableThread
+        syncthingRunnable = null
+        syncthingRunnableThread = null
+
+        killBinaryAndAwaitExit(runnable, runnableThread)
+    }
+
+    private fun prepareShutdown(newState: State) {
         synchronized(stateLock) {
             onServiceStateChange(newState)
         }
@@ -718,20 +817,18 @@ class SyncthingService : Service() {
             }
             api = null
         }
+    }
 
-        syncthingRunnable?.let {
-            Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY)
-            syncthingRunnableThread?.let { thread ->
-                LogV("Waiting for mSyncthingRunnableThread to finish after killProcess(Syncthing) ...")
-                try {
-                    thread.join()
-                } catch (e: InterruptedException) {
-                    Log.w(TAG, "mSyncthingRunnableThread InterruptedException")
-                }
-                Log.d(TAG, "Finished mSyncthingRunnableThread.")
-                syncthingRunnableThread = null
+    private fun killBinaryAndAwaitExit(runnable: SyncthingRunnable, runnableThread: Thread?) {
+        Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY)
+        runnableThread?.let { thread ->
+            LogV("Waiting for mSyncthingRunnableThread to finish after killProcess(Syncthing) ...")
+            try {
+                thread.join()
+            } catch (e: InterruptedException) {
+                Log.w(TAG, "mSyncthingRunnableThread InterruptedException")
             }
-            syncthingRunnable = null
+            Log.d(TAG, "Finished mSyncthingRunnableThread.")
         }
     }
 

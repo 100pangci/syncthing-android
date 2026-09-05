@@ -33,6 +33,7 @@ import com.nutomic.syncthingandroid.ui.LocalServiceState
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.ui.nav.AppNavDisplay
 import com.nutomic.syncthingandroid.ui.nav.AppRoute
+import com.nutomic.syncthingandroid.ui.nav.BackPressGuard
 import com.nutomic.syncthingandroid.ui.nav.EditStateStore
 import com.nutomic.syncthingandroid.ui.nav.IntentAppNavigator
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
@@ -102,14 +103,17 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
                 }
                 val navigator = remember(backStack) {
                     object : IntentAppNavigator(this@MainActivity) {
+                        private val backGuard = BackPressGuard()
+
                         override fun navigateTo(route: AppRoute) {
                             backStack.add(route)
                         }
 
                         override fun navigateBack() {
                             if (backStack.size > 1) {
+                                backGuard.recordPop()
                                 backStack.removeAt(backStack.lastIndex)
-                            } else {
+                            } else if (backGuard.mayLeaveStack()) {
                                 // Leave MainActivity in its state as the home button was pressed.
                                 moveTaskToBack(true)
                             }

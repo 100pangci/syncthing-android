@@ -50,6 +50,10 @@ import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
 import com.nutomic.syncthingandroid.util.Compression
 import com.nutomic.syncthingandroid.util.ConfigRouter
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+
 internal data class FolderShareState(
     val folder: Folder,
     val shared: Boolean,
@@ -117,8 +121,9 @@ fun DeviceEditScreen(
     val holder = LocalDeviceEditStateStore.current.stateFor(deviceEditStateKey(deviceId, isCreate))
     var device by holder::device
 
-    // Init the model once.
-    LaunchedEffect(Unit) {
+    // Init the model once. Holder-keyed: see FolderEditScreen's init effect comment
+    // on Nav3 composition reuse across a fast pop -> re-push of the same route.
+    LaunchedEffect(holder) {
         if (device != null) return@LaunchedEffect
         val d = if (isCreate) {
             Device().apply {
@@ -129,7 +134,9 @@ fun DeviceEditScreen(
             }
         } else {
             var found: Device? = null
-            for (current in configRouter.getDevices(null, false)) {
+            // config.xml DOM parse (api is deliberately null here): keep it off the
+            // main thread so the enter transition stays smooth.
+            for (current in withContext(Dispatchers.IO) { configRouter.getDevices(null, false) }) {
                 if (current.deviceID == (deviceId ?: "")) {
                     found = current
                     break
@@ -147,12 +154,20 @@ fun DeviceEditScreen(
     }
 
     var discoveredDevices by remember { mutableStateOf<Map<String, DiscoveredDevice>?>(null) }
-    val folders = remember(apiConfigLoaded) { configRouter.getFolders(api) }
+    // Folder list is a full-config Gson deep copy (or a config.xml DOM parse when the
+    // api is down): load it off the main thread instead of blocking composition.
+    var folders by remember(apiConfigLoaded) { mutableStateOf<List<Folder>?>(null) }
+    LaunchedEffect(apiConfigLoaded) {
+        folders = withContext(Dispatchers.IO) { configRouter.getFolders(api) }
+    }
 
     // Refresh folder share states whenever the folders list or device id changes.
+    // The delay keeps the state-write recomposition out of the enter transition.
     LaunchedEffect(folders, device?.deviceID) {
+        delay(450)
+        val currentFolders = folders ?: return@LaunchedEffect
         val d = device ?: return@LaunchedEffect
-        holder.folderStates = folders.map { folder ->
+        holder.folderStates = currentFolders.map { folder ->
             val shared = folder.getDevice(d.deviceID) != null
             val password = folder.getDevice(d.deviceID)?.encryptionPassword ?: ""
             FolderShareState(folder, shared, password)
@@ -193,12 +208,11 @@ fun DeviceEditScreen(
         }
     }
 
-    BackHandler(enabled = true) {
-        if (holder.needsUpdate) {
-            showDiscardDialog = true
-        } else {
-            navigator.navigateBack()
-        }
+    // Intercept back only while the draft is dirty: a clean draft lets the event reach
+    // NavDisplay so the predictive pop transition (peek of the previous screen) plays,
+    // a dirty draft shows the discard dialog instead (no peek, standard UX).
+    BackHandler(enabled = holder.needsUpdate) {
+        showDiscardDialog = true
     }
 
     fun save() {
@@ -289,6 +303,9 @@ fun DeviceEditScreen(
                 Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    // Keep the viewport above the IME (see FolderEditScreen comment):
+                    // prevents system window pan + FAB imePadding double-counting.
+                    .imePadding()
             ) {
                 val d = device
                 if (d != null) {

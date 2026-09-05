@@ -21,6 +21,7 @@ import com.nutomic.syncthingandroid.service.SyncthingService
 import com.nutomic.syncthingandroid.ui.theme.ApplicationTheme
 import com.nutomic.syncthingandroid.ui.LocalServiceTick
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
+import com.nutomic.syncthingandroid.ui.nav.BackPressGuard
 import com.nutomic.syncthingandroid.util.LocalActivityScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import me.zhanghai.compose.preference.Preferences
@@ -57,14 +58,17 @@ class SettingsActivity : SyncthingActivity() {
             val backStack = rememberSettingsNavBackStack(startDestination)
             val navigator = remember(backStack) {
                 object : Navigator<SettingsRoute> {
+                    private val backGuard = BackPressGuard()
+
                     override fun navigateTo(route: SettingsRoute) {
                         backStack.add(route)
                     }
                     override fun navigateBack() {
-                        if (backStack.size == 1) {
-                            finish()
-                        } else {
+                        if (backStack.size > 1) {
+                            backGuard.recordPop()
                             backStack.removeLastOrNull()
+                        } else if (backGuard.mayLeaveStack()) {
+                            finish()
                         }
                     }
                     override fun navigateUp() {
