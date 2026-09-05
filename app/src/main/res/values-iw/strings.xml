@@ -605,6 +605,11 @@
     <string name="run_as_root_title">הפעלת ליבת Syncthing כ-root</string>
     <string name="run_as_root_summary">למכשירים מושרשים בלבד: הליבה יכולה לקרוא ולכתוב בכל תיקייה (למשל נתונים של אפליקציות אחרות). קבצים שהיא יוצרת באחסון הפרטי של האפליקציה יהיו ניתנים לכתיבה על ידי כולם. נכנס לתוקף בהפעלת הליבה הבאה.</string>
     <string name="root_authorization_unavailable">אישור root אינו זמין; ההגדרה כובתה.</string>
+    <string name="root_disable_warning_title">זוהו תיקיות ל-root בלבד</string>
+    <string name="root_disable_warning_message">תיקיות אלה נמצאות בספריות שאינן נגישות ללא root והסנכרון שלהן ייעצר לאחר הכיבוי. הסר אותן או הוצא תחילה את התוכן:
+
+%1$s</string>
+    <string name="root_disable_warning_continue">כבה בכל זאת</string>
     <string name="folder_picker_root_browse">עיון עם root</string>
 
     <string name="socks_proxy_address_title">פרוקסי SOCKS5</string>

@@ -606,6 +606,11 @@
     <string name="run_as_root_title">Suorita Syncthingin ydin root-oikeuksin</string>
     <string name="run_as_root_summary">Vain juurituille laitteille: ydin voi lukea ja kirjoittaa mihin tahansa hakemistoon (esim. muiden sovellusten dataa). Ytimen sovelluksen yksityiseen tallennustilaan luomat tiedostot ovat kaikkien kirjoitettavissa. Astuu voimaan ytimen seuraavalla käynnistyksellä.</string>
     <string name="root_authorization_unavailable">Root-oikeutta ei ole myönnetty; asetus poistettiin käytöstä.</string>
+    <string name="root_disable_warning_title">Havaitu vain-root-kansiot</string>
+    <string name="root_disable_warning_message">Nämä kansiot ovat hakemistoissa, joihin ei ole pääsyä ilman root-oikeuksia, eikä niitä enää synkronoida käytöstä poiston jälkeen. Poista ne tai siirrä sisältö ensin ulos:
+
+%1$s</string>
+    <string name="root_disable_warning_continue">Poista käytöstä silti</string>
     <string name="folder_picker_root_browse">Selaa root-oikeuksilla</string>
 
     <string name="socks_proxy_address_title">SOCKS5-välityspalvelin</string>

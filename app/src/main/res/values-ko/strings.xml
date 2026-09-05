@@ -605,6 +605,11 @@
     <string name="run_as_root_title">Syncthing 코어를 root로 실행</string>
     <string name="run_as_root_summary">루팅된 기기 전용: 코어가 모든 디렉터리를 읽고 쓸 수 있습니다(예: 다른 앱의 데이터). 앱 비공개 저장소에 생성하는 파일은 누구나 쓸 수 있게 됩니다. 다음 코어 시작 시 적용됩니다.</string>
     <string name="root_authorization_unavailable">root 권한을 사용할 수 없어 설정이 해제되었습니다.</string>
+    <string name="root_disable_warning_title">root 전용 폴더 감지됨</string>
+    <string name="root_disable_warning_message">이 폴더는 root 없이는 접근할 수 없는 디렉터리에 있으며, 끄면 동기화가 중지됩니다. 먼저 삭제하거나 내용을 꺼내세요:
+
+%1$s</string>
+    <string name="root_disable_warning_continue">그래도 끄기</string>
     <string name="folder_picker_root_browse">root로 탐색</string>
 
     <string name="socks_proxy_address_title">SOCKS5 프록시</string>

@@ -605,6 +605,11 @@
     <string name="run_as_root_title">Esegui il core di Syncthing come root</string>
     <string name="run_as_root_summary">Solo per dispositivi con root: il core può leggere e scrivere in qualsiasi directory (ad es. dati di altre app). I file che crea nell\'archiviazione privata dell\'app diventano scrivibili da chiunque. Ha effetto al prossimo avvio del core.</string>
     <string name="root_authorization_unavailable">Autorizzazione root non disponibile; l\'impostazione è stata disattivata.</string>
+    <string name="root_disable_warning_title">Cartelle solo-root rilevate</string>
+    <string name="root_disable_warning_message">Queste cartelle si trovano in directory inaccessibili senza root e smetteranno di sincronizzarsi alla disattivazione. Rimuovile o recupera prima il loro contenuto:
+
+%1$s</string>
+    <string name="root_disable_warning_continue">Disattiva comunque</string>
     <string name="folder_picker_root_browse">Sfoglia con root</string>
 
     <string name="socks_proxy_address_title">Proxy SOCKS5</string>

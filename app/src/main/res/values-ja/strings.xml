@@ -605,6 +605,11 @@
     <string name="run_as_root_title">Syncthing コアを root で実行</string>
     <string name="run_as_root_summary">root 化されたデバイス専用:コアはどのディレクトリでも読み書きできます(例:他アプリのデータ)。アプリの非公開ストレージ内に作成したファイルは、誰でも書き込める状態になります。次回コア起動時に有効になります。</string>
     <string name="root_authorization_unavailable">root 権限を取得できないため、設定をオフにしました。</string>
+    <string name="root_disable_warning_title">root 専用フォルダを検出</string>
+    <string name="root_disable_warning_message">これらのフォルダは root なしではアクセスできないディレクトリにあり、オフにすると同期が止まります。先に削除するか内容を取り出してください:
+
+%1$s</string>
+    <string name="root_disable_warning_continue">それでもオフにする</string>
     <string name="folder_picker_root_browse">root でブラウズ</string>
 
     <string name="socks_proxy_address_title">SOCKS5 プロキシ</string>

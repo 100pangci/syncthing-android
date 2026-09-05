@@ -608,6 +608,11 @@
     <string name="run_as_root_title">Kør Syncthing-kernen som root</string>
     <string name="run_as_root_summary">Kun for rootede enheder: kernen kan læse og skrive i vilkårlige mapper (fx andre apps\' data). Filer, den opretter i appens private lager, bliver skrivbare for alle. Træder i kraft ved næste kerneopstart.</string>
     <string name="root_authorization_unavailable">Root-godkendelse er ikke tilgængelig; indstillingen blev slået fra.</string>
+    <string name="root_disable_warning_title">Kun-root-mapper fundet</string>
+    <string name="root_disable_warning_message">Disse mapper ligger i mapper, der ikke er tilgængelige uden root, og de stopper synkronisering, når root slås fra. Fjern dem eller hent først indholdet ud:
+
+%1$s</string>
+    <string name="root_disable_warning_continue">Slå alligevel fra</string>
     <string name="folder_picker_root_browse">Gennemse med root</string>
 
     <string name="socks_proxy_address_title">SOCKS5 proxy</string>

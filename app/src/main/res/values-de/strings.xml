@@ -605,6 +605,11 @@
     <string name="run_as_root_title">Syncthing-Kern als root ausführen</string>
     <string name="run_as_root_summary">Nur für Geräte mit Root: Der Kern kann in jedes Verzeichnis lesen und schreiben (z. B. Daten anderer Apps). Dateien, die er im privaten App-Speicher anlegt, sind für alle beschreibbar. Wirksam beim nächsten Kernstart.</string>
     <string name="root_authorization_unavailable">Root-Autorisierung nicht verfügbar; die Einstellung wurde deaktiviert.</string>
+    <string name="root_disable_warning_title">Nur-mit-Root-Ordner erkannt</string>
+    <string name="root_disable_warning_message">Diese Ordner liegen in Verzeichnissen, die ohne Root unzugänglich sind, und synchronisieren nach dem Deaktivieren nicht mehr. Bitte zuerst entfernen oder Inhalte herauskopieren:
+
+%1$s</string>
+    <string name="root_disable_warning_continue">Trotzdem deaktivieren</string>
     <string name="folder_picker_root_browse">Mit root browsen</string>
 
     <string name="socks_proxy_address_title">SOCKS5-Proxy</string>

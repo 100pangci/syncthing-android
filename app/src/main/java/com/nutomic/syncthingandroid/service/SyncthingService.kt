@@ -14,6 +14,7 @@ import com.nutomic.syncthingandroid.model.Folder
 import com.nutomic.syncthingandroid.util.ConfigRouter
 import com.nutomic.syncthingandroid.util.ConfigXml
 import com.nutomic.syncthingandroid.util.PermissionUtil
+import com.nutomic.syncthingandroid.util.RootAccess
 import com.nutomic.syncthingandroid.util.Util
 import java.io.IOException
 import java.net.ConnectException
@@ -247,6 +248,15 @@ class SyncthingService : Service() {
         preferences = app.preferences
         enableVerboseLog = AppPrefs.getPrefVerboseLog(preferences)
         LogV("onCreate")
+        if (AppPrefs.getLastCoreRunAsRoot(preferences)) {
+            // Safety net for cold starts after a root-mode session (e.g. the app process
+            // was killed while the root-uid core was up): config and key material are
+            // root-owned with explicit 0600 modes and must be readable before anything
+            // parses the config below. Marker is intentionally kept: killStaleBinary still
+            // needs root to stop an orphaned root core; the non-root launch path clears it.
+            Log.i(TAG, "Previous core ran as root; returning app storage to app ownership")
+            RootAccess.handBackStorage(this)
+        }
         configRouter = ConfigRouter(this)
         handler = Handler()
         configBackupManager = ConfigBackupManager(this, preferences, enableVerboseLog)

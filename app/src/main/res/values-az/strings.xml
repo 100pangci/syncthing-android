@@ -617,6 +617,11 @@
     <string name="run_as_root_title">Syncthing nüvəsini root ilə işə sal</string>
     <string name="run_as_root_summary">Yalnız root cihazlar üçün: nüvə istənilən qovluğu oxuya və yaza bilər (məs. digər tətbiqlərin məlumatları). Tətbiqin şəxsi yaddaşında yaratdığı fayllar hamı tərəfindən yazıla bilən olur. Dəyişiklik növbəti nüvə başladılışında qüvvəyə minir.</string>
     <string name="root_authorization_unavailable">Root icazəsi yoxdur; ayar söndürüldü.</string>
+    <string name="root_disable_warning_title">Yalnız-root qovluqları aşkarlandı</string>
+    <string name="root_disable_warning_message">Bu qovluqlar root olmadan əlçatmayan qovluqlardadır və söndürüldükdən sonra sinxronlaşma dayanacaq. Əvvəlcə onları silin və ya məzmununu çıxarın:
+
+%1$s</string>
+    <string name="root_disable_warning_continue">Hər halda söndür</string>
     <string name="folder_picker_root_browse">Root ilə bax</string>
 
     <string name="socks_proxy_address_title">SOCKS5 proksi</string>

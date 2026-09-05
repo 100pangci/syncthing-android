@@ -440,6 +440,13 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
                 ProcessBuilder(*commandArgs).also { it.environment().putAll(env) }
             }
         } else {
+            // Hand root-session files back to the app UID before the unprivileged core
+            // (or the app itself, e.g. key generation) needs them: root-written config
+            // and key material carry explicit 0600 modes that umask cannot influence.
+            if (AppPrefs.getLastCoreRunAsRoot(preferences)) {
+                Log.i(TAG, "Previous core ran as root; returning app storage to app ownership")
+                RootAccess.handBackStorage(context)
+            }
             ProcessBuilder(*commandArgs).also { it.environment().putAll(env) }
         }
         val process = pb.start()

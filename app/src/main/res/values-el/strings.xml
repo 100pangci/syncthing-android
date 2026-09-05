@@ -611,6 +611,11 @@
     <string name="run_as_root_title">Εκτέλεση πυρήνα Syncthing ως root</string>
     <string name="run_as_root_summary">Μόνο για συσκευές με root: ο πυρήνας μπορεί να διαβάζει και να γράφει σε οποιονδήποτε κατάλογο (π.χ. δεδομένα άλλων εφαρμογών). Αρχεία που δημιουργεί στον ιδιωτικό χώρο της εφαρμογής γίνονται εγγράψιμα από όλους. Ισχύει από την επόμενη εκκίνηση του πυρήνα.</string>
     <string name="root_authorization_unavailable">Η εξουσιοδότηση root δεν είναι διαθέσιμη· η ρύθμιση απενεργοποιήθηκε.</string>
+    <string name="root_disable_warning_title">Εντοπίστηκαν φάκελοι μόνο για root</string>
+    <string name="root_disable_warning_message">Αυτοί οι φάκελοι βρίσκονται σε καταλόγους απρόσιτους χωρίς root και θα σταματήσουν να συγχρονίζονται μετά την απενεργοποίηση. Αφαιρέστε τους ή εξαγάγετε πρώτα το περιεχόμενό τους:
+
+%1$s</string>
+    <string name="root_disable_warning_continue">Απενεργοποίηση ούτως ή άλλως</string>
     <string name="folder_picker_root_browse">Περιήγηση με root</string>
 
     <string name="socks_proxy_address_title">Διακομιστής μεσολάβησης SOCKS5</string>

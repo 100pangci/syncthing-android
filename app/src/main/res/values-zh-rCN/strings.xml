@@ -605,6 +605,11 @@
     <string name="run_as_root_title">以 root 运行 Syncthing 核心</string>
     <string name="run_as_root_summary">仅限已授权的 root 设备:核心可读写任意目录(如其他应用的数据);其在应用私有存储中创建的文件将对其他应用可写。下次核心启动时生效。</string>
     <string name="root_authorization_unavailable">无法获取 root 授权,已关闭该开关。</string>
+    <string name="root_disable_warning_title">检测到仅限 root 的文件夹</string>
+    <string name="root_disable_warning_message">这些文件夹位于应用无权访问的目录中,关闭 root 后将停止同步。请先删除文件夹或取出其内容:
+
+%1$s</string>
+    <string name="root_disable_warning_continue">仍要关闭</string>
     <string name="folder_picker_root_browse">Root 浏览</string>
 
     <string name="socks_proxy_address_title">SOCKS5 代理</string>
