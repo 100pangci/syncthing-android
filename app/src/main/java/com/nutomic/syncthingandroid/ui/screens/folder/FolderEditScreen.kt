@@ -40,6 +40,9 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.background
 import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.SyncthingApp
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import com.nutomic.syncthingandroid.model.Folder
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.RestApi
@@ -489,7 +492,9 @@ private suspend fun initFolderEditState(
         // newer share state (e.g. right after a config import) - updateFolder PUTs
         // the whole folder object, not a diff.
         var found: Folder? = null
-        for (current in configRouter.getFolders(api)) {
+        // Full-config Gson deep copy (or a config.xml DOM parse when the api is down):
+        // keep it off the main thread so the enter transition stays smooth.
+        for (current in withContext(Dispatchers.IO) { configRouter.getFolders(api) }) {
             if (current.id == (folderId ?: "")) {
                 found = current
                 break
@@ -539,7 +544,7 @@ private suspend fun resyncCleanDraftFromApi(
 ) {
     val folderId = holder.folder?.id ?: return
     var live: Folder? = null
-    for (current in configRouter.getFolders(api)) {
+    for (current in withContext(Dispatchers.IO) { configRouter.getFolders(api) }) {
         if (current.id == folderId) {
             live = current
             break
@@ -565,7 +570,7 @@ private suspend fun refreshDeviceShareStates(
     holder: FolderEditStateHolder,
 ) {
     val f = holder.folder ?: return
-    val devices = configRouter.getDevices(api, false)
+    val devices = withContext(Dispatchers.IO) { configRouter.getDevices(api, false) }
     holder.deviceStates = devices.map { device ->
         val shared = f.getDevice(device.deviceID) != null
         val password = f.getDevice(device.deviceID)?.encryptionPassword ?: ""

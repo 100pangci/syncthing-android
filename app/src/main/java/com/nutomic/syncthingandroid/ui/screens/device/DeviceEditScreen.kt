@@ -50,6 +50,9 @@ import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
 import com.nutomic.syncthingandroid.util.Compression
 import com.nutomic.syncthingandroid.util.ConfigRouter
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 internal data class FolderShareState(
     val folder: Folder,
     val shared: Boolean,
@@ -129,7 +132,9 @@ fun DeviceEditScreen(
             }
         } else {
             var found: Device? = null
-            for (current in configRouter.getDevices(null, false)) {
+            // config.xml DOM parse (api is deliberately null here): keep it off the
+            // main thread so the enter transition stays smooth.
+            for (current in withContext(Dispatchers.IO) { configRouter.getDevices(null, false) }) {
                 if (current.deviceID == (deviceId ?: "")) {
                     found = current
                     break
@@ -147,12 +152,18 @@ fun DeviceEditScreen(
     }
 
     var discoveredDevices by remember { mutableStateOf<Map<String, DiscoveredDevice>?>(null) }
-    val folders = remember(apiConfigLoaded) { configRouter.getFolders(api) }
+    // Folder list is a full-config Gson deep copy (or a config.xml DOM parse when the
+    // api is down): load it off the main thread instead of blocking composition.
+    var folders by remember(apiConfigLoaded) { mutableStateOf<List<Folder>?>(null) }
+    LaunchedEffect(apiConfigLoaded) {
+        folders = withContext(Dispatchers.IO) { configRouter.getFolders(api) }
+    }
 
     // Refresh folder share states whenever the folders list or device id changes.
     LaunchedEffect(folders, device?.deviceID) {
+        val currentFolders = folders ?: return@LaunchedEffect
         val d = device ?: return@LaunchedEffect
-        holder.folderStates = folders.map { folder ->
+        holder.folderStates = currentFolders.map { folder ->
             val shared = folder.getDevice(d.deviceID) != null
             val password = folder.getDevice(d.deviceID)?.encryptionPassword ?: ""
             FolderShareState(folder, shared, password)
