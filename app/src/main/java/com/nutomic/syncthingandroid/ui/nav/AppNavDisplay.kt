@@ -38,6 +38,10 @@ internal const val BACK_PEEK_DIVISOR = 20
 internal const val BACK_PEEK_PAD_DP = 8
 internal const val BACK_TOP_DRIFT_DIVISOR = 10
 
+// A back call that leaves the whole stack (moveTaskToBack / finish) is ignored
+// while a pop transition is still settling, see BackPressGuard.
+internal const val BACK_POP_GUARD_MILLIS = BACK_TRANSITION_MILLIS + 50
+
 /**
  * Android 16 "fade forwards" back transform: the previous screen slides in from
  * the leading quarter while fading in, the top screen fades out fast while
