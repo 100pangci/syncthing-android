@@ -292,6 +292,7 @@
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Phiên bản Android của bạn chỉ cấp quyền truy cập chỉ đọc vào thư mục đã chọn cho Syncthing.</string>
     <string name="saf_bridge_folder_mapped">Vị trí này do ứng dụng khác cung cấp. Syncthing sẽ tự động chuyển tiếp nó để có thể đồng bộ.</string>
+    <string name="saf_bridge_needs_authorization">Thư mục này được chuyển tiếp từ ứng dụng khác và cần được cấp quyền lại. Chọn thư mục trong hộp thoại tiếp theo.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Phiên bản Android của bạn cấp quyền truy cập đọc và ghi vào thư mục đã chọn cho Syncthing.</string>

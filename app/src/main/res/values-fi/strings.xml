@@ -292,6 +292,7 @@
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Android-versiosi antaa Syncthingille vain luku -oikeuden valittuun kansioon.</string>
     <string name="saf_bridge_folder_mapped">Tämän sijainnin tarjoaa toinen sovellus. Syncthing välittää sen automaattisesti, jotta se voidaan synkronoida.</string>
+    <string name="saf_bridge_needs_authorization">Tämä kansio välitetään toisesta sovelluksesta ja se on hyväksyttävä uudelleen. Valitse kansio seuraavasta valintaikkunasta.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Android-versiosi antaa Syncthingille luku- ja kirjoitusoikeuden valittuun kansioon.</string>

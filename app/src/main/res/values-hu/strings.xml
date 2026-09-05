@@ -292,6 +292,7 @@
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Az Ön Android-verziója csak olvasási hozzáférést biztosít a Syncthingnek a kiválasztott mappához.</string>
     <string name="saf_bridge_folder_mapped">Ezt a helyet egy másik alkalmazás biztosítja. A Syncthing automatikusan továbbítja, hogy szinkronizálható legyen.</string>
+    <string name="saf_bridge_needs_authorization">Ez a mappa egy másik alkalmazásból van továbbítva, és újra engedélyezni kell. Válassza ki a mappát a következő párbeszédpanelen.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Az Ön Android-verziója biztosítja a Syncthing számára az olvasási és írási hozzáférést a kiválasztott mappához.</string>

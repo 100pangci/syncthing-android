@@ -112,7 +112,8 @@ class SafBridge(private val context: Context) {
     private fun loadMappings(): MutableMap<String, String> {
         val json = prefs.getString(PREF_MAPPINGS, null) ?: return LinkedHashMap()
         return try {
-            gson.fromJson(json, mappingsType) ?: LinkedHashMap()
+            val parsed: Map<String, String>? = gson.fromJson(json, mappingsType)
+            if (parsed != null) LinkedHashMap(parsed) else LinkedHashMap()
         } catch (e: Exception) {
             Log.w(TAG, "loadMappings: Corrupt mapping pref, resetting", e)
             LinkedHashMap()
@@ -120,13 +121,16 @@ class SafBridge(private val context: Context) {
     }
 
     private fun saveMappings(mappings: Map<String, String>) {
-        prefs.edit().putString(PREF_MAPPINGS, gson.toJson(mappings)).apply()
+        // commit() on purpose: callers (register/reauthorize/unregister) must be
+        // able to rely on the mapping being readable immediately afterwards.
+        prefs.edit().putString(PREF_MAPPINGS, gson.toJson(mappings)).commit()
     }
 
     private fun loadState(stateKey: String): Map<String, NodeInfo> {
         val json = prefs.getString(PREF_STATE_PREFIX + stateKey, null) ?: return emptyMap()
         return try {
-            gson.fromJson(json, stateType) ?: emptyMap()
+            val parsed: Map<String, NodeInfo>? = gson.fromJson(json, stateType)
+            parsed ?: emptyMap()
         } catch (e: Exception) {
             Log.w(TAG, "loadState: Corrupt state pref for $stateKey, starting over", e)
             emptyMap()
@@ -134,7 +138,7 @@ class SafBridge(private val context: Context) {
     }
 
     private fun saveState(stateKey: String, state: Map<String, NodeInfo>) {
-        prefs.edit().putString(PREF_STATE_PREFIX + stateKey, gson.toJson(state)).apply()
+        prefs.edit().putString(PREF_STATE_PREFIX + stateKey, gson.toJson(state)).commit()
     }
 
     /**
@@ -162,6 +166,37 @@ class SafBridge(private val context: Context) {
     /** Returns true if [folderPath] is a forwarded folder managed by a bridge. */
     fun isForwarded(folderPath: String): Boolean {
         return loadMappings().containsKey(folderPath)
+    }
+
+    /** Returns true if [path] lives under the forwarding root (regardless of state). */
+    fun isForwardedPath(path: String): Boolean {
+        return path.startsWith(bridgeRoot.absolutePath + File.separator)
+    }
+
+    /**
+     * True for a folder that is configured to live in the forwarding root but whose
+     * bridge is gone - the fresh-install + config-import case, where the SAF grant
+     * and the persisted mapping are both lost while folder.path still points here.
+     */
+    fun needsAuthorization(path: String): Boolean {
+        return isForwardedPath(path) && !isForwarded(path)
+    }
+
+    /**
+     * Re-creates the bridge for an already-configured forwarded folder after its
+     * authorization was lost (fresh install + config import). The folder path is
+     * kept EXACTLY as-is so the imported config keeps working without a rewrite.
+     */
+    fun reauthorize(folderPath: String, uri: Uri) {
+        val mappings = loadMappings()
+        mappings[folderPath] = uri.toString()
+        saveMappings(mappings)
+        val bridge = synchronized(bridges) {
+            bridges.getOrPut(folderPath) { Bridge(folderPath, uri) }
+        }
+        if (started) {
+            bridge.start()
+        }
     }
 
     /**

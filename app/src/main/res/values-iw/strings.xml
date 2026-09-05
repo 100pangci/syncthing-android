@@ -292,6 +292,7 @@
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">גרסת האנדרואיד שלך רק מעניקה ל־Syncthing גישת קריאה בלבד לתיקייה שנבחרה.</string>
     <string name="saf_bridge_folder_mapped">מיקום זה מסופק על ידי אפליקציה אחרת. Syncthing יעביר אותו אוטומטית כדי שניתן יהיה לסנכרן אותו.</string>
+    <string name="saf_bridge_needs_authorization">תיקיה זו מועברת מאפליקציה אחרת ודרוש אישור מחדש. בחר את התיקיה בתיבת הדו-שיח הבאה.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">גרסת האנדרואיד שלך מעניקה ל־Syncthing גישת קריאה וכתיבה לתיקייה שנבחרה.</string>

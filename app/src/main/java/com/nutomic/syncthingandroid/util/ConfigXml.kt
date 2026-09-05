@@ -2,7 +2,6 @@ package com.nutomic.syncthingandroid.util
 
 import android.content.Context
 import android.os.Build
-import android.os.Environment
 import androidx.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
@@ -18,7 +17,7 @@ import com.nutomic.syncthingandroid.R
 import com.nutomic.syncthingandroid.service.AppPrefs
 import com.nutomic.syncthingandroid.service.Constants
 import com.nutomic.syncthingandroid.service.SyncthingRunnable
-import com.nutomic.syncthingandroid.util.FileUtils.ExternalStorageDirType
+import com.nutomic.syncthingandroid.service.buildSyncthingCameraFolder
 
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -1157,28 +1156,12 @@ class ConfigXml(private val context: Context) {
             return false
         }
 
-        // Get app specific directory, e.g. "/storage/emulated/0/Android/media/[PACKAGE_NAME]/Pictures".
-        val storageDir = FileUtils.getExternalFilesDir(context, ExternalStorageDirType.INT_MEDIA, Environment.DIRECTORY_PICTURES)
-        if (storageDir == null) {
-            Log.e(TAG, "addSyncthingCameraFolder: storageDir == null")
+        // Shared with the RestApi live-enablement path (SyncthingService).
+        val folder = buildSyncthingCameraFolder(context)
+        if (folder == null) {
+            Log.e(TAG, "addSyncthingCameraFolder: Could not determine storage dir")
             return false
         }
-
-        // Prepare folder element.
-        val folder = Folder()
-        folder.minDiskFree = Folder.MinDiskFree()
-        folder.id = Constants.syncthingCameraFolderId
-        folder.label = context.getString(R.string.default_syncthing_camera_folder_label)
-        folder.path = storageDir.absolutePath
-
-        // Add versioning.
-        val versioning = Folder.Versioning()
-        versioning.type = "trashcan"
-        versioning.params["cleanoutDays"] = 14.toString()
-        versioning.cleanupIntervalS = 3600
-        versioning.fsPath = ""
-        versioning.fsType = "basic"
-        folder.versioning = versioning
 
         // Add folder to config.
         LogV("addSyncthingCameraFolder: Adding folder to config [${folder.path}]")

@@ -292,6 +292,7 @@
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Това издание на Андроид дава на Syncthing само права за четене на избраната папка.</string>
     <string name="saf_bridge_folder_mapped">Това местоположение е предоставено от друго приложение. Syncthing ще го препраща автоматично, за да може да се синхронизира.</string>
+    <string name="saf_bridge_needs_authorization">Тази папка се препраща от друго приложение и изисква повторно разрешаване. Изберете папката в следващия диалогов прозорец.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Това издние на Андроид дава на Syncthing права за четене и писане на избраната папка.</string>

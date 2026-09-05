@@ -307,6 +307,7 @@
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Ваша версія Android дае Syncthing толькі доступ для чытання да выбранай тэчкі.</string>
     <string name="saf_bridge_folder_mapped">Гэта размяшчэнне прадастаўлена іншай праграмай. Syncthing аўтаматычна перанакіруе яго для сінхранізацыі.</string>
+    <string name="saf_bridge_needs_authorization">Гэта тэчка перадаецца з іншай праграмы і патрабуе паўторнай аўтарызацыі. Выберыце тэчку ў наступным дыялогавым акне.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Ваша версія Android дае Syncthing доступ для чытання і запісу да выбранай тэчкі.</string>

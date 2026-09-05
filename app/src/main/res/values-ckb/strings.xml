@@ -299,6 +299,7 @@
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">وەشانی Android ی تۆ تەنها دەستگەیشتنی خوێندنەوەی بۆ Syncthing دەبەخشێت بەو ڕێڕەوەی هەڵبژێردراوە.</string>
     <string name="saf_bridge_folder_mapped">ئەم شوێنە لەلایەن ئەپێکی ترەوە دابین کراوە. Syncthing بە شێوەیەکی ئۆتۆماتیکی دەیگوازێتەوە بۆ ئەوەی بتوانرێت هاوکات بکرێت.</string>
+    <string name="saf_bridge_needs_authorization">ئەم فۆڵدەرە لە ئەپێکی ترەوە دەگوازرێتەوە و پێویستی بە شیاویکردنەوە هەیە. لە دیالۆگی داهاتوودا فۆڵدەرەکە هەڵبژێرە.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">وەشانی Android ی تۆ دەستگەیشتنی خوێندنەوە و نووسین دەبەخشێت بە Syncthing بۆ ئەو ڕێڕەوەی هەڵبژێردراوە.</string>

@@ -141,7 +141,15 @@ fun FolderEditScreen(
                 // Third-party DocumentsProvider root: forward it into a real folder
                 // the Syncthing core can sync.
                 val safBridge = (context.applicationContext as SyncthingApp).safBridge
-                val forwardedPath = safBridge.register(uri)
+                val currentPath = holder.folder?.path
+                val forwardedPath = if (currentPath != null && safBridge.needsAuthorization(currentPath)) {
+                    // Re-authorizing an existing forwarded folder after a fresh
+                    // install + config import: keep the configured path unchanged.
+                    safBridge.reauthorize(currentPath, uri)
+                    currentPath
+                } else {
+                    safBridge.register(uri)
+                }
                 holder.folderUri = uri
                 onPickedPath(context, holder, forwardedPath)
                 Toast.makeText(context, R.string.saf_bridge_folder_mapped, Toast.LENGTH_LONG).show()
@@ -153,6 +161,18 @@ fun FolderEditScreen(
         }
     }
     val f = holder.folder
+
+    // A forwarded folder whose SAF grant was lost (fresh install + config import)
+    // pops the SAF picker automatically on entry, one folder at a time. Once
+    // re-authorized the path stays unchanged, so the picker is not offered again.
+    LaunchedEffect(f?.path) {
+        val path = f?.path ?: return@LaunchedEffect
+        if ((context.applicationContext as SyncthingApp).safBridge.needsAuthorization(path)) {
+            Toast.makeText(context, R.string.saf_bridge_needs_authorization, Toast.LENGTH_LONG).show()
+            safLauncher.launch(null)
+        }
+    }
+
     fun saveFolder() {
         val folder = holder.folder ?: return
         FolderEditActions.save(

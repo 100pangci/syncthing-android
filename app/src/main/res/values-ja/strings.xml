@@ -292,6 +292,7 @@
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">お使いの Android バージョンでは、選択したフォルダーへの読み取り専用アクセスのみが Syncthing に許可されます。</string>
     <string name="saf_bridge_folder_mapped">この場所は別のアプリから提供されています。Syncthing が自動的に転送して同期します。</string>
+    <string name="saf_bridge_needs_authorization">このフォルダは別のアプリから転送されており、再認証が必要です。次のダイアログでフォルダを選択してください。</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Android バージョンにより、選択したフォルダーへの読み取りおよび書き込みアクセス権が Syncthing に付与されます。</string>

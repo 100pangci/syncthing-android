@@ -292,6 +292,7 @@
     <!-- Summary shown if we only have readonly access to the folder path -->
     <string name="folder_path_readonly">Din Android-versjon gir kun Syncthing lesetilgang til den valgte mappen.</string>
     <string name="saf_bridge_folder_mapped">Denne plasseringen leveres av en annen app. Syncthing videresender den automatisk slik at den kan synkroniseres.</string>
+    <string name="saf_bridge_needs_authorization">Denne mappen videreføres fra en annen app og må autoriseres på nytt. Velg mappen i den neste dialogen.</string>
 
     <!-- Summary shown if we only have readwrite access to the folder path -->
     <string name="folder_path_readwrite">Din Android-versjon gir Syncthing lese- og skrivetilgang til den valgte mappen.</string>
