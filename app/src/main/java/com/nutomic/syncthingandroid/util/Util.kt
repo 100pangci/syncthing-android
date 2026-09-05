@@ -48,7 +48,6 @@ object Util {
      *
      * Based on http://stackoverflow.com/a/5599842
      */
-    @JvmStatic
     fun readableFileSize(context: Context, bytes: Double): String {
         val units = context.resources.getStringArray(R.array.file_size_units)
         if (bytes <= 0) return "0 " + units[0]
@@ -63,7 +62,6 @@ object Util {
      *
      * Based on http://stackoverflow.com/a/5599842
      */
-    @JvmStatic
     fun readableTransferRate(context: Context, bits: Long): String {
         val units = context.resources.getStringArray(R.array.transfer_rate_units)
         val bytes = bits / 8
@@ -77,7 +75,6 @@ object Util {
      * Returns if the syncthing binary would be able to write a file into
      * the given folder given the configured access level.
      */
-    @JvmStatic
     fun nativeBinaryCanWriteToPath(context: Context, absoluteFolderPath: String): Boolean {
         val touchFileName = ".stwritetest"
 
@@ -108,7 +105,6 @@ object Util {
      * Look for running processes and return a list
      * containing the PIDs of found instances.
      */
-    @JvmStatic
     fun getProcessPIDs(processName: String): List<String> {
         val processPIDs = mutableListOf<String>()
         val output = runShellCommandGetOutput("ps\n")
@@ -135,7 +131,6 @@ object Util {
     /**
      * Look for running processes and end them gracefully.
      */
-    @JvmStatic
     fun killProcess(processName: String) {
         val processPIDs = getProcessPIDs(processName)
         if (processPIDs.isEmpty()) {
@@ -162,7 +157,6 @@ object Util {
     /**
      * Builds the web GUI URL from the given gui address (e.g. "127.0.0.1:8384").
      */
-    @JvmStatic
     fun buildWebGuiUrl(guiAddress: String): URL {
         val urlProtocol = if (Constants.osSupportsTLS12()) "https" else "http"
         try {
@@ -177,7 +171,6 @@ object Util {
      *
      * This method uses Gson and only works with objects that can be converted with Gson.
      */
-    @JvmStatic
     fun <T> deepCopy(obj: T, type: Type): T {
         val gson = Gson()
         return gson.fromJson(gson.toJson(obj, type), type)
@@ -186,7 +179,6 @@ object Util {
     /**
      * Run command in a shell and return the exit code.
      */
-    @JvmStatic
     fun runShellCommand(cmd: String): Int {
         return runShellCommandInternal("runShellCommand", cmd, null)
     }
@@ -194,7 +186,6 @@ object Util {
     /**
      * Run command in a shell and return the captured standard output.
      */
-    @JvmStatic
     fun runShellCommandGetOutput(cmd: String): String {
         val capturedStdOut = StringBuilder()
         runShellCommandInternal("runShellCommandGetOutput", cmd, capturedStdOut)
@@ -255,7 +246,6 @@ object Util {
     /**
      * Check if a TCP is listening on the local device on a specific port.
      */
-    @JvmStatic
     fun isTcpPortListening(port: Int): Boolean {
         // t: tcp, l: listening, n: numeric
         val output = runShellCommandGetOutput("netstat -t -l -n")
@@ -288,7 +278,6 @@ object Util {
      * @param path String containing the path that needs formatting.
      * @return formatted file path as a string.
      */
-    @JvmStatic
     fun formatPath(path: String): String {
         return File(path).toURI().normalize().path
     }
@@ -297,7 +286,6 @@ object Util {
      * Shorten a path using ellipsis to display it on UI
      * where we have little space to display it.
      */
-    @JvmStatic
     fun getPathEllipsis(fullFN: String): String {
         val MAX_CHARS_SUBDIR = 15
         val MAX_CHARS_FILENAME = MAX_CHARS_SUBDIR * 2
@@ -336,7 +324,6 @@ object Util {
         return workOut
     }
 
-    @JvmStatic
     fun isRunningOnTV(context: Context): Boolean {
         val uiModeManager = context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
         return uiModeManager.currentModeType == Configuration.UI_MODE_TYPE_TELEVISION
@@ -345,7 +332,6 @@ object Util {
     /**
      * Converts dateTime to readable localized string.
      */
-    @JvmStatic
     fun formatDateTime(dateTime: String): String {
         // Convert dateTime to readable localized string.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -358,7 +344,6 @@ object Util {
         return formatter.format(zonedDateTime)
     }
 
-    @JvmStatic
     fun formatTime(dateTime: String): String {
         // Convert dateTime to readable localized string.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -374,7 +359,6 @@ object Util {
     /**
      * Converts local time to ZonedDateTime.
      */
-    @JvmStatic
     fun getLocalZonedDateTime(): String {
         // Legacy devices below API 26 don't support java.time; return a fixed
         // fallback timestamp as they cannot display the local time anyway.
@@ -390,7 +374,6 @@ object Util {
      * Note: getRunningServices() is deprecated and only returns a cached
      * snapshot on recent Android versions, which is fine for this check.
      */
-    @JvmStatic
     fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
         val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (service in am.getRunningServices(Int.MAX_VALUE)) {
@@ -404,7 +387,6 @@ object Util {
     /**
      * Quotes a string for safe use as a single shell argument.
      */
-    @JvmStatic
     fun shellQuote(s: String): String {
         return "'" + s.replace("'", "'\\''") + "'"
     }
@@ -412,7 +394,6 @@ object Util {
     /**
      * Called by RestApi/setRemoteCompletionInfo after folder completed.
      */
-    @JvmStatic
     fun runScriptSet(absPath: String, scriptArgs: Array<String>?) {
         val scriptFolder = File(absPath)
         if (!scriptFolder.exists() || !scriptFolder.isDirectory) {
@@ -448,7 +429,6 @@ object Util {
     /**
      * Called by RestApi/setRemoteCompletionInfo after folder completed.
      */
-    @JvmStatic
     fun getSyncConflictFiles(absPath: String): Array<String> {
         val cmdBuilder = StringBuilder()
         cmdBuilder.append("cd ").append(shellQuote("$absPath/")).append(";")
@@ -484,7 +464,6 @@ object Util {
      *
      * @return the OS-backed trust manager, or `null` if it could not be built.
      */
-    @JvmStatic
     fun getOsTrustManager(): X509TrustManager? {
         if (!osTrustManagerInitialized) {
             synchronized(this) {
