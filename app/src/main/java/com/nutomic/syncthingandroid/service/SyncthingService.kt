@@ -595,7 +595,7 @@ class SyncthingService : Service() {
             Log.i(TAG, "Web GUI will be available at ${config.webGuiUrl}")
         }
 
-        // Check mSyncthingRunnable lifecycle and create singleton.
+        // Check syncthingRunnable lifecycle and create singleton.
         if (syncthingRunnable != null || syncthingRunnableThread != null) {
             Log.e(TAG, "onStartupTaskCompleteListener: Syncthing binary lifecycle violated")
             return
@@ -626,7 +626,7 @@ class SyncthingService : Service() {
         // Start the syncthing binary in a separate thread.
         val syncthingRunnableThread = Thread(runnable)
         syncthingRunnableThread.setUncaughtExceptionHandler { _, _ ->
-            Log.e(TAG, "mSyncthingRunnableThread: Uncaught exception [ExecutableNotFoundException]")
+            Log.e(TAG, "syncthingRunnableThread: Uncaught exception [ExecutableNotFoundException]")
             notificationHandler.showCrashedNotification(R.string.executable_not_found, Constants.FILENAME_SYNCTHING_BINARY)
         }
         this.syncthingRunnableThread = syncthingRunnableThread
@@ -822,13 +822,13 @@ class SyncthingService : Service() {
     private fun killBinaryAndAwaitExit(runnable: SyncthingRunnable, runnableThread: Thread?) {
         Util.killProcess(Constants.FILENAME_SYNCTHING_BINARY)
         runnableThread?.let { thread ->
-            LogV("Waiting for mSyncthingRunnableThread to finish after killProcess(Syncthing) ...")
+            LogV("Waiting for syncthingRunnableThread to finish after killProcess(Syncthing) ...")
             try {
                 thread.join()
             } catch (e: InterruptedException) {
-                Log.w(TAG, "mSyncthingRunnableThread InterruptedException")
+                Log.w(TAG, "syncthingRunnableThread InterruptedException")
             }
-            Log.d(TAG, "Finished mSyncthingRunnableThread.")
+            Log.d(TAG, "Finished syncthingRunnableThread.")
         }
     }
 

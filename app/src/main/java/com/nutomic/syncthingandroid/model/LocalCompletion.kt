@@ -13,12 +13,12 @@ import java.util.AbstractMap
  */
 class LocalCompletion(enableVerboseLog: Boolean) {
 
-    private val mFolderMap: MutableMap<String, Map.Entry<FolderStatus, CachedFolderStatus>> = HashMap()
+    private val folderMap: MutableMap<String, Map.Entry<FolderStatus, CachedFolderStatus>> = HashMap()
 
     /**
-     * Object that must be locked upon accessing mFolderMap.
+     * Object that must be locked upon accessing folderMap.
      */
-    private val mFolderMapLock = Any()
+    private val folderMapLock = Any()
 
     private val ENABLE_VERBOSE_LOG = enableVerboseLog
 
@@ -27,10 +27,10 @@ class LocalCompletion(enableVerboseLog: Boolean) {
      * after a config update.
      */
     fun updateFromConfig(newFolders: List<Folder>) {
-        synchronized(mFolderMapLock) {
+        synchronized(folderMapLock) {
             // Handle folders that were removed from the config.
             val removedFolders = ArrayList<String>()
-            for (folderId in mFolderMap.keys) {
+            for (folderId in folderMap.keys) {
                 var folderFound = false
                 for (folder in newFolders) {
                     if (folder.id == folderId) {
@@ -44,14 +44,14 @@ class LocalCompletion(enableVerboseLog: Boolean) {
             }
             for (folderId in removedFolders) {
                 logV("updateFromConfig: Remove folder '$folderId' from cache model")
-                mFolderMap.remove(folderId)
+                folderMap.remove(folderId)
             }
 
             // Handle folders that were added to the config.
             for (folder in newFolders) {
-                if (!mFolderMap.containsKey(folder.id)) {
+                if (!folderMap.containsKey(folder.id)) {
                     logV("updateFromConfig: Add folder '${folder.id}' to cache model.")
-                    mFolderMap[folder.id] = AbstractMap.SimpleEntry(FolderStatus(), CachedFolderStatus())
+                    folderMap[folder.id] = AbstractMap.SimpleEntry(FolderStatus(), CachedFolderStatus())
                 }
             }
         }
@@ -61,10 +61,10 @@ class LocalCompletion(enableVerboseLog: Boolean) {
      * Calculates local folder sync completion percentage across all folders.
      */
     fun getTotalFolderCompletion(): Int {
-        synchronized(mFolderMapLock) {
+        synchronized(folderMapLock) {
             var folderCount = 0
             var sumCompletion = 0.0
-            for (folder in mFolderMap.values) {
+            for (folder in folderMap.values) {
                 val cachedFolderStatus = folder.value
 
                 // Filter invalid percentage values we may have got from the REST API.
@@ -98,11 +98,11 @@ class LocalCompletion(enableVerboseLog: Boolean) {
      * Returns local folder status including completion info.
      */
     fun getFolderStatus(folderId: String): Map.Entry<FolderStatus, CachedFolderStatus> {
-        synchronized(mFolderMapLock) {
-            if (!mFolderMap.containsKey(folderId)) {
+        synchronized(folderMapLock) {
+            if (!folderMap.containsKey(folderId)) {
                 return AbstractMap.SimpleEntry(FolderStatus(), CachedFolderStatus())
             }
-            val folderEntry = mFolderMap[folderId]!!
+            val folderEntry = folderMap[folderId]!!
             return AbstractMap.SimpleEntry(
                 Util.deepCopy(folderEntry.key, object : TypeToken<FolderStatus>() {}.type),
                 Util.deepCopy(folderEntry.value, object : TypeToken<CachedFolderStatus>() {}.type)
@@ -115,7 +115,7 @@ class LocalCompletion(enableVerboseLog: Boolean) {
      * Calculate cachedFolderStatus within the completion[folderId] model.
      */
     fun setFolderStatus(folderId: String, folderPaused: Boolean, folderStatus: FolderStatus) {
-        synchronized(mFolderMapLock) {
+        synchronized(folderMapLock) {
             val cacheEntry = getFolderStatus(folderId)
             val cachedFolderStatus = cacheEntry.value
             cachedFolderStatus.paused = folderPaused
@@ -137,12 +137,12 @@ class LocalCompletion(enableVerboseLog: Boolean) {
             }
 
             // Add folder or update existing folder entry.
-            mFolderMap[folderId] = AbstractMap.SimpleEntry(folderStatus, cachedFolderStatus)
+            folderMap[folderId] = AbstractMap.SimpleEntry(folderStatus, cachedFolderStatus)
         }
     }
 
     fun setFolderStatus(folderId: String, folderStatus: FolderStatus) {
-        synchronized(mFolderMapLock) {
+        synchronized(folderMapLock) {
             // Persist cachedFolderStatus.paused from the previous entry.
             val cacheEntry = getFolderStatus(folderId)
             setFolderStatus(folderId, cacheEntry.value.paused, folderStatus)
@@ -159,7 +159,7 @@ class LocalCompletion(enableVerboseLog: Boolean) {
         lastItemFinishedItem: String,
         lastItemFinishedTime: String
     ) {
-        synchronized(mFolderMapLock) {
+        synchronized(folderMapLock) {
             val cacheEntry = getFolderStatus(folderId)
             val cachedFolderStatus = cacheEntry.value
             cachedFolderStatus.lastItemFinishedAction = lastItemFinishedAction
@@ -167,29 +167,29 @@ class LocalCompletion(enableVerboseLog: Boolean) {
             cachedFolderStatus.lastItemFinishedTime = lastItemFinishedTime
 
             // Add folder or update existing folder entry.
-            mFolderMap[folderId] = AbstractMap.SimpleEntry(cacheEntry.key, cachedFolderStatus)
+            folderMap[folderId] = AbstractMap.SimpleEntry(cacheEntry.key, cachedFolderStatus)
         }
     }
 
     fun setRemoteIndexUpdated(folderId: String, remoteIndexUpdated: Boolean) {
-        synchronized(mFolderMapLock) {
+        synchronized(folderMapLock) {
             val cacheEntry = getFolderStatus(folderId)
             val cachedFolderStatus = cacheEntry.value
             cachedFolderStatus.remoteIndexUpdated = remoteIndexUpdated
 
             // Add folder or update existing folder entry.
-            mFolderMap[folderId] = AbstractMap.SimpleEntry(cacheEntry.key, cachedFolderStatus)
+            folderMap[folderId] = AbstractMap.SimpleEntry(cacheEntry.key, cachedFolderStatus)
         }
     }
 
     fun setDiscoveredConflictFiles(folderId: String, discoveredConflictFiles: Array<String>) {
-        synchronized(mFolderMapLock) {
+        synchronized(folderMapLock) {
             val cacheEntry = getFolderStatus(folderId)
             val cachedFolderStatus = cacheEntry.value
             cachedFolderStatus.discoveredConflictFiles = discoveredConflictFiles
 
             // Add folder or update existing folder entry.
-            mFolderMap[folderId] = AbstractMap.SimpleEntry(cacheEntry.key, cachedFolderStatus)
+            folderMap[folderId] = AbstractMap.SimpleEntry(cacheEntry.key, cachedFolderStatus)
         }
     }
 

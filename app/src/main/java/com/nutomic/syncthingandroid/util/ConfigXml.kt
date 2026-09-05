@@ -1116,7 +1116,7 @@ class ConfigXml(private val context: Context) {
 
     /**
      * Set device model name as device name for Syncthing.
-     * We need to iterate through XML nodes manually, as mConfig.getDocumentElement() will also
+     * We need to iterate through XML nodes manually, as config.getDocumentElement() will also
      * return nested elements inside folder element. We have to check that we only rename the
      * device corresponding to the local device ID.
      * Returns if changes to the config have been made.

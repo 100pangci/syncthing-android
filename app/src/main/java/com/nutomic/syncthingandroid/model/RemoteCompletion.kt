@@ -16,20 +16,20 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
     private var ENABLE_DEBUG_LOG = false
     private val ENABLE_VERBOSE_LOG = enableVerboseLog
 
-    private val mDeviceFolderMap:
+    private val deviceFolderMap:
         MutableMap<String, Map.Entry<Connection, HashMap<String, RemoteCompletionInfo>>> = HashMap()
 
     /**
-     * Object that must be locked upon accessing mDeviceFolderMap.
+     * Object that must be locked upon accessing deviceFolderMap.
      */
-    private val mDeviceFolderMapLock = Any()
+    private val deviceFolderMapLock = Any()
 
     /**
      * Removes a folder from the cache model.
      */
     private fun removeFolder(folderId: String) {
-        synchronized(mDeviceFolderMapLock) {
-            for (folderMapEntry in mDeviceFolderMap.values) {
+        synchronized(deviceFolderMapLock) {
+            for (folderMapEntry in deviceFolderMap.values) {
                 val folderMap = folderMapEntry.value
                 if (folderMap.containsKey(folderId)) {
                     folderMap.remove(folderId)
@@ -44,10 +44,10 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
      * after a config update.
      */
     fun updateFromConfig(newDevices: List<Device>, newFolders: List<Folder>) {
-        synchronized(mDeviceFolderMapLock) {
+        synchronized(deviceFolderMapLock) {
             // Handle devices that were removed from the config.
             val removedDevices = ArrayList<String>()
-            for (deviceId in mDeviceFolderMap.keys) {
+            for (deviceId in deviceFolderMap.keys) {
                 var deviceFound = false
                 for (device in newDevices) {
                     if (device.deviceID == deviceId) {
@@ -61,14 +61,14 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
             }
             for (deviceId in removedDevices) {
                 logV("updateFromConfig: Remove device '${getShortenedDeviceId(deviceId)}' from cache model")
-                mDeviceFolderMap.remove(deviceId)
+                deviceFolderMap.remove(deviceId)
             }
 
             // Handle devices that were added to the config.
             for (device in newDevices) {
-                if (!mDeviceFolderMap.containsKey(device.deviceID)) {
+                if (!deviceFolderMap.containsKey(device.deviceID)) {
                     logV("updateFromConfig: Add device '${getShortenedDeviceId(device.deviceID)}' to cache model")
-                    mDeviceFolderMap[device.deviceID] = AbstractMap.SimpleEntry(
+                    deviceFolderMap[device.deviceID] = AbstractMap.SimpleEntry(
                         Connection(),
                         HashMap()
                     )
@@ -77,7 +77,7 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
 
             // Handle folders that were removed from the config.
             val removedFolders = ArrayList<String>()
-            for (device in mDeviceFolderMap.values) {
+            for (device in deviceFolderMap.values) {
                 for (folderId in device.value.keys) {
                     var folderFound = false
                     for (folder in newFolders) {
@@ -101,7 +101,7 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
                 for (device in newDevices) {
                     if (folder.getDevice(device.deviceID) != null) {
                         // folder is shared with device.
-                        val folderMap = mDeviceFolderMap[device.deviceID]!!.value
+                        val folderMap = deviceFolderMap[device.deviceID]!!.value
                         if (!folderMap.containsKey(folder.id)) {
                             logV("updateFromConfig: Add folder '${folder.id}'" +
                                 " shared with device '${getShortenedDeviceId(device.deviceID)}' to cache model.")
@@ -156,9 +156,9 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
      * Returns "-1" if sync completion is not applicable.
      */
     fun getTotalDeviceCompletion(): Int {
-        synchronized(mDeviceFolderMapLock) {
+        synchronized(deviceFolderMapLock) {
             var connectedDeviceCount = 0
-            for (device in mDeviceFolderMap.values) {
+            for (device in deviceFolderMap.values) {
                 if (device.key.connected) {
                     connectedDeviceCount++
                 }
@@ -167,7 +167,7 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
                 return -1
             }
             val accumulator = CompletionAccumulator()
-            for (device in mDeviceFolderMap.values) {
+            for (device in deviceFolderMap.values) {
                 if (!device.key.connected) {
                     continue
                 }
@@ -182,13 +182,13 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
      * shared with the device.
      */
     fun getDeviceCompletion(deviceId: String): Int {
-        synchronized(mDeviceFolderMapLock) {
-            if (!mDeviceFolderMap.containsKey(deviceId)) {
+        synchronized(deviceFolderMapLock) {
+            if (!deviceFolderMap.containsKey(deviceId)) {
                 logV("getDeviceCompletion: Cache miss for deviceId=[$deviceId]")
                 return 100
             }
 
-            val folderMap = mDeviceFolderMap[deviceId]!!.value
+            val folderMap = deviceFolderMap[deviceId]!!.value
             if (folderMap != null) {
                 val accumulator = CompletionAccumulator()
                 accumulator.accumulate(folderMap.values)
@@ -199,14 +199,14 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
     }
 
     fun getDeviceNeedBytes(deviceId: String): Double {
-        synchronized(mDeviceFolderMapLock) {
-            if (!mDeviceFolderMap.containsKey(deviceId)) {
+        synchronized(deviceFolderMapLock) {
+            if (!deviceFolderMap.containsKey(deviceId)) {
                 logV("getDeviceNeedBytes: Cache miss for deviceId=[$deviceId]")
                 return 0.0
             }
 
             var sumNeedBytes = 0.0
-            val folderMap = mDeviceFolderMap[deviceId]!!.value
+            val folderMap = deviceFolderMap[deviceId]!!.value
             if (folderMap != null) {
                 for (folder in folderMap.values) {
                     sumNeedBytes += folder.needBytes
@@ -220,10 +220,10 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
      * Set completionInfo within the completion[deviceId][folderId] model.
      */
     fun setCompletionInfo(deviceId: String, folderId: String, completionInfo: RemoteCompletionInfo) {
-        synchronized(mDeviceFolderMapLock) {
+        synchronized(deviceFolderMapLock) {
             // Add device parent node if it does not exist.
-            if (!mDeviceFolderMap.containsKey(deviceId)) {
-                mDeviceFolderMap[deviceId] = AbstractMap.SimpleEntry(
+            if (!deviceFolderMap.containsKey(deviceId)) {
+                deviceFolderMap[deviceId] = AbstractMap.SimpleEntry(
                     Connection(),
                     HashMap()
                 )
@@ -232,7 +232,7 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
                 "$folderId\" at device \"" +
                 "${getShortenedDeviceId(deviceId)}\".")
             // Add folder or update existing folder entry.
-            mDeviceFolderMap[deviceId]!!.value[folderId] = completionInfo
+            deviceFolderMap[deviceId]!!.value[folderId] = completionInfo
         }
     }
 
@@ -240,19 +240,19 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
      * Returns remote device status.
      */
     fun getDeviceStatus(deviceId: String): Connection {
-        synchronized(mDeviceFolderMapLock) {
-            if (!mDeviceFolderMap.containsKey(deviceId)) {
+        synchronized(deviceFolderMapLock) {
+            if (!deviceFolderMap.containsKey(deviceId)) {
                 return Connection()
             }
-            val connection = mDeviceFolderMap[deviceId]!!.key
+            val connection = deviceFolderMap[deviceId]!!.key
             return Util.deepCopy(connection, object : TypeToken<Connection>() {}.type)
         }
     }
 
     fun getOnlineDeviceCount(): Int {
-        synchronized(mDeviceFolderMapLock) {
+        synchronized(deviceFolderMapLock) {
             var onlineDeviceCount = 0
-            for (device in mDeviceFolderMap.values) {
+            for (device in deviceFolderMap.values) {
                 if (device.key.connected) {
                     onlineDeviceCount++
                 }
@@ -265,10 +265,10 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
      * Store remote device status for later when we need info for the UI.
      */
     fun setDeviceStatus(deviceId: String, connection: Connection) {
-        synchronized(mDeviceFolderMapLock) {
+        synchronized(deviceFolderMapLock) {
             // Add device parent node if it does not exist.
-            if (!mDeviceFolderMap.containsKey(deviceId)) {
-                mDeviceFolderMap[deviceId] = AbstractMap.SimpleEntry(
+            if (!deviceFolderMap.containsKey(deviceId)) {
+                deviceFolderMap[deviceId] = AbstractMap.SimpleEntry(
                     Connection(),
                     HashMap()
                 )
@@ -285,11 +285,11 @@ class RemoteCompletion(enableVerboseLog: Boolean) {
                 AbstractMap.SimpleEntry(
                     Util.deepCopy(connection, object : TypeToken<Connection>() {}.type),
                     Util.deepCopy(
-                        mDeviceFolderMap[deviceId]!!.value,
+                        deviceFolderMap[deviceId]!!.value,
                         object : TypeToken<HashMap<String, RemoteCompletionInfo>>() {}.type
                     )
                 )
-            mDeviceFolderMap[deviceId] = updatedEntry
+            deviceFolderMap[deviceId] = updatedEntry
         }
     }
 

@@ -69,7 +69,7 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
         const val ACTION_EXIT = ".MainActivity.EXIT"
     }
 
-    lateinit var mPreferences: SharedPreferences
+    lateinit var preferences: SharedPreferences
 
     private var serviceState by mutableStateOf(SyncthingService.State.INIT)
     private val resultBus = ResultBus()
@@ -79,7 +79,7 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        mPreferences = (application as SyncthingApp).preferences
+        preferences = (application as SyncthingApp).preferences
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
@@ -268,7 +268,7 @@ class MainActivity : SyncthingActivity(), OnServiceStateChangeListener {
     }
 
     private fun showQrCodeDialog() {
-        val deviceId = mPreferences.getString(Constants.PREF_LOCAL_DEVICE_ID, "") ?: ""
+        val deviceId = preferences.getString(Constants.PREF_LOCAL_DEVICE_ID, "") ?: ""
         if (deviceId.isEmpty()) {
             android.widget.Toast.makeText(this, R.string.could_not_access_deviceid, android.widget.Toast.LENGTH_SHORT).show()
             return

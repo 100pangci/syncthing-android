@@ -201,8 +201,8 @@ class RunConditionMonitor(
         /**
          * after a reboot lastSyncTimeSinceBootMillisecs might be larger than elapsedRealtime,
          * since it is referring to the previous reboot
-         * in this case we set mPreferences.getLong(Constants.PREF_LAST_RUN_TIME, 0)
-         * to -triggeredSyncSleepIntervalS, so mTimeConditionMatch is guaranteed to be true
+         * in this case we set preferences.getLong(Constants.PREF_LAST_RUN_TIME, 0)
+         * to -triggeredSyncSleepIntervalS, so timeConditionMatch is guaranteed to be true
          */
         if (lastSyncTimeSinceBootMillisecs > elapsedRealtime) {
             preferences.edit()
@@ -229,7 +229,7 @@ class RunConditionMonitor(
             } else {
                 /**
                  * if triggeredSyncSleepIntervalS - elapsedSecondsSinceLastSync is < 0,
-                 * mTimeConditionMatch is set to true during updateShouldRunDecision().
+                 * timeConditionMatch is set to true during updateShouldRunDecision().
                  * Thus the false case cannot be triggered if the delay for
                  * scheduleSyncTriggerServiceJob would be negative.
                  */
@@ -396,7 +396,7 @@ class RunConditionMonitor(
                 /**
                  * If Syncthing is running and the last run was more than triggeredSyncSleepIntervalS ago,
                  * this stop job might actually start Syncthing (resp. leave it running) because
-                 * mTimeConditionsMatch is switched to true if last run was more than triggeredSyncSleepIntervalS ago.
+                 * timeConditionMatch is switched to true if last run was more than triggeredSyncSleepIntervalS ago.
                  * So in this case we put a new (fake) last run time slightly less than triggeredSyncSleepIntervalS ago.
                  * If Syncthing really is stopped (which it should) then the wrong time gets
                  * corrected immediately
@@ -677,7 +677,7 @@ class RunConditionMonitor(
         }
 
         // PREF_RUN_ON_TIME_SCHEDULE
-        // set mTimeConditionMatch to true if the last run was more than triggeredSyncSleepIntervalS ago
+        // set timeConditionMatch to true if the last run was more than triggeredSyncSleepIntervalS ago
         if (SystemClock.elapsedRealtime() - preferences.getLong(Constants.PREF_LAST_RUN_TIME, 0) >
             ((preferences.getString(
                 Constants.PREF_SLEEP_INTERVAL_MINUTES, DEFAULT_SLEEP_INTERVAL_MINUTES
@@ -687,7 +687,7 @@ class RunConditionMonitor(
         }
         if (prefRunOnTimeSchedule && !timeConditionMatch) {
             // Currently, we aren't within a "SyncthingNative should run" time frame.
-            logV("decideShouldRun: PREF_RUN_ON_TIME_SCHEDULE && !mTimeConditionMatch")
+            logV("decideShouldRun: PREF_RUN_ON_TIME_SCHEDULE && !timeConditionMatch")
             val minutes = ((SystemClock.elapsedRealtime() -
                 preferences.getLong(Constants.PREF_LAST_RUN_TIME, 0)) / (60 * 1000)).toInt()
             val minutesText: String = if (minutes == 0) {

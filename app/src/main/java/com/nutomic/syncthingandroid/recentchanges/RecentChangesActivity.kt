@@ -222,7 +222,7 @@ class RecentChangesActivity : SyncthingActivity(), SyncthingService.OnServiceSta
 }
 
 /**
- * Plain Gson instance, same role as RestApi's mGson for parsing disk events into
+ * Plain Gson instance, same role as RestApi's gson for parsing disk events into
  * [DiskEvent] (all model classes are Kotlin data holders since phase1).
  */
 private val gson = Gson()
