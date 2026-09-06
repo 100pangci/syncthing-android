@@ -604,7 +604,7 @@ object Util {
      *
      * Used as a fallback so the app can talk to a local Syncthing instance whose HTTPS certificate
      * was replaced with one signed by a CA the user trusts at the OS level (see
-     * https://github.com/100pangci/syncthing-android/issues/222).
+     * https://github.com/researchxxl/syncthing-android/issues/222).
      *
      * @return the OS-backed trust manager, or `null` if it could not be built.
      */

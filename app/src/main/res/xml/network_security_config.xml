@@ -10,7 +10,7 @@
         (see WebGuiActivity, which pins the WebView to 127.0.0.1). Trust user-installed CAs there so
         a user-supplied CA-signed HTTPS certificate validates natively, without weakening trust for
         any other (non-local) connection. See
-        https://github.com/100pangci/syncthing-android/issues/222
+        https://github.com/researchxxl/syncthing-android/issues/222
     -->
     <domain-config>
         <domain includeSubdomains="false">127.0.0.1</domain>
