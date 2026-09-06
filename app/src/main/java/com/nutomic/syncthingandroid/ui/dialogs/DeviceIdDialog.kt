@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -50,6 +51,8 @@ import androidx.core.graphics.set
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.nutomic.syncthingandroid.R
+import com.nutomic.syncthingandroid.ui.theme.AMOLED_CARD_BORDER_ALPHA
+import com.nutomic.syncthingandroid.ui.theme.LocalAmoledTheme
 
 /**
  * Device ID QR dialog, ported from the legacy DeviceIdDialogFragment.
@@ -191,6 +194,7 @@ private fun PortraitDialogContent(
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = MaterialTheme.colorScheme.surfaceContainerLow,
+            border = amoledSurfaceBorder(),
         ) {
             Text(deviceId, modifier = Modifier.padding(16.dp))
         }
@@ -223,6 +227,7 @@ private fun LandscapeDialogContent(
             Surface(
                 shape = RoundedCornerShape(16.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
+                border = amoledSurfaceBorder(),
             ) {
                 Text(deviceId, modifier = Modifier.padding(16.dp))
             }
@@ -250,6 +255,21 @@ private fun CopyShareButtons(
         }
     }
 }
+
+/**
+ * Faint outline for container-toned surfaces (device ID blocks) in the pure AMOLED
+ * theme, matching the card treatment; null in the regular themes.
+ */
+@Composable
+private fun amoledSurfaceBorder(): BorderStroke? =
+    if (LocalAmoledTheme.current) {
+        BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = AMOLED_CARD_BORDER_ALPHA)
+        )
+    } else {
+        null
+    }
 
 private fun generateQrCode(deviceId: String): Bitmap {
     val qrSize = 232

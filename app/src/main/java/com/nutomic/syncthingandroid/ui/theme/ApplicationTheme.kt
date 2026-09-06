@@ -10,10 +10,12 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -22,6 +24,19 @@ import com.nutomic.syncthingandroid.service.Constants
 
 /** App theme pref value meaning "AMOLED black". Not an AppCompatDelegate mode. */
 const val APP_THEME_AMOLED = 3
+
+/**
+ * True while the pure AMOLED theme is active. Surfaces that deliberately keep a
+ * container tone in the other themes (cards, code blocks) use this to switch to a
+ * pure-black container with only a faint outline instead.
+ */
+val LocalAmoledTheme = staticCompositionLocalOf { false }
+
+/**
+ * Alpha of the faint card outline in the pure AMOLED theme: visible on the black
+ * background, but subtle enough to read as a trace rather than a border.
+ */
+const val AMOLED_CARD_BORDER_ALPHA = 0.4f
 
 /**
  * Observes the app theme preference so in-place switches that do not change
@@ -48,12 +63,18 @@ private fun rememberAppThemePref(): Int {
     return pref
 }
 
-/** AMOLED variant of a dark scheme: pure black background/surface tones. */
+/**
+ * AMOLED variant of a dark scheme: pure black background/surface tones.
+ *
+ * Every card in the app uses [ColorScheme.surfaceContainerLow] as its container,
+ * so it is pure black here too - card separation comes from a faint outline drawn
+ * by the components (see [LocalAmoledTheme]), not from a tinted container.
+ */
 private fun ColorScheme.toAmoled(): ColorScheme = copy(
     background = Color.Black,
     surface = Color.Black,
     surfaceContainerLowest = Color.Black,
-    surfaceContainerLow = Color(0xFF0A0A0A),
+    surfaceContainerLow = Color.Black,
     surfaceContainer = Color(0xFF0F0F0F),
     surfaceContainerHigh = Color(0xFF151515),
     surfaceContainerHighest = Color(0xFF1C1C1C)
@@ -84,9 +105,12 @@ fun ApplicationTheme(
         }
     val colorScheme =
         if (appTheme == APP_THEME_AMOLED && isDarkTheme) baseScheme.toAmoled() else baseScheme
+    val isAmoled = appTheme == APP_THEME_AMOLED && isDarkTheme
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        content = content
-    )
+    CompositionLocalProvider(LocalAmoledTheme provides isAmoled) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            content = content
+        )
+    }
 }
