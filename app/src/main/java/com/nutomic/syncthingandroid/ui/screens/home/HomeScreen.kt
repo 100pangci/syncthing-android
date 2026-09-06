@@ -1,6 +1,7 @@
 package com.nutomic.syncthingandroid.ui.screens.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -27,6 +28,8 @@ import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalNavigationDrawer
@@ -40,6 +43,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -51,6 +55,8 @@ import com.nutomic.syncthingandroid.ui.LocalServiceState
 import com.nutomic.syncthingandroid.ui.LocalSyncthingService
 import com.nutomic.syncthingandroid.ui.components.EmptyListHint
 import com.nutomic.syncthingandroid.ui.nav.LocalAppNavigator
+import com.nutomic.syncthingandroid.ui.theme.AMOLED_CARD_BORDER_ALPHA
+import com.nutomic.syncthingandroid.ui.theme.LocalAmoledTheme
 import kotlinx.coroutines.launch
 
 private const val TAB_FOLDERS = 0
@@ -94,6 +100,7 @@ fun HomeScreen(
     // NavDisplay), so they survive entry transitions; see HomeDataHost.
     val folders = LocalHomeFolderModels.current
     val devices = LocalHomeDeviceModels.current
+    val isAmoled = LocalAmoledTheme.current
 
     val drawerState = rememberDrawerState(androidx.compose.material3.DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -160,20 +167,34 @@ fun HomeScreen(
                 }
             },
             bottomBar = {
-                NavigationBar {
-                    TAB_TITLES.forEachIndexed { index, titleRes ->
-                        val selected = pagerState.currentPage == index
-                        NavigationBarItem(
-                            selected = selected,
-                            onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
-                            icon = {
-                                Icon(
-                                    imageVector = if (selected) TAB_ICONS[index].first else TAB_ICONS[index].second,
-                                    contentDescription = null
-                                )
-                            },
-                            label = { Text(stringResource(titleRes)) }
+                // Pure AMOLED: black bar, separated from the content only by a faint
+                // hairline - no tinted surface, matching the outlined-card treatment.
+                Column {
+                    if (isAmoled) {
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant
+                                .copy(alpha = AMOLED_CARD_BORDER_ALPHA)
                         )
+                    }
+                    NavigationBar(
+                        containerColor = if (isAmoled) Color.Black
+                            else MaterialTheme.colorScheme.surfaceContainer
+                    ) {
+                        TAB_TITLES.forEachIndexed { index, titleRes ->
+                            val selected = pagerState.currentPage == index
+                            NavigationBarItem(
+                                selected = selected,
+                                onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                                icon = {
+                                    Icon(
+                                        imageVector = if (selected) TAB_ICONS[index].first else TAB_ICONS[index].second,
+                                        contentDescription = null
+                                    )
+                                },
+                                label = { Text(stringResource(titleRes)) }
+                            )
+                        }
                     }
                 }
             },

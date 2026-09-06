@@ -1,5 +1,6 @@
 package com.nutomic.syncthingandroid.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,51 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nutomic.syncthingandroid.ui.theme.DISABLED_ALPHA
+import com.nutomic.syncthingandroid.ui.theme.AMOLED_CARD_BORDER_ALPHA
+import com.nutomic.syncthingandroid.ui.theme.LocalAmoledTheme
+
+/**
+ * The app-wide card: same filled card as MD3's default in the regular themes, but in
+ * the pure AMOLED theme the container is pure black (via surfaceContainerLow) and a
+ * faint outline provides the only separation from the background - cards must not
+ * read as tinted blocks on the black background there.
+ */
+@Composable
+fun AppCard(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    val colors = CardDefaults.cardColors(
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+    )
+    val border = if (LocalAmoledTheme.current) {
+        BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = AMOLED_CARD_BORDER_ALPHA)
+        )
+    } else {
+        null
+    }
+    if (onClick != null) {
+        Card(
+            onClick = onClick,
+            colors = colors,
+            border = border,
+            modifier = modifier
+        ) {
+            Column { content() }
+        }
+    } else {
+        Card(
+            colors = colors,
+            border = border,
+            modifier = modifier
+        ) {
+            Column { content() }
+        }
+    }
+}
 
 /**
  * MD3 grouped form section: an elevated-tonal card with an optional heading,
@@ -38,26 +84,21 @@ fun FormCard(
     title: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-        ),
+    AppCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 6.dp)
     ) {
-        Column {
-            if (title != null) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp)
-                )
-            }
-            content()
+        if (title != null) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp)
+            )
         }
+        content()
     }
 }
 
