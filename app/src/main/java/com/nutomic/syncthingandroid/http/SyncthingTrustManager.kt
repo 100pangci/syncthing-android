@@ -26,7 +26,7 @@ import javax.net.ssl.X509TrustManager
  * The local Syncthing instance ships a self-signed certificate by default, which is verified by
  * pinning against the public key stored in https-cert.pem. A user may instead replace the HTTPS
  * certificate with one signed by a CA they trust at the Android OS level (see
- * https://github.com/researchxxl/syncthing-android/issues/222); for that case we fall back to the
+ * https://github.com/100pangci/syncthing-android/issues/222); for that case we fall back to the
  * OS trust store when the self-signed pin does not match.
  *
  * Security scope: this trust manager is only ever wired into the loopback-pinned connection to the

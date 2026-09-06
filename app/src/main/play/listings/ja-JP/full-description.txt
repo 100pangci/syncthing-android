@@ -24,15 +24,15 @@ Syncthing-Fork for Android は Syncthing のラッパーで、Syncthing に内�
 * 戦略とリリース頻度が異なります。
 * Android UIを含むラッパーのみがフォークで指定されるものです。
 
-Webサイト: https://github.com/researchxxl/syncthing-android
+Webサイト: https://github.com/100pangci/syncthing-android
 
-ソースコード: https://github.com/researchxxl/syncthing-android
+ソースコード: https://github.com/100pangci/syncthing-android
 
-Syncthingに外部SDカード書き込み許可を与える方法：  https://github.com/researchxxl/syncthing-android/blob/master/wiki/SD-card-write-access.md
+Syncthingに外部SDカード書き込み許可を与える方法：  https://github.com/100pangci/syncthing-android/blob/master/wiki/SD-card-write-access.md
 
-Wiki, FAQ, 役立つ記事: https://github.com/researchxxl/syncthing-android/tree/main/wiki#readme
+Wiki, FAQ, 役立つ記事: https://github.com/100pangci/syncthing-android/tree/main/wiki#readme
 
-問題: https://github.com/researchxxl/syncthing-android/issues
+問題: https://github.com/100pangci/syncthing-android/issues
 
 一緒に手伝って下さい：
 翻訳： https://hosted.weblate.org/projects/syncthing-fork/app/

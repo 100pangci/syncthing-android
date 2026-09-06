@@ -721,10 +721,10 @@
     <string name="open_issue_tracker_summary">Syncthing-Fork problem izləyicisini %1$s ünvanında açın</string>
 
     <!-- URL of the issue tracker -->
-    <string name="issue_tracker_url" translatable="false">https://github.com/researchxxl/syncthing-android/issues</string>
+    <string name="issue_tracker_url" translatable="false">https://github.com/100pangci/syncthing-android/issues</string>
 
     <!-- URL of the GitHub wiki -->
-    <string name="wiki_url" translatable="false">https://github.com/researchxxl/syncthing-android/tree/main/wiki</string>
+    <string name="wiki_url" translatable="false">https://github.com/100pangci/syncthing-android/tree/main/wiki</string>
 
     <!-- URL of the Syncthing project homepage -->
 

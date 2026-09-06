@@ -24,15 +24,15 @@ Upstream und Fork im Vergleich zum Zeitpunkt des Schreibens:
 * Strategie und Releasehäufigkeit unterscheidet sich
 * Der Fork kümmert sich nur um den Wrapper, welcher die Android-Bedienoberfläche enthält.
 
-Webseite: https://github.com/researchxxl/syncthing-android
+Webseite: https://github.com/100pangci/syncthing-android
 
-Quellcode: https://github.com/researchxxl/syncthing-android
+Quellcode: https://github.com/100pangci/syncthing-android
 
-Wie Syncthing auf externe SD-Karten schreibt: https://github.com/researchxxl/syncthing-android/blob/master/wiki/SD-card-write-access.md
+Wie Syncthing auf externe SD-Karten schreibt: https://github.com/100pangci/syncthing-android/blob/master/wiki/SD-card-write-access.md
 
-Wiki, FAQ und hilfreiche Artikel: https://github.com/researchxxl/syncthing-android/tree/main/wiki#readme
+Wiki, FAQ und hilfreiche Artikel: https://github.com/100pangci/syncthing-android/tree/main/wiki#readme
 
-Probleme: https://github.com/researchxxl/syncthing-android/issues
+Probleme: https://github.com/100pangci/syncthing-android/issues
 
 Bitte bei der Übersetzung mithelfen:
 https://hosted.weblate.org/projects/syncthing-fork/app/

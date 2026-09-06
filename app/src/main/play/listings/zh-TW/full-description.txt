@@ -24,15 +24,15 @@ Syncthing-Fork for Android 提供了 android 系統本身的使用界面來替�
 *策略和发布频率不同
 *只有包含Android UI的包装器由fork处理。
 
-網站：https://github.com/researchxxl/syncthing-android
+網站：https://github.com/100pangci/syncthing-android
 
-原始碼：https://github.com/researchxxl/syncthing-android
+原始碼：https://github.com/100pangci/syncthing-android
 
-How Syncthing writes to external SD card: https://github.com/researchxxl/syncthing-android/blob/master/wiki/SD-card-write-access.md
+How Syncthing writes to external SD card: https://github.com/100pangci/syncthing-android/blob/master/wiki/SD-card-write-access.md
 
-Wiki, FAQ and helpful articles: https://github.com/researchxxl/syncthing-android/tree/main/wiki#readme
+Wiki, FAQ and helpful articles: https://github.com/100pangci/syncthing-android/tree/main/wiki#readme
 
-問題回報：https://github.com/researchxxl/syncthing-android/issues
+問題回報：https://github.com/100pangci/syncthing-android/issues
 
 Please help with the
 翻譯：https://hosted.weblate.org/projects/syncthing-fork/app/

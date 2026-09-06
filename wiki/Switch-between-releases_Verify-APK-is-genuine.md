@@ -3,16 +3,16 @@ Syncthing-Fork "Wrapper for Syncthing" has these release channels:
 <b>1. GitHub and F-Droid release build</b>
 
 * <b>"COMMON USER" - please choose this!</b>
-* Published on [F-Droid](https://f-droid.org/packages/com.github.catfriend1.syncthingfork/) and [GitHub release page](https://github.com/researchxxl/syncthing-android/releases/latest)
+* Published on [F-Droid](https://f-droid.org/packages/com.github.catfriend1.syncthingfork/) and [GitHub release page](https://github.com/100pangci/syncthing-android/releases/latest)
 * File name is like: com.github.catfriend1.syncthingfork_release_v2.0.14.0.apk
-* Releases are protected by [GitHub build provenance attestation](https://github.com/researchxxl/syncthing-android/attestations) and [F-Droid reproducible builds](https://verification.f-droid.org/packages/com.github.catfriend1.syncthingfork)
+* Releases are protected by [GitHub build provenance attestation](https://github.com/100pangci/syncthing-android/attestations) and [F-Droid reproducible builds](https://verification.f-droid.org/packages/com.github.catfriend1.syncthingfork)
 * Certificate hash: 03S43lBXATFDx9FRWgFVmMLfQDvoFgyuAaWMIn5uhqo=
 * Signing Certificate SHA256 fingerprint: <details>D3:74:B8:DE:50:57:01:31:43:C7:D1:51:5A:01:55:98:C2:DF:40:3B:E8:16:0C:AE:01:A5:8C:22:7E:6E:86:AA</details>
 
 <b>2. GitHub debug build</b>
 
 * Only published on GitHub
-* Can be obtained by looking at the [action workflow builds](https://github.com/researchxxl/syncthing-android/actions/workflows/build-app.yaml?query=branch%3Amain+is%3Asuccess) and artifacts.
+* Can be obtained by looking at the [action workflow builds](https://github.com/100pangci/syncthing-android/actions/workflows/build-app.yaml?query=branch%3Amain+is%3Asuccess) and artifacts.
 * It's for maintainers and contributors who require a second installation of the app on their phone for testing purposes.
 * File name is like: com.github.catfriend1.syncthingfork_debug_v2.0.8.0_1234567.apk
 * UNTRUSTED builds from contributors of forks:
