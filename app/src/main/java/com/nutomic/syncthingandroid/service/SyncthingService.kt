@@ -49,6 +49,12 @@ class SyncthingService : Service() {
          */
         private const val SHUTDOWN_RETRY_DELAY_MS = 1000L
 
+        /**
+         * Upper bound for deferring an ACTION_RESTART while State.STARTING, so a stuck
+         * startup cannot queue retries forever.
+         */
+        private const val MAX_RESTART_RETRIES = 30
+
         /** Intent action to perform a Syncthing restart. */
         const val ACTION_RESTART = ".SyncthingService.RESTART"
 
@@ -248,17 +254,10 @@ class SyncthingService : Service() {
         preferences = app.preferences
         enableVerboseLog = AppPrefs.getPrefVerboseLog(preferences)
         LogV("onCreate")
-        if (RootAccess.appStorageOwnedByRoot(this)) {
-            // Safety net for cold starts after a root-mode session (e.g. the app process
-            // was killed while the root-uid core was up): config and key material are
-            // root-owned with explicit 0600 modes and must be readable before anything
-            // parses the config below. Detected via the config file's actual owner — not
-            // the launch marker, which a failed non-root launch would have reset. Marker
-            // is intentionally kept: killStaleBinary still needs root to stop an orphaned
-            // root core; the non-root launch path clears it.
-            Log.i(TAG, "Previous core ran as root; returning app storage to app ownership")
-            RootAccess.handBackStorage(this)
-        }
+        // Note: handing app storage back from a previous root-mode session happens on the
+        // shutdown executor inside [launchStartupTask] - running the recursive chown (and a
+        // possible first su spawn with an authorization dialog) here on the main thread
+        // would block startup and risk ANR.
         configRouter = ConfigRouter(this)
         handler = Handler()
         configBackupManager = ConfigBackupManager(this, preferences, enableVerboseLog)
@@ -321,9 +320,22 @@ class SyncthingService : Service() {
             return START_STICKY
         }
 
-        if (ACTION_RESTART == intent.action && currentState == State.ACTIVE) {
-            shutdownToState(State.INIT) {
-                launchStartupTask(SyncthingRunnable.Command.main)
+        if (ACTION_RESTART == intent.action) {
+            when (currentState) {
+                State.ACTIVE -> shutdownToState(State.INIT) {
+                    launchStartupTask(SyncthingRunnable.Command.main)
+                }
+                State.STARTING -> {
+                    // A core is still launching (with the previous settings, e.g. the
+                    // privilege mode). Restarting it now would kill it mid-startup, and
+                    // silently dropping the request would leave the running core
+                    // diverged from the preference - defer until the startup settled.
+                    Log.w(TAG, "Restart requested in state $currentState, deferring ...")
+                    scheduleRestartRetry()
+                }
+                else -> Log.i(TAG,
+                        "Restart requested in state $currentState - core is not running, " +
+                        "the next start picks up the new settings")
             }
         } else if (ACTION_STOP == intent.action) {
             if (intent.getBooleanExtra(EXTRA_STOP_AFTER_CRASHED_NATIVE, false)) {
@@ -605,6 +617,19 @@ class SyncthingService : Service() {
         // cleanup kills by process name, so spawning must wait for it to complete.
         binaryKillPending = true
         shutdownExecutor.execute {
+            // Safety net for starts after a root-mode session (e.g. the app process was
+            // killed while the root-uid core was up): config and key material are root-owned
+            // with explicit 0600 modes and must be handed back to the app UID before the
+            // config is parsed further below. Runs here on the background executor - the
+            // recursive chown and a possible first su spawn (Magisk dialog) must never run
+            // on the main thread. Detected via the config file's actual owner - not the
+            // launch marker, which a failed non-root launch would have reset. Marker is
+            // intentionally kept: killStaleBinary still needs root to stop an orphaned
+            // root core; the non-root launch path clears it.
+            if (RootAccess.appStorageOwnedByRoot(this)) {
+                Log.i(TAG, "Previous core ran as root; returning app storage to app ownership")
+                RootAccess.handBackStorage(this)
+            }
             killStaleBinary()
             handler.post {
                 binaryKillPending = false
@@ -617,6 +642,30 @@ class SyncthingService : Service() {
                 startBinaryThread(runnable, config)
             }
         }
+    }
+
+    /**
+     * Retries a deferred [ACTION_RESTART] (requested while State.STARTING) until the
+     * startup settled. Bounded by [MAX_RESTART_RETRIES]: a startup that never reaches
+     * ACTIVE must not queue retries forever. If the startup aborted (ERROR/DISABLED)
+     * or the service was destroyed, the core is no longer running and the next natural
+     * start picks up the new settings - the retry is dropped.
+     */
+    private fun scheduleRestartRetry(attempt: Int = 0) {
+        if (attempt >= MAX_RESTART_RETRIES) {
+            Log.w(TAG, "scheduleRestartRetry: Giving up after $attempt retries in state $currentState")
+            return
+        }
+        handler.postDelayed({
+            when (currentState) {
+                State.ACTIVE -> shutdownToState(State.INIT) {
+                    launchStartupTask(SyncthingRunnable.Command.main)
+                }
+                State.STARTING -> scheduleRestartRetry(attempt + 1)
+                else -> Log.i(TAG,
+                        "Deferred restart aborted in state $currentState - core is not running")
+            }
+        }, SHUTDOWN_RETRY_DELAY_MS)
     }
 
     private fun startBinaryThread(runnable: SyncthingRunnable, config: ConfigXml) {

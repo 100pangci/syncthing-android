@@ -107,6 +107,63 @@ class UtilTest {
     }
 
     @Test
+    fun parsePsOutput_rootArgFiltersNarrowGenericProcessNameToOurFolders() {
+        // A bare "find" name match under root would signal every find process on the
+        // system; only helpers operating on OUR folder paths may match.
+        val output = """
+            PID ARGS
+              111 find /storage/emulated/0/Sync -type f -cmin +1440 -print0
+              222 find / -name lost+found
+              333 find /data/otherapp/stuff -type f
+              444 grep find
+        """.trimIndent()
+        val pids = parsePsOutput(
+            output, "find", asRoot = true,
+            argFilters = listOf("/storage/emulated/0/Sync"),
+        )
+        assertEquals(listOf("111"), pids)
+    }
+
+    @Test
+    fun parsePsOutput_rootArgFiltersExcludeBareFindWithoutArgs() {
+        val output = """
+            PID ARGS
+              111 find
+              222 find /storage/emulated/0/Sync -type f
+        """.trimIndent()
+        val pids = parsePsOutput(
+            output, "find", asRoot = true,
+            argFilters = listOf("/storage/emulated/0/Sync"),
+        )
+        assertEquals(listOf("222"), pids)
+    }
+
+    @Test
+    fun parsePsOutput_rootEmptyArgFiltersKeepBareNameMatching() {
+        val output = """
+            PID ARGS
+              111 find
+              222 find /anything
+        """.trimIndent()
+        val pids = parsePsOutput(output, "find", asRoot = true)
+        assertEquals(listOf("111", "222"), pids)
+    }
+
+    @Test
+    fun parsePsOutput_nonRootIgnoresArgFilters() {
+        // Non-root lookups are UID-scoped; the filter must not change the results.
+        val output = """
+            USER      PID   PPID  VSIZE  RSS   WCHAN    NAME        S
+            u0_a123   5678  999   1234   567   0        find        S
+        """.trimIndent()
+        val pids = parsePsOutput(
+            output, "find", asRoot = false,
+            argFilters = listOf("/nonexistent/path"),
+        )
+        assertEquals(listOf("5678"), pids)
+    }
+
+    @Test
     fun parsePsOutput_nonRootReadsPidFromSecondToken() {
         val output = """
             USER      PID   PPID  VSIZE  RSS   WCHAN    NAME        S

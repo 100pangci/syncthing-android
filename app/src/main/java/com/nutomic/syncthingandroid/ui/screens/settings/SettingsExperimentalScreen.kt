@@ -84,15 +84,13 @@ fun SettingsExperimentalScreen() {
                                 }
                                 runAsRoot.value = true
                             } else {
-                                // While su is still guaranteed to work, hand root-session
-                                // files back to the app UID: the root-uid core writes
-                                // config.xml and key material with explicit 0600 modes,
-                                // which the unprivileged app could no longer read.
-                                if (withContext(Dispatchers.IO) { RootAccess.appStorageOwnedByRoot(context) }) {
-                                    withContext(Dispatchers.IO) { RootAccess.handBackStorage(context) }
-                                }
                                 runAsRoot.value = false
                             }
+                            // No storage handback here on disable: the root-uid core is
+                            // still running and could rewrite config.xml (0600 root) after
+                            // our chown, voiding it. The restart flow hands storage back
+                            // AFTER the core has fully exited (launchStartupTask's root
+                            // preflight / the non-root launch path).
                             context.startService(
                                 Intent(context, SyncthingService::class.java)
                                     .setAction(SyncthingService.ACTION_RESTART)

@@ -43,6 +43,12 @@ object Util {
 
     private const val TAG = "Util"
 
+    /** Grace period after SIGINT before [killProcess] escalates to SIGKILL. */
+    private const val KILL_SIGINT_GRACE_MS = 5000L
+
+    /** Grace period after SIGKILL before [killProcess] gives up waiting. */
+    private const val KILL_SIGKILL_GRACE_MS = 2000L
+
     /**
      * Converts a number of bytes to a human readable file size (eg 3.5 GiB).
      *
@@ -88,10 +94,14 @@ object Util {
 
         // Write permission test file.
         val touchFile = "$absoluteFolderPath/$touchFileName"
+        // The path is user-editable (folder edit screen) and may contain single quotes and
+        // other shell metacharacters - always quote it, otherwise a path like "x';reboot;'"
+        // would escape the quoting and run arbitrary commands through the root shell.
+        val quotedTouchFile = shellQuote(touchFile)
         val exitCode = if (asRoot) {
-            RootAccess.code("touch '$touchFile'")
+            RootAccess.code("touch $quotedTouchFile")
         } else {
-            runShellCommand("echo \"\" > \"$touchFile\"\n")
+            runShellCommand("echo \"\" > $quotedTouchFile\n")
         }
         if (exitCode != 0) {
             val error = when (exitCode) {
@@ -107,9 +117,9 @@ object Util {
 
         // Remove test file.
         val rmExitCode = if (asRoot) {
-            RootAccess.code("rm '$touchFile'")
+            RootAccess.code("rm $quotedTouchFile")
         } else {
-            runShellCommand("rm \"$touchFile\"\n")
+            runShellCommand("rm $quotedTouchFile\n")
         }
         if (rmExitCode != 0) {
             // This is very unlikely to happen, so we have less error handling.
@@ -129,7 +139,11 @@ object Util {
      * command line embeds the launch script containing that same path, and killing the
      * wrapper reports a spurious crash exit code (130) for the watched process.
      */
-    fun getProcessPIDs(processName: String, asRoot: Boolean = false): List<String> {
+    fun getProcessPIDs(
+        processName: String,
+        asRoot: Boolean = false,
+        argFilters: List<String> = emptyList(),
+    ): List<String> {
         val output = if (asRoot) {
             RootAccess.out("ps -A -o pid,args").joinToString("\n")
         } else {
@@ -139,7 +153,7 @@ object Util {
             Log.w(TAG, "getProcessPIDs: Failed to list processes. ps command returned empty.")
             return emptyList()
         }
-        return parsePsOutput(output, processName, asRoot)
+        return parsePsOutput(output, processName, asRoot, argFilters)
     }
 
     /**
@@ -147,9 +161,19 @@ object Util {
      *
      * With [asRoot] both the lookup and the SIGINT go through the root shell: an app-UID
      * `kill` cannot signal the root-uid syncthing core (EPERM), and `ps` cannot see it.
+     *
+     * With [argFilters] (root mode only), a process is only matched when its argument
+     * string contains at least one of the given substrings. Used for helpers like `find`
+     * whose bare name is far too generic to kill under root: `ps -A` lists every process
+     * on the system, and other users' or apps' `find` instances must not be signaled.
+     * Non-root lookups are UID-scoped and ignore the filter.
      */
-    fun killProcess(processName: String, asRoot: Boolean = false) {
-        val processPIDs = getProcessPIDs(processName, asRoot)
+    fun killProcess(
+        processName: String,
+        asRoot: Boolean = false,
+        argFilters: List<String> = emptyList(),
+    ) {
+        val processPIDs = getProcessPIDs(processName, asRoot, argFilters)
         if (processPIDs.isEmpty()) {
             Log.v(TAG, "killProcess: Found no running instances of [$processName]")
             return
@@ -166,13 +190,52 @@ object Util {
             }
         }
 
-        /**
-         * Wait for process to end.
-         */
-        while (getProcessPIDs(processName, asRoot).isNotEmpty()) {
-            SystemClock.sleep(50)
+        // Wait for the process to end. SIGINT is only a request: a process with blocked
+        // signals or uninterruptible IO can ignore it indefinitely, which used to hang
+        // this loop (and with it the whole shutdown path) forever. Escalate to SIGKILL
+        // after a grace period, then give up with a warning.
+        if (!awaitProcessExit(processName, asRoot, argFilters, KILL_SIGINT_GRACE_MS)) {
+            Log.w(TAG, "killProcess: [$processName] still running after SIGINT grace " +
+                    "period, escalating to SIGKILL")
+            for (processPID in getProcessPIDs(processName, asRoot, argFilters)) {
+                val exitCode = if (asRoot) {
+                    RootAccess.code("kill -SIGKILL $processPID")
+                } else {
+                    runShellCommand("kill -SIGKILL $processPID\n")
+                }
+                if (exitCode != 0) {
+                    Log.w(TAG, "killProcess: Failed to send kill SIGKILL to process [$processPID" +
+                            "] exit code $exitCode")
+                }
+            }
+            if (!awaitProcessExit(processName, asRoot, argFilters, KILL_SIGKILL_GRACE_MS)) {
+                Log.w(TAG, "killProcess: Giving up, [$processName] still running after SIGKILL")
+                return
+            }
         }
         Log.d(TAG, "killProcess: No more instances of [$processName] running")
+    }
+
+    /**
+     * Polls until no instance of [processName] matches anymore, or the timeout in
+     * [timeoutMs] elapses. Returns true when all instances exited.
+     */
+    private fun awaitProcessExit(
+        processName: String,
+        asRoot: Boolean,
+        argFilters: List<String>,
+        timeoutMs: Long,
+    ): Boolean {
+        // Root lookups go through a su shell round-trip per poll; poll less often there.
+        val pollIntervalMs = if (asRoot) 250L else 50L
+        val deadline = SystemClock.elapsedRealtime() + timeoutMs
+        while (getProcessPIDs(processName, asRoot, argFilters).isNotEmpty()) {
+            if (SystemClock.elapsedRealtime() >= deadline) {
+                return false
+            }
+            SystemClock.sleep(pollIntervalMs)
+        }
+        return true
     }
 
     /**
@@ -521,15 +584,29 @@ object Util {
  * on the first argument). The exact root match pairs with full-binary-path filters and
  * deliberately skips lines like `su -c <script>` whose arguments merely CONTAIN the
  * path — killing that wrapper instead of only the core reports a spurious 130 crash.
+ *
+ * With [argFilters] (root mode only), a matched line must additionally contain at least
+ * one filter in its argument string - used to narrow generic process names like `find`
+ * down to instances spawned for our own folders. An empty filter list disables the
+ * narrowing (non-root lookups are UID-scoped anyway and always ignore the filter).
  */
-internal fun parsePsOutput(output: String, processName: String, asRoot: Boolean): List<String> {
+internal fun parsePsOutput(
+    output: String,
+    processName: String,
+    asRoot: Boolean,
+    argFilters: List<String> = emptyList(),
+): List<String> {
     val pidTokenIndex = if (asRoot) 0 else 1
     val processPIDs = mutableListOf<String>()
     for (line in output.split("\n".toRegex())) {
         if (asRoot) {
             val tokens = line.trim().split("\\s+".toRegex())
             if (tokens.size > 1 && tokens[1] == processName) {
-                processPIDs.add(tokens[0])
+                if (argFilters.isEmpty() ||
+                    tokens.drop(2).joinToString(" ").let { args -> argFilters.any { it in args } }
+                ) {
+                    processPIDs.add(tokens[0])
+                }
             }
         } else if (line.contains(processName)) {
             val tokens = line.trim().split("\\s+".toRegex())

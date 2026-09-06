@@ -665,7 +665,18 @@ class RestApi(
         // The helper is a child of the syncthing core, so in root mode it runs as root too
         // and both ps and kill must go through the root shell.
         restScope.launch(Dispatchers.IO) {
-            Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME, runAsRoot)
+            // Under root, a bare "find" name match would signal every find process on the
+            // system. Narrow it down to instances operating on OUR folder paths - the
+            // core spawns the versioning helper with the folder as its search root, which
+            // covers both live and orphaned leftovers. If the config is unavailable the
+            // filter degrades to the old (unfiltered) behavior rather than failing.
+            val argFilters = try {
+                folders.map { it.path }
+            } catch (e: Exception) {
+                Log.w(TAG, "shutdown: Failed to collect folder paths for find filter", e)
+                emptyList()
+            }
+            Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME, runAsRoot, argFilters)
         }
         apiPost(ApiClient.URI_SYSTEM_SHUTDOWN)
     }
