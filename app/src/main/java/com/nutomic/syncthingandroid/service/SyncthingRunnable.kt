@@ -96,6 +96,21 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
         constructor(message: String, throwable: Throwable) : super(message, throwable)
     }
 
+    /**
+     * Set by [SyncthingService] while it kills this process as part of a planned
+     * shutdown (stop or restart). A core whose graceful shutdown exceeds the kill
+     * grace period is escalated to SIGKILL by our own killProcess and then exits with
+     * 137 - which the exit mapping below would otherwise misreport as a crash
+     * (notification + ERROR state) even though WE delivered the SIGKILL on purpose.
+     */
+    @Volatile
+    var plannedShutdown = false
+        private set
+
+    fun markPlannedShutdown() {
+        plannedShutdown = true
+    }
+
     override fun run() {
         try {
             run(false)
@@ -158,7 +173,13 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
             } else {
                 Log.w(TAG, disposition.logMessage)
             }
-            when (disposition.outcome) {
+            if (plannedShutdown && disposition.outcome == ExitOutcome.CRASH) {
+                // Our own planned kill (SIGKILL escalation after the SIGINT grace
+                // period) is not a crash: skip the crash notification and the
+                // ACTION_STOP-with-crashed-extra, the shutdown flow already knows.
+                Log.i(TAG, "Syncthing exited with code $exitCode during our planned " +
+                        "shutdown; not treating it as a crash")
+            } else when (disposition.outcome) {
                 ExitOutcome.NORMAL -> {}
                 ExitOutcome.RESTART -> {
                     // Restart was requested via Rest API call.

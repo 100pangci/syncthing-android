@@ -910,6 +910,11 @@ class SyncthingService : Service() {
     }
 
     private fun killBinaryAndAwaitExit(runnable: SyncthingRunnable, runnableThread: Thread?) {
+        // Mark BEFORE the kill so the runnable's exit watcher sees the flag as soon as
+        // waitFor returns: a graceful shutdown exceeding the kill grace period gets
+        // escalated to SIGKILL by our own killProcess, and the resulting exit 137 must
+        // not be reported as a crash.
+        runnable.markPlannedShutdown()
         killStaleBinary()
         runnableThread?.let { thread ->
             LogV("Waiting for syncthingRunnableThread to finish after killProcess(Syncthing) ...")

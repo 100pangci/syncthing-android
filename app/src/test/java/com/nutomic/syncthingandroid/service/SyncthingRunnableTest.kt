@@ -184,6 +184,18 @@ class SyncthingRunnableTest {
     }
 
     @Test
+    fun plannedShutdownSuppressesCrashReportingOnForcedExit() {
+        // killProcess escalates to SIGKILL when a planned shutdown's graceful exit
+        // exceeds the grace period; the resulting 137 must not surface as a crash.
+        val runnable = newRunnable(Command.main)
+        runnable.markPlannedShutdown()
+        writeBinary("exit 137")
+        runnable.run()
+        assertNull("planned shutdown: unexpected stop intent", nextStartedService())
+        assertFalse("planned shutdown: unexpected crash notification", notificationCount() > 0)
+    }
+
+    @Test
     fun crashExitCodes_stopServiceWithExtraAndShowCrashNotification() {
         for (exitCode in intArrayOf(1, 2, 9, 64, 137, 7)) {   // 7 covers the default branch; 137 = SIGKILL.
             writeBinary("exit $exitCode")
