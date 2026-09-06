@@ -1,6 +1,7 @@
 package com.nutomic.syncthingandroid.ui.screens.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.outlined.PieChart
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalNavigationDrawer
@@ -122,34 +124,40 @@ fun HomeScreen(
                         }
                     },
                     actions = {
-                        when (pagerState.currentPage) {
-                            TAB_FOLDERS -> {
-                                IconButton(onClick = { navigator.openFolderEdit(null, true) }) {
-                                    Icon(Icons.Outlined.Add, stringResource(R.string.add_folder))
+                        if (pagerState.currentPage == TAB_FOLDERS) {
+                            IconButton(onClick = {
+                                if (api != null && apiConfigLoaded) {
+                                    api.rescanAll()
                                 }
-                                IconButton(onClick = {
-                                    if (api != null && apiConfigLoaded) {
-                                        api.rescanAll()
-                                    }
-                                }) {
-                                    Icon(
-                                        Icons.Outlined.Refresh,
-                                        stringResource(R.string.activity_main_bottom_navigation_rescan_all)
-                                    )
-                                }
+                            }) {
+                                Icon(
+                                    Icons.Outlined.Refresh,
+                                    stringResource(R.string.activity_main_bottom_navigation_rescan_all)
+                                )
                             }
-                            TAB_DEVICES -> {
-                                IconButton(onClick = { navigator.openDeviceEdit(null, true) }) {
-                                    Icon(Icons.Outlined.Add, stringResource(R.string.add_device))
-                                }
-                            }
-                            else -> {}
                         }
                         IconButton(onClick = { navigator.openSettings() }) {
                             Icon(Icons.Outlined.Settings, stringResource(R.string.settings_title))
                         }
                     }
                 )
+            },
+            floatingActionButton = {
+                // Add actions live on a bottom-right FAB (same spot as the folder
+                // editor's save button), tab-aware: each list tab adds its own kind.
+                when (pagerState.currentPage) {
+                    TAB_FOLDERS -> {
+                        FloatingActionButton(onClick = { navigator.openFolderEdit(null, true) }) {
+                            Icon(Icons.Outlined.Add, stringResource(R.string.add_folder))
+                        }
+                    }
+                    TAB_DEVICES -> {
+                        FloatingActionButton(onClick = { navigator.openDeviceEdit(null, true) }) {
+                            Icon(Icons.Outlined.Add, stringResource(R.string.add_device))
+                        }
+                    }
+                    else -> {}
+                }
             },
             bottomBar = {
                 NavigationBar {
@@ -237,7 +245,9 @@ private fun FolderListPage(
     }
     LazyColumn(
         state = rememberLazyListState(prefetchStrategy = NoLazyListPrefetch),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        // Keep the last row reachable above the bottom-right FAB.
+        contentPadding = PaddingValues(bottom = 96.dp)
     ) {
         items(folders, key = { it.id }, contentType = { "folder" }) { model ->
             FolderRow(
@@ -265,7 +275,9 @@ private fun DeviceListPage(
     }
     LazyColumn(
         state = rememberLazyListState(prefetchStrategy = NoLazyListPrefetch),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        // Keep the last row reachable above the bottom-right FAB.
+        contentPadding = PaddingValues(bottom = 96.dp)
     ) {
         items(devices, key = { it.id }, contentType = { "device" }) { model ->
             DeviceRow(
