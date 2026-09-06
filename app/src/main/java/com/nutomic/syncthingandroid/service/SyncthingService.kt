@@ -55,6 +55,12 @@ class SyncthingService : Service() {
          */
         private const val MAX_RESTART_RETRIES = 30
 
+        /**
+         * Upper bound for retrying a startup whose WebUI port stayed occupied after the
+         * stale-binary kill (see [onWebUiPortOccupied]).
+         */
+        private const val MAX_PORT_BUSY_RETRIES = 2
+
         /** Intent action to perform a Syncthing restart. */
         const val ACTION_RESTART = ".SyncthingService.RESTART"
 
@@ -180,6 +186,13 @@ class SyncthingService : Service() {
      * spawned binary can never race a name-based kill aimed at the previous instance.
      */
     private var binaryKillPending = false
+
+    /**
+     * Main-thread-only counter of consecutive startups that aborted because the WebUI
+     * port stayed occupied after the stale-binary kill (see [onWebUiPortOccupied]).
+     * Reset as soon as a startup passes the port check.
+     */
+    private var portBusyRetryCount = 0
 
     private lateinit var handler: Handler
 
@@ -582,16 +595,6 @@ class SyncthingService : Service() {
         }
         this.config = config
 
-        // Check if the SyncthingNative's configured webgui port is allocated by another app or process.
-        val webGuiTcpPort = config.webGuiBindPort
-        val isWebUIPortListening = Util.isTcpPortListening(webGuiTcpPort)
-        if (isWebUIPortListening) {
-            // We shouldn't start SyncthingNative as we would wait forever for life signs on the configured port. (ANR)
-            Log.e(TAG, "launchStartupTask: WebUI tcp port $webGuiTcpPort unavailable. Second instance?")
-            notificationHandler.showCrashedNotification(R.string.webui_tcp_port_unavailable, webGuiTcpPort.toString())
-            return
-        }
-
         onServiceStateChange(State.STARTING)
 
         if (api == null) {
@@ -631,6 +634,14 @@ class SyncthingService : Service() {
                 RootAccess.handBackStorage(this)
             }
             killStaleBinary()
+            // Probe the WebUI port AFTER the stale-binary kill, on this background
+            // thread: a loopback TCP connect is a network op and must not run on the
+            // main thread, and only now do we know whether the kill actually freed the
+            // port. A root-uid core survives an app force-stop and ps-based matching
+            // does not always find it, so the kill above can be a no-op even with a
+            // stale instance still bound to our port - spawning into it would just
+            // exit with code 1 ("another instance may be already running").
+            val portOccupied = Util.isTcpPortListening(config.webGuiBindPort)
             handler.post {
                 binaryKillPending = false
                 if (syncthingRunnable == null) {
@@ -639,8 +650,41 @@ class SyncthingService : Service() {
                     Log.i(TAG, "launchStartupTask: Startup aborted, binary was shut down in the meantime.")
                     return@post
                 }
+                if (portOccupied) {
+                    onWebUiPortOccupied(config.webGuiBindPort)
+                    return@post
+                }
+                portBusyRetryCount = 0
                 startBinaryThread(runnable, config)
             }
+        }
+    }
+
+    /**
+     * The WebUI port is still bound after the stale-binary kill - most likely a root-uid
+     * core that survived an app force-stop and that neither ps-based matching nor the
+     * port-owner kill could stop. Spawning now would just exit with code 1.
+     *
+     * Self-heals through the normal shutdown-to-INIT cycle: its prepareShutdown runs
+     * RestApi.shutdown, which POSTs system/shutdown to whatever is listening on the
+     * WebUI port - with the same config and API key as the stale core, so the stale core
+     * exits gracefully. Then the startup is retried; after [MAX_PORT_BUSY_RETRIES]
+     * failed retries the service gives up with State.ERROR.
+     */
+    private fun onWebUiPortOccupied(port: Int) {
+        Log.e(TAG, "launchStartupTask: WebUI tcp port $port still occupied after stale kill " +
+                "(stale root core?). Retry $portBusyRetryCount/$MAX_PORT_BUSY_RETRIES")
+        notificationHandler.showCrashedNotification(R.string.webui_tcp_port_unavailable, port.toString())
+        if (portBusyRetryCount >= MAX_PORT_BUSY_RETRIES) {
+            synchronized(stateLock) {
+                onServiceStateChange(State.ERROR)
+            }
+            stopSelf()
+            return
+        }
+        portBusyRetryCount++
+        shutdownToState(State.INIT) {
+            launchStartupTask(SyncthingRunnable.Command.main)
         }
     }
 
@@ -896,6 +940,17 @@ class SyncthingService : Service() {
             Constants.FILENAME_SYNCTHING_BINARY
         }
         Util.killProcess(processName, asRoot)
+        // Last resort for a stale root-uid core that survived an app force-stop: the
+        // ps-based kill above can come up empty (the shell may not see the root process
+        // or may have fallen back to an unprivileged shell). Whoever still holds our
+        // WebUI port is then almost certainly that stale core - kill it by port owner,
+        // but only after verifying it is an instance of our own binary.
+        val port = config?.webGuiBindPort
+        if (asRoot && port != null && Util.isTcpPortListening(port)) {
+            Log.w(TAG, "killStaleBinary: WebUI port $port still in use after ps-based kill, " +
+                    "trying port-owner kill")
+            Util.killPortListenerAsRoot(port, Constants.getSyncthingBinary(this).name)
+        }
     }
 
     /**

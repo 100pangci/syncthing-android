@@ -22,7 +22,10 @@ import java.io.InputStreamReader
 import java.io.BufferedReader
 import java.io.OutputStreamWriter
 import java.lang.reflect.Type
+import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.net.MalformedURLException
+import java.net.Socket
 import java.net.URL
 import java.nio.charset.StandardCharsets
 import java.security.KeyStore
@@ -328,32 +331,89 @@ object Util {
     }
 
     /**
-     * Check if a TCP is listening on the local device on a specific port.
+     * Returns true if some process is listening on the given TCP port on the loopback
+     * interface.
+     *
+     * Probes with an actual localhost TCP connect instead of parsing /proc/net/tcp
+     * (netstat): reading /proc/net/tcp is SELinux-denied for untrusted apps on many
+     * devices, which made the old netstat-based check always report "port free" and
+     * let a stale syncthing instance go unnoticed.
+     *
+     * Must not be called from the main thread (network op).
      */
     fun isTcpPortListening(port: Int): Boolean {
-        // t: tcp, l: listening, n: numeric
-        val output = runShellCommandGetOutput("netstat -t -l -n")
-        if (output.isEmpty()) {
-            Log.w(TAG, "isTcpPortListening: Failed to run netstat. Returning false.")
+        return try {
+            Socket().use { socket ->
+                socket.connect(InetSocketAddress(InetAddress.getLoopbackAddress(), port), 500)
+                true
+            }
+        } catch (e: IOException) {
+            // Connection refused or timeout: nothing (reachable) is listening.
+            false
+        }
+    }
+
+    /**
+     * Grace period after SIGINT before [killPortListenerAsRoot] escalates to SIGKILL.
+     */
+    private const val PORT_KILL_SIGINT_GRACE_MS = 3000L
+
+    /**
+     * Grace period after SIGKILL before [killPortListenerAsRoot] gives up waiting.
+     */
+    private const val PORT_KILL_SIGKILL_GRACE_MS = 2000L
+
+    /**
+     * Kills the process listening on [port] through the root shell - but only when it
+     * is an instance of our own syncthing binary ([binaryName]).
+     *
+     * Last-resort cleanup for a stale root-uid core that survived an app force-stop and
+     * that ps-based matching failed to find: whoever holds our WebUI port is almost
+     * certainly that core, and the program name check makes sure a foreign app on the
+     * same port is left alone. Returns true when a matching listener was found.
+     * Must not be called from the main thread.
+     */
+    fun killPortListenerAsRoot(port: Int, binaryName: String): Boolean {
+        if (!RootAccess.isSuAvailable()) {
+            Log.i(TAG, "killPortListenerAsRoot: su unavailable, skipping port-owner kill")
             return false
         }
-        for (line in output.split("\n".toRegex())) {
-            val words = line.split("\\s+".toRegex())
-            if (words.size > 5) {
-                val protocol = words[0]
-                val localAddress = words[3]
-                val connState = words[5]
-                if (protocol == "tcp" || protocol == "tcp6") {
-                    if (localAddress.endsWith(":" + port.toString()) &&
-                        connState.equals("LISTEN", ignoreCase = true)
-                    ) {
-                        // Port is listening.
-                        return true
-                    }
-                }
-            }
+        val pids = parseRootListenerPids(
+            RootAccess.out("netstat -tlnp").joinToString("\n"), port, binaryName
+        )
+        if (pids.isEmpty()) {
+            Log.i(TAG, "killPortListenerAsRoot: no listener of our binary on port $port")
+            return false
         }
-        return false
+        Log.w(TAG, "killPortListenerAsRoot: stale listener(s) $pids on port $port, sending SIGINT")
+        for (pid in pids) {
+            RootAccess.code("kill -SIGINT $pid")
+        }
+        if (!awaitTcpPortClosed(port, PORT_KILL_SIGINT_GRACE_MS)) {
+            Log.w(TAG, "killPortListenerAsRoot: port $port still listening, escalating to SIGKILL")
+            for (pid in parseRootListenerPids(
+                RootAccess.out("netstat -tlnp").joinToString("\n"), port, binaryName
+            )) {
+                RootAccess.code("kill -SIGKILL $pid")
+            }
+            awaitTcpPortClosed(port, PORT_KILL_SIGKILL_GRACE_MS)
+        }
+        return true
+    }
+
+    /**
+     * Polls until nothing listens on [port] anymore, or the timeout elapses.
+     * Returns true when the port is free. Must not be called from the main thread.
+     */
+    private fun awaitTcpPortClosed(port: Int, timeoutMs: Long): Boolean {
+        val deadline = SystemClock.elapsedRealtime() + timeoutMs
+        while (isTcpPortListening(port)) {
+            if (SystemClock.elapsedRealtime() >= deadline) {
+                return false
+            }
+            SystemClock.sleep(250)
+        }
+        return true
     }
 
     /**
@@ -616,4 +676,37 @@ internal fun parsePsOutput(
         }
     }
     return processPIDs
+}
+
+/**
+ * Extracts the PIDs of LISTEN sockets on [port] whose program name matches
+ * [binaryName], from `netstat -tlnp` (root) output. Lines look like:
+ *
+ * `tcp   0   0 127.0.0.1:8384   0.0.0.0:*   LISTEN   1234/libsyncthingnative.so`
+ *
+ * Column layouts vary between netstat implementations (some insert User/Inode
+ * columns before PID/Program), so the parser locates the LISTEN state token, takes
+ * the local address two columns before it, and the PID/Program from the last column.
+ */
+internal fun parseRootListenerPids(netstatOutput: String, port: Int, binaryName: String): List<String> {
+    val pids = mutableListOf<String>()
+    for (line in netstatOutput.split("\n")) {
+        val tokens = line.trim().split("\\s+".toRegex())
+        val listenIdx = tokens.indexOf("LISTEN")
+        if (listenIdx < 2) {
+            continue
+        }
+        if (!tokens[listenIdx - 2].endsWith(":$port")) {
+            continue
+        }
+        val pidAndProgram = tokens.last()
+        if (!pidAndProgram.endsWith("/$binaryName")) {
+            continue
+        }
+        val pid = pidAndProgram.substringBefore('/')
+        if (pid.isNotEmpty()) {
+            pids.add(pid)
+        }
+    }
+    return pids
 }

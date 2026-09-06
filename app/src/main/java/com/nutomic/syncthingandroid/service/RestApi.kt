@@ -668,15 +668,20 @@ class RestApi(
             // Under root, a bare "find" name match would signal every find process on the
             // system. Narrow it down to instances operating on OUR folder paths - the
             // core spawns the versioning helper with the folder as its search root, which
-            // covers both live and orphaned leftovers. If the config is unavailable the
-            // filter degrades to the old (unfiltered) behavior rather than failing.
-            val argFilters = try {
+            // covers both live and orphaned leftovers.
+            val argFilters: List<String>? = try {
                 folders.map { it.path }
             } catch (e: Exception) {
                 Log.w(TAG, "shutdown: Failed to collect folder paths for find filter", e)
-                emptyList()
+                null
             }
-            Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME, runAsRoot, argFilters)
+            if (argFilters != null) {
+                Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME, runAsRoot, argFilters)
+            } else if (!runAsRoot) {
+                // Config unavailable: keep the UID-scoped (safe) non-root cleanup, but
+                // never fall back to an unfiltered root kill of every "find" process.
+                Util.killProcess(VERSIONING_CLEANUP_PROCESS_NAME)
+            }
         }
         apiPost(ApiClient.URI_SYSTEM_SHUTDOWN)
     }

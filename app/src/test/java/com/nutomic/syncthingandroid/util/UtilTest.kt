@@ -4,7 +4,9 @@ import com.google.gson.reflect.TypeToken
 import com.nutomic.syncthingandroid.model.Folder
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -161,6 +163,55 @@ class UtilTest {
             argFilters = listOf("/nonexistent/path"),
         )
         assertEquals(listOf("5678"), pids)
+    }
+
+    @Test
+    fun parseRootListenerPids_matchesOurListenerOnThePort() {
+        val output = """
+            Active Internet connections (only servers)
+            Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program
+            tcp   0   0 127.0.0.1:8384          0.0.0.0:*               LISTEN      1234/libsyncthingnative.so
+            tcp   0   0 127.0.0.1:8080          0.0.0.0:*               LISTEN      555/someapp
+        """.trimIndent()
+        val pids = parseRootListenerPids(output, 8384, "libsyncthingnative.so")
+        assertEquals(listOf("1234"), pids)
+    }
+
+    @Test
+    fun parseRootListenerPids_handlesIpv6AndExtraColumns() {
+        val output = """
+            tcp6   0   0 :::8384   :::*   LISTEN   0   12345   777/libsyncthingnative.so
+            tcp   0   0 0.0.0.0:8384   0.0.0.0:*   LISTEN   888/libsyncthingnative.so
+        """.trimIndent()
+        val pids = parseRootListenerPids(output, 8384, "libsyncthingnative.so")
+        assertEquals(listOf("777", "888"), pids)
+    }
+
+    @Test
+    fun parseRootListenerPids_ignoresOtherPortsStatesAndPrograms() {
+        val output = """
+            tcp   0   0 127.0.0.1:9999   0.0.0.0:*   LISTEN   1234/libsyncthingnative.so
+            tcp   0   0 127.0.0.1:8384   1.2.3.4:5678   ESTABLISHED   1235/libsyncthingnative.so
+            tcp   0   0 127.0.0.1:8384   0.0.0.0:*   LISTEN   1236/other-binary
+        """.trimIndent()
+        val pids = parseRootListenerPids(output, 8384, "libsyncthingnative.so")
+        assertEquals(emptyList<String>(), pids)
+    }
+
+    @Test
+    fun isTcpPortListening_detectsListeningAndClosedPorts() {
+        java.net.ServerSocket(0, 1, java.net.InetAddress.getLoopbackAddress()).use { server ->
+            assertTrue(
+                "probe must find the listening socket",
+                Util.isTcpPortListening(server.localPort)
+            )
+        }
+        // A closed listening socket (no accepted connections) releases its port
+        // immediately, so connecting must be refused.
+        val closed = java.net.ServerSocket(0, 1, java.net.InetAddress.getLoopbackAddress())
+        val closedPort = closed.localPort
+        closed.close()
+        assertFalse("closed port must refuse connects", Util.isTcpPortListening(closedPort))
     }
 
     @Test
