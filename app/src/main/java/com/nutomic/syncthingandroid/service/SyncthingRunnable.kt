@@ -96,6 +96,21 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
         constructor(message: String, throwable: Throwable) : super(message, throwable)
     }
 
+    /**
+     * Set by [SyncthingService] while it kills this process as part of a planned
+     * shutdown (stop or restart). A core whose graceful shutdown exceeds the kill
+     * grace period is escalated to SIGKILL by our own killProcess and then exits with
+     * 137 - which the exit mapping below would otherwise misreport as a crash
+     * (notification + ERROR state) even though WE delivered the SIGKILL on purpose.
+     */
+    @Volatile
+    var plannedShutdown = false
+        private set
+
+    fun markPlannedShutdown() {
+        plannedShutdown = true
+    }
+
     override fun run() {
         try {
             run(false)
@@ -158,7 +173,13 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
             } else {
                 Log.w(TAG, disposition.logMessage)
             }
-            when (disposition.outcome) {
+            if (plannedShutdown && disposition.outcome == ExitOutcome.CRASH) {
+                // Our own planned kill (SIGKILL escalation after the SIGINT grace
+                // period) is not a crash: skip the crash notification and the
+                // ACTION_STOP-with-crashed-extra, the shutdown flow already knows.
+                Log.i(TAG, "Syncthing exited with code $exitCode during our planned " +
+                        "shutdown; not treating it as a crash")
+            } else when (disposition.outcome) {
                 ExitOutcome.NORMAL -> {}
                 ExitOutcome.RESTART -> {
                     // Restart was requested via Rest API call.
@@ -213,6 +234,14 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
             val keyAndValue = entry.split("=", limit = 2)
             if (keyAndValue.size != 2 || keyAndValue[0].isEmpty()) {
                 Log.w(TAG, "putCustomEnvironmentVariables: Ignoring malformed entry [$entry]")
+                continue
+            }
+            if (!ENV_KEY_PATTERN.matches(keyAndValue[0])) {
+                // POSIX env names only. A key like "A;reboot;" is inert in the app-UID
+                // ProcessBuilder environment, but the root-mode launch script renders
+                // entries as raw `export KEY=VALUE` lines where it would execute.
+                Log.w(TAG, "putCustomEnvironmentVariables: Ignoring entry with invalid " +
+                        "variable name [${keyAndValue[0]}]")
                 continue
             }
             logV("Setting env var: [${keyAndValue[0]}]=[${keyAndValue[1]}]")
@@ -489,6 +518,12 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
 }
 
 /**
+ * Valid POSIX environment variable names. Keys are validated against this before they
+ * reach either the ProcessBuilder environment or the root-mode launch script.
+ */
+private val ENV_KEY_PATTERN = Regex("[A-Za-z_][A-Za-z0-9_]*")
+
+/**
  * Builds the shell script executed by `su -c` for a root-mode core launch.
  *
  * Environment variables are re-exported inside the script (instead of relying on su
@@ -498,7 +533,12 @@ class SyncthingRunnable(private val context: Context, command: Command) : Runnab
  */
 internal fun buildRootLaunchScript(env: Map<String, String>, commandArgs: Array<String>): String {
     val singleQuoted = { value: String -> "'" + value.replace("'", "'\\''") + "'" }
-    val exports = env.entries.joinToString("") { (key, value) -> "export $key=${singleQuoted(value)}\n" }
+    // Keys are quoted too (export 'FOO'=... is valid shell): parsing is supposed to have
+    // validated them against ENV_KEY_PATTERN, but the script must stay inert even for a
+    // key like "A;reboot;" so a parsing gap cannot turn into a root shell injection.
+    val exports = env.entries.joinToString("") { (key, value) ->
+        "export ${singleQuoted(key)}=${singleQuoted(value)}\n"
+    }
     val execLine = commandArgs.joinToString(" ") { arg -> singleQuoted(arg) }
     return "${exports}umask 000\nexec $execLine"
 }

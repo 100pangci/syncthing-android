@@ -22,7 +22,10 @@ import java.io.InputStreamReader
 import java.io.BufferedReader
 import java.io.OutputStreamWriter
 import java.lang.reflect.Type
+import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.net.MalformedURLException
+import java.net.Socket
 import java.net.URL
 import java.nio.charset.StandardCharsets
 import java.security.KeyStore
@@ -42,6 +45,12 @@ import javax.net.ssl.X509TrustManager
 object Util {
 
     private const val TAG = "Util"
+
+    /** Grace period after SIGINT before [killProcess] escalates to SIGKILL. */
+    private const val KILL_SIGINT_GRACE_MS = 5000L
+
+    /** Grace period after SIGKILL before [killProcess] gives up waiting. */
+    private const val KILL_SIGKILL_GRACE_MS = 2000L
 
     /**
      * Converts a number of bytes to a human readable file size (eg 3.5 GiB).
@@ -88,10 +97,14 @@ object Util {
 
         // Write permission test file.
         val touchFile = "$absoluteFolderPath/$touchFileName"
+        // The path is user-editable (folder edit screen) and may contain single quotes and
+        // other shell metacharacters - always quote it, otherwise a path like "x';reboot;'"
+        // would escape the quoting and run arbitrary commands through the root shell.
+        val quotedTouchFile = shellQuote(touchFile)
         val exitCode = if (asRoot) {
-            RootAccess.code("touch '$touchFile'")
+            RootAccess.code("touch $quotedTouchFile")
         } else {
-            runShellCommand("echo \"\" > \"$touchFile\"\n")
+            runShellCommand("echo \"\" > $quotedTouchFile\n")
         }
         if (exitCode != 0) {
             val error = when (exitCode) {
@@ -107,9 +120,9 @@ object Util {
 
         // Remove test file.
         val rmExitCode = if (asRoot) {
-            RootAccess.code("rm '$touchFile'")
+            RootAccess.code("rm $quotedTouchFile")
         } else {
-            runShellCommand("rm \"$touchFile\"\n")
+            runShellCommand("rm $quotedTouchFile\n")
         }
         if (rmExitCode != 0) {
             // This is very unlikely to happen, so we have less error handling.
@@ -129,7 +142,11 @@ object Util {
      * command line embeds the launch script containing that same path, and killing the
      * wrapper reports a spurious crash exit code (130) for the watched process.
      */
-    fun getProcessPIDs(processName: String, asRoot: Boolean = false): List<String> {
+    fun getProcessPIDs(
+        processName: String,
+        asRoot: Boolean = false,
+        argFilters: List<String> = emptyList(),
+    ): List<String> {
         val output = if (asRoot) {
             RootAccess.out("ps -A -o pid,args").joinToString("\n")
         } else {
@@ -139,7 +156,7 @@ object Util {
             Log.w(TAG, "getProcessPIDs: Failed to list processes. ps command returned empty.")
             return emptyList()
         }
-        return parsePsOutput(output, processName, asRoot)
+        return parsePsOutput(output, processName, asRoot, argFilters)
     }
 
     /**
@@ -147,9 +164,19 @@ object Util {
      *
      * With [asRoot] both the lookup and the SIGINT go through the root shell: an app-UID
      * `kill` cannot signal the root-uid syncthing core (EPERM), and `ps` cannot see it.
+     *
+     * With [argFilters] (root mode only), a process is only matched when its argument
+     * string contains at least one of the given substrings. Used for helpers like `find`
+     * whose bare name is far too generic to kill under root: `ps -A` lists every process
+     * on the system, and other users' or apps' `find` instances must not be signaled.
+     * Non-root lookups are UID-scoped and ignore the filter.
      */
-    fun killProcess(processName: String, asRoot: Boolean = false) {
-        val processPIDs = getProcessPIDs(processName, asRoot)
+    fun killProcess(
+        processName: String,
+        asRoot: Boolean = false,
+        argFilters: List<String> = emptyList(),
+    ) {
+        val processPIDs = getProcessPIDs(processName, asRoot, argFilters)
         if (processPIDs.isEmpty()) {
             Log.v(TAG, "killProcess: Found no running instances of [$processName]")
             return
@@ -166,13 +193,52 @@ object Util {
             }
         }
 
-        /**
-         * Wait for process to end.
-         */
-        while (getProcessPIDs(processName, asRoot).isNotEmpty()) {
-            SystemClock.sleep(50)
+        // Wait for the process to end. SIGINT is only a request: a process with blocked
+        // signals or uninterruptible IO can ignore it indefinitely, which used to hang
+        // this loop (and with it the whole shutdown path) forever. Escalate to SIGKILL
+        // after a grace period, then give up with a warning.
+        if (!awaitProcessExit(processName, asRoot, argFilters, KILL_SIGINT_GRACE_MS)) {
+            Log.w(TAG, "killProcess: [$processName] still running after SIGINT grace " +
+                    "period, escalating to SIGKILL")
+            for (processPID in getProcessPIDs(processName, asRoot, argFilters)) {
+                val exitCode = if (asRoot) {
+                    RootAccess.code("kill -SIGKILL $processPID")
+                } else {
+                    runShellCommand("kill -SIGKILL $processPID\n")
+                }
+                if (exitCode != 0) {
+                    Log.w(TAG, "killProcess: Failed to send kill SIGKILL to process [$processPID" +
+                            "] exit code $exitCode")
+                }
+            }
+            if (!awaitProcessExit(processName, asRoot, argFilters, KILL_SIGKILL_GRACE_MS)) {
+                Log.w(TAG, "killProcess: Giving up, [$processName] still running after SIGKILL")
+                return
+            }
         }
         Log.d(TAG, "killProcess: No more instances of [$processName] running")
+    }
+
+    /**
+     * Polls until no instance of [processName] matches anymore, or the timeout in
+     * [timeoutMs] elapses. Returns true when all instances exited.
+     */
+    private fun awaitProcessExit(
+        processName: String,
+        asRoot: Boolean,
+        argFilters: List<String>,
+        timeoutMs: Long,
+    ): Boolean {
+        // Root lookups go through a su shell round-trip per poll; poll less often there.
+        val pollIntervalMs = if (asRoot) 250L else 50L
+        val deadline = SystemClock.elapsedRealtime() + timeoutMs
+        while (getProcessPIDs(processName, asRoot, argFilters).isNotEmpty()) {
+            if (SystemClock.elapsedRealtime() >= deadline) {
+                return false
+            }
+            SystemClock.sleep(pollIntervalMs)
+        }
+        return true
     }
 
     /**
@@ -265,32 +331,89 @@ object Util {
     }
 
     /**
-     * Check if a TCP is listening on the local device on a specific port.
+     * Returns true if some process is listening on the given TCP port on the loopback
+     * interface.
+     *
+     * Probes with an actual localhost TCP connect instead of parsing /proc/net/tcp
+     * (netstat): reading /proc/net/tcp is SELinux-denied for untrusted apps on many
+     * devices, which made the old netstat-based check always report "port free" and
+     * let a stale syncthing instance go unnoticed.
+     *
+     * Must not be called from the main thread (network op).
      */
     fun isTcpPortListening(port: Int): Boolean {
-        // t: tcp, l: listening, n: numeric
-        val output = runShellCommandGetOutput("netstat -t -l -n")
-        if (output.isEmpty()) {
-            Log.w(TAG, "isTcpPortListening: Failed to run netstat. Returning false.")
+        return try {
+            Socket().use { socket ->
+                socket.connect(InetSocketAddress(InetAddress.getLoopbackAddress(), port), 500)
+                true
+            }
+        } catch (e: IOException) {
+            // Connection refused or timeout: nothing (reachable) is listening.
+            false
+        }
+    }
+
+    /**
+     * Grace period after SIGINT before [killPortListenerAsRoot] escalates to SIGKILL.
+     */
+    private const val PORT_KILL_SIGINT_GRACE_MS = 3000L
+
+    /**
+     * Grace period after SIGKILL before [killPortListenerAsRoot] gives up waiting.
+     */
+    private const val PORT_KILL_SIGKILL_GRACE_MS = 2000L
+
+    /**
+     * Kills the process listening on [port] through the root shell - but only when it
+     * is an instance of our own syncthing binary ([binaryName]).
+     *
+     * Last-resort cleanup for a stale root-uid core that survived an app force-stop and
+     * that ps-based matching failed to find: whoever holds our WebUI port is almost
+     * certainly that core, and the program name check makes sure a foreign app on the
+     * same port is left alone. Returns true when a matching listener was found.
+     * Must not be called from the main thread.
+     */
+    fun killPortListenerAsRoot(port: Int, binaryName: String): Boolean {
+        if (!RootAccess.isSuAvailable()) {
+            Log.i(TAG, "killPortListenerAsRoot: su unavailable, skipping port-owner kill")
             return false
         }
-        for (line in output.split("\n".toRegex())) {
-            val words = line.split("\\s+".toRegex())
-            if (words.size > 5) {
-                val protocol = words[0]
-                val localAddress = words[3]
-                val connState = words[5]
-                if (protocol == "tcp" || protocol == "tcp6") {
-                    if (localAddress.endsWith(":" + port.toString()) &&
-                        connState.equals("LISTEN", ignoreCase = true)
-                    ) {
-                        // Port is listening.
-                        return true
-                    }
-                }
-            }
+        val pids = parseRootListenerPids(
+            RootAccess.out("netstat -tlnp").joinToString("\n"), port, binaryName
+        )
+        if (pids.isEmpty()) {
+            Log.i(TAG, "killPortListenerAsRoot: no listener of our binary on port $port")
+            return false
         }
-        return false
+        Log.w(TAG, "killPortListenerAsRoot: stale listener(s) $pids on port $port, sending SIGINT")
+        for (pid in pids) {
+            RootAccess.code("kill -SIGINT $pid")
+        }
+        if (!awaitTcpPortClosed(port, PORT_KILL_SIGINT_GRACE_MS)) {
+            Log.w(TAG, "killPortListenerAsRoot: port $port still listening, escalating to SIGKILL")
+            for (pid in parseRootListenerPids(
+                RootAccess.out("netstat -tlnp").joinToString("\n"), port, binaryName
+            )) {
+                RootAccess.code("kill -SIGKILL $pid")
+            }
+            awaitTcpPortClosed(port, PORT_KILL_SIGKILL_GRACE_MS)
+        }
+        return true
+    }
+
+    /**
+     * Polls until nothing listens on [port] anymore, or the timeout elapses.
+     * Returns true when the port is free. Must not be called from the main thread.
+     */
+    private fun awaitTcpPortClosed(port: Int, timeoutMs: Long): Boolean {
+        val deadline = SystemClock.elapsedRealtime() + timeoutMs
+        while (isTcpPortListening(port)) {
+            if (SystemClock.elapsedRealtime() >= deadline) {
+                return false
+            }
+            SystemClock.sleep(250)
+        }
+        return true
     }
 
     /**
@@ -521,15 +644,29 @@ object Util {
  * on the first argument). The exact root match pairs with full-binary-path filters and
  * deliberately skips lines like `su -c <script>` whose arguments merely CONTAIN the
  * path — killing that wrapper instead of only the core reports a spurious 130 crash.
+ *
+ * With [argFilters] (root mode only), a matched line must additionally contain at least
+ * one filter in its argument string - used to narrow generic process names like `find`
+ * down to instances spawned for our own folders. An empty filter list disables the
+ * narrowing (non-root lookups are UID-scoped anyway and always ignore the filter).
  */
-internal fun parsePsOutput(output: String, processName: String, asRoot: Boolean): List<String> {
+internal fun parsePsOutput(
+    output: String,
+    processName: String,
+    asRoot: Boolean,
+    argFilters: List<String> = emptyList(),
+): List<String> {
     val pidTokenIndex = if (asRoot) 0 else 1
     val processPIDs = mutableListOf<String>()
     for (line in output.split("\n".toRegex())) {
         if (asRoot) {
             val tokens = line.trim().split("\\s+".toRegex())
             if (tokens.size > 1 && tokens[1] == processName) {
-                processPIDs.add(tokens[0])
+                if (argFilters.isEmpty() ||
+                    tokens.drop(2).joinToString(" ").let { args -> argFilters.any { it in args } }
+                ) {
+                    processPIDs.add(tokens[0])
+                }
             }
         } else if (line.contains(processName)) {
             val tokens = line.trim().split("\\s+".toRegex())
@@ -539,4 +676,37 @@ internal fun parsePsOutput(output: String, processName: String, asRoot: Boolean)
         }
     }
     return processPIDs
+}
+
+/**
+ * Extracts the PIDs of LISTEN sockets on [port] whose program name matches
+ * [binaryName], from `netstat -tlnp` (root) output. Lines look like:
+ *
+ * `tcp   0   0 127.0.0.1:8384   0.0.0.0:*   LISTEN   1234/libsyncthingnative.so`
+ *
+ * Column layouts vary between netstat implementations (some insert User/Inode
+ * columns before PID/Program), so the parser locates the LISTEN state token, takes
+ * the local address two columns before it, and the PID/Program from the last column.
+ */
+internal fun parseRootListenerPids(netstatOutput: String, port: Int, binaryName: String): List<String> {
+    val pids = mutableListOf<String>()
+    for (line in netstatOutput.split("\n")) {
+        val tokens = line.trim().split("\\s+".toRegex())
+        val listenIdx = tokens.indexOf("LISTEN")
+        if (listenIdx < 2) {
+            continue
+        }
+        if (!tokens[listenIdx - 2].endsWith(":$port")) {
+            continue
+        }
+        val pidAndProgram = tokens.last()
+        if (!pidAndProgram.endsWith("/$binaryName")) {
+            continue
+        }
+        val pid = pidAndProgram.substringBefore('/')
+        if (pid.isNotEmpty()) {
+            pids.add(pid)
+        }
+    }
+    return pids
 }

@@ -49,6 +49,18 @@ class SyncthingService : Service() {
          */
         private const val SHUTDOWN_RETRY_DELAY_MS = 1000L
 
+        /**
+         * Upper bound for deferring an ACTION_RESTART while State.STARTING, so a stuck
+         * startup cannot queue retries forever.
+         */
+        private const val MAX_RESTART_RETRIES = 30
+
+        /**
+         * Upper bound for retrying a startup whose WebUI port stayed occupied after the
+         * stale-binary kill (see [onWebUiPortOccupied]).
+         */
+        private const val MAX_PORT_BUSY_RETRIES = 2
+
         /** Intent action to perform a Syncthing restart. */
         const val ACTION_RESTART = ".SyncthingService.RESTART"
 
@@ -175,6 +187,13 @@ class SyncthingService : Service() {
      */
     private var binaryKillPending = false
 
+    /**
+     * Main-thread-only counter of consecutive startups that aborted because the WebUI
+     * port stayed occupied after the stale-binary kill (see [onWebUiPortOccupied]).
+     * Reset as soon as a startup passes the port check.
+     */
+    private var portBusyRetryCount = 0
+
     private lateinit var handler: Handler
 
     private val onServiceStateChangeListeners = HashSet<OnServiceStateChangeListener>()
@@ -248,17 +267,10 @@ class SyncthingService : Service() {
         preferences = app.preferences
         enableVerboseLog = AppPrefs.getPrefVerboseLog(preferences)
         LogV("onCreate")
-        if (RootAccess.appStorageOwnedByRoot(this)) {
-            // Safety net for cold starts after a root-mode session (e.g. the app process
-            // was killed while the root-uid core was up): config and key material are
-            // root-owned with explicit 0600 modes and must be readable before anything
-            // parses the config below. Detected via the config file's actual owner — not
-            // the launch marker, which a failed non-root launch would have reset. Marker
-            // is intentionally kept: killStaleBinary still needs root to stop an orphaned
-            // root core; the non-root launch path clears it.
-            Log.i(TAG, "Previous core ran as root; returning app storage to app ownership")
-            RootAccess.handBackStorage(this)
-        }
+        // Note: handing app storage back from a previous root-mode session happens on the
+        // shutdown executor inside [launchStartupTask] - running the recursive chown (and a
+        // possible first su spawn with an authorization dialog) here on the main thread
+        // would block startup and risk ANR.
         configRouter = ConfigRouter(this)
         handler = Handler()
         configBackupManager = ConfigBackupManager(this, preferences, enableVerboseLog)
@@ -321,9 +333,22 @@ class SyncthingService : Service() {
             return START_STICKY
         }
 
-        if (ACTION_RESTART == intent.action && currentState == State.ACTIVE) {
-            shutdownToState(State.INIT) {
-                launchStartupTask(SyncthingRunnable.Command.main)
+        if (ACTION_RESTART == intent.action) {
+            when (currentState) {
+                State.ACTIVE -> shutdownToState(State.INIT) {
+                    launchStartupTask(SyncthingRunnable.Command.main)
+                }
+                State.STARTING -> {
+                    // A core is still launching (with the previous settings, e.g. the
+                    // privilege mode). Restarting it now would kill it mid-startup, and
+                    // silently dropping the request would leave the running core
+                    // diverged from the preference - defer until the startup settled.
+                    Log.w(TAG, "Restart requested in state $currentState, deferring ...")
+                    scheduleRestartRetry()
+                }
+                else -> Log.i(TAG,
+                        "Restart requested in state $currentState - core is not running, " +
+                        "the next start picks up the new settings")
             }
         } else if (ACTION_STOP == intent.action) {
             if (intent.getBooleanExtra(EXTRA_STOP_AFTER_CRASHED_NATIVE, false)) {
@@ -570,16 +595,6 @@ class SyncthingService : Service() {
         }
         this.config = config
 
-        // Check if the SyncthingNative's configured webgui port is allocated by another app or process.
-        val webGuiTcpPort = config.webGuiBindPort
-        val isWebUIPortListening = Util.isTcpPortListening(webGuiTcpPort)
-        if (isWebUIPortListening) {
-            // We shouldn't start SyncthingNative as we would wait forever for life signs on the configured port. (ANR)
-            Log.e(TAG, "launchStartupTask: WebUI tcp port $webGuiTcpPort unavailable. Second instance?")
-            notificationHandler.showCrashedNotification(R.string.webui_tcp_port_unavailable, webGuiTcpPort.toString())
-            return
-        }
-
         onServiceStateChange(State.STARTING)
 
         if (api == null) {
@@ -605,7 +620,28 @@ class SyncthingService : Service() {
         // cleanup kills by process name, so spawning must wait for it to complete.
         binaryKillPending = true
         shutdownExecutor.execute {
+            // Safety net for starts after a root-mode session (e.g. the app process was
+            // killed while the root-uid core was up): config and key material are root-owned
+            // with explicit 0600 modes and must be handed back to the app UID before the
+            // config is parsed further below. Runs here on the background executor - the
+            // recursive chown and a possible first su spawn (Magisk dialog) must never run
+            // on the main thread. Detected via the config file's actual owner - not the
+            // launch marker, which a failed non-root launch would have reset. Marker is
+            // intentionally kept: killStaleBinary still needs root to stop an orphaned
+            // root core; the non-root launch path clears it.
+            if (RootAccess.appStorageOwnedByRoot(this)) {
+                Log.i(TAG, "Previous core ran as root; returning app storage to app ownership")
+                RootAccess.handBackStorage(this)
+            }
             killStaleBinary()
+            // Probe the WebUI port AFTER the stale-binary kill, on this background
+            // thread: a loopback TCP connect is a network op and must not run on the
+            // main thread, and only now do we know whether the kill actually freed the
+            // port. A root-uid core survives an app force-stop and ps-based matching
+            // does not always find it, so the kill above can be a no-op even with a
+            // stale instance still bound to our port - spawning into it would just
+            // exit with code 1 ("another instance may be already running").
+            val portOccupied = Util.isTcpPortListening(config.webGuiBindPort)
             handler.post {
                 binaryKillPending = false
                 if (syncthingRunnable == null) {
@@ -614,9 +650,66 @@ class SyncthingService : Service() {
                     Log.i(TAG, "launchStartupTask: Startup aborted, binary was shut down in the meantime.")
                     return@post
                 }
+                if (portOccupied) {
+                    onWebUiPortOccupied(config.webGuiBindPort)
+                    return@post
+                }
+                portBusyRetryCount = 0
                 startBinaryThread(runnable, config)
             }
         }
+    }
+
+    /**
+     * The WebUI port is still bound after the stale-binary kill - most likely a root-uid
+     * core that survived an app force-stop and that neither ps-based matching nor the
+     * port-owner kill could stop. Spawning now would just exit with code 1.
+     *
+     * Self-heals through the normal shutdown-to-INIT cycle: its prepareShutdown runs
+     * RestApi.shutdown, which POSTs system/shutdown to whatever is listening on the
+     * WebUI port - with the same config and API key as the stale core, so the stale core
+     * exits gracefully. Then the startup is retried; after [MAX_PORT_BUSY_RETRIES]
+     * failed retries the service gives up with State.ERROR.
+     */
+    private fun onWebUiPortOccupied(port: Int) {
+        Log.e(TAG, "launchStartupTask: WebUI tcp port $port still occupied after stale kill " +
+                "(stale root core?). Retry $portBusyRetryCount/$MAX_PORT_BUSY_RETRIES")
+        notificationHandler.showCrashedNotification(R.string.webui_tcp_port_unavailable, port.toString())
+        if (portBusyRetryCount >= MAX_PORT_BUSY_RETRIES) {
+            synchronized(stateLock) {
+                onServiceStateChange(State.ERROR)
+            }
+            stopSelf()
+            return
+        }
+        portBusyRetryCount++
+        shutdownToState(State.INIT) {
+            launchStartupTask(SyncthingRunnable.Command.main)
+        }
+    }
+
+    /**
+     * Retries a deferred [ACTION_RESTART] (requested while State.STARTING) until the
+     * startup settled. Bounded by [MAX_RESTART_RETRIES]: a startup that never reaches
+     * ACTIVE must not queue retries forever. If the startup aborted (ERROR/DISABLED)
+     * or the service was destroyed, the core is no longer running and the next natural
+     * start picks up the new settings - the retry is dropped.
+     */
+    private fun scheduleRestartRetry(attempt: Int = 0) {
+        if (attempt >= MAX_RESTART_RETRIES) {
+            Log.w(TAG, "scheduleRestartRetry: Giving up after $attempt retries in state $currentState")
+            return
+        }
+        handler.postDelayed({
+            when (currentState) {
+                State.ACTIVE -> shutdownToState(State.INIT) {
+                    launchStartupTask(SyncthingRunnable.Command.main)
+                }
+                State.STARTING -> scheduleRestartRetry(attempt + 1)
+                else -> Log.i(TAG,
+                        "Deferred restart aborted in state $currentState - core is not running")
+            }
+        }, SHUTDOWN_RETRY_DELAY_MS)
     }
 
     private fun startBinaryThread(runnable: SyncthingRunnable, config: ConfigXml) {
@@ -817,6 +910,11 @@ class SyncthingService : Service() {
     }
 
     private fun killBinaryAndAwaitExit(runnable: SyncthingRunnable, runnableThread: Thread?) {
+        // Mark BEFORE the kill so the runnable's exit watcher sees the flag as soon as
+        // waitFor returns: a graceful shutdown exceeding the kill grace period gets
+        // escalated to SIGKILL by our own killProcess, and the resulting exit 137 must
+        // not be reported as a crash.
+        runnable.markPlannedShutdown()
         killStaleBinary()
         runnableThread?.let { thread ->
             LogV("Waiting for syncthingRunnableThread to finish after killProcess(Syncthing) ...")
@@ -847,6 +945,17 @@ class SyncthingService : Service() {
             Constants.FILENAME_SYNCTHING_BINARY
         }
         Util.killProcess(processName, asRoot)
+        // Last resort for a stale root-uid core that survived an app force-stop: the
+        // ps-based kill above can come up empty (the shell may not see the root process
+        // or may have fallen back to an unprivileged shell). Whoever still holds our
+        // WebUI port is then almost certainly that stale core - kill it by port owner,
+        // but only after verifying it is an instance of our own binary.
+        val port = config?.webGuiBindPort
+        if (asRoot && port != null && Util.isTcpPortListening(port)) {
+            Log.w(TAG, "killStaleBinary: WebUI port $port still in use after ps-based kill, " +
+                    "trying port-owner kill")
+            Util.killPortListenerAsRoot(port, Constants.getSyncthingBinary(this).name)
+        }
     }
 
     /**

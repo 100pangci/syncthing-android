@@ -184,6 +184,18 @@ class SyncthingRunnableTest {
     }
 
     @Test
+    fun plannedShutdownSuppressesCrashReportingOnForcedExit() {
+        // killProcess escalates to SIGKILL when a planned shutdown's graceful exit
+        // exceeds the grace period; the resulting 137 must not surface as a crash.
+        val runnable = newRunnable(Command.main)
+        runnable.markPlannedShutdown()
+        writeBinary("exit 137")
+        runnable.run()
+        assertNull("planned shutdown: unexpected stop intent", nextStartedService())
+        assertFalse("planned shutdown: unexpected crash notification", notificationCount() > 0)
+    }
+
+    @Test
     fun crashExitCodes_stopServiceWithExtraAndShowCrashNotification() {
         for (exitCode in intArrayOf(1, 2, 9, 64, 137, 7)) {   // 7 covers the default branch; 137 = SIGKILL.
             writeBinary("exit $exitCode")
@@ -309,8 +321,8 @@ class SyncthingRunnableTest {
                 mapOf("HOME" to "/data/user/0/pkg/files", "STTRACE" to "a b"),
                 arrayOf("/path/to/libsyncthingnative.so", "serve", "--no-browser"),
         )
-        assertTrue(script.contains("export HOME='/data/user/0/pkg/files'\n"))
-        assertTrue(script.contains("export STTRACE='a b'\n"))
+        assertTrue(script.contains("export 'HOME'='/data/user/0/pkg/files'\n"))
+        assertTrue(script.contains("export 'STTRACE'='a b'\n"))
         assertTrue(script.contains("umask 000\n"))
         assertTrue(script.contains("exec '/path/to/libsyncthingnative.so' 'serve' '--no-browser'"))
         // exec must be the last statement so signals and the exit code reach the binary.
@@ -323,6 +335,31 @@ class SyncthingRunnableTest {
                 mapOf("STVERSIONEXTRA" to "it's a fork"),
                 arrayOf("/bin"),
         )
-        assertTrue(script.contains("export STVERSIONEXTRA='it'\\''s a fork'"))
+        assertTrue(script.contains("export 'STVERSIONEXTRA'='it'\\''s a fork'"))
+    }
+
+    @Test
+    fun rootLaunchScript_quotesKeysSoMalformedNamesStayInert() {
+        // Parsing (putCustomEnvironmentVariables) is supposed to reject keys like this,
+        // but the script must stay inert even if such a key ever reaches it: unquoted,
+        // `export A;reboot;='x'` would execute `reboot` as root.
+        val script = buildRootLaunchScript(
+                mapOf("A;reboot;" to "x"),
+                arrayOf("/bin"),
+        )
+        assertTrue(script.contains("export 'A;reboot;'='x'\n"))
+    }
+
+    @Test
+    fun customEnvironmentVariables_rejectEntriesWithInvalidKeyNames() {
+        // "A;reboot;=x" carries a shell-metacharacter variable name; it must be dropped
+        // entirely (it would execute as root in the root-mode launch script) while the
+        // valid entry still lands in the environment.
+        prefs.edit().putString(
+                Constants.PREF_ENVIRONMENT_VARIABLES, "ST_TEST_VAR=hello A;reboot;=x"
+        ).commit()
+        writeBinary("echo \"VAR=\$ST_TEST_VAR\"; echo \"A=\$A\"")
+        val out = newRunnable(Command.main).run(true)
+        assertEquals("VAR=hello\nA=\n", out)
     }
 }
